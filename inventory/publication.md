@@ -13,6 +13,7 @@ This is the durable publication record for the Claude-to-Codex workflow migratio
 - All 23 reviewed branch SHAs now exist remotely as `codex/agent-workflow-migration` and exactly match the local migration commits.
 - No rebase or conflict repair is currently required.
 - The large NextUp skill diffs remove duplicated `.claude/skills` payloads after preserving the canonical `.agents/skills` copies. No canonical skill resource is deleted.
+- NextUp backend keeps `.claude/skills/BEST-PRACTICES.md` as a compatibility symlink to the canonical `.agents/skills/README.md` so archived documentation links remain valid.
 - Primary-checkout work-in-progress is not part of these branches.
 
 Because remote state can change, rerun the post-publication SHA and divergence checks when resuming this migration.
@@ -30,7 +31,7 @@ All remote-backed branches are pushed. Pull requests are being opened in waves s
 | Repository       | Default  | Head       | Suggested PR title                          | Scope                                       |
 | ---------------- | -------- | ---------- | ------------------------------------------- | ------------------------------------------- |
 | `nextup-ios-app` | `main`   | `a2eae9f8` | `chore: share agent skills across runtimes` | 19 canonical skills and Claude symlinks     |
-| `nextup-backend` | `main`   | `58c34d12` | `chore: share agent skills across runtimes` | 24 canonical directories, safety, MCP docs  |
+| `nextup-backend` | `main`   | `319117e5` | `chore: share agent skills across runtimes` | 24 canonical directories, safety, MCP docs  |
 | `nextup-web`     | `main`   | `fef3229`  | `docs: align agent workflows`               | Exploration mode and Firebase boundaries    |
 | `pat-portfolio`  | `main`   | `fc14e65`  | `docs: align agent workflows`               | Portfolio design-iteration guidance         |
 | `messenger`      | `master` | `02d8f21`  | `docs: align agent workflows`               | Expo design iteration and opt-in strict TDD |
