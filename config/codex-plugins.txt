@@ -1,0 +1,7 @@
+patrick-delivery@personal
+firebase@firebase
+figma@openai-curated
+github@openai-curated
+sentry@openai-curated
+expo@openai-curated
+vercel@openai-curated

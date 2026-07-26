@@ -1,0 +1,6 @@
+interface:
+  display_name: "Strict TDD"
+  short_description: "Run an explicit red-green-refactor cycle"
+  default_prompt: "Use $patrick-delivery:strict-tdd to implement this change with strict red-green-refactor discipline."
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Write Plan"
+  short_description: "Create a focused executable implementation plan"
+  default_prompt: "Use $patrick-delivery:write-plan to create a practical implementation plan for this work."
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Execute Plan"
+  short_description: "Implement an approved plan with checkpoints"
+  default_prompt: "Use $patrick-delivery:execute-plan to carry out this approved implementation plan."
+policy:
+  allow_implicit_invocation: false
