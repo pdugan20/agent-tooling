@@ -10,6 +10,7 @@ Private, canonical source for Patrick's cross-repository agent instructions, per
 - `.agents/plugins/marketplace.json`: local Codex marketplace manifest.
 - `scripts/bootstrap.sh`: creates runtime symlinks and applies non-secret routing settings.
 - `scripts/install-codex-plugins.sh`: installs the portable plugin set on a new machine.
+- `scripts/audit-migration-branches.sh`: rechecks every local migration branch immediately before publication.
 
 ## Setup on another machine
 
