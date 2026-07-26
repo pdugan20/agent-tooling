@@ -38,6 +38,8 @@ All remote-backed branches are pushed. Pull requests are being opened in waves s
 
 Published as draft pull requests: [iOS #772](https://github.com/nxt-up/nextup-ios-app/pull/772), [backend #740](https://github.com/nxt-up/nextup-backend/pull/740), [web #117](https://github.com/nxt-up/nextup-web/pull/117), [portfolio #87](https://github.com/pdugan20/pat-portfolio/pull/87), and [Messenger #15](https://github.com/pdugan20/messenger-proto/pull/15).
 
+All applicable Wave 1 checks passed on 2026-07-26. The backend compatibility-symlink rerun passed documentation quality, pre-commit, Firebase deployment validation, unit coverage, Firebase emulator integration, and the final CI gate.
+
 ### Wave 2: shared skills and operational boundaries
 
 | Repository          | Default | Head      | Suggested PR title                            | Scope                                             |
