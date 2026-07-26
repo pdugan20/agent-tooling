@@ -36,6 +36,13 @@ Invoke strict workflows explicitly:
 
 Claude's official Superpowers plugin is disabled by the bootstrap because Claude cannot apply `skillOverrides` to plugin-provided skills. The shared delivery skills provide the intentional opt-in replacement without maintaining two copies.
 
+If a workflow exists only in Superpowers, enable the plugin for that session of work and disable it afterward:
+
+```bash
+claude plugin enable superpowers@claude-plugins-official --scope user
+claude plugin disable superpowers@claude-plugins-official --scope user
+```
+
 ## What does not sync automatically
 
 Git carries the files, but each machine still needs the bootstrap. OAuth sessions, API keys, trusted-workspace decisions, plugin authentication, app settings, and repository-local `AGENTS.md` files remain machine- or repository-local. Never commit those credentials here.

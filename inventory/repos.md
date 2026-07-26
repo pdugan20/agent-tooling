@@ -106,3 +106,11 @@ Do not migrate these separately:
 - Create a private GitHub remote for `agent-tooling` and push `main`.
 - Push the five `codex/agent-workflow-migration` branches and open reviewable pull requests.
 - Batch the remaining clean repositories first; isolate dirty repositories through clean worktrees based on their remote default branches.
+
+## Local environment follow-ups
+
+- Codex CLI `0.145.0` is available; this machine currently runs `0.144.1`. Re-run the fresh-process smoke test after updating, especially the stale model-cache warning about `supports_reasoning_summaries`.
+- The NextUp backend MCP endpoint requires authentication and logs an auth warning in a fresh Codex session. Authenticate it or disable that repository MCP server when it is not in use.
+- `codex doctor` reports the terminal-hosted Computer Use command as unresolved because its configured command is relative. The desktop plugin works; recheck this after the Codex update before changing configuration.
+- Codex shortened skill descriptions to fit its 2% skill-context budget. If automatic routing becomes unreliable, disable plugins that are not relevant to the current stack or use a leaner profile.
+- A no-tool Claude startup loaded about 34.5k context tokens and passed the routing smoke test. Keep configuration smoke tests to one turn; repeated tool turns rewrite/cache that context and cost substantially more.
