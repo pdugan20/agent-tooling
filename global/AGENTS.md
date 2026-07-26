@@ -32,7 +32,7 @@ Use only when explicitly requested. Audit edge cases, accessibility, performance
 
 Do not invoke Superpowers planning, brainstorming, TDD, worktree, or branch-finishing workflows implicitly. Use them only when Patrick names the specific skill or explicitly asks for that workflow.
 
-Patrick's `patrick-delivery` skills are also explicit-only. Typical invocations are `$patrick-delivery:formal-spec`, `$patrick-delivery:strict-tdd`, `$patrick-delivery:write-plan`, `$patrick-delivery:execute-plan`, and `$patrick-delivery:production-hardening`.
+Patrick's `patrick-delivery` skills are also explicit-only. In Codex, invoke `$patrick-delivery:formal-spec`, `$patrick-delivery:strict-tdd`, `$patrick-delivery:write-plan`, `$patrick-delivery:execute-plan`, or `$patrick-delivery:production-hardening`. In Claude, use the direct personal-skill equivalents `/formal-spec`, `/strict-tdd`, `/write-plan`, `/execute-plan`, and `/production-hardening`.
 
 ## Firebase and Firestore safety
 
