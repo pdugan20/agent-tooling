@@ -44,8 +44,6 @@ python3 "$ROOT/scripts/configure-claude.py" --settings "$HOME/.claude/settings.j
 codex_config="$HOME/.codex/config.toml"
 mkdir -p "$(dirname "$codex_config")"
 touch "$codex_config"
-if ! grep -q '^project_doc_fallback_filenames[[:space:]]*=' "$codex_config"; then
-  printf '\nproject_doc_fallback_filenames = ["CLAUDE.md"]\n' >> "$codex_config"
-fi
+python3 "$ROOT/scripts/configure-codex.py" --config "$codex_config"
 
 echo "Agent tooling links and routing settings are configured."

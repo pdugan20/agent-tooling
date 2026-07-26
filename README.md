@@ -20,7 +20,7 @@ Clone this repository, then run:
 ./scripts/install-codex-plugins.sh
 ```
 
-The bootstrap script refuses to replace existing non-symlink files. Review or move conflicting files first.
+The bootstrap script refuses to replace existing non-symlink files. Review or move conflicting files first. It also applies two non-secret, machine-local Codex repairs when relevant: keeping the Claude fallback filename at TOML top level and resolving the installed Computer Use executable to its absolute path.
 
 ## Runtime mapping
 

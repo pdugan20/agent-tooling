@@ -16,7 +16,7 @@ All canonical repositories have been handled. Remote-backed repositories use a l
 | -------------------------- | ---------- | ---------------------------------------------------------------------- |
 | `agent-tooling`            | local main | Private-tooling source; no remote yet                                  |
 | `nextup-ios-app`           | `a2eae9f8` | Canonical skills plus Claude symlinks                                  |
-| `nextup-backend`           | `72eea95b` | Canonical skills; TDD/live-test workflows explicit-only                |
+| `nextup-backend`           | `58c34d12` | Canonical skills, explicit-only TDD, and Codex MCP connection docs     |
 | `nextup-web`               | `fef3229`  | Exploration/production modes and Firebase safety                       |
 | `pat-portfolio`            | `fc14e65`  | Existing guidance preserved in canonical `AGENTS.md`                   |
 | `messenger`                | `02d8f21`  | Expo design-iteration mode and explicit strict TDD                     |
@@ -98,11 +98,12 @@ Do not migrate these separately:
 - Decide whether `github-automation` and `github-portfolio-ops` should remain local-only, be archived, or receive private remotes before attempting to sync them.
 - Do not push a direct migration to `clickwheel-fm-docs`; let its existing source-mirror workflow carry the nested docs guidance after `clickwheel` is merged.
 
-## Local environment follow-ups
+## Local environment status and follow-ups
 
-- Codex CLI `0.145.0` is available; this machine currently runs `0.144.1`. Re-run the fresh-process smoke test after updating, especially the stale model-cache warning about `supports_reasoning_summaries`.
-- The NextUp backend MCP endpoint requires authentication and logs an auth warning in a fresh Codex session. Authenticate it or disable that repository MCP server when it is not in use.
-- `codex doctor` reports the terminal-hosted Computer Use command as unresolved because its configured command is relative. The desktop plugin works; recheck this after the Codex update before changing configuration.
-- Codex shortened skill descriptions to fit its 2% skill-context budget. If automatic routing becomes unreliable, disable plugins that are not relevant to the current stack or use a leaner profile.
+- Codex CLI `0.145.0` is installed and passes a fresh-process exploration-mode smoke test. The stale `supports_reasoning_summaries` model-cache warning and skill-description budget warning no longer appear.
+- The Computer Use MCP command now uses its verified absolute executable path. `codex doctor` reports the MCP configuration locally consistent; `scripts/configure-codex.py` applies the same non-secret repair idempotently on other machines when that executable exists.
+- The NextUp backend MCP endpoint is configured and advertises OAuth correctly. Authentication still requires interactive account consent on each machine: run `codex mcp login nextup-mcp-dev` from the repository, approve `library:read` and `ugc:write` in the browser, then confirm `codex mcp list` shows OAuth rather than `Not logged in`. The 2026-07-26 attempt timed out without consent and stored no login.
+- A fresh Codex `0.145.0` process logs non-blocking validation warnings from bundled OpenAI plugins: the spreadsheet skill's icons escape its asset directory, and template-creator supplies more than three default prompts. These are upstream cache contents, not personal-plugin defects; do not patch generated plugin caches.
+- The fresh process also logged transient rollout lookup fallbacks, while `codex doctor` independently reported healthy databases and exact rollout/state-DB parity. Reinvestigate only if thread listing or resume behavior becomes visibly incorrect.
 - A no-tool Claude startup loaded about 34.5k context tokens and passed the routing smoke test. Keep configuration smoke tests to one turn; repeated tool turns rewrite/cache that context and cost substantially more.
 - Installing `clickwheel/tools/ci` from its lockfile for the repository hook reported 16 existing high-severity npm audit findings. The migration changed no dependencies; investigate separately and do not run `npm audit fix --force` as part of this workflow migration.
