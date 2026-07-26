@@ -10,59 +10,49 @@ Migrate each remote once from its canonical checkout. Do not edit suffixed linke
 
 ## Completed locally, not pushed
 
-| Repository       | Local branch                     | Commit     | Notes                                                      |
-| ---------------- | -------------------------------- | ---------- | ---------------------------------------------------------- |
-| `agent-tooling`  | `main`                           | `caa2fee`  | New local private-tooling source; no remote yet            |
-| `nextup-ios-app` | `codex/agent-workflow-migration` | `a2eae9f8` | Canonical skills plus Claude symlinks                      |
-| `nextup-backend` | `codex/agent-workflow-migration` | `72eea95b` | Canonical skills; TDD/live-test workflows explicit-only    |
-| `nextup-web`     | `codex/agent-workflow-migration` | `fef3229`  | Exploration/production modes and Firebase safety           |
-| `pat-portfolio`  | `codex/agent-workflow-migration` | `fc14e65`  | Current `main` guidance preserved in canonical `AGENTS.md` |
-| `messenger`      | `codex/agent-workflow-migration` | `02d8f21`  | Expo design-iteration mode and explicit strict TDD         |
+All canonical repositories have been handled. Remote-backed repositories use a local `codex/agent-workflow-migration` branch based on the current remote default branch. Local-only repositories use the same branch name based on local `main`.
 
-## Remaining canonical repositories
+| Repository                 | Commit     | Notes                                                                  |
+| -------------------------- | ---------- | ---------------------------------------------------------------------- |
+| `agent-tooling`            | local main | Private-tooling source; no remote yet                                  |
+| `nextup-ios-app`           | `a2eae9f8` | Canonical skills plus Claude symlinks                                  |
+| `nextup-backend`           | `72eea95b` | Canonical skills; TDD/live-test workflows explicit-only                |
+| `nextup-web`               | `fef3229`  | Exploration/production modes and Firebase safety                       |
+| `pat-portfolio`            | `fc14e65`  | Existing guidance preserved in canonical `AGENTS.md`                   |
+| `messenger`                | `02d8f21`  | Expo design-iteration mode and explicit strict TDD                     |
+| `chat-app-prototype`       | `6cb668e`  | React Native / Expo guidance                                           |
+| `claude-usage`             | `f60bb43`  | Swift guidance; Claude references retained where they describe product |
+| `claudelint`               | `3b48ca4`  | Root/nested guides plus one canonical shared skill                     |
+| `claudenotes`              | `5c5d6d4`  | Next.js guidance                                                       |
+| `e-ink-scoreboard`         | `825d544`  | Python/JavaScript guidance                                             |
+| `figma-chat-builder`       | `82a0a6f`  | Figma TypeScript guidance; strict hooks and 88 tests passed            |
+| `figma-music-injector`     | `e08ddca`  | Figma TypeScript guidance                                              |
+| `imessage-swift-prototype` | `936dcd7`  | SwiftUI exploration guidance                                           |
+| `libby-downloader`         | `51f0088`  | TypeScript CLI guidance                                                |
+| `mintlify-docs`            | `9eb14ed`  | Cross-runtime contributor guide without shipping plugin context        |
+| `passant-prototype`        | `223d62c`  | React Native / Expo guidance                                           |
+| `rss-feed-generator`       | `671127a`  | TypeScript service guidance                                            |
+| `touchpoint`               | `6376a64`  | macOS prototype guidance                                               |
+| `x-archive`                | `0c2696c`  | Next.js/Supabase guidance                                              |
+| `bibliocommons-mcp`        | `7a9583f`  | Live library-account mutation boundary                                 |
+| `clickwheel`               | `9c27552`  | Client-independent MCP safety plus canonical docs-mirror guidance      |
+| `presentations`            | `6f5f2b9`  | Lightweight narrative/visual iteration mode                            |
+| `rewind`                   | `0fa60c9`  | Three canonical shared skills plus live API/data boundaries            |
+| `github-automation`        | `5e0f4b5`  | Local-only; preserves the read-only control-plane invariant            |
+| `github-portfolio-ops`     | `6f38a51`  | Local-only; historical Superpowers artifacts do not trigger workflow   |
 
-### Existing `AGENTS.md`; consolidate duplicate guidance
+## Generated mirror exception
 
-| Repository          | State                                                            | Recommended action                                                          |
-| ------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| `bibliocommons-mcp` | Dirty primary worktree; `AGENTS.md` and `CLAUDE.md` both present | Preserve WIP, make `AGENTS.md` canonical, reduce Claude file to import/shim |
-| `clickwheel`        | Dirty primary worktree; two Superpowers references               | Preserve WIP, audit the strict-workflow language, then consolidate          |
-| `presentations`     | Dirty primary worktree                                           | Preserve ten local changes; consolidate through an isolated branch          |
+`clickwheel-fm-docs` is an external-organization, one-way generated mirror of `clickwheel/docs-mintlify`. It must not be edited directly. The `clickwheel` migration adds `docs-mintlify/AGENTS.md` and its Claude shim at commit `9c27552`; the existing mirror workflow will copy them only after that source branch is merged and synced.
 
-### Claude-only repository skills
+## Preserved primary-worktree state
 
-| Repository   | Skills | Recommended action                                                                                              |
-| ------------ | -----: | --------------------------------------------------------------------------------------------------------------- |
-| `claudelint` |      1 | Move canonical source to `.agents/skills`, add per-skill Claude symlink, validate                               |
-| `rewind`     |      3 | Preserve four local changes, move canonical source to `.agents/skills`, add per-skill Claude symlinks, validate |
+The migration used isolated worktrees, so existing primary-checkout work remains unchanged. In particular:
 
-### `CLAUDE.md` only; add canonical `AGENTS.md`
-
-| Repository                 | Default branch | Notes                                               |
-| -------------------------- | -------------- | --------------------------------------------------- |
-| `chat-app-prototype`       | `main`         | React Native / Expo                                 |
-| `claude-usage`             | `main`         | Claude tooling                                      |
-| `claudelint`               | `main`         | Also needs skill conversion                         |
-| `claudenotes`              | `main`         | TypeScript app                                      |
-| `e-ink-scoreboard`         | `main`         | TypeScript and Python                               |
-| `figma-chat-builder`       | `main`         | Figma-oriented TypeScript                           |
-| `figma-music-injector`     | `main`         | Figma-oriented TypeScript                           |
-| `imessage-swift-prototype` | `main`         | Swift prototype                                     |
-| `libby-downloader`         | `main`         | TypeScript                                          |
-| `passant-prototype`        | `master`       | React Native / Expo                                 |
-| `rewind`                   | `main`         | Dirty primary worktree; also needs skill conversion |
-| `rss-feed-generator`       | `main`         | TypeScript                                          |
-| `touchpoint`               | `master`       | Prototype                                           |
-| `x-archive`                | `main`         | TypeScript                                          |
-
-### No repository instruction file
-
-| Repository             | State                                                | Recommended action                                             |
-| ---------------------- | ---------------------------------------------------- | -------------------------------------------------------------- |
-| `clickwheel-fm-docs`   | External organization remote; current feature branch | Confirm ownership/scope before adding instructions             |
-| `github-automation`    | Local-only repository                                | Decide whether to keep local, archive, or add a private remote |
-| `github-portfolio-ops` | Local-only repository                                | Decide whether to keep local, archive, or add a private remote |
-| `mintlify-docs`        | Clean `main`                                         | Add a concise docs-specific `AGENTS.md` if active              |
+- `bibliocommons-mcp`, `clickwheel`, and `presentations` retain their untracked local `AGENTS.md` files and other active changes.
+- `rewind` retains its modified `CLAUDE.md`, reading/watching domain edits, historical Superpowers plans, and local feature-branch commit.
+- The previously recorded NextUp, portfolio, and Messenger work-in-progress remains untouched.
+- `nextup-backend` has two pre-existing `lint-staged automatic backup` recovery stashes, dated 2026-07-26 07:33 and 2026-07-18 21:41. They contain unrelated notification-quality and public-profile reconciliation work and were deliberately preserved.
 
 ## Existing linked worktrees and duplicate checkouts
 
@@ -104,8 +94,9 @@ Do not migrate these separately:
 ## Remote actions awaiting explicit approval
 
 - Create a private GitHub remote for `agent-tooling` and push `main`.
-- Push the five `codex/agent-workflow-migration` branches and open reviewable pull requests.
-- Batch the remaining clean repositories first; isolate dirty repositories through clean worktrees based on their remote default branches.
+- Push the 23 remote-backed `codex/agent-workflow-migration` branches and open reviewable pull requests.
+- Decide whether `github-automation` and `github-portfolio-ops` should remain local-only, be archived, or receive private remotes before attempting to sync them.
+- Do not push a direct migration to `clickwheel-fm-docs`; let its existing source-mirror workflow carry the nested docs guidance after `clickwheel` is merged.
 
 ## Local environment follow-ups
 
@@ -114,3 +105,4 @@ Do not migrate these separately:
 - `codex doctor` reports the terminal-hosted Computer Use command as unresolved because its configured command is relative. The desktop plugin works; recheck this after the Codex update before changing configuration.
 - Codex shortened skill descriptions to fit its 2% skill-context budget. If automatic routing becomes unreliable, disable plugins that are not relevant to the current stack or use a leaner profile.
 - A no-tool Claude startup loaded about 34.5k context tokens and passed the routing smoke test. Keep configuration smoke tests to one turn; repeated tool turns rewrite/cache that context and cost substantially more.
+- Installing `clickwheel/tools/ci` from its lockfile for the repository hook reported 16 existing high-severity npm audit findings. The migration changed no dependencies; investigate separately and do not run `npm audit fix --force` as part of this workflow migration.
