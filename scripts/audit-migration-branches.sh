@@ -6,13 +6,18 @@ migration_branch=codex/agent-workflow-migration
 github_root=${AGENT_GITHUB_ROOT:-"$HOME/Documents/Github"}
 messenger_root=${AGENT_MESSENGER_ROOT:-"$HOME/Documents/messenger"}
 fetch=false
+published=false
 
-if [[ ${1:-} == "--fetch" ]]; then
-  fetch=true
-elif [[ $# -gt 0 ]]; then
-  echo "Usage: $0 [--fetch]" >&2
-  exit 2
-fi
+for argument in "$@"; do
+  case $argument in
+    --fetch) fetch=true ;;
+    --published) published=true ;;
+    *)
+      echo "Usage: $0 [--fetch] [--published]" >&2
+      exit 2
+      ;;
+  esac
+done
 
 failed=false
 
@@ -53,14 +58,24 @@ while IFS='|' read -r repository path; do
   parent_state=ok
   [[ $parent == "$merge_base" ]] || parent_state=stale
 
-  remote_state=absent
+  local_head=$(git -C "$path" rev-parse "$migration_branch")
   remote_output=$(git -C "$path" ls-remote --heads origin "refs/heads/$migration_branch")
-  [[ -z $remote_output ]] || remote_state=exists
+  remote_head=${remote_output%%[[:space:]]*}
+  if [[ -z $remote_output ]]; then
+    remote_state=absent
+  elif [[ $remote_head == "$local_head" ]]; then
+    remote_state=match
+  else
+    remote_state=differs
+  fi
 
   printf '%-28s %-8s %-10s %5s %6s %7s %7s\n' \
     "$repository" "${default_ref#origin/}" "$head" "$ahead" "$behind" "$parent_state" "$remote_state"
 
-  if [[ $ahead -ne 1 || $behind -ne 0 || $parent_state != ok || $remote_state != absent ]]; then
+  expected_remote_state=absent
+  [[ $published == true ]] && expected_remote_state=match
+
+  if [[ $ahead -ne 1 || $behind -ne 0 || $parent_state != ok || $remote_state != "$expected_remote_state" ]]; then
     failed=true
   fi
 done <<EOF
@@ -90,8 +105,12 @@ rewind|$github_root/rewind
 EOF
 
 if [[ $failed == true ]]; then
-  echo "Migration publication preflight failed." >&2
+  echo "Migration branch audit failed." >&2
   exit 1
 fi
 
-echo "Migration publication preflight passed."
+if [[ $published == true ]]; then
+  echo "Published migration branch audit passed."
+else
+  echo "Migration publication preflight passed."
+fi

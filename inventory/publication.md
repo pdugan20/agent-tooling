@@ -2,7 +2,7 @@
 
 Audit date: 2026-07-26
 
-This is the durable handoff for publishing the local Claude-to-Codex workflow migrations. It does not authorize pushes, pull requests, merges, or repository creation.
+This is the durable publication record for the Claude-to-Codex workflow migrations. Branch pushes and Wave 1 draft pull requests were authorized and completed on 2026-07-26. It does not authorize merges or opening later-wave pull requests.
 
 ## Verified preflight state
 
@@ -10,20 +10,20 @@ This is the durable handoff for publishing the local Claude-to-Codex workflow mi
 - All 23 remotes were fetched immediately before this manifest was written.
 - Every migration branch is exactly one commit ahead of, and zero commits behind, its current remote default branch.
 - Each migration commit's parent is the merge base with the current remote default branch.
-- No remote already has `codex/agent-workflow-migration`.
+- All 23 reviewed branch SHAs now exist remotely as `codex/agent-workflow-migration` and exactly match the local migration commits.
 - No rebase or conflict repair is currently required.
 - The large NextUp skill diffs remove duplicated `.claude/skills` payloads after preserving the canonical `.agents/skills` copies. No canonical skill resource is deleted.
 - Primary-checkout work-in-progress is not part of these branches.
 
-Because remote state can change, rerun the fetch/divergence checks immediately before pushing.
+Because remote state can change, rerun the post-publication SHA and divergence checks when resuming this migration.
 
 ```bash
-./scripts/audit-migration-branches.sh --fetch
+./scripts/audit-migration-branches.sh --fetch --published
 ```
 
 ## Publication waves
 
-Pushes can be done together after approval, but open pull requests in waves so review and notifications stay manageable.
+All remote-backed branches are pushed. Pull requests are being opened in waves so review and notifications stay manageable.
 
 ### Wave 1: current priorities
 
@@ -34,6 +34,8 @@ Pushes can be done together after approval, but open pull requests in waves so r
 | `nextup-web`     | `main`   | `fef3229`  | `docs: align agent workflows`               | Exploration mode and Firebase boundaries    |
 | `pat-portfolio`  | `main`   | `fc14e65`  | `docs: align agent workflows`               | Portfolio design-iteration guidance         |
 | `messenger`      | `master` | `02d8f21`  | `docs: align agent workflows`               | Expo design iteration and opt-in strict TDD |
+
+Published as draft pull requests: [iOS #772](https://github.com/nxt-up/nextup-ios-app/pull/772), [backend #740](https://github.com/nxt-up/nextup-backend/pull/740), [web #117](https://github.com/nxt-up/nextup-web/pull/117), [portfolio #87](https://github.com/pdugan20/pat-portfolio/pull/87), and [Messenger #15](https://github.com/pdugan20/messenger-proto/pull/15).
 
 ### Wave 2: shared skills and operational boundaries
 
@@ -98,7 +100,7 @@ Add repository-specific verification to the template where available. `figma-cha
 
 - `clickwheel-fm-docs` is a generated mirror and must not receive a direct PR. The `clickwheel` source migration carries nested docs guidance through the existing mirror workflow after merge.
 - `github-automation` (`5e0f4b5`) and `github-portfolio-ops` (`6f38a51`) are local-only. Decide whether to archive them, keep them local, or create private remotes.
-- `agent-tooling` has no remote. Create a private repository before pushing its `main` branch.
+- `agent-tooling` is published as the private repository `pdugan20/agent-tooling`.
 - NextUp MCP OAuth credentials are machine-local and never belong in a repository or this manifest.
 
 ## Final publication gate

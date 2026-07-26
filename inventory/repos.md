@@ -8,38 +8,38 @@ This inventory covers top-level Git worktrees in `/Users/patrickdugan/Documents/
 
 Migrate each remote once from its canonical checkout. Do not edit suffixed linked worktrees independently; they inherit repository instructions when the canonical migration lands on the default branch.
 
-## Completed locally, not pushed
+## Published and local migration state
 
-All canonical repositories have been handled. Remote-backed repositories use a local `codex/agent-workflow-migration` branch based on the current remote default branch. Local-only repositories use the same branch name based on local `main`.
+All canonical repositories have been handled. The 23 remote-backed repositories have a published `codex/agent-workflow-migration` branch whose remote SHA was verified against the reviewed local commit on 2026-07-26. The five current-priority repositories have draft pull requests; later waves are pushed but intentionally do not have pull requests yet. Local-only repositories use the same branch name based on local `main`.
 
-| Repository                 | Commit     | Notes                                                                  |
-| -------------------------- | ---------- | ---------------------------------------------------------------------- |
-| `agent-tooling`            | local main | Private-tooling source; no remote yet                                  |
-| `nextup-ios-app`           | `a2eae9f8` | Canonical skills plus Claude symlinks                                  |
-| `nextup-backend`           | `58c34d12` | Canonical skills, explicit-only TDD, and Codex MCP connection docs     |
-| `nextup-web`               | `fef3229`  | Exploration/production modes and Firebase safety                       |
-| `pat-portfolio`            | `fc14e65`  | Existing guidance preserved in canonical `AGENTS.md`                   |
-| `messenger`                | `02d8f21`  | Expo design-iteration mode and explicit strict TDD                     |
-| `chat-app-prototype`       | `6cb668e`  | React Native / Expo guidance                                           |
-| `claude-usage`             | `f60bb43`  | Swift guidance; Claude references retained where they describe product |
-| `claudelint`               | `3b48ca4`  | Root/nested guides plus one canonical shared skill                     |
-| `claudenotes`              | `5c5d6d4`  | Next.js guidance                                                       |
-| `e-ink-scoreboard`         | `825d544`  | Python/JavaScript guidance                                             |
-| `figma-chat-builder`       | `82a0a6f`  | Figma TypeScript guidance; strict hooks and 88 tests passed            |
-| `figma-music-injector`     | `e08ddca`  | Figma TypeScript guidance                                              |
-| `imessage-swift-prototype` | `936dcd7`  | SwiftUI exploration guidance                                           |
-| `libby-downloader`         | `51f0088`  | TypeScript CLI guidance                                                |
-| `mintlify-docs`            | `9eb14ed`  | Cross-runtime contributor guide without shipping plugin context        |
-| `passant-prototype`        | `223d62c`  | React Native / Expo guidance                                           |
-| `rss-feed-generator`       | `671127a`  | TypeScript service guidance                                            |
-| `touchpoint`               | `6376a64`  | macOS prototype guidance                                               |
-| `x-archive`                | `0c2696c`  | Next.js/Supabase guidance                                              |
-| `bibliocommons-mcp`        | `7a9583f`  | Live library-account mutation boundary                                 |
-| `clickwheel`               | `9c27552`  | Client-independent MCP safety plus canonical docs-mirror guidance      |
-| `presentations`            | `6f5f2b9`  | Lightweight narrative/visual iteration mode                            |
-| `rewind`                   | `0fa60c9`  | Three canonical shared skills plus live API/data boundaries            |
-| `github-automation`        | `5e0f4b5`  | Local-only; preserves the read-only control-plane invariant            |
-| `github-portfolio-ops`     | `6f38a51`  | Local-only; historical Superpowers artifacts do not trigger workflow   |
+| Repository                 | Commit     | Publication status                                                  | Notes                                                                  |
+| -------------------------- | ---------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `agent-tooling`            | `main`     | Private remote: `pdugan20/agent-tooling`                            | Shared source, installer, inventory, and Patrick Delivery plugin       |
+| `nextup-ios-app`           | `a2eae9f8` | [Draft PR #772](https://github.com/nxt-up/nextup-ios-app/pull/772)  | Canonical skills plus Claude symlinks                                  |
+| `nextup-backend`           | `58c34d12` | [Draft PR #740](https://github.com/nxt-up/nextup-backend/pull/740)  | Canonical skills, explicit-only TDD, and Codex MCP connection docs     |
+| `nextup-web`               | `fef3229`  | [Draft PR #117](https://github.com/nxt-up/nextup-web/pull/117)      | Exploration/production modes and Firebase safety                       |
+| `pat-portfolio`            | `fc14e65`  | [Draft PR #87](https://github.com/pdugan20/pat-portfolio/pull/87)   | Existing guidance preserved in canonical `AGENTS.md`                   |
+| `messenger`                | `02d8f21`  | [Draft PR #15](https://github.com/pdugan20/messenger-proto/pull/15) | Expo design-iteration mode and explicit strict TDD                     |
+| `chat-app-prototype`       | `6cb668e`  | Branch pushed; Wave 3 PR pending                                    | React Native / Expo guidance                                           |
+| `claude-usage`             | `f60bb43`  | Branch pushed; Wave 3 PR pending                                    | Swift guidance; Claude references retained where they describe product |
+| `claudelint`               | `3b48ca4`  | Branch pushed; Wave 2 PR pending                                    | Root/nested guides plus one canonical shared skill                     |
+| `claudenotes`              | `5c5d6d4`  | Branch pushed; Wave 3 PR pending                                    | Next.js guidance                                                       |
+| `e-ink-scoreboard`         | `825d544`  | Branch pushed; Wave 3 PR pending                                    | Python/JavaScript guidance                                             |
+| `figma-chat-builder`       | `82a0a6f`  | Branch pushed; Wave 3 PR pending                                    | Figma TypeScript guidance; strict hooks and 88 tests passed            |
+| `figma-music-injector`     | `e08ddca`  | Branch pushed; Wave 3 PR pending                                    | Figma TypeScript guidance                                              |
+| `imessage-swift-prototype` | `936dcd7`  | Branch pushed; Wave 3 PR pending                                    | SwiftUI exploration guidance                                           |
+| `libby-downloader`         | `51f0088`  | Branch pushed; Wave 3 PR pending                                    | TypeScript CLI guidance                                                |
+| `mintlify-docs`            | `9eb14ed`  | Branch pushed; Wave 2 PR pending                                    | Cross-runtime contributor guide without shipping plugin context        |
+| `passant-prototype`        | `223d62c`  | Branch pushed; Wave 3 PR pending                                    | React Native / Expo guidance                                           |
+| `rss-feed-generator`       | `671127a`  | Branch pushed; Wave 3 PR pending                                    | TypeScript service guidance                                            |
+| `touchpoint`               | `6376a64`  | Branch pushed; Wave 3 PR pending                                    | macOS prototype guidance                                               |
+| `x-archive`                | `0c2696c`  | Branch pushed; Wave 3 PR pending                                    | Next.js/Supabase guidance                                              |
+| `bibliocommons-mcp`        | `7a9583f`  | Branch pushed; Wave 2 PR pending                                    | Live library-account mutation boundary                                 |
+| `clickwheel`               | `9c27552`  | Branch pushed; Wave 2 PR pending                                    | Client-independent MCP safety plus canonical docs-mirror guidance      |
+| `presentations`            | `6f5f2b9`  | Branch pushed; Wave 2 PR pending                                    | Lightweight narrative/visual iteration mode                            |
+| `rewind`                   | `0fa60c9`  | Branch pushed; Wave 2 PR pending                                    | Three canonical shared skills plus live API/data boundaries            |
+| `github-automation`        | `5e0f4b5`  | Local only; remote decision pending                                 | Preserves the read-only control-plane invariant                        |
+| `github-portfolio-ops`     | `6f38a51`  | Local only; remote decision pending                                 | Historical Superpowers artifacts do not trigger workflow               |
 
 ## Generated mirror exception
 
@@ -91,10 +91,10 @@ Do not migrate these separately:
 - `x-archive-automation-hardening`
 - `x-archive-security-bridge`
 
-## Remote actions awaiting explicit approval
+## Remaining publication decisions
 
-- Create a private GitHub remote for `agent-tooling` and push `main`.
-- Push the 23 remote-backed `codex/agent-workflow-migration` branches and open reviewable pull requests.
+- Review and merge the five Wave 1 draft pull requests; no migration pull request is configured to merge automatically.
+- Open Wave 2 and Wave 3 pull requests when the first wave has been reviewed and notification volume is acceptable.
 - Decide whether `github-automation` and `github-portfolio-ops` should remain local-only, be archived, or receive private remotes before attempting to sync them.
 - Do not push a direct migration to `clickwheel-fm-docs`; let its existing source-mirror workflow carry the nested docs guidance after `clickwheel` is merged.
 
