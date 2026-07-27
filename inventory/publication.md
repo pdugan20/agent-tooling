@@ -1,119 +1,78 @@
 # Agent workflow migration publication manifest
 
-Audit date: 2026-07-26
+Completed: 2026-07-26 through 2026-07-27
 
-This is the durable publication record for the Claude-to-Codex workflow migrations. Branch pushes and Wave 1 draft pull requests were authorized and completed on 2026-07-26. It does not authorize merges or opening later-wave pull requests.
+The Claude-to-Codex workflow migration is complete for all 23 remote-backed repositories. Every migration was
+reviewed through a pull request, passed its applicable checks, and was squash-merged into the repository's default
+branch. GitHub then removed every temporary `codex/agent-workflow-migration` remote branch.
 
-## Verified preflight state
-
-- Branch: `codex/agent-workflow-migration` in every remote-backed repository.
-- All 23 remotes were fetched immediately before this manifest was written.
-- Every migration branch is exactly one commit ahead of, and zero commits behind, its current remote default branch.
-- Each migration commit's parent is the merge base with the current remote default branch.
-- All 23 reviewed branch SHAs now exist remotely as `codex/agent-workflow-migration` and exactly match the local migration commits.
-- No rebase or conflict repair is currently required.
-- The large NextUp skill diffs remove duplicated `.claude/skills` payloads after preserving the canonical `.agents/skills` copies. No canonical skill resource is deleted.
-- NextUp backend keeps `.claude/skills/BEST-PRACTICES.md` as a compatibility symlink to the canonical `.agents/skills/README.md` so archived documentation links remain valid.
-- Primary-checkout work-in-progress is not part of these branches.
-
-Because remote state can change, rerun the post-publication SHA and divergence checks when resuming this migration.
+Run the durable post-merge audit with:
 
 ```bash
-./scripts/audit-migration-branches.sh --fetch --published
+./scripts/audit-migration-branches.sh --fetch --merged
 ```
 
-## Publication waves
+That audit verifies each recorded squash-merge commit remains reachable from the current remote default branch and
+that no temporary migration branch has reappeared.
 
-All remote-backed branches are pushed. Pull requests are being opened in waves so review and notifications stay manageable.
+## Wave 1: current priorities
 
-### Wave 1: current priorities
+| Repository       | PR                                                                 | Migration head | Merge commit |
+| ---------------- | ------------------------------------------------------------------ | -------------- | ------------ |
+| `nextup-ios-app` | [#772](https://github.com/nxt-up/nextup-ios-app/pull/772)           | `a2eae9f8`     | `2f89c729`   |
+| `nextup-backend` | [#740](https://github.com/nxt-up/nextup-backend/pull/740)           | `319117e5`     | `68a6de4a`   |
+| `nextup-web`     | [#117](https://github.com/nxt-up/nextup-web/pull/117)               | `fef3229`      | `ae835097`   |
+| `pat-portfolio`  | [#87](https://github.com/pdugan20/pat-portfolio/pull/87)            | `fc14e65`      | `7308d50f`   |
+| `messenger`      | [#15](https://github.com/pdugan20/messenger-proto/pull/15)          | `02d8f21`      | `9d339b98`   |
 
-| Repository       | Default  | Head       | Suggested PR title                          | Scope                                       |
-| ---------------- | -------- | ---------- | ------------------------------------------- | ------------------------------------------- |
-| `nextup-ios-app` | `main`   | `a2eae9f8` | `chore: share agent skills across runtimes` | 19 canonical skills and Claude symlinks     |
-| `nextup-backend` | `main`   | `319117e5` | `chore: share agent skills across runtimes` | 24 canonical directories, safety, MCP docs  |
-| `nextup-web`     | `main`   | `fef3229`  | `docs: align agent workflows`               | Exploration mode and Firebase boundaries    |
-| `pat-portfolio`  | `main`   | `fc14e65`  | `docs: align agent workflows`               | Portfolio design-iteration guidance         |
-| `messenger`      | `master` | `02d8f21`  | `docs: align agent workflows`               | Expo design iteration and opt-in strict TDD |
+## Wave 2: shared skills and operational boundaries
 
-Published as draft pull requests: [iOS #772](https://github.com/nxt-up/nextup-ios-app/pull/772), [backend #740](https://github.com/nxt-up/nextup-backend/pull/740), [web #117](https://github.com/nxt-up/nextup-web/pull/117), [portfolio #87](https://github.com/pdugan20/pat-portfolio/pull/87), and [Messenger #15](https://github.com/pdugan20/messenger-proto/pull/15).
+| Repository          | PR                                                                 | Migration head | Merge commit |
+| ------------------- | ------------------------------------------------------------------ | -------------- | ------------ |
+| `claudelint`        | [#165](https://github.com/pdugan20/claudelint/pull/165)             | `79db2717`     | `016b46d2`   |
+| `rewind`            | [#182](https://github.com/pdugan20/rewind/pull/182)                 | `0fa60c90`     | `c0bb6a0a`   |
+| `clickwheel`        | [#125](https://github.com/pdugan20/clickwheel/pull/125)             | `9c275528`     | `9cf8833e`   |
+| `bibliocommons-mcp` | [#60](https://github.com/pdugan20/bibliocommons-mcp/pull/60)        | `7a9583f7`     | `d04267b7`   |
+| `mintlify-docs`     | [#23](https://github.com/pdugan20/mintlify-docs/pull/23)            | `90cab618`     | `222fb1d5`   |
+| `presentations`     | [#7](https://github.com/pdugan20/presentations/pull/7)              | `6f5f2b94`     | `d39b9f6c`   |
 
-All applicable Wave 1 checks passed on 2026-07-26. The backend compatibility-symlink rerun passed documentation quality, pre-commit, Firebase deployment validation, unit coverage, Firebase emulator integration, and the final CI gate.
+## Wave 3: repository guidance
 
-### Wave 2: shared skills and operational boundaries
+| Repository                 | PR                                                                 | Migration head | Merge commit |
+| -------------------------- | ------------------------------------------------------------------ | -------------- | ------------ |
+| `chat-app-prototype`       | [#78](https://github.com/pdugan20/chat-app-prototype/pull/78)       | `6cb668ef`     | `b81724f3`   |
+| `claude-usage`             | [#7](https://github.com/pdugan20/claude-usage/pull/7)               | `f60bb435`     | `f73384ad`   |
+| `claudenotes`              | [#64](https://github.com/pdugan20/claudenotes/pull/64)              | `8e997b7b`     | `ee21f276`   |
+| `e-ink-scoreboard`         | [#84](https://github.com/pdugan20/e-ink-scoreboard/pull/84)         | `825d5444`     | `2ee6682f`   |
+| `figma-chat-builder`       | [#96](https://github.com/pdugan20/figma-chat-builder/pull/96)       | `82a0a6f6`     | `93e77b92`   |
+| `figma-music-injector`     | [#38](https://github.com/pdugan20/figma-music-injector/pull/38)     | `e08ddca0`     | `6f842d81`   |
+| `imessage-swift-prototype` | [#5](https://github.com/pdugan20/imessage-swift-prototype/pull/5)   | `936dcd79`     | `fe5a878e`   |
+| `libby-downloader`         | [#123](https://github.com/pdugan20/libby-downloader/pull/123)       | `51f00881`     | `9c9ac844`   |
+| `passant-prototype`        | [#65](https://github.com/pdugan20/passant-prototype/pull/65)        | `223d62cf`     | `739d7f93`   |
+| `rss-feed-generator`       | [#42](https://github.com/pdugan20/rss-feed-generator/pull/42)       | `671127a2`     | `de98a45a`   |
+| `touchpoint`               | [#9](https://github.com/pdugan20/touchpoint/pull/9)                  | `6376a64c`     | `8a823933`   |
+| `x-archive`                | [#62](https://github.com/pdugan20/x-archive/pull/62)                | `0553ea9d`     | `712e3705`   |
 
-| Repository          | Default | Head      | Suggested PR title                            | Scope                                             |
-| ------------------- | ------- | --------- | --------------------------------------------- | ------------------------------------------------- |
-| `claudelint`        | `main`  | `3b48ca4` | `chore: share agent guidance across runtimes` | Nested guides and one shared skill                |
-| `rewind`            | `main`  | `0fa60c9` | `chore: share agent guidance across runtimes` | Three shared skills and live-data boundaries      |
-| `clickwheel`        | `main`  | `9c27552` | `chore: share agent guidance across runtimes` | Client-neutral MCP safety and mirror-source guide |
-| `bibliocommons-mcp` | `main`  | `7a9583f` | `chore: share agent guidance across runtimes` | Live library-account mutation boundary            |
-| `mintlify-docs`     | `main`  | `9eb14ed` | `chore: share agent guidance across runtimes` | Cross-runtime contributor context for plugin work |
-| `presentations`     | `main`  | `6f5f2b9` | `chore: share agent guidance across runtimes` | Lightweight narrative and visual iteration        |
+## Final verification notes
 
-### Wave 3: low-risk repository guidance
+- All applicable pull-request checks passed before merge. This included the larger NextUp, ClaudeLint, ClaudeNotes,
+  Clickwheel, and Expo/React Native matrices.
+- ClaudeLint keeps its portable shared skill free of runtime-specific metadata. A path-specific override disables
+  only ClaudeLint's Claude-only `skill-missing-version` rule for that canonical shared skill.
+- Mintlify Docs, ClaudeNotes, and X Archive wrap two shared work-mode bullets to satisfy their Markdown line-length
+  rules; the wording is unchanged.
+- ClaudeNotes was replayed over the newer `main` image-upload hardening commit before its PR was opened.
+- The generated `clickwheel-fm/docs` mirror was synchronized through its existing one-way workflow. Mirror commit
+  `5633115` contains the inherited `AGENTS.md` and Claude import shim; no direct mirror edit or PR was made.
+- Primary-checkout work-in-progress and the two pre-existing NextUp backend recovery stashes were preserved.
 
-| Repository                 | Default  | Head      |
-| -------------------------- | -------- | --------- |
-| `chat-app-prototype`       | `main`   | `6cb668e` |
-| `claude-usage`             | `main`   | `f60bb43` |
-| `claudenotes`              | `main`   | `5c5d6d4` |
-| `e-ink-scoreboard`         | `main`   | `825d544` |
-| `figma-chat-builder`       | `main`   | `82a0a6f` |
-| `figma-music-injector`     | `main`   | `e08ddca` |
-| `imessage-swift-prototype` | `main`   | `936dcd7` |
-| `libby-downloader`         | `main`   | `51f0088` |
-| `passant-prototype`        | `master` | `223d62c` |
-| `rss-feed-generator`       | `main`   | `671127a` |
-| `touchpoint`               | `master` | `6376a64` |
-| `x-archive`                | `main`   | `0c2696c` |
+## Deliberate exclusions and remaining optional work
 
-Use `chore: share agent guidance across runtimes` as the Wave 3 PR title.
-
-## Pull request body template
-
-```markdown
-## Summary
-
-- Make `AGENTS.md` the canonical repository guidance for Codex and other compatible agents.
-- Keep Claude on the same source through a small import shim or per-skill symlinks.
-- Default lightweight UI, design, documentation, and prototype work to exploration mode.
-- Keep strict TDD, formal plans, production hardening, deployments, and live-data mutations explicit and proportional to the request.
-
-## Why
-
-This removes runtime-specific instruction drift while preserving repository-specific architecture and safety rules. Claude and Codex now consume the same maintained source instead of two hand-edited copies.
-
-## Verification
-
-- Branch is one commit ahead of and zero commits behind the current default branch.
-- `git diff --check` passes.
-- Repository hooks or focused format/lint checks passed where configured.
-- Fresh Codex and Claude processes both selected exploration mode for a quick UI experiment without requiring a spec, worktree, or TDD.
-
-## Notes
-
-- No application runtime behavior, deployment, production data, credentials, or repository settings changed.
-- Large deletion counts in skill-heavy repositories are removal of duplicated Claude payloads; canonical `.agents/skills` resources remain present.
-```
-
-Add repository-specific verification to the template where available. `figma-chat-builder` ran TypeScript checks and 88 tests; all four newly shared skills passed the Codex skill validator; Clickwheel's configured formatting, Markdown, and commit hooks passed.
-
-## Exclusions and separate decisions
-
-- `clickwheel-fm-docs` is a generated mirror and must not receive a direct PR. The `clickwheel` source migration carries nested docs guidance through the existing mirror workflow after merge.
-- `github-automation` (`5e0f4b5`) and `github-portfolio-ops` (`6f38a51`) are local-only. Decide whether to archive them, keep them local, or create private remotes.
-- `agent-tooling` is published as the private repository `pdugan20/agent-tooling`.
-- NextUp MCP OAuth credentials are machine-local and never belong in a repository or this manifest.
-
-## Final publication gate
-
-Before each push:
-
-1. Fetch `origin` and require the migration branch to remain zero commits behind the remote default branch.
-2. Confirm the remote migration branch still does not exist.
-3. Confirm the primary checkout's existing work remains unchanged.
-4. Push the exact local migration branch without force.
-5. Open a pull request; do not merge automatically.
-
-After each merge, fetch the canonical checkout and verify a fresh Codex and Claude session sees the merged guidance from the default branch.
+- `github-automation` (`5e0f4b5`) and `github-portfolio-ops` (`6f38a51`) remain local-only. Creating private remotes or
+  archiving them is a separate decision.
+- NextUp MCP OAuth remains intentionally deferred. No credentials were stored; retry with
+  `codex mcp login nextup-mcp-dev` and then confirm `codex mcp list` reports OAuth authentication.
+- Existing dependency/security findings reported by repository tooling were not changed because these migrations
+  did not modify dependencies. Track remediation separately rather than using forced audit fixes.
+- The NextUp backend's deprecated Node.js action warning and non-blocking validation warnings from bundled OpenAI
+  plugin caches remain independent maintenance items.
