@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+
+if ! command -v codex >/dev/null 2>&1; then
+  echo "Codex CLI is not installed." >&2
+  exit 1
+fi
+
+codex plugin marketplace upgrade
+
+while IFS= read -r plugin; do
+  [[ -n $plugin ]] || continue
+  echo "Refreshing $plugin"
+  codex plugin add "$plugin"
+done <"$ROOT/config/codex-plugins.txt"
+
+python3 "$ROOT/scripts/configure-codex.py" --config "$HOME/.codex/config.toml"
+
+echo "Configured Codex plugins refreshed. Start a new Codex task to load them."

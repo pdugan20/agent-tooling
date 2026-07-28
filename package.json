@@ -1,0 +1,23 @@
+{
+  "name": "agent-tooling",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Development tooling for Patrick's shared Codex and Claude configuration.",
+  "scripts": {
+    "format": "prettier --write \"**/*.{json,yaml,yml}\"",
+    "format:check": "prettier --check \"**/*.{json,yaml,yml}\"",
+    "lint:claude": "claudelint check-all --strict --no-cache --format compact && claudelint validate-skills --path plugins/patrick-delivery/skills --preset strict --warnings-as-errors",
+    "lint:markdown": "markdownlint \"**/*.md\" --ignore node_modules --ignore .claudelint-cache",
+    "test": "python3 -m unittest discover -s scripts -p 'test_*.py' -v",
+    "verify": "bash scripts/verify-repo.sh"
+  },
+  "devDependencies": {
+    "claude-code-lint": "0.7.0",
+    "markdownlint-cli": "0.49.1",
+    "prettier": "3.9.6"
+  },
+  "engines": {
+    "node": ">=22.22.2"
+  },
+  "packageManager": "npm@11.5.2"
+}

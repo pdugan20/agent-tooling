@@ -6,7 +6,6 @@ import os
 import tempfile
 from pathlib import Path
 
-
 PLUGIN = "superpowers@claude-plugins-official"
 DELIVERY_SKILLS = (
     "execute-plan",

@@ -5,6 +5,10 @@ description: This skill encodes Emil Kowalski's philosophy on UI polish, compone
 
 # Design Engineering
 
+## Usage
+
+Use this guidance when building or reviewing interface polish, component behavior, and motion. Follow the required response and review formats below when they apply to the request.
+
 ## Initial Response
 
 When this skill is first invoked without a specific question, respond only with:

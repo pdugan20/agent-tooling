@@ -1,5 +1,7 @@
 patrick-delivery@personal
 firebase@firebase
+cloudflare@cloudflare
+mintlify@claude-plugins-official
 figma@openai-curated
 github@openai-curated
 sentry@openai-curated

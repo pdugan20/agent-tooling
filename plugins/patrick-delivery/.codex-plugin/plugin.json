@@ -1,19 +1,20 @@
 {
   "name": "patrick-delivery",
-  "version": "0.1.0",
-  "description": "Opt-in specification, planning, strict TDD, execution, and production-hardening workflows.",
+  "version": "0.2.0",
+  "description": "Proportional production feature delivery plus opt-in specification, planning, strict TDD, execution, and hardening workflows.",
   "author": {
     "name": "Patrick Dugan"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "Patrick Delivery",
-    "shortDescription": "Explicit delivery workflows without forced process.",
-    "longDescription": "A personal set of opt-in workflows for formal specifications, strict test-driven development, implementation plans, plan execution, and production hardening.",
+    "shortDescription": "Production delivery without forced process.",
+    "longDescription": "A personal production feature workflow plus opt-in formal specifications, strict test-driven development, implementation plans, plan execution, and production hardening.",
     "developerName": "Patrick Dugan",
     "category": "Developer",
     "capabilities": ["Skills"],
     "defaultPrompt": [
+      "Implement this substantial feature for production.",
       "Turn this chosen direction into a formal spec.",
       "Implement this change with strict TDD.",
       "Harden this selected implementation for production."

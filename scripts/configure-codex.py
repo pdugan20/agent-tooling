@@ -9,9 +9,8 @@ import json
 import os
 import re
 import tempfile
-from pathlib import Path
-
 import tomllib
+from pathlib import Path
 
 FALLBACK_LINE = 'project_doc_fallback_filenames = ["CLAUDE.md"]'
 FALLBACK_RE = re.compile(r"^project_doc_fallback_filenames\s*=.*$", re.MULTILINE)
@@ -24,6 +23,8 @@ COMPUTER_USE_SUFFIX = (
     ".codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/"
     "SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
 )
+PRODUCT_DESIGN_DISABLED_SKILLS = ("ideate", "index")
+SKILL_CONFIG_HEADER = "[[skills.config]]"
 
 
 def _insert_root_fallback(text: str) -> str:
@@ -72,10 +73,59 @@ def _repair_computer_use_command(text: str, home: Path) -> str:
     return "\n".join(lines) + "\n"
 
 
+def _product_design_skill_paths(home: Path) -> list[Path]:
+    roots = (
+        home / ".codex/plugins/cache/openai-curated-remote/product-design",
+        home / ".codex/.tmp/plugins/plugins/product-design",
+    )
+    paths: set[Path] = set()
+    for root in roots:
+        if not root.exists():
+            continue
+        for skill_name in PRODUCT_DESIGN_DISABLED_SKILLS:
+            paths.update(root.glob(f"*/skills/{skill_name}/SKILL.md"))
+            direct = root / "skills" / skill_name / "SKILL.md"
+            if direct.exists():
+                paths.add(direct)
+    return sorted(path.resolve() for path in paths)
+
+
+def _disable_skill(text: str, path: Path) -> str:
+    rendered_path = json.dumps(str(path))
+    blocks = list(
+        re.finditer(
+            r"(?ms)^\[\[skills\.config\]\]\s*\n.*?(?=^\[|\Z)",
+            text,
+        )
+    )
+    for block in blocks:
+        body = block.group(0)
+        if not re.search(rf"(?m)^path\s*=\s*{re.escape(rendered_path)}\s*$", body):
+            continue
+        if re.search(r"(?m)^enabled\s*=", body):
+            replacement = re.sub(r"(?m)^enabled\s*=.*$", "enabled = false", body, count=1)
+        else:
+            replacement = body.rstrip() + "\nenabled = false\n\n"
+        return text[: block.start()] + replacement + text[block.end() :]
+
+    suffix = "" if not text.strip() else "\n\n"
+    return (
+        text.rstrip() + suffix + f"{SKILL_CONFIG_HEADER}\npath = {rendered_path}\nenabled = false\n"
+    )
+
+
+def _disable_product_design_image_ideation(text: str, home: Path) -> str:
+    for path in _product_design_skill_paths(home):
+        text = _disable_skill(text, path)
+    return text
+
+
 def update_config(text: str, home: Path) -> str:
     """Return an updated config without changing secrets or runtime auth."""
 
-    return _repair_computer_use_command(_insert_root_fallback(text), home)
+    updated = _insert_root_fallback(text)
+    updated = _repair_computer_use_command(updated, home)
+    return _disable_product_design_image_ideation(updated, home)
 
 
 def main() -> None:

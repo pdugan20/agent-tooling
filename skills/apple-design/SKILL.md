@@ -9,6 +9,10 @@ How Apple builds interfaces that stop feeling like a computer and start feeling 
 
 The through-line: **an interface feels alive when motion starts from the current on-screen value, inherits the user's velocity, projects momentum forward, and can be grabbed and reversed at any instant.** Springs are the tool that makes all of this natural, because they are inherently interruptible and velocity-aware.
 
+## Usage
+
+Apply the principles below when building or reviewing Apple-style interaction, motion, typography, materials, and accessibility. Start with the sections closest to the requested surface rather than treating every section as a mandatory checklist.
+
 ## The Core Idea
 
 > "When we align the interface to the way we think and move, something magical happens — it stops feeling like a computer and starts feeling like a seamless extension of us."

@@ -65,7 +65,7 @@ while IFS='|' read -r repository repository_path merge_commit; do
 
   if [[ $merged == true ]]; then
     merge_state=missing
-    if git -C "$repository_path" cat-file -e "$merge_commit^{commit}" 2>/dev/null && \
+    if git -C "$repository_path" cat-file -e "$merge_commit^{commit}" 2>/dev/null &&
       git -C "$repository_path" merge-base --is-ancestor "$merge_commit" "$default_ref"; then
       merge_state=included
     fi

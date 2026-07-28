@@ -1,0 +1,86 @@
+minimum_pre_commit_version: "4.0.0"
+default_stages: [pre-commit]
+
+exclude: |
+  (?x)^(
+    node_modules/.*|
+    \.claudelint-cache/.*|
+    \.ruff_cache/.*
+  )$
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+        args: ["--maxkb=1000"]
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-yaml
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+      - id: shellcheck
+        args: ["--severity=warning"]
+
+  - repo: https://github.com/scop/pre-commit-shfmt
+    rev: v3.13.1-1
+    hooks:
+      - id: shfmt
+        args: ["-i", "2", "-ci", "-d"]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.0
+    hooks:
+      - id: ruff-check
+      - id: ruff-format
+        args: ["--check"]
+
+  - repo: local
+    hooks:
+      - id: actionlint
+        name: actionlint
+        entry: actionlint
+        language: system
+        files: ^\.github/workflows/.*\.ya?ml$
+        types: [yaml]
+
+      - id: claudelint
+        name: ClaudeLint
+        entry: npm run lint:claude
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: markdownlint
+        name: Markdownlint
+        entry: npm run lint:markdown
+        language: system
+        types: [markdown]
+        pass_filenames: false
+
+      - id: prettier
+        name: Prettier configuration check
+        entry: npm run format:check
+        language: system
+        files: \.(json|ya?ml)$
+        pass_filenames: false
+
+      - id: repository-policy
+        name: Agent tooling repository policy
+        entry: python3 scripts/validate_repository.py
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: gitleaks
+        name: Gitleaks working-tree scan
+        entry: gitleaks dir . --redact --no-banner
+        language: system
+        pass_filenames: false
+        always_run: true

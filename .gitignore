@@ -1,7 +1,13 @@
 .DS_Store
+.claudelint-cache/
+.ruff_cache/
+.venv/
+__pycache__/
+*.py[cod]
 .env
 .env.*
 !.env.example
+node_modules/
 *.local.json
 credentials/
 secrets/
