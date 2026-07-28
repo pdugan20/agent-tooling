@@ -33,6 +33,7 @@ while IFS= read -r -d '' file; do
 done < <(git ls-files --cached --others --exclude-standard -z)
 
 pre-commit run --files "${repository_files[@]}" --show-diff-on-failure
+gitleaks git --redact --no-banner --verbose .
 git diff --check
 
 echo "Agent tooling repository verified."

@@ -68,13 +68,15 @@ nvm use
 npm ci
 python3 -m pip install pre-commit==4.6.1
 brew install actionlint gitleaks
-pre-commit install
+pre-commit install --hook-type pre-commit --hook-type pre-push
 npm run verify
 ```
 
-`npm run verify` runs unit tests, pinned pre-commit linters, ClaudeLint, Markdownlint, Ruff, ShellCheck, shfmt, actionlint, repository policy assertions, Gitleaks, and whitespace checks. It intentionally does not run `scripts/verify-setup.sh`, because setup verification depends on authenticated machine-local Codex and Claude state.
+`npm run verify` runs unit tests, pinned pre-commit linters, ClaudeLint, Markdownlint, Ruff, ShellCheck, shfmt, actionlint, repository policy assertions, a full-history Gitleaks scan, and whitespace checks. The pre-commit hook scans staged changes, while the pre-push hook scans the full Git history. Verification intentionally does not run `scripts/verify-setup.sh`, because setup verification depends on authenticated machine-local Codex and Claude state.
 
 CI uses one stable required job named `ci`. Dependabot proposes grouped npm and GitHub Actions updates after a 14-day cooldown.
+
+GitHub-native secret scanning and push protection are unavailable for this user-owned private repository under the current account model. The required `ci` check plus staged-change, pre-push, and full-history Gitleaks scans are the deliberate no-billing fallback. Do not enable GitHub Secret Protection or change repository ownership/visibility merely to replace this fallback without a separate product and billing decision.
 
 ## Patrick Delivery releases
 
