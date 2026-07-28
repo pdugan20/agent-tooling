@@ -13,8 +13,11 @@ ROOT = Path(__file__).resolve().parent.parent
 PLUGIN_ROOT = ROOT / "plugins/patrick-delivery"
 PLUGIN_MANIFEST = PLUGIN_ROOT / ".codex-plugin/plugin.json"
 MARKETPLACE_MANIFEST = ROOT / ".agents/plugins/marketplace.json"
+ROOT_PACKAGE = ROOT / "package.json"
+PACKAGE_LOCK = ROOT / "package-lock.json"
+CHANGELOG = ROOT / "CHANGELOG.md"
 SEMVER_RE = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
-RELEASE_TAG_RE = re.compile(r"^patrick-delivery-v(?P<version>\d+\.\d+\.\d+)$")
+RELEASE_TAG_RE = re.compile(r"^v(?P<version>\d+\.\d+\.\d+)$")
 DELIVERY_SKILLS = {
     "execute-plan": False,
     "feature-delivery": True,
@@ -65,16 +68,25 @@ def plugin_version() -> str:
     return version
 
 
+def repository_version() -> str:
+    version = load_json(ROOT_PACKAGE).get("version")
+    if not isinstance(version, str) or not SEMVER_RE.fullmatch(version):
+        raise ValidationError("root package version must be valid SemVer")
+    return version
+
+
 def validate_release_tag(tag: str) -> str:
     match = RELEASE_TAG_RE.fullmatch(tag)
     if not match:
-        raise ValidationError("release tag must use patrick-delivery-vMAJOR.MINOR.PATCH")
+        raise ValidationError("release tag must use vMAJOR.MINOR.PATCH")
     version = match.group("version")
-    manifest_version = plugin_version()
-    if version != manifest_version:
+    package_version = repository_version()
+    if version != package_version:
         raise ValidationError(
-            f"release tag version {version} does not match plugin manifest {manifest_version}"
+            f"release tag version {version} does not match root package version {package_version}"
         )
+    if not re.search(rf"(?m)^## \[{re.escape(version)}\](?:\s+-|\s*$)", CHANGELOG.read_text()):
+        raise ValidationError(f"CHANGELOG.md has no [{version}] release section")
     return version
 
 
@@ -85,6 +97,13 @@ def validate_repository() -> None:
     if manifest.get("skills") != "./skills/":
         raise ValidationError("Patrick Delivery manifest must load ./skills/")
     plugin_version()
+    package_version = repository_version()
+    package_lock = load_json(PACKAGE_LOCK)
+    if package_lock.get("version") != package_version:
+        raise ValidationError("package-lock root version must match package.json")
+    lock_package = package_lock.get("packages", {}).get("", {})
+    if lock_package.get("version") != package_version:
+        raise ValidationError("package-lock packages root version must match package.json")
 
     marketplace = load_json(MARKETPLACE_MANIFEST)
     plugins = marketplace.get("plugins")
@@ -161,7 +180,7 @@ def main() -> None:
         validate_repository()
         if args.release_tag:
             version = validate_release_tag(args.release_tag)
-            print(f"Patrick Delivery release tag matches manifest version {version}.")
+            print(f"Agent tooling release tag matches repository version {version}.")
         else:
             print("Agent tooling repository policy verified.")
     except (OSError, json.JSONDecodeError, ValidationError) as error:

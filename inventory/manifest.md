@@ -4,16 +4,16 @@ This is the authoritative map of Patrick's shared Claude and Codex setup. The pr
 
 ## Canonical sources
 
-| Concern | Canonical source | Runtime destination |
-| --- | --- | --- |
-| Global working agreement | `global/AGENTS.md` | `~/.codex/AGENTS.md` and `~/.claude/CLAUDE.md` |
-| Portable personal skills | `skills/*/SKILL.md` | `~/.agents/skills/*` and `~/.claude/skills/*` |
-| Production delivery plugin | `plugins/patrick-delivery/` | Codex plugin cache and `~/.claude/skills/*` compatibility links |
-| Desired Codex plugins | `config/codex-plugins.txt` | `~/.codex/config.toml` and Codex plugin caches |
-| Desired Claude plugins | `config/claude-plugins.txt` | `~/.claude/settings.json` and Claude plugin caches |
-| Codex machine policy | `scripts/configure-codex.py` | `~/.codex/config.toml` |
-| Claude machine policy | `scripts/configure-claude.py` | `~/.claude/settings.json` |
-| Repository-specific guidance | Each repository's `AGENTS.md` | Travels with that repository |
+| Concern                      | Canonical source              | Runtime destination                                             |
+| ---------------------------- | ----------------------------- | --------------------------------------------------------------- |
+| Global working agreement     | `global/AGENTS.md`            | `~/.codex/AGENTS.md` and `~/.claude/CLAUDE.md`                  |
+| Portable personal skills     | `skills/*/SKILL.md`           | `~/.agents/skills/*` and `~/.claude/skills/*`                   |
+| Production delivery plugin   | `plugins/patrick-delivery/`   | Codex plugin cache and `~/.claude/skills/*` compatibility links |
+| Desired Codex plugins        | `config/codex-plugins.txt`    | `~/.codex/config.toml` and Codex plugin caches                  |
+| Desired Claude plugins       | `config/claude-plugins.txt`   | `~/.claude/settings.json` and Claude plugin caches              |
+| Codex machine policy         | `scripts/configure-codex.py`  | `~/.codex/config.toml`                                          |
+| Claude machine policy        | `scripts/configure-claude.py` | `~/.claude/settings.json`                                       |
+| Repository-specific guidance | Each repository's `AGENTS.md` | Travels with that repository                                    |
 
 Do not edit generated runtime cache files. Edit this repository, rerun the setup scripts, and start a new task.
 
@@ -30,16 +30,17 @@ Portable skills shared directly by Codex and Claude:
 
 Skills in `patrick-delivery`:
 
-| Skill | Invocation policy |
-| --- | --- |
-| `feature-delivery` | Automatic only for substantial production feature implementation |
-| `formal-spec` | Explicit-only |
-| `strict-tdd` | Explicit-only |
-| `write-plan` | Explicit-only |
-| `execute-plan` | Explicit-only |
-| `production-hardening` | Explicit-only |
+| Skill                  | Invocation policy                                                |
+| ---------------------- | ---------------------------------------------------------------- |
+| `feature-delivery`     | Automatic only for substantial production feature implementation |
+| `formal-spec`          | Explicit-only                                                    |
+| `strict-tdd`           | Explicit-only                                                    |
+| `write-plan`           | Explicit-only                                                    |
+| `execute-plan`         | Explicit-only                                                    |
+| `production-hardening` | Explicit-only                                                    |
 
-Patrick Delivery currently uses manifest version `0.2.0`. Plugin behavior releases use tags such as `patrick-delivery-v0.2.0`; other repository changes do not require a version bump or release.
+Patrick Delivery currently uses manifest version `0.2.0`. This plugin version is independent from the repository
+version in `package.json`; bump it only when plugin behavior or compatibility changes.
 
 In Codex, delivery skills use the `$patrick-delivery:<skill>` namespace. Claude receives direct personal-skill links such as `/strict-tdd` and `/feature-delivery`.
 
@@ -106,6 +107,10 @@ codex plugin list --json
 codex plugin marketplace list
 claude plugin list --json
 ./scripts/verify-setup.sh
+npm run catalog:snapshot
 ```
+
+The browser catalog derives its canonical view from this repository. `npm run catalog:snapshot` creates an ignored
+machine-local snapshot for the **This Mac** view; it never becomes a portable source of truth.
 
 See `inventory/maintenance.md` for upgrades and upstream Superpowers review. See `README.md` for new-machine setup.

@@ -26,6 +26,7 @@ if ((missing)); then
 fi
 
 npm test
+npm run catalog:check
 
 repository_files=()
 while IFS= read -r -d '' file; do

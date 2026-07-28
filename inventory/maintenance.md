@@ -5,7 +5,7 @@
 ## Update personal instructions and skills
 
 1. Edit the canonical file in this repository.
-2. When a plugin changes, bump its `.codex-plugin/plugin.json` version.
+2. When a plugin's behavior or compatibility changes, bump its `.codex-plugin/plugin.json` version.
 3. Validate affected skills with `quick_validate.py` and run the repository's configuration tests.
 4. Commit and push this repository.
 5. On another machine, pull, run `./scripts/bootstrap.sh`, and start a new Claude or Codex task.
@@ -36,24 +36,48 @@ The repository instead fails closed through Gitleaks at three points:
 
 Install both local hooks with `pre-commit install --hook-type pre-commit --hook-type pre-push`. CI checkouts must retain `fetch-depth: 0`; repository policy validation guards that invariant.
 
-## Release Patrick Delivery
+## Release agent tooling
 
-Patrick Delivery uses independent SemVer even though the repository also contains unversioned instructions and portable skills. Do not use semantic-release or publish a repository-wide package.
+GitHub releases describe the complete repository setup and use ordinary SemVer tags. `package.json` is the
+repository version source; individual plugin manifests remain independent compatibility versions.
 
-1. Change the workflow behavior and update its tests or policy assertions.
-2. Bump `plugins/patrick-delivery/.codex-plugin/plugin.json` according to SemVer.
-3. Run `npm run verify` and merge the change to `main`.
-4. Create an annotated tag from the verified merge commit:
+1. Move the completed entries from `[Unreleased]` into a dated version section in `CHANGELOG.md`.
+2. Bump the root `package.json` version according to SemVer and refresh `package-lock.json`.
+3. Bump `plugins/patrick-delivery/.codex-plugin/plugin.json` only when Patrick Delivery itself changed.
+4. Run `npm run verify` and merge the verified change to `main`.
+5. Create and push an annotated repository tag from that merge commit:
 
    ```bash
-   git tag -a patrick-delivery-v0.2.0 -m "Patrick Delivery 0.2.0"
-   git push origin patrick-delivery-v0.2.0
+   git tag -a v0.3.0 -m "v0.3.0"
+   git push origin v0.3.0
    ```
 
-5. Confirm that the `Release Patrick Delivery` workflow created the GitHub Release.
-6. On each machine, pull, run `./scripts/refresh-codex-plugins.sh`, and start a new Codex task.
+6. Confirm the release workflow created a GitHub Release titled `v0.3.0` with the matching curated changelog notes.
+7. On each machine, pull and rerun the relevant bootstrap or refresh commands from the release's upgrade notes.
 
-The release workflow rejects malformed tags and tags whose version differs from the plugin manifest. It creates release notes only; it does not publish to npm, update runtime caches, or install the plugin on other machines.
+The release workflow rejects malformed tags, tags that differ from the root package version, and versions without a
+changelog section. It publishes release notes only; it does not publish an npm package, update runtime caches, or
+install plugins on other machines.
+
+Patrick Delivery's historical `patrick-delivery-v0.2.0` tag remains valid history. Future GitHub releases use the
+repository-wide `vMAJOR.MINOR.PATCH` convention.
+
+## Maintain the catalog
+
+The committed `catalog/data.json` file is generated from skill frontmatter, plugin manifests, desired plugin lists,
+and `catalog/plugin-metadata.json`. Do not hand-edit it.
+
+```bash
+npm run catalog:generate
+npm run catalog
+```
+
+When a configured third-party plugin changes, update its short descriptive metadata only if the existing description
+is no longer accurate. CI runs `npm run catalog:check` and fails when generated data drifts from canonical inputs.
+
+For a private runtime comparison, run `npm run catalog:snapshot`. The resulting
+`catalog/runtime-data.local.json` contains only capability identifiers, versions, runtime state, and repository
+metadata—not installation paths, credentials, or plugin configuration—and is ignored by Git.
 
 ## Refresh installed Codex plugins
 

@@ -11,3 +11,4 @@ node_modules/
 *.local.json
 credentials/
 secrets/
+catalog/runtime-data.local.json
