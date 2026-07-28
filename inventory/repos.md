@@ -114,5 +114,7 @@ Do not migrate these separately:
 - NextUp backend CI warns that `hashicorp/setup-terraform` still targets deprecated Node.js 20 and is being forced onto Node.js 24. This predates and is unrelated to the agent-workflow migration; update the pinned action separately.
 - A fresh Codex `0.145.0` process logs non-blocking validation warnings from bundled OpenAI plugins: the spreadsheet skill's icons escape its asset directory, and template-creator supplies more than three default prompts. These are upstream cache contents, not personal-plugin defects; do not patch generated plugin caches.
 - The fresh process also logged transient rollout lookup fallbacks, while `codex doctor` independently reported healthy databases and exact rollout/state-DB parity. Reinvestigate only if thread listing or resume behavior becomes visibly incorrect.
-- A no-tool Claude startup loaded about 34.5k context tokens and passed the routing smoke test. Keep configuration smoke tests to one turn; repeated tool turns rewrite/cache that context and cost substantially more.
+- During the migration audit, a no-tool Claude startup loaded about 34.5k context tokens and passed the routing smoke
+  test. This is historical migration evidence, not a live authentication check. Keep configuration smoke tests to one
+  turn; repeated tool turns rewrite/cache that context and cost substantially more.
 - Installing `clickwheel/tools/ci` from its lockfile for the repository hook reported 16 existing high-severity npm audit findings. The migration changed no dependencies; investigate separately and do not run `npm audit fix --force` as part of this workflow migration.

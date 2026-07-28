@@ -46,6 +46,7 @@ check_skill_collection "$ROOT/skills"
 check_skill_collection "$ROOT/.agents/skills"
 
 codex_plugins=$(codex plugin list --json)
+codex_cache_root=${CODEX_HOME:-"$HOME/.codex"}/plugins/cache
 while IFS= read -r plugin; do
   [[ -n $plugin ]] || continue
   if PLUGIN_ID="$plugin" python3 -c '
@@ -59,6 +60,31 @@ raise SystemExit(0 if any(item.get("pluginId") == target and item.get("enabled")
     fail "Codex plugin $plugin is not installed and enabled"
   fi
 done <"$ROOT/config/codex-plugins.txt"
+
+retired_codex_plugins=(
+  patrick-delivery@personal
+  superpowers@claude-plugins-official
+  superpowers@openai-curated
+)
+retired_codex_state_clean=true
+for retired_plugin in "${retired_codex_plugins[@]}"; do
+  plugin_name=${retired_plugin%@*}
+  marketplace_name=${retired_plugin#*@}
+  if [[ -e $codex_cache_root/$marketplace_name/$plugin_name ]]; then
+    retired_codex_state_clean=false
+  fi
+done
+if RETIRED_PLUGIN_IDS="${retired_codex_plugins[*]}" python3 -c '
+import json, os, sys
+data = json.load(sys.stdin)
+retired = set(os.environ["RETIRED_PLUGIN_IDS"].split())
+installed = {item.get("pluginId") for item in data.get("installed", [])}
+raise SystemExit(0 if retired.isdisjoint(installed) else 1)
+' <<<"$codex_plugins" && [[ $retired_codex_state_clean == true ]]; then
+  pass "Retired Codex plugins are absent from installed state and cache"
+else
+  fail "Retired Codex plugins remain installed or cached; rerun the Codex plugin installer"
+fi
 
 if PLUGIN_ID="$superpowers_plugin_id" PLUGIN_VERSION="$superpowers_version" python3 -c '
 import json, os, sys

@@ -1,8 +1,8 @@
 # Agent Tooling
 
 [![CI](https://github.com/pdugan20/agent-tooling/actions/workflows/ci.yml/badge.svg)](https://github.com/pdugan20/agent-tooling/actions/workflows/ci.yml)
-![Codex](https://img.shields.io/badge/Codex-configured-111111?logo=openai&logoColor=white)
-![Claude Code](https://img.shields.io/badge/Claude_Code-configured-D97757)
+[![Release](https://img.shields.io/github/v/release/pdugan20/agent-tooling)](https://github.com/pdugan20/agent-tooling/releases/latest)
+[![License](https://img.shields.io/github/license/pdugan20/agent-tooling)](LICENSE)
 ![Node](https://img.shields.io/badge/Node-22-3C873A?logo=nodedotjs&logoColor=white)
 
 Portable, canonical tooling shared across Codex and Claude Code projects: working agreements, reusable workflows, a
