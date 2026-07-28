@@ -122,6 +122,10 @@ Run:
 
 The script refreshes Git marketplace snapshots, re-adds every configured plugin in place, reapplies the Product Design skill overrides, and reminds you to start a new task. Re-adding an installed plugin refreshes its recorded version without an uninstall. OpenAI-curated and bundled local marketplaces are refreshed by Codex application or CLI updates; the add uses whichever snapshot that installation currently exposes.
 
+The installer also removes retired plugin state through `codex plugin remove`, including orphaned caches whose
+marketplace has already been removed. `./scripts/verify-setup.sh` fails if Patrick Delivery or an unconfigured
+Superpowers copy remains installed or cached.
+
 The current Codex CLI has no `plugin update` command. Its relevant refresh primitives are `codex plugin marketplace upgrade` and `codex plugin add`.
 
 `mintlify-docs` is refreshed from the native Codex catalog in `pdugan20/pdugan20-plugins`. Its canonical plugin code
