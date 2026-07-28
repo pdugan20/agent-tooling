@@ -51,12 +51,8 @@ const elements = {
 
 const activeItems = () => collections[state.scope];
 
-const runtimeLabel = (runtimes) => {
-  if (runtimes.length === 2) return "Codex + Claude";
-  if (runtimes[0] === "codex") return "Codex";
-  if (runtimes[0] === "claude") return "Claude";
-  return "Unknown";
-};
+const runtimeLabel = (runtime) =>
+  runtime === "codex" ? "Codex" : runtime === "claude" ? "Claude" : "Unknown";
 
 const matchesRuntime = (item) => {
   if (state.runtime === "all") return true;
@@ -181,12 +177,9 @@ const render = () => {
     }
 
     const runtime = fragment.querySelector(".runtime");
-    runtime.append(
-      makeTag(
-        runtimeLabel(item.runtimes),
-        item.runtimes.length === 2 ? "shared" : "",
-      ),
-    );
+    item.runtimes.forEach((itemRuntime) => {
+      runtime.append(makeTag(runtimeLabel(itemRuntime), itemRuntime));
+    });
     fragment.querySelector(".source").textContent = item.sourceLabel;
     fragment.querySelector(".version").textContent =
       item.version === "Git"

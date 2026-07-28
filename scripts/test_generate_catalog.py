@@ -10,28 +10,36 @@ class CatalogGenerationTests(unittest.TestCase):
         catalog = generate_catalog.build_catalog()
         items = catalog["items"]
 
-        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 12)
-        self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 19)
+        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 8)
+        self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 20)
         self.assertEqual(len({item["id"] for item in items}), len(items))
 
-    def test_delivery_invocation_policy_is_visible(self) -> None:
+    def test_custom_invocation_policy_is_visible(self) -> None:
         items = generate_catalog.build_catalog()["items"]
-        delivery = {
+        custom = {
             item["name"]: item["invocation"]
             for item in items
-            if item["sourceLabel"] == "Patrick Delivery"
+            if item["sourceLabel"] == "Built here"
         }
 
-        self.assertEqual(delivery["feature-delivery"], "Automatic")
-        self.assertEqual(delivery["strict-tdd"], "Explicit")
+        self.assertEqual(custom["feature-delivery"], "Automatic")
+        self.assertEqual(custom["production-hardening"], "Explicit")
 
-    def test_patrick_delivery_plugin_is_explained_in_plain_language(self) -> None:
+    def test_superpowers_plugin_provenance_is_explicit(self) -> None:
         items = generate_catalog.build_catalog()["items"]
-        plugin = next(item for item in items if item.get("pluginId") == "patrick-delivery@personal")
+        plugins = [
+            item for item in items if item.get("pluginId") == "superpowers@superpowers-configured"
+        ]
 
-        self.assertEqual(plugin["displayName"], "Patrick Delivery")
-        self.assertIn("six production workflows", plugin["description"])
-        self.assertEqual(plugin["path"], "plugins/patrick-delivery/.codex-plugin/plugin.json")
+        self.assertEqual(
+            {tuple(plugin["runtimes"]) for plugin in plugins}, {("codex",), ("claude",)}
+        )
+        self.assertTrue(
+            all(plugin["displayName"] == "Superpowers (Configured)" for plugin in plugins)
+        )
+        self.assertTrue(all("upstream" in plugin["description"].lower() for plugin in plugins))
+        self.assertTrue(all(plugin["path"] == "config/superpowers.json" for plugin in plugins))
+        self.assertTrue(all(plugin["version"] == "6.2.0-config.1" for plugin in plugins))
         self.assertNotIn("Desired", {item["state"] for item in items})
 
 

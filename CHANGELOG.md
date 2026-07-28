@@ -11,11 +11,17 @@ version when compatibility requires it.
 - A generated browser catalog for searching and filtering canonical skills and plugins.
 - Optional machine-local inventory snapshots that distinguish installed runtime state from Git-backed desired state.
 - Catalog drift verification in the local and GitHub Actions repository gate.
+- A thin, upstream-tracking Superpowers fork with policy tests and a weekly upstream-change monitor.
 
 ### Changed
 
 - Reworked the README into a concise repository landing page with standard navigation and commands.
 - Standardized future repository releases on `vMAJOR.MINOR.PATCH` tags with curated changelog notes.
+- Replaced the duplicated Patrick Delivery wrapper with the configured Superpowers plugin plus two clearly owned
+  personal skills: `feature-delivery` and `production-hardening`.
+- Made Superpowers planning, brainstorming, TDD, worktree, parallel-agent, and branch-finishing workflows
+  explicit-only while keeping debugging, review, verification, and skill-authoring workflows available automatically.
+- Removed Superpowers' automatic session router and browser-based visual option picker.
 
 ## [0.2.0] - 2026-07-27
 

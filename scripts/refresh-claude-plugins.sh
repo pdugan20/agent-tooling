@@ -9,6 +9,14 @@ if ! command -v claude >/dev/null 2>&1; then
   exit 1
 fi
 
+if ! claude plugin marketplace list --json | python3 -c '
+import json, sys
+data = json.load(sys.stdin)
+raise SystemExit(0 if any(item.get("name") == "superpowers-configured" for item in data) else 1)
+'; then
+  claude plugin marketplace add pdugan20/superpowers
+fi
+
 claude plugin marketplace update
 
 installed_plugins=$(claude plugin list --json)

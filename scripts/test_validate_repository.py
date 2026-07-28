@@ -10,6 +10,15 @@ class RepositoryValidationTests(unittest.TestCase):
     def test_current_repository_is_valid(self) -> None:
         validate_repository.validate_repository()
 
+    def test_superpowers_configuration_tracks_upstream_and_fork(self) -> None:
+        configuration = validate_repository.load_json(validate_repository.SUPERPOWERS_CONFIG)
+
+        self.assertEqual(configuration["upstreamVersion"], "6.2.0")
+        self.assertEqual(configuration["forkVersion"], "6.2.0-config.1")
+        self.assertEqual(configuration["marketplace"], "superpowers-configured")
+        self.assertIn("test-driven-development", configuration["explicitOnlySkills"])
+        self.assertIn("systematic-debugging", configuration["automaticSkills"])
+
     def test_release_tag_must_match_repository_version(self) -> None:
         with (
             mock.patch.object(validate_repository, "repository_version", return_value="1.2.3"),

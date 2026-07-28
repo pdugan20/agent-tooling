@@ -17,7 +17,6 @@ CATALOG_ROOT = ROOT / "catalog"
 CATALOG_DATA = CATALOG_ROOT / "data.json"
 RUNTIME_DATA = CATALOG_ROOT / "runtime-data.local.json"
 PLUGIN_METADATA = CATALOG_ROOT / "plugin-metadata.json"
-PLUGIN_MANIFEST = ROOT / "plugins/patrick-delivery/.codex-plugin/plugin.json"
 
 SKILL_PRIORITY = {
     "feature-delivery": 1,
@@ -27,11 +26,7 @@ SKILL_PRIORITY = {
     "review-animations": 5,
     "animation-vocabulary": 6,
     "emil-design-eng": 7,
-    "formal-spec": 20,
-    "strict-tdd": 21,
-    "write-plan": 22,
-    "execute-plan": 23,
-    "production-hardening": 24,
+    "production-hardening": 20,
 }
 
 
@@ -96,7 +91,7 @@ def read_skill_interface(skill_root: Path) -> tuple[str | None, str | None, str]
     return display_name, description, invocation
 
 
-def skill_item(skill_path: Path, *, delivery_version: str | None = None) -> dict[str, Any]:
+def skill_item(skill_path: Path) -> dict[str, Any]:
     skill_root = skill_path.parent
     frontmatter = read_frontmatter(skill_path)
     name = frontmatter.get("name")
@@ -104,7 +99,6 @@ def skill_item(skill_path: Path, *, delivery_version: str | None = None) -> dict
         raise CatalogError(f"{skill_path.relative_to(ROOT)} name must match its directory")
 
     display_name, short_description, invocation = read_skill_interface(skill_root)
-    is_delivery = delivery_version is not None
     return {
         "description": short_description or frontmatter.get("description", ""),
         "displayName": display_name or humanize_name(name),
@@ -115,10 +109,10 @@ def skill_item(skill_path: Path, *, delivery_version: str | None = None) -> dict
         "path": skill_path.relative_to(ROOT).as_posix(),
         "runtimes": ["codex", "claude"],
         "source": "personal",
-        "sourceLabel": "Patrick Delivery" if is_delivery else "Personal",
+        "sourceLabel": "Built here",
         "state": "Configured",
         "type": "skill",
-        "version": delivery_version or read_skill_version(skill_path),
+        "version": read_skill_version(skill_path),
     }
 
 
@@ -127,7 +121,6 @@ def plugin_item(
     runtime: str,
     metadata: dict[str, Any],
     index: int,
-    delivery_version: str,
 ) -> dict[str, Any]:
     name, _marketplace = plugin_id.split("@", 1)
     return {
@@ -137,31 +130,21 @@ def plugin_item(
         "id": f"plugin:{runtime}:{plugin_id}",
         "invocation": None,
         "name": name,
-        "path": (
-            "plugins/patrick-delivery/.codex-plugin/plugin.json"
-            if plugin_id == "patrick-delivery@personal"
-            else f"config/{runtime}-plugins.txt"
-        ),
+        "path": metadata.get("path", f"config/{runtime}-plugins.txt"),
         "pluginId": plugin_id,
         "runtimes": [runtime],
         "source": metadata["source"],
         "sourceLabel": metadata["sourceLabel"],
         "state": "Configured",
         "type": "plugin",
-        "version": delivery_version if plugin_id == "patrick-delivery@personal" else "Managed",
+        "version": metadata.get("version", "Managed"),
     }
 
 
 def build_catalog() -> dict[str, Any]:
-    plugin_manifest = load_json(PLUGIN_MANIFEST)
-    delivery_version = plugin_manifest["version"]
     plugin_metadata = load_json(PLUGIN_METADATA)
 
     skill_items = [skill_item(path) for path in sorted((ROOT / "skills").glob("*/SKILL.md"))]
-    skill_items.extend(
-        skill_item(path, delivery_version=delivery_version)
-        for path in sorted((ROOT / "plugins/patrick-delivery/skills").glob("*/SKILL.md"))
-    )
 
     configured: list[tuple[str, str]] = []
     for runtime in ("codex", "claude"):
@@ -176,14 +159,14 @@ def build_catalog() -> dict[str, Any]:
         raise CatalogError(f"plugin metadata mismatch; missing={missing}, stale={stale}")
 
     plugin_items = [
-        plugin_item(plugin_id, runtime, plugin_metadata[plugin_id], index, delivery_version)
+        plugin_item(plugin_id, runtime, plugin_metadata[plugin_id], index)
         for index, (plugin_id, runtime) in enumerate(configured)
     ]
     items = sorted(skill_items + plugin_items, key=lambda item: (item["featured"], item["name"]))
     return {
         "generatedFrom": [
             "skills/*/SKILL.md",
-            "plugins/patrick-delivery/",
+            "config/superpowers.json",
             "config/codex-plugins.txt",
             "config/claude-plugins.txt",
             "catalog/plugin-metadata.json",
@@ -224,17 +207,9 @@ def build_runtime_snapshot() -> dict[str, Any]:
     }
     items: list[dict[str, Any]] = []
     codex_data = run_json_command(["codex", "plugin", "list", "--json"])
-    delivery_plugin_enabled = any(
-        plugin.get("pluginId") == "patrick-delivery@personal" and plugin.get("enabled")
-        for plugin in codex_data.get("installed", [])
-    )
-
     for skill in canonical_skills:
         installed_runtimes = []
-        is_delivery_skill = skill["sourceLabel"] == "Patrick Delivery"
-        if (Path.home() / ".agents/skills" / skill["name"] / "SKILL.md").exists() or (
-            is_delivery_skill and delivery_plugin_enabled
-        ):
+        if (Path.home() / ".agents/skills" / skill["name"] / "SKILL.md").exists():
             installed_runtimes.append("codex")
         if (Path.home() / ".claude/skills" / skill["name"] / "SKILL.md").exists():
             installed_runtimes.append("claude")

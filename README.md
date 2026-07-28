@@ -6,7 +6,7 @@
 ![Node](https://img.shields.io/badge/Node-22-3C873A?logo=nodedotjs&logoColor=white)
 
 Private, canonical tooling shared across Patrick's Codex and Claude Code projects: working agreements, personal
-skills, production-delivery workflows, plugin manifests, and machine setup.
+skills, a policy-configured Superpowers fork, plugin manifests, and machine setup.
 
 ## Quick start
 
@@ -23,13 +23,13 @@ instructions remain machine- or project-local.
 
 ## Included
 
-| Area                | Purpose                                                          | Canonical source                                         |
-| ------------------- | ---------------------------------------------------------------- | -------------------------------------------------------- |
-| Shared instructions | Exploration, production, Firebase, and safety policy             | [`global/AGENTS.md`](global/AGENTS.md)                   |
-| Personal skills     | Portable design, SwiftUI, and motion workflows                   | [`skills/`](skills/)                                     |
-| Patrick Delivery    | Proportional delivery plus explicit planning, TDD, and hardening | [`plugins/patrick-delivery/`](plugins/patrick-delivery/) |
-| Plugin setup        | Desired Codex and Claude plugin sets                             | [`config/`](config/)                                     |
-| Machine setup       | Bootstrap, refresh, configuration, and verification              | [`scripts/`](scripts/)                                   |
+| Area                   | Purpose                                                        | Canonical source                               |
+| ---------------------- | -------------------------------------------------------------- | ---------------------------------------------- |
+| Shared instructions    | Exploration, production, Firebase, and safety policy           | [`global/AGENTS.md`](global/AGENTS.md)         |
+| Personal skills        | Design, SwiftUI, motion, feature delivery, and hardening       | [`skills/`](skills/)                           |
+| Configured Superpowers | Upstream plugin with strict workflows made explicit-only       | [`config/superpowers.json`](config/superpowers.json) |
+| Plugin setup           | Desired Codex and Claude plugin sets                           | [`config/`](config/)                           |
+| Machine setup          | Bootstrap, refresh, configuration, and verification            | [`scripts/`](scripts/)                         |
 
 ## Catalog
 
@@ -51,6 +51,7 @@ skills on the current Mac, run `npm run catalog:snapshot`, reopen the catalog wi
 | `./scripts/refresh-codex-plugins.sh`  | Refresh the desired Codex plugin set               |
 | `./scripts/refresh-claude-plugins.sh` | Refresh the desired Claude plugin set              |
 | `./scripts/verify-setup.sh`           | Compare this Mac with the desired setup            |
+| `npm run superpowers:check`           | Check whether the fork trails upstream             |
 | `npm run catalog`                     | Generate and serve the browser catalog             |
 | `npm run verify`                      | Run the complete local and GitHub Actions gate     |
 
@@ -79,6 +80,6 @@ whitespace.
 
 ## Releases
 
-Repository releases use `vMAJOR.MINOR.PATCH` tags and curated notes from `CHANGELOG.md`. Patrick Delivery keeps its
-own manifest version for plugin compatibility; it is not the GitHub release title or the repository version source.
-See the [maintenance guide](inventory/maintenance.md#release-agent-tooling) for the release checklist.
+Repository releases use `vMAJOR.MINOR.PATCH` tags and curated notes from `CHANGELOG.md`. The configured Superpowers
+fork has its own upstream-derived version and release process. See the
+[maintenance guide](inventory/maintenance.md#release-agent-tooling) for both update paths.

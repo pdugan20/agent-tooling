@@ -1,4 +1,4 @@
-patrick-delivery@personal
+superpowers@superpowers-configured
 firebase@firebase
 cloudflare@cloudflare
 mintlify@claude-plugins-official

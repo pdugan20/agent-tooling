@@ -5,6 +5,8 @@ description: Implement a substantial production-ready feature with proportional 
 
 # Feature Delivery
 
+## Instructions
+
 1. Read applicable instructions, inspect the relevant architecture and tests, and preserve unrelated user work.
 2. Establish the selected behavior, boundaries, and success criteria. Ask only about unresolved decisions that would materially change the implementation.
 3. Form a concise checkpoint plan proportional to the work. Do not require a formal spec, plan file, approval ceremony, worktree, branch, or commit.
@@ -15,4 +17,4 @@ description: Implement a substantial production-ready feature with proportional 
 8. Run focused verification throughout, then the repository's broader production or CI gate before claiming readiness.
 9. Report the delivered outcome, verification evidence, remaining risks, and any deploy, data mutation, push, or PR action still requiring authorization.
 
-Do not invoke the explicit-only delivery skills merely because this skill is active. Apply their underlying rigor proportionally; invoke one only when the user names it or explicitly requests that workflow.
+Do not invoke explicit-only Superpowers skills merely because this skill is active. Apply their underlying rigor proportionally; invoke one only when the user names it or explicitly requests that workflow.

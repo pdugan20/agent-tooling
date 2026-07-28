@@ -10,8 +10,9 @@
     "catalog:snapshot": "python3 scripts/generate_catalog.py --snapshot-runtime",
     "format": "prettier --write \"**/*.{css,html,js,json,yaml,yml}\"",
     "format:check": "prettier --check \"**/*.{css,html,js,json,yaml,yml}\"",
-    "lint:claude": "claudelint check-all --strict --no-cache --format compact && claudelint validate-skills --path plugins/patrick-delivery/skills --preset strict --warnings-as-errors",
+    "lint:claude": "claudelint check-all --strict --no-cache --format compact && claudelint validate-skills --path skills --preset strict --warnings-as-errors",
     "lint:markdown": "markdownlint \"**/*.md\" --ignore node_modules --ignore .claudelint-cache",
+    "superpowers:check": "python3 scripts/check_superpowers_update.py --check",
     "test": "python3 -m unittest discover -s scripts -p 'test_*.py' -v",
     "verify": "bash scripts/verify-repo.sh"
   },

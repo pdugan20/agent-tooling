@@ -6,15 +6,28 @@ import os
 import tempfile
 from pathlib import Path
 
-PLUGIN = "superpowers@claude-plugins-official"
-DELIVERY_SKILLS = (
-    "execute-plan",
-    "formal-spec",
+OFFICIAL_SUPERPOWERS = "superpowers@claude-plugins-official"
+CONFIGURED_SUPERPOWERS = "superpowers@superpowers-configured"
+EXPLICIT_PERSONAL_SKILLS = (
     "production-hardening",
     "review-animations",
-    "strict-tdd",
-    "write-plan",
 )
+RETIRED_SKILLS = ("execute-plan", "formal-spec", "strict-tdd", "write-plan")
+
+
+def update_settings(data: dict[str, object]) -> dict[str, object]:
+    plugins = data.setdefault("enabledPlugins", {})
+    overrides = data.setdefault("skillOverrides", {})
+    if not isinstance(plugins, dict) or not isinstance(overrides, dict):
+        raise ValueError("enabledPlugins and skillOverrides must be JSON objects")
+
+    plugins[OFFICIAL_SUPERPOWERS] = False
+    plugins[CONFIGURED_SUPERPOWERS] = True
+    for skill in EXPLICIT_PERSONAL_SKILLS:
+        overrides[skill] = "user-invocable-only"
+    for skill in RETIRED_SKILLS:
+        overrides.pop(skill, None)
+    return data
 
 
 def main() -> None:
@@ -24,12 +37,7 @@ def main() -> None:
     args = parser.parse_args()
 
     data = json.loads(args.settings.read_text()) if args.settings.exists() else {}
-    plugins = data.setdefault("enabledPlugins", {})
-    overrides = data.setdefault("skillOverrides", {})
-
-    plugins[PLUGIN] = False
-    for skill in DELIVERY_SKILLS:
-        overrides[skill] = "user-invocable-only"
+    update_settings(data)
 
     rendered = json.dumps(data, indent=2) + "\n"
     if args.dry_run:

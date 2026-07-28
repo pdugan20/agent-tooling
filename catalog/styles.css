@@ -501,6 +501,12 @@ kbd {
   line-height: 1.4;
 }
 
+.runtime {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
 .tag {
   display: inline-flex;
   padding: 5px 8px;
@@ -513,10 +519,16 @@ kbd {
   white-space: nowrap;
 }
 
-.tag.shared {
+.tag.codex {
   color: var(--accent);
   border-color: transparent;
   background: var(--accent-soft);
+}
+
+.tag.claude {
+  color: #8b4f3b;
+  border-color: transparent;
+  background: #f3e6e0;
 }
 
 .version {

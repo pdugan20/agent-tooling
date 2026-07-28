@@ -1,0 +1,32 @@
+{
+  "upstreamRepository": "https://github.com/obra/superpowers.git",
+  "forkRepository": "https://github.com/pdugan20/superpowers.git",
+  "marketplace": "superpowers-configured",
+  "pluginId": "superpowers@superpowers-configured",
+  "upstreamVersion": "6.2.0",
+  "upstreamCommit": "3dcbd5c4b48e02263fbf4a3c01e3fe4f81d584d9",
+  "forkVersion": "6.2.0-config.1",
+  "explicitOnlySkills": [
+    "brainstorming",
+    "dispatching-parallel-agents",
+    "executing-plans",
+    "finishing-a-development-branch",
+    "subagent-driven-development",
+    "test-driven-development",
+    "using-git-worktrees",
+    "using-superpowers",
+    "writing-plans"
+  ],
+  "automaticSkills": [
+    "receiving-code-review",
+    "requesting-code-review",
+    "systematic-debugging",
+    "verification-before-completion",
+    "writing-skills"
+  ],
+  "patches": [
+    "Disable the session-start using-superpowers injection",
+    "Make strict orchestration skills explicit-only in Codex and Claude",
+    "Remove the brainstorming Visual Companion and browser option-picker"
+  ]
+}

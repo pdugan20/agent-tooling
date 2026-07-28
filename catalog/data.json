@@ -1,7 +1,7 @@
 {
   "generatedFrom": [
     "skills/*/SKILL.md",
-    "plugins/patrick-delivery/",
+    "config/superpowers.json",
     "config/codex-plugins.txt",
     "config/claude-plugins.txt",
     "catalog/plugin-metadata.json"
@@ -14,16 +14,16 @@
       "id": "skill:feature-delivery",
       "invocation": "Automatic",
       "name": "feature-delivery",
-      "path": "plugins/patrick-delivery/skills/feature-delivery/SKILL.md",
+      "path": "skills/feature-delivery/SKILL.md",
       "runtimes": [
         "codex",
         "claude"
       ],
       "source": "personal",
-      "sourceLabel": "Patrick Delivery",
+      "sourceLabel": "Built here",
       "state": "Configured",
       "type": "skill",
-      "version": "0.2.0"
+      "version": "Git"
     },
     {
       "description": "Explore UI directions in runnable code",
@@ -38,7 +38,7 @@
         "claude"
       ],
       "source": "personal",
-      "sourceLabel": "Personal",
+      "sourceLabel": "Built here",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -56,7 +56,7 @@
         "claude"
       ],
       "source": "personal",
-      "sourceLabel": "Personal",
+      "sourceLabel": "Built here",
       "state": "Configured",
       "type": "skill",
       "version": "1.1"
@@ -74,7 +74,7 @@
         "claude"
       ],
       "source": "personal",
-      "sourceLabel": "Personal",
+      "sourceLabel": "Built here",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -92,7 +92,7 @@
         "claude"
       ],
       "source": "personal",
-      "sourceLabel": "Personal",
+      "sourceLabel": "Built here",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -110,7 +110,7 @@
         "claude"
       ],
       "source": "personal",
-      "sourceLabel": "Personal",
+      "sourceLabel": "Built here",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -128,118 +128,46 @@
         "claude"
       ],
       "source": "personal",
-      "sourceLabel": "Personal",
+      "sourceLabel": "Built here",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
     },
     {
-      "description": "Turn a chosen direction into a concise spec",
-      "displayName": "Formal Spec",
-      "featured": 20,
-      "id": "skill:formal-spec",
-      "invocation": "Explicit",
-      "name": "formal-spec",
-      "path": "plugins/patrick-delivery/skills/formal-spec/SKILL.md",
-      "runtimes": [
-        "codex",
-        "claude"
-      ],
-      "source": "personal",
-      "sourceLabel": "Patrick Delivery",
-      "state": "Configured",
-      "type": "skill",
-      "version": "0.2.0"
-    },
-    {
-      "description": "Run an explicit red-green-refactor cycle",
-      "displayName": "Strict TDD",
-      "featured": 21,
-      "id": "skill:strict-tdd",
-      "invocation": "Explicit",
-      "name": "strict-tdd",
-      "path": "plugins/patrick-delivery/skills/strict-tdd/SKILL.md",
-      "runtimes": [
-        "codex",
-        "claude"
-      ],
-      "source": "personal",
-      "sourceLabel": "Patrick Delivery",
-      "state": "Configured",
-      "type": "skill",
-      "version": "0.2.0"
-    },
-    {
-      "description": "Create a focused executable implementation plan",
-      "displayName": "Write Plan",
-      "featured": 22,
-      "id": "skill:write-plan",
-      "invocation": "Explicit",
-      "name": "write-plan",
-      "path": "plugins/patrick-delivery/skills/write-plan/SKILL.md",
-      "runtimes": [
-        "codex",
-        "claude"
-      ],
-      "source": "personal",
-      "sourceLabel": "Patrick Delivery",
-      "state": "Configured",
-      "type": "skill",
-      "version": "0.2.0"
-    },
-    {
-      "description": "Implement an approved plan with checkpoints",
-      "displayName": "Execute Plan",
-      "featured": 23,
-      "id": "skill:execute-plan",
-      "invocation": "Explicit",
-      "name": "execute-plan",
-      "path": "plugins/patrick-delivery/skills/execute-plan/SKILL.md",
-      "runtimes": [
-        "codex",
-        "claude"
-      ],
-      "source": "personal",
-      "sourceLabel": "Patrick Delivery",
-      "state": "Configured",
-      "type": "skill",
-      "version": "0.2.0"
-    },
-    {
       "description": "Harden a selected implementation for release",
       "displayName": "Production Hardening",
-      "featured": 24,
+      "featured": 20,
       "id": "skill:production-hardening",
       "invocation": "Explicit",
       "name": "production-hardening",
-      "path": "plugins/patrick-delivery/skills/production-hardening/SKILL.md",
+      "path": "skills/production-hardening/SKILL.md",
       "runtimes": [
         "codex",
         "claude"
-      ],
-      "source": "personal",
-      "sourceLabel": "Patrick Delivery",
-      "state": "Configured",
-      "type": "skill",
-      "version": "0.2.0"
-    },
-    {
-      "description": "Our own Codex add-on. It installs six production workflows: feature delivery plus optional specifications, plans, strict TDD, execution, and hardening.",
-      "displayName": "Patrick Delivery",
-      "featured": 100,
-      "id": "plugin:codex:patrick-delivery@personal",
-      "invocation": null,
-      "name": "patrick-delivery",
-      "path": "plugins/patrick-delivery/.codex-plugin/plugin.json",
-      "pluginId": "patrick-delivery@personal",
-      "runtimes": [
-        "codex"
       ],
       "source": "personal",
       "sourceLabel": "Built here",
       "state": "Configured",
+      "type": "skill",
+      "version": "Git"
+    },
+    {
+      "description": "The upstream Superpowers plugin with a small maintained policy patch: strict workflows are explicit-only, the always-on session bootstrap is disabled, and browser option-picking is removed.",
+      "displayName": "Superpowers (Configured)",
+      "featured": 100,
+      "id": "plugin:codex:superpowers@superpowers-configured",
+      "invocation": null,
+      "name": "superpowers",
+      "path": "config/superpowers.json",
+      "pluginId": "superpowers@superpowers-configured",
+      "runtimes": [
+        "codex"
+      ],
+      "source": "third-party",
+      "sourceLabel": "Upstream + local policy",
+      "state": "Configured",
       "type": "plugin",
-      "version": "0.2.0"
+      "version": "6.2.0-config.1"
     },
     {
       "description": "Firebase, Firestore, Auth, hosting, rules, and Xcode setup guidance.",
@@ -530,9 +458,27 @@
       "version": "Managed"
     },
     {
+      "description": "The upstream Superpowers plugin with a small maintained policy patch: strict workflows are explicit-only, the always-on session bootstrap is disabled, and browser option-picking is removed.",
+      "displayName": "Superpowers (Configured)",
+      "featured": 117,
+      "id": "plugin:claude:superpowers@superpowers-configured",
+      "invocation": null,
+      "name": "superpowers",
+      "path": "config/superpowers.json",
+      "pluginId": "superpowers@superpowers-configured",
+      "runtimes": [
+        "claude"
+      ],
+      "source": "third-party",
+      "sourceLabel": "Upstream + local policy",
+      "state": "Configured",
+      "type": "plugin",
+      "version": "6.2.0-config.1"
+    },
+    {
       "description": "Swift language-server integration for Claude Code.",
       "displayName": "Swift LSP",
-      "featured": 117,
+      "featured": 118,
       "id": "plugin:claude:swift-lsp@claude-plugins-official",
       "invocation": null,
       "name": "swift-lsp",
@@ -550,7 +496,7 @@
     {
       "description": "TypeScript language-server integration for Claude Code.",
       "displayName": "Typescript LSP",
-      "featured": 118,
+      "featured": 119,
       "id": "plugin:claude:typescript-lsp@claude-plugins-official",
       "invocation": null,
       "name": "typescript-lsp",

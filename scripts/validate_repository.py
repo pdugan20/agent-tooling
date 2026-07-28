@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Validate the canonical plugin, skill, and release invariants."""
+"""Validate canonical skills, plugin dependencies, and release invariants."""
 
 from __future__ import annotations
 
@@ -10,21 +10,33 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-PLUGIN_ROOT = ROOT / "plugins/patrick-delivery"
-PLUGIN_MANIFEST = PLUGIN_ROOT / ".codex-plugin/plugin.json"
-MARKETPLACE_MANIFEST = ROOT / ".agents/plugins/marketplace.json"
+SUPERPOWERS_CONFIG = ROOT / "config/superpowers.json"
 ROOT_PACKAGE = ROOT / "package.json"
 PACKAGE_LOCK = ROOT / "package-lock.json"
 CHANGELOG = ROOT / "CHANGELOG.md"
 SEMVER_RE = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
 RELEASE_TAG_RE = re.compile(r"^v(?P<version>\d+\.\d+\.\d+)$")
-DELIVERY_SKILLS = {
-    "execute-plan": False,
+CUSTOM_SKILLS = {
     "feature-delivery": True,
-    "formal-spec": False,
     "production-hardening": False,
-    "strict-tdd": False,
-    "write-plan": False,
+}
+EXPECTED_EXPLICIT_SUPERPOWERS = {
+    "brainstorming",
+    "dispatching-parallel-agents",
+    "executing-plans",
+    "finishing-a-development-branch",
+    "subagent-driven-development",
+    "test-driven-development",
+    "using-git-worktrees",
+    "using-superpowers",
+    "writing-plans",
+}
+EXPECTED_AUTOMATIC_SUPERPOWERS = {
+    "receiving-code-review",
+    "requesting-code-review",
+    "systematic-debugging",
+    "verification-before-completion",
+    "writing-skills",
 }
 
 
@@ -61,13 +73,6 @@ def read_implicit_invocation(path: Path) -> bool:
     return match.group(1) == "true"
 
 
-def plugin_version() -> str:
-    version = load_json(PLUGIN_MANIFEST).get("version")
-    if not isinstance(version, str) or not SEMVER_RE.fullmatch(version):
-        raise ValidationError("Patrick Delivery manifest version must be valid SemVer")
-    return version
-
-
 def repository_version() -> str:
     version = load_json(ROOT_PACKAGE).get("version")
     if not isinstance(version, str) or not SEMVER_RE.fullmatch(version):
@@ -91,12 +96,6 @@ def validate_release_tag(tag: str) -> str:
 
 
 def validate_repository() -> None:
-    manifest = load_json(PLUGIN_MANIFEST)
-    if manifest.get("name") != "patrick-delivery":
-        raise ValidationError("Patrick Delivery manifest name changed unexpectedly")
-    if manifest.get("skills") != "./skills/":
-        raise ValidationError("Patrick Delivery manifest must load ./skills/")
-    plugin_version()
     package_version = repository_version()
     package_lock = load_json(PACKAGE_LOCK)
     if package_lock.get("version") != package_version:
@@ -105,26 +104,48 @@ def validate_repository() -> None:
     if lock_package.get("version") != package_version:
         raise ValidationError("package-lock packages root version must match package.json")
 
-    marketplace = load_json(MARKETPLACE_MANIFEST)
-    plugins = marketplace.get("plugins")
-    if not isinstance(plugins, list):
-        raise ValidationError("personal marketplace plugins must be a list")
-    matches = [plugin for plugin in plugins if plugin.get("name") == "patrick-delivery"]
-    if len(matches) != 1:
-        raise ValidationError("personal marketplace must contain Patrick Delivery exactly once")
-    source = matches[0].get("source")
-    if source != {"source": "local", "path": "./plugins/patrick-delivery"}:
-        raise ValidationError("Patrick Delivery marketplace source must remain canonical and local")
+    superpowers = load_json(SUPERPOWERS_CONFIG)
+    if superpowers.get("upstreamRepository") != "https://github.com/obra/superpowers.git":
+        raise ValidationError("Superpowers upstream repository must remain obra/superpowers")
+    if superpowers.get("forkRepository") != "https://github.com/pdugan20/superpowers.git":
+        raise ValidationError("Superpowers fork repository must remain pdugan20/superpowers")
+    if superpowers.get("marketplace") != "superpowers-configured":
+        raise ValidationError("Superpowers marketplace must remain superpowers-configured")
+    if superpowers.get("pluginId") != "superpowers@superpowers-configured":
+        raise ValidationError("Superpowers plugin ID must match its configured marketplace")
 
-    actual_skills = {path.parent.name for path in (PLUGIN_ROOT / "skills").glob("*/SKILL.md")}
-    if actual_skills != DELIVERY_SKILLS.keys():
+    upstream_version = superpowers.get("upstreamVersion")
+    fork_version = superpowers.get("forkVersion")
+    if not isinstance(upstream_version, str) or not SEMVER_RE.fullmatch(upstream_version):
+        raise ValidationError("Superpowers upstreamVersion must be valid SemVer")
+    if not isinstance(fork_version, str) or not re.fullmatch(
+        rf"{re.escape(upstream_version)}-config\.[1-9]\d*", fork_version
+    ):
+        raise ValidationError("Superpowers forkVersion must extend upstreamVersion with -config.N")
+    if not re.fullmatch(r"[0-9a-f]{40}", str(superpowers.get("upstreamCommit", ""))):
+        raise ValidationError("Superpowers upstreamCommit must be a full Git SHA")
+    if set(superpowers.get("explicitOnlySkills", [])) != EXPECTED_EXPLICIT_SUPERPOWERS:
+        raise ValidationError("Superpowers explicit-only skill inventory changed unexpectedly")
+    if set(superpowers.get("automaticSkills", [])) != EXPECTED_AUTOMATIC_SUPERPOWERS:
+        raise ValidationError("Superpowers automatic skill inventory changed unexpectedly")
+    patches = superpowers.get("patches")
+    if (
+        not isinstance(patches, list)
+        or not patches
+        or not all(isinstance(item, str) and item for item in patches)
+    ):
+        raise ValidationError("Superpowers patches must be a non-empty string list")
+
+    retired_plugin_root = ROOT / "plugins/patrick-delivery"
+    if any(path.is_file() or path.is_symlink() for path in retired_plugin_root.rglob("*")):
+        raise ValidationError("retired Patrick Delivery plugin must not remain in the repository")
+    if (ROOT / ".agents/plugins/marketplace.json").exists():
         raise ValidationError(
-            "Patrick Delivery skill set mismatch: "
-            f"expected {sorted(DELIVERY_SKILLS)}, got {sorted(actual_skills)}"
+            "retired personal plugin marketplace must not remain in the repository"
         )
 
-    for skill_name, expected_implicit in DELIVERY_SKILLS.items():
-        skill_root = PLUGIN_ROOT / "skills" / skill_name
+    for skill_name, expected_implicit in CUSTOM_SKILLS.items():
+        skill_root = ROOT / "skills" / skill_name
         frontmatter = read_frontmatter(skill_root / "SKILL.md")
         if frontmatter.get("name") != skill_name:
             raise ValidationError(f"{skill_name} frontmatter name must match its directory")
@@ -134,6 +155,7 @@ def validate_repository() -> None:
                 f"{skill_name} allow_implicit_invocation must be {str(expected_implicit).lower()}"
             )
 
+    plugin_manifests: dict[str, list[str]] = {}
     for manifest_path in (ROOT / "config/codex-plugins.txt", ROOT / "config/claude-plugins.txt"):
         entries = [
             line.strip()
@@ -147,6 +169,16 @@ def validate_repository() -> None:
             raise ValidationError(
                 f"{manifest_path.relative_to(ROOT)} has invalid plugin IDs: {invalid}"
             )
+        plugin_manifests[manifest_path.name] = entries
+
+    plugin_id = str(superpowers["pluginId"])
+    if plugin_id not in plugin_manifests["codex-plugins.txt"]:
+        raise ValidationError("configured Superpowers must be desired in Codex")
+    if plugin_id not in plugin_manifests["claude-plugins.txt"]:
+        raise ValidationError("configured Superpowers must be desired in Claude")
+    retired_ids = {"patrick-delivery@personal", "superpowers@claude-plugins-official"}
+    if any(retired_ids & set(entries) for entries in plugin_manifests.values()):
+        raise ValidationError("retired delivery or official Superpowers plugins remain desired")
 
     for workflow_path in (
         ROOT / ".github/workflows/ci.yml",

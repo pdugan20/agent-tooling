@@ -4,16 +4,16 @@ This is the authoritative map of Patrick's shared Claude and Codex setup. The pr
 
 ## Canonical sources
 
-| Concern                      | Canonical source              | Runtime destination                                             |
-| ---------------------------- | ----------------------------- | --------------------------------------------------------------- |
-| Global working agreement     | `global/AGENTS.md`            | `~/.codex/AGENTS.md` and `~/.claude/CLAUDE.md`                  |
-| Portable personal skills     | `skills/*/SKILL.md`           | `~/.agents/skills/*` and `~/.claude/skills/*`                   |
-| Production delivery plugin   | `plugins/patrick-delivery/`   | Codex plugin cache and `~/.claude/skills/*` compatibility links |
-| Desired Codex plugins        | `config/codex-plugins.txt`    | `~/.codex/config.toml` and Codex plugin caches                  |
-| Desired Claude plugins       | `config/claude-plugins.txt`   | `~/.claude/settings.json` and Claude plugin caches              |
-| Codex machine policy         | `scripts/configure-codex.py`  | `~/.codex/config.toml`                                          |
-| Claude machine policy        | `scripts/configure-claude.py` | `~/.claude/settings.json`                                       |
-| Repository-specific guidance | Each repository's `AGENTS.md` | Travels with that repository                                    |
+| Concern                      | Canonical source                 | Runtime destination                                |
+| ---------------------------- | -------------------------------- | -------------------------------------------------- |
+| Global working agreement     | `global/AGENTS.md`               | `~/.codex/AGENTS.md` and `~/.claude/CLAUDE.md`     |
+| Portable personal skills     | `skills/*/SKILL.md`              | `~/.agents/skills/*` and `~/.claude/skills/*`      |
+| Configured Superpowers state | `config/superpowers.json`        | Fork repository and both products' plugin caches   |
+| Desired Codex plugins        | `config/codex-plugins.txt`       | `~/.codex/config.toml` and Codex plugin caches     |
+| Desired Claude plugins       | `config/claude-plugins.txt`      | `~/.claude/settings.json` and Claude plugin caches |
+| Codex machine policy         | `scripts/configure-codex.py`     | `~/.codex/config.toml`                             |
+| Claude machine policy        | `scripts/configure-claude.py`    | `~/.claude/settings.json`                          |
+| Repository-specific guidance | Each repository's `AGENTS.md`    | Travels with that repository                       |
 
 Do not edit generated runtime cache files. Edit this repository, rerun the setup scripts, and start a new task.
 
@@ -25,30 +25,50 @@ Portable skills shared directly by Codex and Claude:
 - `apple-design`
 - `code-native-ui-ideation`
 - `emil-design-eng`
+- `feature-delivery`
+- `production-hardening`
 - `review-animations`
 - `swiftui-pro`
 
-Skills in `patrick-delivery`:
+`feature-delivery` may run automatically for a substantial production implementation. `production-hardening` is
+explicit-only. They are personal skills—not a plugin, a fork, or copies of Superpowers workflows—and use the same
+canonical files in Codex and Claude.
 
-| Skill                  | Invocation policy                                                |
-| ---------------------- | ---------------------------------------------------------------- |
-| `feature-delivery`     | Automatic only for substantial production feature implementation |
-| `formal-spec`          | Explicit-only                                                    |
-| `strict-tdd`           | Explicit-only                                                    |
-| `write-plan`           | Explicit-only                                                    |
-| `execute-plan`         | Explicit-only                                                    |
-| `production-hardening` | Explicit-only                                                    |
+## Configured Superpowers fork
 
-Patrick Delivery currently uses manifest version `0.2.0`. This plugin version is independent from the repository
-version in `package.json`; bump it only when plugin behavior or compatibility changes.
+[`pdugan20/superpowers`](https://github.com/pdugan20/superpowers) is a thin fork of
+[`obra/superpowers`](https://github.com/obra/superpowers). It is installed as
+`superpowers@superpowers-configured` in both products. `config/superpowers.json` records the exact upstream baseline,
+fork version, policy patch set, and invocation classification.
 
-In Codex, delivery skills use the `$patrick-delivery:<skill>` namespace. Claude receives direct personal-skill links such as `/strict-tdd` and `/feature-delivery`.
+The fork changes only policy and presentation:
+
+- it disables the automatic session-start `using-superpowers` injection;
+- it makes strict orchestration workflows explicit-only in both Codex and Claude; and
+- it removes the brainstorming Visual Companion/browser option picker.
+
+Strict workflows:
+
+| Superpowers skill                | Invocation policy |
+| -------------------------------- | ----------------- |
+| `brainstorming`                  | Explicit-only     |
+| `dispatching-parallel-agents`    | Explicit-only     |
+| `executing-plans`                | Explicit-only     |
+| `finishing-a-development-branch` | Explicit-only     |
+| `subagent-driven-development`    | Explicit-only     |
+| `test-driven-development`        | Explicit-only     |
+| `using-git-worktrees`            | Explicit-only     |
+| `using-superpowers`              | Explicit-only     |
+| `writing-plans`                  | Explicit-only     |
+
+The fork's review, debugging, verification, and skill-authoring skills can still be selected automatically when
+relevant. Invoke strict skills as `$superpowers:<skill-name>` in Codex or `/superpowers:<skill-name>` in Claude.
 
 ## Desired user-managed Codex plugins
 
 `config/codex-plugins.txt` is the machine-readable desired-state manifest:
 
-- `patrick-delivery@personal`
+- `superpowers@superpowers-configured`
 - `firebase@firebase`
 - `cloudflare@cloudflare`
 - `mintlify@claude-plugins-official`
@@ -85,8 +105,11 @@ Generated-image ideation is opt-in. Code-native UI ideation in the actual browse
 - `skill-creator`
 - `swift-lsp`
 - `typescript-lsp`
+- `superpowers@superpowers-configured`
 
-Superpowers may remain installed in Claude's cache, but `configure-claude.py` forces it disabled. Disabled, project-local, and historical Claude plugins are not part of the desired setup unless added to `config/claude-plugins.txt`.
+`configure-claude.py` enables the configured fork and disables `superpowers@claude-plugins-official` so only the
+policy-controlled copy is active. Disabled, project-local, and historical Claude plugins are not part of the desired
+setup unless added to `config/claude-plugins.txt`.
 
 ## What does not sync through Git
 

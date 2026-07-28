@@ -17,10 +17,10 @@ ensure_marketplace() {
   fi
 }
 
-ensure_marketplace personal "$HOME"
 ensure_marketplace firebase https://github.com/firebase/skills.git
 ensure_marketplace cloudflare https://github.com/cloudflare/skills.git
 ensure_marketplace claude-plugins-official https://github.com/anthropics/claude-plugins-official.git
+ensure_marketplace superpowers-configured https://github.com/pdugan20/superpowers.git
 
 installed_plugins=$(codex plugin list --json)
 while IFS= read -r plugin; do
@@ -30,5 +30,14 @@ while IFS= read -r plugin; do
   fi
   codex plugin add "$plugin"
 done <"$ROOT/config/codex-plugins.txt"
+
+for retired_plugin in \
+  patrick-delivery@personal \
+  superpowers@claude-plugins-official \
+  superpowers@openai-curated; do
+  if PLUGIN_ID="$retired_plugin" python3 -c 'import json, os, sys; data=json.load(sys.stdin); target=os.environ["PLUGIN_ID"]; raise SystemExit(0 if any(item.get("pluginId") == target for item in data.get("installed", [])) else 1)' <<<"$installed_plugins"; then
+    codex plugin remove "$retired_plugin"
+  fi
+done
 
 echo "Codex plugin set is installed. Complete any connector authentication in the app."
