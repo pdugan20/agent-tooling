@@ -24,6 +24,18 @@ This is the exact `ci` status check used by GitHub Actions. It validates the can
 
 ClaudeLint is intentionally strict. Fix new warnings rather than adding broad suppressions. The one file-scoped override handles Swift closure syntax such as `$0`, which ClaudeLint otherwise mistakes for a skill argument. The Patrick Delivery Codex manifest is validated by `scripts/validate_repository.py` because ClaudeLint's plugin validator targets Claude's `.claude-plugin` layout, not Codex's `.codex-plugin` layout.
 
+### Secret-scanning fallback
+
+GitHub-native secret scanning and push protection are unavailable for this user-owned private repository under the current account model. GitHub documents private-repository Secret Protection as an organization or enterprise product, so enabling it would require a separate ownership, plan, and billing decision.
+
+The repository instead fails closed through Gitleaks at three points:
+
+- staged changes in the local pre-commit hook;
+- full Git history in the local pre-push hook;
+- full Git history in required GitHub Actions `ci` and release verification.
+
+Install both local hooks with `pre-commit install --hook-type pre-commit --hook-type pre-push`. CI checkouts must retain `fetch-depth: 0`; repository policy validation guards that invariant.
+
 ## Release Patrick Delivery
 
 Patrick Delivery uses independent SemVer even though the repository also contains unversioned instructions and portable skills. Do not use semantic-release or publish a repository-wide package.

@@ -78,9 +78,18 @@ repos:
         pass_filenames: false
         always_run: true
 
-      - id: gitleaks
-        name: Gitleaks working-tree scan
-        entry: gitleaks dir . --redact --no-banner
+      - id: gitleaks-staged
+        name: Gitleaks staged-change scan
+        entry: gitleaks git --pre-commit --staged --redact --no-banner --verbose
         language: system
         pass_filenames: false
         always_run: true
+        stages: [pre-commit]
+
+      - id: gitleaks-history
+        name: Gitleaks full-history scan
+        entry: gitleaks git --redact --no-banner --verbose .
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]

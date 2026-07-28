@@ -129,6 +129,28 @@ def validate_repository() -> None:
                 f"{manifest_path.relative_to(ROOT)} has invalid plugin IDs: {invalid}"
             )
 
+    for workflow_path in (
+        ROOT / ".github/workflows/ci.yml",
+        ROOT / ".github/workflows/release.yml",
+    ):
+        workflow = workflow_path.read_text(encoding="utf-8")
+        if "fetch-depth: 0" not in workflow:
+            raise ValidationError(
+                f"{workflow_path.relative_to(ROOT)} must fetch full history for Gitleaks"
+            )
+
+    pre_commit = (ROOT / ".pre-commit-config.yaml").read_text(encoding="utf-8")
+    required_gitleaks_hooks = (
+        "gitleaks git --pre-commit --staged",
+        "gitleaks git --redact --no-banner --verbose .",
+    )
+    if not all(command in pre_commit for command in required_gitleaks_hooks):
+        raise ValidationError("pre-commit must scan staged changes and full history")
+
+    verification = (ROOT / "scripts/verify-repo.sh").read_text(encoding="utf-8")
+    if "gitleaks git --redact --no-banner --verbose ." not in verification:
+        raise ValidationError("repository verification must scan full Git history")
+
 
 def main() -> None:
     parser = argparse.ArgumentParser()
