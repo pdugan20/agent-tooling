@@ -85,7 +85,7 @@ whitespace.
 - [Manifest](inventory/manifest.md): ownership, runtime mapping, and what does not sync.
 - [Maintenance](inventory/maintenance.md): updates, plugin refreshes, Superpowers review, and releases.
 - [Authoring checks](inventory/authoring.md): linting, formatting, validation, and behavioral testing for skills and plugins.
-- [Outstanding work](inventory/next-steps.md): the remaining publication, updater, cleanup, and MacBook tasks.
+- [Outstanding work](inventory/next-steps.md): the remaining authentication-dependent and MacBook setup tasks.
 - [Migration record](inventory/publication.md): completed cross-repository rollout.
 - [Repository inventory](inventory/repos.md): repositories governed by the shared setup.
 - [Changelog](CHANGELOG.md): curated repository releases and upgrade notes.
