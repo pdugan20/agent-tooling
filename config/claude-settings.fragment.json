@@ -1,13 +1,10 @@
 {
   "enabledPlugins": {
-    "superpowers@claude-plugins-official": false
+    "superpowers@claude-plugins-official": false,
+    "superpowers@superpowers-configured": true
   },
   "skillOverrides": {
-    "execute-plan": "user-invocable-only",
-    "formal-spec": "user-invocable-only",
     "production-hardening": "user-invocable-only",
-    "review-animations": "user-invocable-only",
-    "strict-tdd": "user-invocable-only",
-    "write-plan": "user-invocable-only"
+    "review-animations": "user-invocable-only"
   }
 }

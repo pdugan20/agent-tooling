@@ -1,0 +1,57 @@
+name: Superpowers update check
+
+on:
+  schedule:
+    - cron: "0 17 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check upstream Superpowers
+        id: superpowers
+        run: python3 scripts/check_superpowers_update.py --github-output
+
+      - name: Open update issue
+        if: steps.superpowers.outputs.outdated == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CURRENT_COMMIT: ${{ steps.superpowers.outputs.currentCommit }}
+          LATEST_COMMIT: ${{ steps.superpowers.outputs.latestCommit }}
+          UPSTREAM_VERSION: ${{ steps.superpowers.outputs.upstreamVersion }}
+          FORK_VERSION: ${{ steps.superpowers.outputs.forkVersion }}
+        run: |
+          title="Update configured Superpowers fork"
+          existing=$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number // empty')
+          if [[ -n $existing ]]; then
+            echo "Issue #$existing already tracks this update."
+            exit 0
+          fi
+          body=$(cat <<EOF
+          Upstream Superpowers has advanced beyond the configured baseline.
+
+          - Recorded upstream version: \`$UPSTREAM_VERSION\`
+          - Configured fork version: \`$FORK_VERSION\`
+          - Recorded commit: \`$CURRENT_COMMIT\`
+          - Latest upstream main: \`$LATEST_COMMIT\`
+
+          Follow \`inventory/maintenance.md#update-the-configured-superpowers-fork\`. Review and merge upstream into the thin fork, rerun its policy tests, update \`config/superpowers.json\`, then refresh both runtimes. Do not overwrite the fork's policy patches wholesale.
+          EOF
+          )
+          gh issue create --title "$title" --body "$body"
+
+      - name: Report current baseline
+        if: steps.superpowers.outputs.outdated == 'false'
+        run: echo "Configured Superpowers already matches upstream main."

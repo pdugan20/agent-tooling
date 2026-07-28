@@ -9,6 +9,10 @@ if ! command -v codex >/dev/null 2>&1; then
   exit 1
 fi
 
+if ! codex plugin marketplace list | awk '$1 == "superpowers-configured" { found = 1 } END { exit !found }'; then
+  codex plugin marketplace add https://github.com/pdugan20/superpowers.git
+fi
+
 codex plugin marketplace upgrade
 
 while IFS= read -r plugin; do

@@ -1,16 +1,19 @@
 # Agent tooling maintenance
 
-`agent-tooling` is the single canonical source for Patrick's shared instructions and personal skills. Claude and Codex consume the same files through runtime-specific symlinks and metadata; do not maintain separate workflow copies.
+`agent-tooling` is the single canonical source for Patrick's shared instructions, personal skills, desired plugin
+state, and configured Superpowers baseline. Claude and Codex consume the same personal skill files through
+runtime-specific symlinks; do not maintain separate copies.
 
 ## Update personal instructions and skills
 
 1. Edit the canonical file in this repository.
-2. When a plugin changes, bump its `.codex-plugin/plugin.json` version.
-3. Validate affected skills with `quick_validate.py` and run the repository's configuration tests.
+2. Validate affected skills with `quick_validate.py` and run the repository's configuration tests.
+3. Regenerate the catalog when skill metadata or plugin state changes.
 4. Commit and push this repository.
 5. On another machine, pull, run `./scripts/bootstrap.sh`, and start a new Claude or Codex task.
 
-The local marketplace points at this repository through a symlink. After changing `patrick-delivery`, run `codex plugin add patrick-delivery@personal` or the refresh script below so Codex records the new manifest version, then restart Codex to reload the skill inventory. No uninstall is needed.
+After changing a personal skill, rerun `./scripts/bootstrap.sh` and start new tasks. The symlinks update immediately,
+but active tasks retain the skill inventory loaded when they started.
 
 ## Verify repository changes
 
@@ -22,7 +25,9 @@ npm run verify
 
 This is the exact `ci` status check used by GitHub Actions. It validates the canonical files and repository policy without inspecting authenticated runtime state. Continue to use `./scripts/verify-setup.sh` separately after applying the setup on a real machine.
 
-ClaudeLint is intentionally strict. Fix new warnings rather than adding broad suppressions. The one file-scoped override handles Swift closure syntax such as `$0`, which ClaudeLint otherwise mistakes for a skill argument. The Patrick Delivery Codex manifest is validated by `scripts/validate_repository.py` because ClaudeLint's plugin validator targets Claude's `.claude-plugin` layout, not Codex's `.codex-plugin` layout.
+ClaudeLint is intentionally strict. Fix new warnings rather than adding broad suppressions. The one file-scoped
+override handles Swift closure syntax such as `$0`, which ClaudeLint otherwise mistakes for a skill argument.
+`scripts/validate_repository.py` separately validates the configured Superpowers baseline and desired plugin state.
 
 ### Secret-scanning fallback
 
@@ -36,24 +41,48 @@ The repository instead fails closed through Gitleaks at three points:
 
 Install both local hooks with `pre-commit install --hook-type pre-commit --hook-type pre-push`. CI checkouts must retain `fetch-depth: 0`; repository policy validation guards that invariant.
 
-## Release Patrick Delivery
+## Release agent tooling
 
-Patrick Delivery uses independent SemVer even though the repository also contains unversioned instructions and portable skills. Do not use semantic-release or publish a repository-wide package.
+GitHub releases describe the complete repository setup and use ordinary SemVer tags. `package.json` is the
+repository version source. The Superpowers fork is versioned in its own repository and is not coupled to this
+repository's release number.
 
-1. Change the workflow behavior and update its tests or policy assertions.
-2. Bump `plugins/patrick-delivery/.codex-plugin/plugin.json` according to SemVer.
-3. Run `npm run verify` and merge the change to `main`.
-4. Create an annotated tag from the verified merge commit:
+1. Move the completed entries from `[Unreleased]` into a dated version section in `CHANGELOG.md`.
+2. Bump the root `package.json` version according to SemVer and refresh `package-lock.json`.
+3. Run `npm run verify` and merge the verified change to `main`.
+4. Create and push an annotated repository tag from that merge commit:
 
    ```bash
-   git tag -a patrick-delivery-v0.2.0 -m "Patrick Delivery 0.2.0"
-   git push origin patrick-delivery-v0.2.0
+   git tag -a v0.3.0 -m "v0.3.0"
+   git push origin v0.3.0
    ```
 
-5. Confirm that the `Release Patrick Delivery` workflow created the GitHub Release.
-6. On each machine, pull, run `./scripts/refresh-codex-plugins.sh`, and start a new Codex task.
+5. Confirm the release workflow created a GitHub Release titled `v0.3.0` with the matching curated changelog notes.
+6. On each machine, pull and rerun the relevant bootstrap or refresh commands from the release's upgrade notes.
 
-The release workflow rejects malformed tags and tags whose version differs from the plugin manifest. It creates release notes only; it does not publish to npm, update runtime caches, or install the plugin on other machines.
+The release workflow rejects malformed tags, tags that differ from the root package version, and versions without a
+changelog section. It publishes release notes only; it does not publish an npm package, update runtime caches, or
+install plugins on other machines.
+
+Patrick Delivery's historical `patrick-delivery-v0.2.0` tag remains valid history. Future GitHub releases use the
+repository-wide `vMAJOR.MINOR.PATCH` convention.
+
+## Maintain the catalog
+
+The committed `catalog/data.json` file is generated from skill frontmatter, plugin manifests, desired plugin lists,
+and `catalog/plugin-metadata.json`. Do not hand-edit it.
+
+```bash
+npm run catalog:generate
+npm run catalog
+```
+
+When a configured third-party plugin changes, update its short descriptive metadata only if the existing description
+is no longer accurate. CI runs `npm run catalog:check` and fails when generated data drifts from canonical inputs.
+
+For a private runtime comparison, run `npm run catalog:snapshot`. The resulting
+`catalog/runtime-data.local.json` contains only capability identifiers, versions, runtime state, and repository
+metadata—not installation paths, credentials, or plugin configuration—and is ignored by Git.
 
 ## Refresh installed Codex plugins
 
@@ -75,20 +104,34 @@ Refresh the desired Claude plugin set with:
 
 Underneath, this runs `claude plugin marketplace update` and `claude plugin update` for the entries in `config/claude-plugins.txt`. Claude requires a restart after a plugin update.
 
-## Review upstream Superpowers changes
+## Update the configured Superpowers fork
 
-Superpowers stays uninstalled in Codex and disabled in Claude. `patrick-delivery` is a selective adaptation, not a fork that should be overwritten by upstream releases.
+The actual Superpowers plugin is installed from [`pdugan20/superpowers`](https://github.com/pdugan20/superpowers),
+a thin fork of [`obra/superpowers`](https://github.com/obra/superpowers). The fork keeps an `upstream` Git remote and
+documents its intentionally small patch set in `CUSTOMIZATION.md`. `config/superpowers.json` is this repository's
+machine-readable record of the installed baseline.
 
-To review a new upstream release:
+Run `npm run superpowers:check` at any time. A weekly GitHub Actions job runs the same comparison and opens one issue
+when upstream `main` advances.
 
-1. Update Codex/ChatGPT so its OpenAI-curated marketplace snapshot is current.
-2. Run `codex plugin marketplace upgrade claude-plugins-official` to refresh the Git marketplace copy.
-3. Inspect `codex plugin list --available --json` for the available Superpowers version or source SHA.
-4. Compare only the upstream workflows relevant to Patrick's setup: planning, execution, verification, debugging, review, and production completion.
-5. Port useful ideas intentionally into the canonical personal skills, preserving Patrick's boundaries: no mandatory brainstorming, browser option picker, worktree, strict TDD, commit, or branch-finishing process.
-6. Bump `patrick-delivery`, validate it, and test representative positive and negative prompts in new tasks.
+To update safely:
 
-Baseline reviewed for the current adaptation: OpenAI-curated Superpowers `5.1.3`; Claude marketplace source SHA `3dcbd5c4b48e02263fbf4a3c01e3fe4f81d584d9`. Claude's disabled local cache currently contains Superpowers `6.2.0`; that newer upstream version has not been merged wholesale and should be treated as a pending selective review, not an automatic upgrade.
+1. In the fork checkout, fetch `upstream` and review the commits since `config/superpowers.json`'s
+   `upstreamCommit`.
+2. Merge or rebase the new upstream version into a branch of the fork. Resolve conflicts by preserving the three
+   policy patches documented in `CUSTOMIZATION.md`; do not copy upstream over the fork wholesale.
+3. Bump the fork to `<upstream-version>-config.<revision>` and update both plugin manifests and marketplace entries.
+4. Run the fork's configured-policy test, Codex packaging tests, hook tests, version check, and
+   `claude plugin validate .`.
+5. Push the fork, then update `upstreamVersion`, `upstreamCommit`, and `forkVersion` in
+   `config/superpowers.json`. Regenerate the catalog and run `npm run verify` here.
+6. Run `./scripts/refresh-codex-plugins.sh` and `./scripts/refresh-claude-plugins.sh`, restart both products, and run
+   `./scripts/verify-setup.sh`.
+7. Start new tasks and smoke-test one automatic workflow (for example debugging) plus negative prompts for TDD,
+   brainstorming, worktrees, and the browser option picker.
+
+The current baseline is upstream `6.2.0` at commit
+`44c9b2d6e889982ac18c27d05a19fefe335194e1`; the configured fork version is `6.2.0-config.2`.
 
 ## Product Design policy
 

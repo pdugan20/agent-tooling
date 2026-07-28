@@ -1,13 +1,18 @@
 {
   "name": "agent-tooling",
-  "version": "0.0.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Development tooling for Patrick's shared Codex and Claude configuration.",
   "scripts": {
-    "format": "prettier --write \"**/*.{json,yaml,yml}\"",
-    "format:check": "prettier --check \"**/*.{json,yaml,yml}\"",
-    "lint:claude": "claudelint check-all --strict --no-cache --format compact && claudelint validate-skills --path plugins/patrick-delivery/skills --preset strict --warnings-as-errors",
+    "catalog": "npm run catalog:generate && python3 -m http.server 4173 --bind 127.0.0.1",
+    "catalog:check": "python3 scripts/generate_catalog.py --check",
+    "catalog:generate": "python3 scripts/generate_catalog.py",
+    "catalog:snapshot": "python3 scripts/generate_catalog.py --snapshot-runtime",
+    "format": "prettier --write \"**/*.{css,html,js,json,yaml,yml}\"",
+    "format:check": "prettier --check \"**/*.{css,html,js,json,yaml,yml}\"",
+    "lint:claude": "claudelint check-all --strict --no-cache --format compact && claudelint validate-skills --path skills --preset strict --warnings-as-errors",
     "lint:markdown": "markdownlint \"**/*.md\" --ignore node_modules --ignore .claudelint-cache",
+    "superpowers:check": "python3 scripts/check_superpowers_update.py --check",
     "test": "python3 -m unittest discover -s scripts -p 'test_*.py' -v",
     "verify": "bash scripts/verify-repo.sh"
   },

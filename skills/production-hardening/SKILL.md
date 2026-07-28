@@ -5,6 +5,8 @@ description: Prepare a selected implementation for production by auditing risk, 
 
 # Production Hardening
 
+## Instructions
+
 1. Establish the selected behavior and inspect the current diff before changing it.
 2. Remove dead variants, debug affordances, temporary data, and experiment-only code.
 3. Review accessibility, loading and empty states, failures, cancellation, concurrency, platform behavior, and localization where relevant.

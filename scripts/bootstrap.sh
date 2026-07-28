@@ -20,8 +20,25 @@ link_path() {
   ln -s "$source" "$target"
 }
 
+remove_legacy_link() {
+  local target=$1
+  local expected_prefix=$2
+
+  if [[ -L $target && $(readlink "$target") == "$expected_prefix"* ]]; then
+    unlink "$target"
+  fi
+}
+
 link_path "$ROOT/global/AGENTS.md" "$HOME/.codex/AGENTS.md"
 link_path "$ROOT/global/AGENTS.md" "$HOME/.claude/CLAUDE.md"
+
+for legacy_skill in execute-plan feature-delivery formal-spec production-hardening strict-tdd write-plan; do
+  remove_legacy_link \
+    "$HOME/.claude/skills/$legacy_skill" \
+    "$ROOT/plugins/patrick-delivery/skills/$legacy_skill"
+done
+remove_legacy_link "$HOME/plugins/patrick-delivery" "$ROOT/plugins/patrick-delivery"
+remove_legacy_link "$HOME/.agents/plugins/marketplace.json" "$ROOT/.agents/plugins/marketplace.json"
 
 for skill_dir in "$ROOT"/skills/*; do
   [[ -f $skill_dir/SKILL.md ]] || continue
@@ -29,15 +46,6 @@ for skill_dir in "$ROOT"/skills/*; do
   link_path "$skill_dir" "$HOME/.agents/skills/$skill_name"
   link_path "$skill_dir" "$HOME/.claude/skills/$skill_name"
 done
-
-for skill_dir in "$ROOT"/plugins/patrick-delivery/skills/*; do
-  [[ -f $skill_dir/SKILL.md ]] || continue
-  skill_name=${skill_dir##*/}
-  link_path "$skill_dir" "$HOME/.claude/skills/$skill_name"
-done
-
-link_path "$ROOT/plugins/patrick-delivery" "$HOME/plugins/patrick-delivery"
-link_path "$ROOT/.agents/plugins/marketplace.json" "$HOME/.agents/plugins/marketplace.json"
 
 python3 "$ROOT/scripts/configure-claude.py" --settings "$HOME/.claude/settings.json"
 

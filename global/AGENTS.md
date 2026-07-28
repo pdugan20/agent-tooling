@@ -31,7 +31,7 @@ Use when Patrick says `ship`, `merge`, `release`, `PR`, `production`, or `harden
 - Check relevant accessibility, failure states, loading states, and platform behavior.
 - Run focused verification first, then the appropriate broader checks before claiming readiness.
 - Do not deploy, mutate production data, push, or open a PR without explicit authorization.
-- For a substantial production feature spanning meaningful behavior or multiple subsystems, allow `patrick-delivery:feature-delivery` to apply automatically.
+- For a substantial production feature spanning meaningful behavior or multiple subsystems, allow the personal `feature-delivery` skill to apply automatically.
 
 ### Hardening
 
@@ -39,11 +39,13 @@ Use only when explicitly requested. Audit edge cases, accessibility, performance
 
 ## Strict workflows are opt-in
 
-Do not invoke Superpowers planning, brainstorming, TDD, worktree, or branch-finishing workflows implicitly. Use them only when Patrick names the specific skill or explicitly asks for that workflow.
+The configured Superpowers fork enforces explicit-only invocation for brainstorming, strict TDD, implementation planning and execution, worktrees, parallel-agent orchestration, the full Superpowers router, and branch finishing. Use those workflows only when Patrick names the skill or explicitly requests that workflow.
 
-Patrick's strict component workflows remain explicit-only. In Codex, invoke `$patrick-delivery:formal-spec`, `$patrick-delivery:strict-tdd`, `$patrick-delivery:write-plan`, `$patrick-delivery:execute-plan`, or `$patrick-delivery:production-hardening`. In Claude, use the direct personal-skill equivalents `/formal-spec`, `/strict-tdd`, `/write-plan`, `/execute-plan`, and `/production-hardening`.
+In Codex, invoke strict workflows with `$superpowers:<skill-name>`. In Claude, use `/superpowers:<skill-name>`. Common examples are `brainstorming`, `test-driven-development`, `writing-plans`, `executing-plans`, `using-git-worktrees`, and `finishing-a-development-branch`.
 
-`patrick-delivery:feature-delivery` is the exception: it may trigger automatically for substantial production feature implementation. It uses proportional planning, risk-based testing, implementation checkpoints, and production verification without implicitly invoking strict TDD, mandatory brainstorming, worktrees, or branch-finishing workflows.
+The personal `feature-delivery` skill is the exception: it may trigger automatically for substantial production feature implementation. It uses proportional planning, risk-based testing, implementation checkpoints, and production verification without implicitly invoking strict TDD, mandatory brainstorming, worktrees, or branch-finishing workflows. Invoke the personal `production-hardening` skill explicitly when a selected implementation needs a dedicated release-readiness audit.
+
+The configured Superpowers plugin is maintained as a thin fork of `obra/superpowers`. It disables the always-on session bootstrap and removes the brainstorming Visual Companion/browser option-picker. Do not restore either behavior through repository-level instructions.
 
 ## Firebase and Firestore safety
 

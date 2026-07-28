@@ -1,6 +1,0 @@
-interface:
-  display_name: "Formal Spec"
-  short_description: "Turn a chosen direction into a concise spec"
-  default_prompt: "Use $patrick-delivery:formal-spec to turn this direction into an implementation-ready specification."
-policy:
-  allow_implicit_invocation: false

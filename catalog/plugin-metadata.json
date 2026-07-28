@@ -1,0 +1,100 @@
+{
+  "superpowers@superpowers-configured": {
+    "description": "The upstream Superpowers plugin with a small maintained policy patch: strict workflows are explicit-only, the always-on session bootstrap is disabled, and browser option-picking is removed.",
+    "displayName": "Superpowers (Configured)",
+    "source": "third-party",
+    "sourceLabel": "Upstream + local policy",
+    "path": "config/superpowers.json",
+    "version": "6.2.0-config.2"
+  },
+  "firebase@firebase": {
+    "description": "Firebase, Firestore, Auth, hosting, rules, and Xcode setup guidance.",
+    "source": "third-party",
+    "sourceLabel": "Firebase"
+  },
+  "cloudflare@cloudflare": {
+    "description": "Workers, Durable Objects, Wrangler, web performance, and Cloudflare platform skills.",
+    "source": "third-party",
+    "sourceLabel": "Cloudflare"
+  },
+  "mintlify@claude-plugins-official": {
+    "description": "Build and maintain Mintlify documentation sites.",
+    "source": "third-party",
+    "sourceLabel": "Mintlify"
+  },
+  "figma@openai-curated": {
+    "description": "Figma design context, design-to-code, Code Connect, SwiftUI, and motion workflows.",
+    "source": "openai",
+    "sourceLabel": "OpenAI curated"
+  },
+  "github@openai-curated": {
+    "description": "Repository, pull request, review, CI, and publishing workflows.",
+    "source": "openai",
+    "sourceLabel": "OpenAI curated"
+  },
+  "sentry@openai-curated": {
+    "description": "Inspect and triage Sentry issues, events, and production diagnostics.",
+    "source": "openai",
+    "sourceLabel": "OpenAI curated"
+  },
+  "expo@openai-curated": {
+    "description": "Expo and React Native project workflows and platform guidance.",
+    "source": "openai",
+    "sourceLabel": "OpenAI curated"
+  },
+  "vercel@openai-curated": {
+    "description": "Next.js, React, deployment, browser verification, and Vercel platform skills.",
+    "source": "third-party",
+    "sourceLabel": "Vercel"
+  },
+  "claude-code-setup@claude-plugins-official": {
+    "description": "Configure Claude Code projects and user environments.",
+    "source": "anthropic",
+    "sourceLabel": "Anthropic official"
+  },
+  "code-review@claude-plugins-official": {
+    "description": "Review code changes for correctness, quality, and regressions.",
+    "source": "anthropic",
+    "sourceLabel": "Anthropic official"
+  },
+  "code-simplifier@claude-plugins-official": {
+    "description": "Reduce unnecessary complexity while preserving behavior.",
+    "source": "anthropic",
+    "sourceLabel": "Anthropic official"
+  },
+  "commit-commands@claude-plugins-official": {
+    "description": "Claude-native commands for structured Git commits.",
+    "source": "anthropic",
+    "sourceLabel": "Anthropic official"
+  },
+  "explanatory-output-style@claude-plugins-official": {
+    "description": "A more explanatory response style for unfamiliar technical work.",
+    "source": "anthropic",
+    "sourceLabel": "Anthropic official"
+  },
+  "feature-dev@claude-plugins-official": {
+    "description": "Guided feature implementation workflows for Claude Code.",
+    "source": "anthropic",
+    "sourceLabel": "Anthropic official"
+  },
+  "frontend-design@claude-plugins-official": {
+    "description": "Frontend interface design and implementation guidance.",
+    "source": "anthropic",
+    "sourceLabel": "Anthropic official"
+  },
+  "skill-creator@claude-plugins-official": {
+    "description": "Create and improve reusable Claude skills.",
+    "source": "anthropic",
+    "sourceLabel": "Anthropic official"
+  },
+  "swift-lsp@claude-plugins-official": {
+    "description": "Swift language-server integration for Claude Code.",
+    "source": "anthropic",
+    "sourceLabel": "Anthropic official"
+  },
+  "typescript-lsp@claude-plugins-official": {
+    "description": "TypeScript language-server integration for Claude Code.",
+    "source": "anthropic",
+    "sourceLabel": "Anthropic official"
+  }
+}
