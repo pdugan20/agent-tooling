@@ -19,6 +19,23 @@ class RepositoryValidationTests(unittest.TestCase):
         self.assertIn("test-driven-development", configuration["explicitOnlySkills"])
         self.assertIn("systematic-debugging", configuration["automaticSkills"])
 
+    def test_upstream_skills_are_locked_outside_local_workflows(self) -> None:
+        skills_lock = validate_repository.load_json(validate_repository.ROOT / "skills-lock.json")
+
+        self.assertEqual(set(skills_lock["skills"]), set(validate_repository.UPSTREAM_SKILLS))
+        self.assertFalse(
+            set(validate_repository.UPSTREAM_SKILLS)
+            & {
+                path.name
+                for path in (validate_repository.ROOT / "skills").iterdir()
+                if (path / "SKILL.md").is_file()
+            }
+        )
+        self.assertEqual(
+            set((validate_repository.ROOT / ".agents/skills").glob("*/skills/*/SKILL.md")),
+            {validate_repository.ROOT / ".agents/skills/swiftui-pro/skills/swiftui-pro/SKILL.md"},
+        )
+
     def test_release_tag_must_match_repository_version(self) -> None:
         with (
             mock.patch.object(validate_repository, "repository_version", return_value="1.2.3"),

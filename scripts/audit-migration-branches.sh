@@ -3,8 +3,16 @@
 set -euo pipefail
 
 migration_branch=codex/agent-workflow-migration
-github_root=${AGENT_GITHUB_ROOT:-"$HOME/Documents/Github"}
-messenger_root=${AGENT_MESSENGER_ROOT:-"$HOME/Documents/messenger"}
+root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+default_repositories_root=$(cd "$root/.." && pwd)
+repositories_root=${AGENT_REPOSITORIES_ROOT:-${AGENT_GITHUB_ROOT:-$default_repositories_root}}
+if [[ -n ${AGENT_MESSENGER_ROOT:-} ]]; then
+  messenger_root=$AGENT_MESSENGER_ROOT
+elif [[ -d $repositories_root/messenger ]]; then
+  messenger_root=$repositories_root/messenger
+else
+  messenger_root=$(cd "$repositories_root/.." && pwd)/messenger
+fi
 fetch=false
 published=false
 merged=false
@@ -113,29 +121,29 @@ while IFS='|' read -r repository repository_path merge_commit; do
     failed=true
   fi
 done <<EOF
-nextup-ios-app|$github_root/nextup-ios-app|2f89c7292c8d11c0354ffa0dfdc2ac81bc86e587
-nextup-backend|$github_root/nextup-backend|68a6de4a1a29fdda9d1874e51bf4f42e83503f2e
-nextup-web|$github_root/nextup-web|ae835097a6d84fa175a31f66ea530a48e8072b33
-pat-portfolio|$github_root/pat-portfolio|7308d50fa7dca7cef0560bb2ca2af90f9648c626
+nextup-ios-app|$repositories_root/nextup-ios-app|2f89c7292c8d11c0354ffa0dfdc2ac81bc86e587
+nextup-backend|$repositories_root/nextup-backend|68a6de4a1a29fdda9d1874e51bf4f42e83503f2e
+nextup-web|$repositories_root/nextup-web|ae835097a6d84fa175a31f66ea530a48e8072b33
+pat-portfolio|$repositories_root/pat-portfolio|7308d50fa7dca7cef0560bb2ca2af90f9648c626
 messenger|$messenger_root|9d339b9853fdf46ebd6fea2d89f8bebd22b40767
-chat-app-prototype|$github_root/chat-app-prototype|b81724f3ab149d60b6aa54a29431025e0e6d4be4
-claude-usage|$github_root/claude-usage|f73384ad21ca7f9277e50f03dc223a42e5f9deff
-claudelint|$github_root/claudelint|016b46d21e6cffb8da3ffa931b75f94a88fb3639
-claudenotes|$github_root/claudenotes|ee21f2760ba789e138fae7d97934e96b0731ab1d
-e-ink-scoreboard|$github_root/e-ink-scoreboard|2ee6682fca0d4a3a01492c509e9e7077e92ba4c3
-figma-chat-builder|$github_root/figma-chat-builder|93e77b926f956e9e6713264a51cfcb3dc6e4624a
-figma-music-injector|$github_root/figma-music-injector|6f842d8167c8df4f830dbfc1e1b9887216cb4952
-imessage-swift-prototype|$github_root/imessage-swift-prototype|fe5a878ee3f2957b19cfc6742ffab7d5733a20ad
-libby-downloader|$github_root/libby-downloader|9c9ac8440edd7a4d7cb357fe54397d53b47f1882
-mintlify-docs|$github_root/mintlify-docs|222fb1d59f6e683419b380343b5c7cea72a327b6
-passant-prototype|$github_root/passant-prototype|739d7f93829bcb8eb9aabcc65145c961f5d5e3d3
-rss-feed-generator|$github_root/rss-feed-generator|de98a45a5a7426e19cb65f1ab7d4b280a381ef92
-touchpoint|$github_root/touchpoint|8a823933280240eb5b31f6eea085fe18444f816b
-x-archive|$github_root/x-archive|712e3705cecbf993b4b2c66b2fa027eceef146bf
-bibliocommons-mcp|$github_root/bibliocommons-mcp|d04267b75d8d2745359153f25a48260f5812061d
-clickwheel|$github_root/clickwheel|9cf8833e80f455440fdde009da909cb162666aa1
-presentations|$github_root/presentations|d39b9f6c7b9b4cb0bdaa90af0c9b52d2f9353de8
-rewind|$github_root/rewind|c0bb6a0a66b1bf1400e0b320a8449a622f966654
+chat-app-prototype|$repositories_root/chat-app-prototype|b81724f3ab149d60b6aa54a29431025e0e6d4be4
+claude-usage|$repositories_root/claude-usage|f73384ad21ca7f9277e50f03dc223a42e5f9deff
+claudelint|$repositories_root/claudelint|016b46d21e6cffb8da3ffa931b75f94a88fb3639
+claudenotes|$repositories_root/claudenotes|ee21f2760ba789e138fae7d97934e96b0731ab1d
+e-ink-scoreboard|$repositories_root/e-ink-scoreboard|2ee6682fca0d4a3a01492c509e9e7077e92ba4c3
+figma-chat-builder|$repositories_root/figma-chat-builder|93e77b926f956e9e6713264a51cfcb3dc6e4624a
+figma-music-injector|$repositories_root/figma-music-injector|6f842d8167c8df4f830dbfc1e1b9887216cb4952
+imessage-swift-prototype|$repositories_root/imessage-swift-prototype|fe5a878ee3f2957b19cfc6742ffab7d5733a20ad
+libby-downloader|$repositories_root/libby-downloader|9c9ac8440edd7a4d7cb357fe54397d53b47f1882
+mintlify-docs|$repositories_root/mintlify-docs|222fb1d59f6e683419b380343b5c7cea72a327b6
+passant-prototype|$repositories_root/passant-prototype|739d7f93829bcb8eb9aabcc65145c961f5d5e3d3
+rss-feed-generator|$repositories_root/rss-feed-generator|de98a45a5a7426e19cb65f1ab7d4b280a381ef92
+touchpoint|$repositories_root/touchpoint|8a823933280240eb5b31f6eea085fe18444f816b
+x-archive|$repositories_root/x-archive|712e3705cecbf993b4b2c66b2fa027eceef146bf
+bibliocommons-mcp|$repositories_root/bibliocommons-mcp|d04267b75d8d2745359153f25a48260f5812061d
+clickwheel|$repositories_root/clickwheel|9cf8833e80f455440fdde009da909cb162666aa1
+presentations|$repositories_root/presentations|d39b9f6c7b9b4cb0bdaa90af0c9b52d2f9353de8
+rewind|$repositories_root/rewind|c0bb6a0a66b1bf1400e0b320a8449a622f966654
 EOF
 
 if [[ $failed == true ]]; then

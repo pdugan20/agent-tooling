@@ -54,6 +54,21 @@ class ConfigureCodexTests(unittest.TestCase):
 
             self.assertFalse(parsed["skills"]["config"][0]["enabled"])
 
+    def test_disables_an_additional_repository_skill(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            home = Path(directory)
+            nested_skill = home / "repo/.agents/skills/swiftui-pro/skills/swiftui-pro/SKILL.md"
+            nested_skill.parent.mkdir(parents=True)
+            nested_skill.write_text("---\nname: swiftui-pro\n---\n")
+
+            updated = configure_codex.update_config("", home, (nested_skill,))
+            parsed = tomllib.loads(updated)
+
+            self.assertEqual(
+                parsed["skills"]["config"],
+                [{"path": str(nested_skill.resolve()), "enabled": False}],
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -4,35 +4,50 @@ This is the authoritative map of Patrick's shared Claude and Codex setup. The pr
 
 ## Canonical sources
 
-| Concern                      | Canonical source                 | Runtime destination                                |
-| ---------------------------- | -------------------------------- | -------------------------------------------------- |
-| Global working agreement     | `global/AGENTS.md`               | `~/.codex/AGENTS.md` and `~/.claude/CLAUDE.md`     |
-| Portable personal skills     | `skills/*/SKILL.md`              | `~/.agents/skills/*` and `~/.claude/skills/*`      |
-| Configured Superpowers state | `config/superpowers.json`        | Fork repository and both products' plugin caches   |
-| Desired Codex plugins        | `config/codex-plugins.txt`       | `~/.codex/config.toml` and Codex plugin caches     |
-| Desired Claude plugins       | `config/claude-plugins.txt`      | `~/.claude/settings.json` and Claude plugin caches |
-| Codex machine policy         | `scripts/configure-codex.py`     | `~/.codex/config.toml`                             |
-| Claude machine policy        | `scripts/configure-claude.py`    | `~/.claude/settings.json`                          |
-| Repository-specific guidance | Each repository's `AGENTS.md`    | Travels with that repository                       |
+| Concern                      | Canonical source                             | Runtime destination                                |
+| ---------------------------- | -------------------------------------------- | -------------------------------------------------- |
+| Global working agreement     | `global/AGENTS.md`                           | `~/.codex/AGENTS.md` and `~/.claude/CLAUDE.md`     |
+| Locally maintained workflows | `skills/*/SKILL.md`                          | `~/.agents/skills/*` and `~/.claude/skills/*`      |
+| Locked upstream skills       | `.agents/skills/*` and `skills-lock.json`    | `~/.agents/skills/*` and `~/.claude/skills/*`      |
+| Configured Superpowers state | `config/superpowers.json`                    | Fork repository and both products' plugin caches   |
+| Desired Codex plugins        | `config/codex-plugins.txt`                   | `~/.codex/config.toml` and Codex plugin caches     |
+| Desired Claude plugins       | `config/claude-plugins.txt`                  | `~/.claude/settings.json` and Claude plugin caches |
+| Personal plugin marketplace  | `pdugan20/pdugan20-plugins`                  | Both products' marketplace snapshots               |
+| Codex machine policy         | `scripts/configure-codex.py`                 | `~/.codex/config.toml`                              |
+| Claude machine policy        | `scripts/configure-claude.py`                | `~/.claude/settings.json`                           |
+| Repository-specific guidance | Each repository's `AGENTS.md`                | Travels with that repository                       |
 
 Do not edit generated runtime cache files. Edit this repository, rerun the setup scripts, and start a new task.
 
-## Owned skills
+## Locally maintained workflows
 
-Portable skills shared directly by Codex and Claude:
+These are authored or adapted as part of this repository and live under `skills/`:
 
-- `animation-vocabulary`
-- `apple-design`
 - `code-native-ui-ideation`
-- `emil-design-eng`
 - `feature-delivery`
 - `production-hardening`
-- `review-animations`
-- `swiftui-pro`
 
 `feature-delivery` may run automatically for a substantial production implementation. `production-hardening` is
-explicit-only. They are personal skills—not a plugin, a fork, or copies of Superpowers workflows—and use the same
-canonical files in Codex and Claude.
+explicit-only. These are skills—not a plugin, a fork, or copies of Superpowers workflows—and use the same canonical
+files in Codex and Claude.
+
+## Locked upstream skills
+
+Third-party skills are installed through the official [`skills` CLI](https://github.com/vercel-labs/skills) at
+project scope. The CLI owns `.agents/skills/`, creates the `.claude/skills/` compatibility links, and records source
+and content hashes in `skills-lock.json`.
+
+| Skill                  | Original source                            | Creator        |
+| ---------------------- | ------------------------------------------ | -------------- |
+| `animation-vocabulary` | `emilkowalski/skills`                      | Emil Kowalski  |
+| `apple-design`         | `emilkowalski/skills`                      | Emil Kowalski  |
+| `emil-design-eng`      | `emilkowalski/skills`                      | Emil Kowalski  |
+| `review-animations`    | `emilkowalski/skills`                      | Emil Kowalski  |
+| `swiftui-pro`          | `twostraws/swiftui-agent-skill`            | Paul Hudson    |
+
+These are committed snapshots so a clone is reproducible, but they are not maintained or claimed as original work
+here. Do not edit them directly. Run `npm run skills:update`, review both the snapshot and lockfile changes, and then
+run `npm run verify`.
 
 ## Configured Superpowers fork
 
@@ -72,6 +87,7 @@ relevant. Invoke strict skills as `$superpowers:<skill-name>` in Codex or `/supe
 - `firebase@firebase`
 - `cloudflare@cloudflare`
 - `mintlify@claude-plugins-official`
+- `mintlify-docs@pdugan20-plugins`
 - `figma@openai-curated`
 - `github@openai-curated`
 - `sentry@openai-curated`
@@ -79,6 +95,11 @@ relevant. Invoke strict skills as `$superpowers:<skill-name>` in Codex or `/supe
 - `vercel@openai-curated`
 
 Each plugin may contribute many skills or MCP tools. Do not duplicate those transitive skill names here because they change with plugin versions. Use `codex plugin list --json` for exact installed versions and the Codex skill picker for the current transitive skill inventory.
+
+`mintlify-docs` is Patrick's maintained four-skill docs-site plugin. Its source remains
+[`pdugan20/mintlify-docs`](https://github.com/pdugan20/mintlify-docs); this repository records the desired installation
+without copying its skills. The official `mintlify` plugin remains installed alongside it for component and
+`docs.json` mechanics.
 
 ## Codex runtime-managed plugins
 
@@ -102,6 +123,7 @@ Generated-image ideation is opt-in. Code-native UI ideation in the actual browse
 - `explanatory-output-style`
 - `feature-dev`
 - `frontend-design`
+- `mintlify-docs@pdugan20-plugins`
 - `skill-creator`
 - `swift-lsp`
 - `typescript-lsp`

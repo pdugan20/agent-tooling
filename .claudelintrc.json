@@ -1,12 +1,4 @@
 {
   "extends": "claudelint:recommended",
-  "overrides": [
-    {
-      "files": ["**/skills/swiftui-pro/SKILL.md"],
-      "rules": {
-        "skill-arguments-without-hint": "off"
-      }
-    }
-  ],
   "reportUnusedDisableDirectives": true
 }

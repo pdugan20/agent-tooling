@@ -29,12 +29,21 @@ check_link() {
 check_link "$ROOT/global/AGENTS.md" "$HOME/.codex/AGENTS.md"
 check_link "$ROOT/global/AGENTS.md" "$HOME/.claude/CLAUDE.md"
 
-for skill_dir in "$ROOT"/skills/*; do
-  [[ -f $skill_dir/SKILL.md ]] || continue
-  skill_name=${skill_dir##*/}
-  check_link "$skill_dir" "$HOME/.agents/skills/$skill_name"
-  check_link "$skill_dir" "$HOME/.claude/skills/$skill_name"
-done
+check_skill_collection() {
+  local collection=$1
+  local skill_dir
+  local skill_name
+
+  for skill_dir in "$collection"/*; do
+    [[ -f $skill_dir/SKILL.md ]] || continue
+    skill_name=${skill_dir##*/}
+    check_link "$skill_dir" "$HOME/.agents/skills/$skill_name"
+    check_link "$skill_dir" "$HOME/.claude/skills/$skill_name"
+  done
+}
+
+check_skill_collection "$ROOT/skills"
+check_skill_collection "$ROOT/.agents/skills"
 
 codex_plugins=$(codex plugin list --json)
 while IFS= read -r plugin; do
@@ -101,12 +110,13 @@ else
   fail "Claude must disable official Superpowers and enable $superpowers_plugin_id"
 fi
 
-if python3 - "$HOME" <<'PY'; then
+if python3 - "$HOME" "$ROOT" <<'PY'; then
 import sys
 import tomllib
 from pathlib import Path
 
 home = Path(sys.argv[1])
+repository = Path(sys.argv[2])
 config = tomllib.loads((home / ".codex/config.toml").read_text())
 disabled = {
     Path(item["path"]).resolve()
@@ -118,11 +128,14 @@ expected = set()
 if root.exists():
     for name in ("ideate", "index"):
         expected.update(path.resolve() for path in root.glob(f"*/skills/{name}/SKILL.md"))
+expected.add(
+    (repository / ".agents/skills/swiftui-pro/skills/swiftui-pro/SKILL.md").resolve()
+)
 raise SystemExit(0 if expected <= disabled else 1)
 PY
-  pass "Product Design image ideation is disabled"
+  pass "Product Design image ideation and duplicate nested skills are disabled"
 else
-  fail "Product Design index/ideate policy is incomplete; rerun bootstrap"
+  fail "Codex skill override policy is incomplete; rerun bootstrap"
 fi
 
 if ((failures)); then

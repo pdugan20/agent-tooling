@@ -9,9 +9,16 @@ if ! command -v codex >/dev/null 2>&1; then
   exit 1
 fi
 
-if ! codex plugin marketplace list | awk '$1 == "superpowers-configured" { found = 1 } END { exit !found }'; then
-  codex plugin marketplace add https://github.com/pdugan20/superpowers.git
-fi
+ensure_marketplace() {
+  local name=$1
+  local source=$2
+  if ! codex plugin marketplace list | awk -v target="$name" '$1 == target { found = 1 } END { exit !found }'; then
+    codex plugin marketplace add "$source"
+  fi
+}
+
+ensure_marketplace pdugan20-plugins https://github.com/pdugan20/pdugan20-plugins.git
+ensure_marketplace superpowers-configured https://github.com/pdugan20/superpowers.git
 
 codex plugin marketplace upgrade
 

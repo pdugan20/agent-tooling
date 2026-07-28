@@ -17,6 +17,12 @@ CATALOG_ROOT = ROOT / "catalog"
 CATALOG_DATA = CATALOG_ROOT / "data.json"
 RUNTIME_DATA = CATALOG_ROOT / "runtime-data.local.json"
 PLUGIN_METADATA = CATALOG_ROOT / "plugin-metadata.json"
+SKILLS_LOCK = ROOT / "skills-lock.json"
+
+UPSTREAM_SOURCE_LABELS = {
+    "emilkowalski/skills": "Emil Kowalski",
+    "twostraws/swiftui-agent-skill": "Paul Hudson",
+}
 
 SKILL_PRIORITY = {
     "feature-delivery": 1,
@@ -74,10 +80,17 @@ def humanize_name(name: str) -> str:
     )
 
 
-def read_skill_interface(skill_root: Path) -> tuple[str | None, str | None, str]:
+def read_skill_interface(
+    skill_root: Path, frontmatter: dict[str, str]
+) -> tuple[str | None, str | None, str]:
     agents_manifest = skill_root / "agents/openai.yaml"
     if not agents_manifest.exists():
-        return None, None, "Automatic"
+        invocation = (
+            "Explicit"
+            if frontmatter.get("disable-model-invocation", "").lower() == "true"
+            else "Automatic"
+        )
+        return None, None, invocation
 
     text = agents_manifest.read_text(encoding="utf-8")
     display_name_match = re.search(r'(?m)^\s+display_name:\s*["\']?(.+?)["\']?\s*$', text)
@@ -91,14 +104,19 @@ def read_skill_interface(skill_root: Path) -> tuple[str | None, str | None, str]
     return display_name, description, invocation
 
 
-def skill_item(skill_path: Path) -> dict[str, Any]:
+def skill_item(
+    skill_path: Path,
+    *,
+    source: str = "local",
+    source_label: str = "Managed here",
+) -> dict[str, Any]:
     skill_root = skill_path.parent
     frontmatter = read_frontmatter(skill_path)
     name = frontmatter.get("name")
     if not name or name != skill_root.name:
         raise CatalogError(f"{skill_path.relative_to(ROOT)} name must match its directory")
 
-    display_name, short_description, invocation = read_skill_interface(skill_root)
+    display_name, short_description, invocation = read_skill_interface(skill_root, frontmatter)
     return {
         "description": short_description or frontmatter.get("description", ""),
         "displayName": display_name or humanize_name(name),
@@ -108,8 +126,8 @@ def skill_item(skill_path: Path) -> dict[str, Any]:
         "name": name,
         "path": skill_path.relative_to(ROOT).as_posix(),
         "runtimes": ["codex", "claude"],
-        "source": "personal",
-        "sourceLabel": "Built here",
+        "source": source,
+        "sourceLabel": source_label,
         "state": "Configured",
         "type": "skill",
         "version": read_skill_version(skill_path),
@@ -118,7 +136,7 @@ def skill_item(skill_path: Path) -> dict[str, Any]:
 
 def plugin_item(
     plugin_id: str,
-    runtime: str,
+    runtimes: list[str],
     metadata: dict[str, Any],
     index: int,
 ) -> dict[str, Any]:
@@ -127,12 +145,12 @@ def plugin_item(
         "description": metadata["description"],
         "displayName": metadata.get("displayName", humanize_name(name)),
         "featured": 100 + index,
-        "id": f"plugin:{runtime}:{plugin_id}",
+        "id": f"plugin:{plugin_id}",
         "invocation": None,
         "name": name,
-        "path": metadata.get("path", f"config/{runtime}-plugins.txt"),
+        "path": metadata.get("path", f"config/{runtimes[0]}-plugins.txt"),
         "pluginId": plugin_id,
-        "runtimes": [runtime],
+        "runtimes": runtimes,
         "source": metadata["source"],
         "sourceLabel": metadata["sourceLabel"],
         "state": "Configured",
@@ -145,13 +163,31 @@ def build_catalog() -> dict[str, Any]:
     plugin_metadata = load_json(PLUGIN_METADATA)
 
     skill_items = [skill_item(path) for path in sorted((ROOT / "skills").glob("*/SKILL.md"))]
+    skills_lock = load_json(SKILLS_LOCK)
+    locked_skills = skills_lock.get("skills", {})
+    upstream_paths = sorted((ROOT / ".agents/skills").glob("*/SKILL.md"))
+    upstream_names = {path.parent.name for path in upstream_paths}
+    if skills_lock.get("version") != 1 or not isinstance(locked_skills, dict):
+        raise CatalogError("skills-lock.json must use the official version 1 schema")
+    if upstream_names != set(locked_skills):
+        raise CatalogError(
+            "skills-lock.json and .agents/skills disagree; "
+            f"lock={sorted(locked_skills)}, files={sorted(upstream_names)}"
+        )
+    for path in upstream_paths:
+        source = locked_skills[path.parent.name].get("source")
+        source_label = UPSTREAM_SOURCE_LABELS.get(source)
+        if not source_label:
+            raise CatalogError(f"no catalog source label for locked skill source {source!r}")
+        skill_items.append(skill_item(path, source="third-party", source_label=source_label))
 
-    configured: list[tuple[str, str]] = []
+    configured: dict[str, list[str]] = {}
     for runtime in ("codex", "claude"):
         manifest_path = ROOT / f"config/{runtime}-plugins.txt"
-        configured.extend((plugin_id, runtime) for plugin_id in read_plugin_entries(manifest_path))
+        for plugin_id in read_plugin_entries(manifest_path):
+            configured.setdefault(plugin_id, []).append(runtime)
 
-    configured_ids = {plugin_id for plugin_id, _runtime in configured}
+    configured_ids = set(configured)
     metadata_ids = set(plugin_metadata)
     if configured_ids != metadata_ids:
         missing = sorted(configured_ids - metadata_ids)
@@ -159,13 +195,15 @@ def build_catalog() -> dict[str, Any]:
         raise CatalogError(f"plugin metadata mismatch; missing={missing}, stale={stale}")
 
     plugin_items = [
-        plugin_item(plugin_id, runtime, plugin_metadata[plugin_id], index)
-        for index, (plugin_id, runtime) in enumerate(configured)
+        plugin_item(plugin_id, runtimes, plugin_metadata[plugin_id], index)
+        for index, (plugin_id, runtimes) in enumerate(configured.items())
     ]
     items = sorted(skill_items + plugin_items, key=lambda item: (item["featured"], item["name"]))
     return {
         "generatedFrom": [
             "skills/*/SKILL.md",
+            ".agents/skills/*/SKILL.md",
+            "skills-lock.json",
             "config/superpowers.json",
             "config/codex-plugins.txt",
             "config/claude-plugins.txt",
@@ -201,9 +239,10 @@ def build_runtime_snapshot() -> dict[str, Any]:
     canonical_skills = [item for item in canonical["items"] if item["type"] == "skill"]
     plugin_metadata = load_json(PLUGIN_METADATA)
     desired_ids = {
-        (item["pluginId"], item["runtimes"][0]): item
+        (item["pluginId"], runtime): item
         for item in canonical["items"]
         if item["type"] == "plugin"
+        for runtime in item["runtimes"]
     }
     items: list[dict[str, Any]] = []
     codex_data = run_json_command(["codex", "plugin", "list", "--json"])

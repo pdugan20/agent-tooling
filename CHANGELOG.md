@@ -6,12 +6,16 @@ version when compatibility requires it.
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-07-28
+
 ### Added
 
 - A generated browser catalog for searching and filtering canonical skills and plugins.
 - Optional machine-local inventory snapshots that distinguish installed runtime state from Git-backed desired state.
 - Catalog drift verification in the local and GitHub Actions repository gate.
 - A thin, upstream-tracking Superpowers fork with policy tests and a weekly upstream-change monitor.
+- Official `skills` CLI lockfile management for the four Emil Kowalski skills and Paul Hudson's `swiftui-pro`.
+- Dual-runtime desired state for the shared `mintlify-docs` plugin.
 
 ### Changed
 
@@ -24,6 +28,10 @@ version when compatibility requires it.
 - Removed Superpowers' automatic session router and browser-based visual option picker.
 - Exercised the upstream-update path against a documentation-only Superpowers change and advanced the configured
   fork baseline to `6.2.0-config.2`.
+- Made new-machine setup and migration auditing independent of a username or fixed checkout directory.
+- Reduced `skills/` to the three workflows maintained in this repository; third-party snapshots now live under
+  `.agents/skills/` with their original source and creator shown in the catalog.
+- Added source-lock and compatibility-link validation so copied or silently diverged upstream skills fail CI.
 
 ## [0.2.0] - 2026-07-27
 
@@ -53,5 +61,6 @@ version when compatibility requires it.
 Pull the repository, run `./scripts/bootstrap.sh`, refresh the configured Codex and Claude plugins, and start new
 tasks in both products.
 
-[unreleased]: https://github.com/pdugan20/agent-tooling/compare/patrick-delivery-v0.2.0...HEAD
+[unreleased]: https://github.com/pdugan20/agent-tooling/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/pdugan20/agent-tooling/compare/patrick-delivery-v0.2.0...v0.3.0
 [0.2.0]: https://github.com/pdugan20/agent-tooling/releases/tag/patrick-delivery-v0.2.0

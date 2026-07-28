@@ -1,10 +1,10 @@
 # Agent tooling maintenance
 
-`agent-tooling` is the single canonical source for Patrick's shared instructions, personal skills, desired plugin
-state, and configured Superpowers baseline. Claude and Codex consume the same personal skill files through
-runtime-specific symlinks; do not maintain separate copies.
+`agent-tooling` is the single canonical source for Patrick's shared instructions, locally maintained workflows,
+locked upstream skill set, desired plugin state, and configured Superpowers baseline. Claude and Codex consume the
+same skill files through runtime-specific symlinks; do not maintain separate copies.
 
-## Update personal instructions and skills
+## Update shared instructions and local workflows
 
 1. Edit the canonical file in this repository.
 2. Validate affected skills with `quick_validate.py` and run the repository's configuration tests.
@@ -12,8 +12,35 @@ runtime-specific symlinks; do not maintain separate copies.
 4. Commit and push this repository.
 5. On another machine, pull, run `./scripts/bootstrap.sh`, and start a new Claude or Codex task.
 
-After changing a personal skill, rerun `./scripts/bootstrap.sh` and start new tasks. The symlinks update immediately,
+After changing a local workflow, rerun `./scripts/bootstrap.sh` and start new tasks. The symlinks update immediately,
 but active tasks retain the skill inventory loaded when they started.
+
+## Update upstream skills
+
+The five third-party skills in `.agents/skills/` are project-scoped installations managed by the official
+[`skills` CLI](https://github.com/vercel-labs/skills). Their exact GitHub sources and content hashes live in
+`skills-lock.json`; the repository does not maintain hand-copied versions under `skills/`.
+
+```bash
+npm run skills:update
+git diff -- .agents/skills .claude/skills skills-lock.json
+npm run verify
+```
+
+Review instruction changes like dependency changes: confirm their source, inspect the full diff, and smoke-test the
+affected workflow before committing. Do not patch the generated snapshot, run a global update for this repository,
+or auto-merge instruction updates. If a local customization is genuinely needed, create a clearly named local
+workflow under `skills/` instead of silently diverging the upstream copy.
+
+Updates remain intentionally manual for now. The CLI provides the canonical install, lock, and update operation but
+does not provide a first-party scheduled pull-request workflow. Adding custom branch and pull-request automation
+would recreate tooling around the official updater, so revisit this only if the CLI ships a supported automation
+path. The current maintenance command is short, reviewable, and safe to run alongside other dependency updates.
+
+The upstream `swiftui-pro` package includes a nested Claude compatibility copy inside its canonical Codex-ready
+skill directory. The snapshot remains unmodified so `skills-lock.json` can track it exactly; `bootstrap.sh` uses
+Codex's supported per-skill configuration override to disable only that nested duplicate. Rerun bootstrap after an
+upstream update so the override follows the current checkout location.
 
 ## Verify repository changes
 
@@ -25,9 +52,10 @@ npm run verify
 
 This is the exact `ci` status check used by GitHub Actions. It validates the canonical files and repository policy without inspecting authenticated runtime state. Continue to use `./scripts/verify-setup.sh` separately after applying the setup on a real machine.
 
-ClaudeLint is intentionally strict. Fix new warnings rather than adding broad suppressions. The one file-scoped
-override handles Swift closure syntax such as `$0`, which ClaudeLint otherwise mistakes for a skill argument.
-`scripts/validate_repository.py` separately validates the configured Superpowers baseline and desired plugin state.
+ClaudeLint is intentionally strict for workflows maintained in this repository. Locked upstream snapshots are
+excluded from local style rewrites and lint policy; their integrity and provenance are enforced through
+`skills-lock.json`. `scripts/validate_repository.py` separately validates that split, the configured Superpowers
+baseline, and desired plugin state.
 
 ### Secret-scanning fallback
 
@@ -96,6 +124,10 @@ The script refreshes Git marketplace snapshots, re-adds every configured plugin 
 
 The current Codex CLI has no `plugin update` command. Its relevant refresh primitives are `codex plugin marketplace upgrade` and `codex plugin add`.
 
+`mintlify-docs` is refreshed from the native Codex catalog in `pdugan20/pdugan20-plugins`. Its canonical plugin code
+lives in `pdugan20/mintlify-docs`; update and release that repository first, then refresh the marketplace snapshot and
+re-add the configured plugin here.
+
 Refresh the desired Claude plugin set with:
 
 ```bash
@@ -103,6 +135,10 @@ Refresh the desired Claude plugin set with:
 ```
 
 Underneath, this runs `claude plugin marketplace update` and `claude plugin update` for the entries in `config/claude-plugins.txt`. Claude requires a restart after a plugin update.
+
+The Claude and Codex installations of `mintlify-docs` use the same tagged source release. The source repository keeps
+separate `.claude-plugin` and `.codex-plugin` manifests only for runtime packaging; both manifests point at the same
+`skills/` directory and are versioned together.
 
 ## Update the configured Superpowers fork
 

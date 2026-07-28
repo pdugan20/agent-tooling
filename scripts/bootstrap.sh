@@ -40,18 +40,34 @@ done
 remove_legacy_link "$HOME/plugins/patrick-delivery" "$ROOT/plugins/patrick-delivery"
 remove_legacy_link "$HOME/.agents/plugins/marketplace.json" "$ROOT/.agents/plugins/marketplace.json"
 
-for skill_dir in "$ROOT"/skills/*; do
-  [[ -f $skill_dir/SKILL.md ]] || continue
-  skill_name=${skill_dir##*/}
-  link_path "$skill_dir" "$HOME/.agents/skills/$skill_name"
-  link_path "$skill_dir" "$HOME/.claude/skills/$skill_name"
+for upstream_skill in animation-vocabulary apple-design emil-design-eng review-animations swiftui-pro; do
+  remove_legacy_link "$HOME/.agents/skills/$upstream_skill" "$ROOT/skills/$upstream_skill"
+  remove_legacy_link "$HOME/.claude/skills/$upstream_skill" "$ROOT/skills/$upstream_skill"
 done
+
+link_skill_collection() {
+  local collection=$1
+  local skill_dir
+  local skill_name
+
+  for skill_dir in "$collection"/*; do
+    [[ -f $skill_dir/SKILL.md ]] || continue
+    skill_name=${skill_dir##*/}
+    link_path "$skill_dir" "$HOME/.agents/skills/$skill_name"
+    link_path "$skill_dir" "$HOME/.claude/skills/$skill_name"
+  done
+}
+
+link_skill_collection "$ROOT/skills"
+link_skill_collection "$ROOT/.agents/skills"
 
 python3 "$ROOT/scripts/configure-claude.py" --settings "$HOME/.claude/settings.json"
 
 codex_config="$HOME/.codex/config.toml"
 mkdir -p "$(dirname "$codex_config")"
 touch "$codex_config"
-python3 "$ROOT/scripts/configure-codex.py" --config "$codex_config"
+python3 "$ROOT/scripts/configure-codex.py" \
+  --config "$codex_config" \
+  --disable-skill "$ROOT/.agents/skills/swiftui-pro/skills/swiftui-pro/SKILL.md"
 
 echo "Agent tooling links and routing settings are configured."
