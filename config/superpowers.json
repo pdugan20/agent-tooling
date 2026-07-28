@@ -4,8 +4,8 @@
   "marketplace": "superpowers-configured",
   "pluginId": "superpowers@superpowers-configured",
   "upstreamVersion": "6.2.0",
-  "upstreamCommit": "3dcbd5c4b48e02263fbf4a3c01e3fe4f81d584d9",
-  "forkVersion": "6.2.0-config.1",
+  "upstreamCommit": "44c9b2d6e889982ac18c27d05a19fefe335194e1",
+  "forkVersion": "6.2.0-config.2",
   "explicitOnlySkills": [
     "brainstorming",
     "dispatching-parallel-agents",

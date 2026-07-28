@@ -22,6 +22,8 @@ version when compatibility requires it.
 - Made Superpowers planning, brainstorming, TDD, worktree, parallel-agent, and branch-finishing workflows
   explicit-only while keeping debugging, review, verification, and skill-authoring workflows available automatically.
 - Removed Superpowers' automatic session router and browser-based visual option picker.
+- Exercised the upstream-update path against a documentation-only Superpowers change and advanced the configured
+  fork baseline to `6.2.0-config.2`.
 
 ## [0.2.0] - 2026-07-27
 

@@ -5,7 +5,7 @@
     "source": "third-party",
     "sourceLabel": "Upstream + local policy",
     "path": "config/superpowers.json",
-    "version": "6.2.0-config.1"
+    "version": "6.2.0-config.2"
   },
   "firebase@firebase": {
     "description": "Firebase, Firestore, Auth, hosting, rules, and Xcode setup guidance.",

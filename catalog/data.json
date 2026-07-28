@@ -167,7 +167,7 @@
       "sourceLabel": "Upstream + local policy",
       "state": "Configured",
       "type": "plugin",
-      "version": "6.2.0-config.1"
+      "version": "6.2.0-config.2"
     },
     {
       "description": "Firebase, Firestore, Auth, hosting, rules, and Xcode setup guidance.",
@@ -473,7 +473,7 @@
       "sourceLabel": "Upstream + local policy",
       "state": "Configured",
       "type": "plugin",
-      "version": "6.2.0-config.1"
+      "version": "6.2.0-config.2"
     },
     {
       "description": "Swift language-server integration for Claude Code.",

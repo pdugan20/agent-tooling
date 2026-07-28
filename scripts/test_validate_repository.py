@@ -14,7 +14,7 @@ class RepositoryValidationTests(unittest.TestCase):
         configuration = validate_repository.load_json(validate_repository.SUPERPOWERS_CONFIG)
 
         self.assertEqual(configuration["upstreamVersion"], "6.2.0")
-        self.assertEqual(configuration["forkVersion"], "6.2.0-config.1")
+        self.assertEqual(configuration["forkVersion"], "6.2.0-config.2")
         self.assertEqual(configuration["marketplace"], "superpowers-configured")
         self.assertIn("test-driven-development", configuration["explicitOnlySkills"])
         self.assertIn("systematic-debugging", configuration["automaticSkills"])

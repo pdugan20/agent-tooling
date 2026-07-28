@@ -18,7 +18,7 @@ class SuperpowersUpdateCheckTests(unittest.TestCase):
                     "upstreamRepository": "https://example.com/upstream.git",
                     "upstreamCommit": "a" * 40,
                     "upstreamVersion": "6.2.0",
-                    "forkVersion": "6.2.0-config.1",
+                    "forkVersion": "6.2.0-config.2",
                 }
             )
 
@@ -36,7 +36,7 @@ class SuperpowersUpdateCheckTests(unittest.TestCase):
                     "upstreamRepository": "https://example.com/upstream.git",
                     "upstreamCommit": "a" * 40,
                     "upstreamVersion": "6.2.0",
-                    "forkVersion": "6.2.0-config.1",
+                    "forkVersion": "6.2.0-config.2",
                 }
             )
 

@@ -131,7 +131,7 @@ To update safely:
    brainstorming, worktrees, and the browser option picker.
 
 The current baseline is upstream `6.2.0` at commit
-`3dcbd5c4b48e02263fbf4a3c01e3fe4f81d584d9`; the configured fork version is `6.2.0-config.1`.
+`44c9b2d6e889982ac18c27d05a19fefe335194e1`; the configured fork version is `6.2.0-config.2`.
 
 ## Product Design policy
 

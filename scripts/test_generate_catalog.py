@@ -39,7 +39,7 @@ class CatalogGenerationTests(unittest.TestCase):
         )
         self.assertTrue(all("upstream" in plugin["description"].lower() for plugin in plugins))
         self.assertTrue(all(plugin["path"] == "config/superpowers.json" for plugin in plugins))
-        self.assertTrue(all(plugin["version"] == "6.2.0-config.1" for plugin in plugins))
+        self.assertTrue(all(plugin["version"] == "6.2.0-config.2" for plugin in plugins))
         self.assertNotIn("Desired", {item["state"] for item in items})
 
 
