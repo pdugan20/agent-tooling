@@ -1,5 +1,5 @@
 {
   "items": [],
-  "message": "Run npm run catalog:snapshot to create a private, machine-local installed inventory.",
+  "message": "Run npm run catalog:snapshot to see what is installed on this computer.",
   "schemaVersion": 1
 }

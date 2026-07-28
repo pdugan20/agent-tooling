@@ -9,6 +9,7 @@
   "items": [
     {
       "description": "Deliver substantial production-ready features",
+      "displayName": "Feature Delivery",
       "featured": 1,
       "id": "skill:feature-delivery",
       "invocation": "Automatic",
@@ -20,12 +21,13 @@
       ],
       "source": "personal",
       "sourceLabel": "Patrick Delivery",
-      "state": "Included",
+      "state": "Configured",
       "type": "skill",
       "version": "0.2.0"
     },
     {
       "description": "Explore UI directions in runnable code",
+      "displayName": "Code-Native UI Ideation",
       "featured": 2,
       "id": "skill:code-native-ui-ideation",
       "invocation": "Automatic",
@@ -37,12 +39,13 @@
       ],
       "source": "personal",
       "sourceLabel": "Personal",
-      "state": "Included",
+      "state": "Configured",
       "type": "skill",
       "version": "Git"
     },
     {
       "description": "Reviews SwiftUI code for modern best practices.",
+      "displayName": "SwiftUI Pro",
       "featured": 3,
       "id": "skill:swiftui-pro",
       "invocation": "Automatic",
@@ -54,12 +57,13 @@
       ],
       "source": "personal",
       "sourceLabel": "Personal",
-      "state": "Included",
+      "state": "Configured",
       "type": "skill",
       "version": "1.1"
     },
     {
       "description": "Apple's approach to interface design and fluid, physical motion, translated for the web. Use when building or reviewing gesture-driven UI, spring animations, drag/swipe/sheet interactions, momentum and interruptible transitions, translucent materials and depth, typography (optical sizing, tracking, leading), reduced-motion, or the design foundations (feedback, spatial consistency, restraint) behind Apple-style interfaces.",
+      "displayName": "Apple Design",
       "featured": 4,
       "id": "skill:apple-design",
       "invocation": "Automatic",
@@ -71,12 +75,13 @@
       ],
       "source": "personal",
       "sourceLabel": "Personal",
-      "state": "Included",
+      "state": "Configured",
       "type": "skill",
       "version": "Git"
     },
     {
       "description": "Reviews animation and motion code against a high craft bar derived from Emil Kowalski's design engineering philosophy. Default to flagging; approval is earned.",
+      "displayName": "Review Animations",
       "featured": 5,
       "id": "skill:review-animations",
       "invocation": "Automatic",
@@ -88,12 +93,13 @@
       ],
       "source": "personal",
       "sourceLabel": "Personal",
-      "state": "Included",
+      "state": "Configured",
       "type": "skill",
       "version": "Git"
     },
     {
       "description": "Reverse-lookup glossary that turns a vague description of a web animation or motion effect into its exact term (\"the bouncy thing when a popover opens\" \u2192 Pop in; \"the iOS rubber-band scroll\" \u2192 Rubber-banding). Use when the user asks \"what's it called when\u2026\", or describes a motion effect without knowing its name and wants the right word to prompt an AI or designer with. For naming an effect, not designing or building one.",
+      "displayName": "Animation Vocabulary",
       "featured": 6,
       "id": "skill:animation-vocabulary",
       "invocation": "Automatic",
@@ -105,12 +111,13 @@
       ],
       "source": "personal",
       "sourceLabel": "Personal",
-      "state": "Included",
+      "state": "Configured",
       "type": "skill",
       "version": "Git"
     },
     {
       "description": "This skill encodes Emil Kowalski's philosophy on UI polish, component design, animation decisions, and the invisible details that make software feel great.",
+      "displayName": "Emil Design ENG",
       "featured": 7,
       "id": "skill:emil-design-eng",
       "invocation": "Automatic",
@@ -122,12 +129,13 @@
       ],
       "source": "personal",
       "sourceLabel": "Personal",
-      "state": "Included",
+      "state": "Configured",
       "type": "skill",
       "version": "Git"
     },
     {
       "description": "Turn a chosen direction into a concise spec",
+      "displayName": "Formal Spec",
       "featured": 20,
       "id": "skill:formal-spec",
       "invocation": "Explicit",
@@ -139,12 +147,13 @@
       ],
       "source": "personal",
       "sourceLabel": "Patrick Delivery",
-      "state": "Included",
+      "state": "Configured",
       "type": "skill",
       "version": "0.2.0"
     },
     {
       "description": "Run an explicit red-green-refactor cycle",
+      "displayName": "Strict TDD",
       "featured": 21,
       "id": "skill:strict-tdd",
       "invocation": "Explicit",
@@ -156,12 +165,13 @@
       ],
       "source": "personal",
       "sourceLabel": "Patrick Delivery",
-      "state": "Included",
+      "state": "Configured",
       "type": "skill",
       "version": "0.2.0"
     },
     {
       "description": "Create a focused executable implementation plan",
+      "displayName": "Write Plan",
       "featured": 22,
       "id": "skill:write-plan",
       "invocation": "Explicit",
@@ -173,12 +183,13 @@
       ],
       "source": "personal",
       "sourceLabel": "Patrick Delivery",
-      "state": "Included",
+      "state": "Configured",
       "type": "skill",
       "version": "0.2.0"
     },
     {
       "description": "Implement an approved plan with checkpoints",
+      "displayName": "Execute Plan",
       "featured": 23,
       "id": "skill:execute-plan",
       "invocation": "Explicit",
@@ -190,12 +201,13 @@
       ],
       "source": "personal",
       "sourceLabel": "Patrick Delivery",
-      "state": "Included",
+      "state": "Configured",
       "type": "skill",
       "version": "0.2.0"
     },
     {
       "description": "Harden a selected implementation for release",
+      "displayName": "Production Hardening",
       "featured": 24,
       "id": "skill:production-hardening",
       "invocation": "Explicit",
@@ -207,29 +219,31 @@
       ],
       "source": "personal",
       "sourceLabel": "Patrick Delivery",
-      "state": "Included",
+      "state": "Configured",
       "type": "skill",
       "version": "0.2.0"
     },
     {
-      "description": "Personal production delivery workflows without forced process.",
+      "description": "Our own Codex add-on. It installs six production workflows: feature delivery plus optional specifications, plans, strict TDD, execution, and hardening.",
+      "displayName": "Patrick Delivery",
       "featured": 100,
       "id": "plugin:codex:patrick-delivery@personal",
       "invocation": null,
       "name": "patrick-delivery",
-      "path": "config/codex-plugins.txt",
+      "path": "plugins/patrick-delivery/.codex-plugin/plugin.json",
       "pluginId": "patrick-delivery@personal",
       "runtimes": [
         "codex"
       ],
       "source": "personal",
-      "sourceLabel": "Personal",
-      "state": "Desired",
+      "sourceLabel": "Built here",
+      "state": "Configured",
       "type": "plugin",
       "version": "0.2.0"
     },
     {
       "description": "Firebase, Firestore, Auth, hosting, rules, and Xcode setup guidance.",
+      "displayName": "Firebase",
       "featured": 101,
       "id": "plugin:codex:firebase@firebase",
       "invocation": null,
@@ -241,12 +255,13 @@
       ],
       "source": "third-party",
       "sourceLabel": "Firebase",
-      "state": "Desired",
+      "state": "Configured",
       "type": "plugin",
       "version": "Managed"
     },
     {
       "description": "Workers, Durable Objects, Wrangler, web performance, and Cloudflare platform skills.",
+      "displayName": "Cloudflare",
       "featured": 102,
       "id": "plugin:codex:cloudflare@cloudflare",
       "invocation": null,
@@ -258,12 +273,13 @@
       ],
       "source": "third-party",
       "sourceLabel": "Cloudflare",
-      "state": "Desired",
+      "state": "Configured",
       "type": "plugin",
       "version": "Managed"
     },
     {
       "description": "Build and maintain Mintlify documentation sites.",
+      "displayName": "Mintlify",
       "featured": 103,
       "id": "plugin:codex:mintlify@claude-plugins-official",
       "invocation": null,
@@ -275,12 +291,13 @@
       ],
       "source": "third-party",
       "sourceLabel": "Mintlify",
-      "state": "Desired",
+      "state": "Configured",
       "type": "plugin",
       "version": "Managed"
     },
     {
       "description": "Figma design context, design-to-code, Code Connect, SwiftUI, and motion workflows.",
+      "displayName": "Figma",
       "featured": 104,
       "id": "plugin:codex:figma@openai-curated",
       "invocation": null,
@@ -292,12 +309,13 @@
       ],
       "source": "openai",
       "sourceLabel": "OpenAI curated",
-      "state": "Desired",
+      "state": "Configured",
       "type": "plugin",
       "version": "Managed"
     },
     {
       "description": "Repository, pull request, review, CI, and publishing workflows.",
+      "displayName": "GitHub",
       "featured": 105,
       "id": "plugin:codex:github@openai-curated",
       "invocation": null,
@@ -309,12 +327,13 @@
       ],
       "source": "openai",
       "sourceLabel": "OpenAI curated",
-      "state": "Desired",
+      "state": "Configured",
       "type": "plugin",
       "version": "Managed"
     },
     {
       "description": "Inspect and triage Sentry issues, events, and production diagnostics.",
+      "displayName": "Sentry",
       "featured": 106,
       "id": "plugin:codex:sentry@openai-curated",
       "invocation": null,
@@ -326,12 +345,13 @@
       ],
       "source": "openai",
       "sourceLabel": "OpenAI curated",
-      "state": "Desired",
+      "state": "Configured",
       "type": "plugin",
       "version": "Managed"
     },
     {
       "description": "Expo and React Native project workflows and platform guidance.",
+      "displayName": "Expo",
       "featured": 107,
       "id": "plugin:codex:expo@openai-curated",
       "invocation": null,
@@ -343,12 +363,13 @@
       ],
       "source": "openai",
       "sourceLabel": "OpenAI curated",
-      "state": "Desired",
+      "state": "Configured",
       "type": "plugin",
       "version": "Managed"
     },
     {
       "description": "Next.js, React, deployment, browser verification, and Vercel platform skills.",
+      "displayName": "Vercel",
       "featured": 108,
       "id": "plugin:codex:vercel@openai-curated",
       "invocation": null,
@@ -360,12 +381,13 @@
       ],
       "source": "third-party",
       "sourceLabel": "Vercel",
-      "state": "Desired",
+      "state": "Configured",
       "type": "plugin",
       "version": "Managed"
     },
     {
       "description": "Configure Claude Code projects and user environments.",
+      "displayName": "Claude Code Setup",
       "featured": 109,
       "id": "plugin:claude:claude-code-setup@claude-plugins-official",
       "invocation": null,
@@ -377,12 +399,13 @@
       ],
       "source": "anthropic",
       "sourceLabel": "Anthropic official",
-      "state": "Desired",
+      "state": "Configured",
       "type": "plugin",
       "version": "Managed"
     },
     {
       "description": "Review code changes for correctness, quality, and regressions.",
+      "displayName": "Code Review",
       "featured": 110,
       "id": "plugin:claude:code-review@claude-plugins-official",
       "invocation": null,
@@ -394,12 +417,13 @@
       ],
       "source": "anthropic",
       "sourceLabel": "Anthropic official",
-      "state": "Desired",
+      "state": "Configured",
       "type": "plugin",
       "version": "Managed"
     },
     {
       "description": "Reduce unnecessary complexity while preserving behavior.",
+      "displayName": "Code Simplifier",
       "featured": 111,
       "id": "plugin:claude:code-simplifier@claude-plugins-official",
       "invocation": null,
@@ -411,12 +435,13 @@
       ],
       "source": "anthropic",
       "sourceLabel": "Anthropic official",
-      "state": "Desired",
+      "state": "Configured",
       "type": "plugin",
       "version": "Managed"
     },
     {
       "description": "Claude-native commands for structured Git commits.",
+      "displayName": "Commit Commands",
       "featured": 112,
       "id": "plugin:claude:commit-commands@claude-plugins-official",
       "invocation": null,
@@ -428,12 +453,13 @@
       ],
       "source": "anthropic",
       "sourceLabel": "Anthropic official",
-      "state": "Desired",
+      "state": "Configured",
       "type": "plugin",
       "version": "Managed"
     },
     {
       "description": "A more explanatory response style for unfamiliar technical work.",
+      "displayName": "Explanatory Output Style",
       "featured": 113,
       "id": "plugin:claude:explanatory-output-style@claude-plugins-official",
       "invocation": null,
@@ -445,12 +471,13 @@
       ],
       "source": "anthropic",
       "sourceLabel": "Anthropic official",
-      "state": "Desired",
+      "state": "Configured",
       "type": "plugin",
       "version": "Managed"
     },
     {
       "description": "Guided feature implementation workflows for Claude Code.",
+      "displayName": "Feature DEV",
       "featured": 114,
       "id": "plugin:claude:feature-dev@claude-plugins-official",
       "invocation": null,
@@ -462,12 +489,13 @@
       ],
       "source": "anthropic",
       "sourceLabel": "Anthropic official",
-      "state": "Desired",
+      "state": "Configured",
       "type": "plugin",
       "version": "Managed"
     },
     {
       "description": "Frontend interface design and implementation guidance.",
+      "displayName": "Frontend Design",
       "featured": 115,
       "id": "plugin:claude:frontend-design@claude-plugins-official",
       "invocation": null,
@@ -479,12 +507,13 @@
       ],
       "source": "anthropic",
       "sourceLabel": "Anthropic official",
-      "state": "Desired",
+      "state": "Configured",
       "type": "plugin",
       "version": "Managed"
     },
     {
       "description": "Create and improve reusable Claude skills.",
+      "displayName": "Skill Creator",
       "featured": 116,
       "id": "plugin:claude:skill-creator@claude-plugins-official",
       "invocation": null,
@@ -496,12 +525,13 @@
       ],
       "source": "anthropic",
       "sourceLabel": "Anthropic official",
-      "state": "Desired",
+      "state": "Configured",
       "type": "plugin",
       "version": "Managed"
     },
     {
       "description": "Swift language-server integration for Claude Code.",
+      "displayName": "Swift LSP",
       "featured": 117,
       "id": "plugin:claude:swift-lsp@claude-plugins-official",
       "invocation": null,
@@ -513,12 +543,13 @@
       ],
       "source": "anthropic",
       "sourceLabel": "Anthropic official",
-      "state": "Desired",
+      "state": "Configured",
       "type": "plugin",
       "version": "Managed"
     },
     {
       "description": "TypeScript language-server integration for Claude Code.",
+      "displayName": "Typescript LSP",
       "featured": 118,
       "id": "plugin:claude:typescript-lsp@claude-plugins-official",
       "invocation": null,
@@ -530,7 +561,7 @@
       ],
       "source": "anthropic",
       "sourceLabel": "Anthropic official",
-      "state": "Desired",
+      "state": "Configured",
       "type": "plugin",
       "version": "Managed"
     }

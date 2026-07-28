@@ -1,8 +1,9 @@
 {
   "patrick-delivery@personal": {
-    "description": "Personal production delivery workflows without forced process.",
+    "description": "Our own Codex add-on. It installs six production workflows: feature delivery plus optional specifications, plans, strict TDD, execution, and hardening.",
+    "displayName": "Patrick Delivery",
     "source": "personal",
-    "sourceLabel": "Personal"
+    "sourceLabel": "Built here"
   },
   "firebase@firebase": {
     "description": "Firebase, Firestore, Auth, hosting, rules, and Xcode setup guidance.",

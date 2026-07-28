@@ -69,6 +69,7 @@ const filteredItems = () => {
   const filtered = activeItems().filter((item) => {
     const haystack = [
       item.name,
+      item.displayName,
       item.pluginId,
       item.description,
       item.sourceLabel,
@@ -126,17 +127,16 @@ const renderSummary = () => {
     (item) => item.runtimes.length === 2,
   ).length;
   document.querySelector(".summary div:first-child span").textContent =
-    state.scope === "canonical" ? "Included" : "Detected";
+    state.scope === "canonical" ? "In our setup" : "On this Mac";
 };
 
 const renderScope = () => {
   const isCanonical = state.scope === "canonical";
-  elements.environment.textContent = isCanonical
-    ? "Canonical setup"
-    : "This Mac";
+  elements.environment.textContent = isCanonical ? "Our setup" : "This Mac";
   elements.scopeNote.textContent = isCanonical
-    ? `Generated from ${canonicalCatalog.generatedFrom.length} canonical sources in this repository.`
+    ? "The setup saved in GitHub and used when configuring a new computer."
     : runtimeCatalog.message;
+  document.querySelector(".status-filter").hidden = isCanonical;
 };
 
 const render = () => {
@@ -147,25 +147,30 @@ const render = () => {
   visible.forEach((item) => {
     const fragment = elements.template.content.cloneNode(true);
     const article = fragment.querySelector(".item");
-    const mark = fragment.querySelector(".item-mark");
-    mark.textContent = item.type === "skill" ? "S" : "P";
-    mark.classList.add(item.type);
-
-    fragment.querySelector("h3").textContent = item.name;
-    fragment.querySelector(".kind").textContent = item.type;
+    fragment.querySelector("h3").textContent = item.displayName || item.name;
+    fragment.querySelector(".kind").textContent =
+      item.type === "skill" ? "Skill" : "Plugin";
     fragment.querySelector(".description").textContent = item.description;
 
     const invocation = fragment.querySelector(".invocation");
     if (item.invocation) {
-      invocation.textContent = item.invocation;
+      invocation.textContent =
+        item.invocation === "Automatic"
+          ? "Can start automatically"
+          : "Only when asked";
       invocation.classList.add(item.invocation.toLowerCase());
     } else {
       invocation.remove();
     }
 
     const status = fragment.querySelector(".state");
-    status.textContent = item.state;
-    status.classList.add(item.state.toLowerCase());
+    if (state.scope === "local") {
+      const statusLabels = { Enabled: "On", Disabled: "Off" };
+      status.textContent = statusLabels[item.state] || item.state;
+      status.classList.add(item.state.toLowerCase());
+    } else {
+      status.remove();
+    }
 
     const path = fragment.querySelector(".path");
     if (item.path) {
@@ -183,7 +188,12 @@ const render = () => {
       ),
     );
     fragment.querySelector(".source").textContent = item.sourceLabel;
-    fragment.querySelector(".version").textContent = item.version;
+    fragment.querySelector(".version").textContent =
+      item.version === "Git"
+        ? "—"
+        : item.version === "Managed"
+          ? "Auto-updated"
+          : item.version;
 
     article.dataset.type = item.type;
     elements.results.append(fragment);
@@ -210,12 +220,12 @@ const renderFilterChips = () => {
       () => ((state.query = ""), (elements.search.value = "")),
     ],
     state.runtime !== "all" && [
-      "Runtime",
+      "App",
       elements.runtime.selectedOptions[0].text,
       () => setSelect("runtime", "all"),
     ],
     state.source !== "all" && [
-      "Source",
+      "Creator",
       elements.source.selectedOptions[0].text,
       () => setSelect("source", "all"),
     ],

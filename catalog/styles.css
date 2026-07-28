@@ -139,12 +139,53 @@ h1 {
 .summary {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  margin-bottom: 80px;
+  margin-bottom: 32px;
   border: 1px solid var(--line);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.5);
   box-shadow: var(--shadow);
   overflow: hidden;
+}
+
+.concepts {
+  margin-bottom: 80px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.concepts-heading {
+  margin-bottom: 24px;
+}
+
+.concepts-heading h2 {
+  font-size: 24px;
+}
+
+.concept-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.concept-grid strong,
+.delivery-explainer strong {
+  font-size: 13px;
+}
+
+.concept-grid p,
+.delivery-explainer {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.delivery-explainer {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
 }
 
 .summary div {
@@ -189,6 +230,10 @@ h1 {
 
 .scope-switch .segment {
   min-width: 112px;
+}
+
+.scope-switch .segment:last-child {
+  min-width: 154px;
 }
 
 .scope-note {
@@ -369,25 +414,6 @@ kbd {
   display: flex;
   min-width: 0;
   align-items: start;
-  gap: 13px;
-}
-
-.item-mark {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  flex: 0 0 auto;
-  place-items: center;
-  color: var(--accent);
-  border-radius: 10px;
-  background: var(--accent-soft);
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.item-mark.plugin {
-  color: var(--purple);
-  background: var(--purple-soft);
 }
 
 .item-copy {
@@ -550,6 +576,10 @@ kbd {
   border: 0;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 @media (max-width: 960px) {
   .toolbar {
     grid-template-columns: 1fr auto auto;
@@ -621,6 +651,16 @@ kbd {
   .summary {
     grid-template-columns: repeat(2, 1fr);
     margin-bottom: 60px;
+  }
+
+  .concepts {
+    margin-bottom: 60px;
+    padding: 22px;
+  }
+
+  .concept-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .summary div:nth-child(2) {

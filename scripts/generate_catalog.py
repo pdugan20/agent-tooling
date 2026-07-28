@@ -71,19 +71,29 @@ def read_skill_version(path: Path) -> str:
     return match.group(1) if match else "Git"
 
 
-def read_skill_interface(skill_root: Path) -> tuple[str | None, str]:
+def humanize_name(name: str) -> str:
+    special_names = {"figma": "Figma", "github": "GitHub", "swiftui": "SwiftUI"}
+    return " ".join(
+        special_names.get(part, part.upper() if len(part) <= 3 else part.title())
+        for part in name.split("-")
+    )
+
+
+def read_skill_interface(skill_root: Path) -> tuple[str | None, str | None, str]:
     agents_manifest = skill_root / "agents/openai.yaml"
     if not agents_manifest.exists():
-        return None, "Automatic"
+        return None, None, "Automatic"
 
     text = agents_manifest.read_text(encoding="utf-8")
+    display_name_match = re.search(r'(?m)^\s+display_name:\s*["\']?(.+?)["\']?\s*$', text)
     description_match = re.search(r'(?m)^\s+short_description:\s*["\']?(.+?)["\']?\s*$', text)
     implicit_match = re.search(r"(?m)^\s+allow_implicit_invocation:\s*(true|false)\s*$", text)
+    display_name = display_name_match.group(1).strip("\"'") if display_name_match else None
     description = description_match.group(1).strip("\"'") if description_match else None
     invocation = (
         "Automatic" if implicit_match is None or implicit_match.group(1) == "true" else "Explicit"
     )
-    return description, invocation
+    return display_name, description, invocation
 
 
 def skill_item(skill_path: Path, *, delivery_version: str | None = None) -> dict[str, Any]:
@@ -93,10 +103,11 @@ def skill_item(skill_path: Path, *, delivery_version: str | None = None) -> dict
     if not name or name != skill_root.name:
         raise CatalogError(f"{skill_path.relative_to(ROOT)} name must match its directory")
 
-    short_description, invocation = read_skill_interface(skill_root)
+    display_name, short_description, invocation = read_skill_interface(skill_root)
     is_delivery = delivery_version is not None
     return {
         "description": short_description or frontmatter.get("description", ""),
+        "displayName": display_name or humanize_name(name),
         "featured": SKILL_PRIORITY.get(name, 50),
         "id": f"skill:{name}",
         "invocation": invocation,
@@ -105,7 +116,7 @@ def skill_item(skill_path: Path, *, delivery_version: str | None = None) -> dict
         "runtimes": ["codex", "claude"],
         "source": "personal",
         "sourceLabel": "Patrick Delivery" if is_delivery else "Personal",
-        "state": "Included",
+        "state": "Configured",
         "type": "skill",
         "version": delivery_version or read_skill_version(skill_path),
     }
@@ -121,16 +132,21 @@ def plugin_item(
     name, _marketplace = plugin_id.split("@", 1)
     return {
         "description": metadata["description"],
+        "displayName": metadata.get("displayName", humanize_name(name)),
         "featured": 100 + index,
         "id": f"plugin:{runtime}:{plugin_id}",
         "invocation": None,
         "name": name,
-        "path": f"config/{runtime}-plugins.txt",
+        "path": (
+            "plugins/patrick-delivery/.codex-plugin/plugin.json"
+            if plugin_id == "patrick-delivery@personal"
+            else f"config/{runtime}-plugins.txt"
+        ),
         "pluginId": plugin_id,
         "runtimes": [runtime],
         "source": metadata["source"],
         "sourceLabel": metadata["sourceLabel"],
-        "state": "Desired",
+        "state": "Configured",
         "type": "plugin",
         "version": delivery_version if plugin_id == "patrick-delivery@personal" else "Managed",
     }
@@ -239,6 +255,7 @@ def build_runtime_snapshot() -> dict[str, Any]:
                     if desired
                     else f"Installed Codex plugin from {source_label}."
                 ),
+                "displayName": desired["displayName"] if desired else humanize_name(plugin["name"]),
                 "featured": 200 + (0 if desired else 100) + index,
                 "id": f"runtime:codex:{plugin_id}",
                 "invocation": None,
@@ -267,6 +284,9 @@ def build_runtime_snapshot() -> dict[str, Any]:
                     if desired
                     else f"Installed Claude plugin from {source_label}."
                 ),
+                "displayName": (
+                    desired["displayName"] if desired else humanize_name(plugin_id.split("@", 1)[0])
+                ),
                 "featured": 400 + (0 if desired else 100) + index,
                 "id": f"runtime:claude:{plugin_id}",
                 "invocation": None,
@@ -285,7 +305,7 @@ def build_runtime_snapshot() -> dict[str, Any]:
     return {
         "generatedAt": datetime.now(UTC).isoformat(),
         "items": items,
-        "message": "Generated from the installed Codex and Claude runtimes on this machine.",
+        "message": "What Codex and Claude currently report as installed on this computer.",
         "schemaVersion": 1,
     }
 

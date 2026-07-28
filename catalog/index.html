@@ -14,33 +14,69 @@
           <span class="brand-mark" aria-hidden="true">A</span>
           <span>Agent Tooling</span>
         </a>
-        <span class="environment" id="environment">Canonical setup</span>
+        <span class="environment" id="environment">Our setup</span>
       </header>
 
       <main>
         <section class="hero">
           <p class="eyebrow">Catalog</p>
-          <h1>Everything your agents can reach.</h1>
+          <h1>Your agent setup, in plain English.</h1>
           <p class="lede">
-            Browse the skills and plugins shared across Codex and Claude. See
-            what is owned, where it runs, and how it gets invoked.
+            See the reusable instructions and add-ons we use with Codex and
+            Claude, plus what is actually installed on this Mac.
           </p>
         </section>
 
         <section class="summary" aria-label="Catalog summary">
-          <div><strong id="total-count">0</strong><span>Included</span></div>
+          <div>
+            <strong id="total-count">0</strong><span>In our setup</span>
+          </div>
           <div><strong id="skill-count">0</strong><span>Skills</span></div>
           <div><strong id="plugin-count">0</strong><span>Plugins</span></div>
           <div>
-            <strong id="shared-count">0</strong><span>Shared runtimes</span>
+            <strong id="shared-count">0</strong><span>Work in both</span>
           </div>
+        </section>
+
+        <section class="concepts" aria-labelledby="concepts-heading">
+          <div class="concepts-heading">
+            <p class="eyebrow">What these mean</p>
+            <h2 id="concepts-heading">Two kinds of building blocks</h2>
+          </div>
+          <div class="concept-grid">
+            <div>
+              <strong>Skill</strong>
+              <p>
+                A reusable set of instructions for one kind of work—for example,
+                reviewing SwiftUI or using strict TDD.
+              </p>
+            </div>
+            <div>
+              <strong>Plugin</strong>
+              <p>
+                An add-on installed in Codex or Claude. It can contain several
+                skills or connect to a product such as Figma or Firebase.
+              </p>
+            </div>
+            <div>
+              <strong>When a skill runs</strong>
+              <p>
+                “Can start automatically” means the agent may use it when it
+                fits. “Only when asked” means you must request it directly.
+              </p>
+            </div>
+          </div>
+          <p class="delivery-explainer">
+            <strong>Patrick Delivery</strong> is our own plugin. It packages six
+            production workflows; it is not a separate app or service.
+          </p>
         </section>
 
         <section class="catalog" aria-labelledby="catalog-heading">
           <div class="catalog-heading">
             <div>
               <p class="eyebrow">Inventory</p>
-              <h2 id="catalog-heading">Included capabilities</h2>
+              <h2 id="catalog-heading">Skills and plugins</h2>
             </div>
             <p id="result-count" class="result-count" aria-live="polite"></p>
           </div>
@@ -53,7 +89,7 @@
                 type="button"
                 aria-pressed="true"
               >
-                Canonical setup
+                Our setup
               </button>
               <button
                 class="segment scope-segment"
@@ -61,7 +97,7 @@
                 type="button"
                 aria-pressed="false"
               >
-                This Mac
+                Installed on this Mac
               </button>
             </div>
             <p id="scope-note" class="scope-note"></p>
@@ -111,31 +147,29 @@
             </div>
 
             <label class="select-wrap">
-              <span class="sr-only">Filter by runtime</span>
+              <span class="sr-only">Filter by app</span>
               <select id="runtime">
-                <option value="all">All runtimes</option>
+                <option value="all">All apps</option>
                 <option value="both">Codex + Claude</option>
                 <option value="codex">Codex</option>
                 <option value="claude">Claude</option>
               </select>
             </label>
 
-            <label class="select-wrap">
+            <label class="select-wrap status-filter" hidden>
               <span class="sr-only">Filter by state</span>
               <select id="status">
-                <option value="all">All states</option>
-                <option value="Included">Included</option>
-                <option value="Desired">Desired</option>
+                <option value="all">All statuses</option>
                 <option value="Installed">Installed</option>
-                <option value="Enabled">Enabled</option>
-                <option value="Disabled">Disabled</option>
+                <option value="Enabled">On</option>
+                <option value="Disabled">Off</option>
               </select>
             </label>
 
             <label class="select-wrap">
-              <span class="sr-only">Filter by source</span>
+              <span class="sr-only">Filter by creator</span>
               <select id="source">
-                <option value="all">All sources</option>
+                <option value="all">All creators</option>
                 <option value="personal">Personal</option>
                 <option value="openai">OpenAI</option>
                 <option value="anthropic">Anthropic</option>
@@ -149,8 +183,8 @@
                 <option value="featured">Sort: Featured</option>
                 <option value="name">Sort: Name</option>
                 <option value="type">Sort: Type</option>
-                <option value="source">Sort: Source</option>
-                <option value="state">Sort: State</option>
+                <option value="source">Sort: Creator</option>
+                <option value="state">Sort: Status</option>
               </select>
             </label>
           </div>
@@ -163,8 +197,8 @@
 
           <div class="list-header" aria-hidden="true">
             <span>Capability</span>
-            <span>Runtime</span>
-            <span>Source</span>
+            <span>Works in</span>
+            <span>Made by</span>
             <span>Version</span>
           </div>
           <div id="results" class="results"></div>
@@ -184,7 +218,6 @@
     <template id="item-template">
       <article class="item">
         <div class="identity">
-          <span class="item-mark" aria-hidden="true"></span>
           <div class="item-copy">
             <div class="title-line">
               <h3></h3>

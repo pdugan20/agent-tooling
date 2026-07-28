@@ -25,6 +25,15 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertEqual(delivery["feature-delivery"], "Automatic")
         self.assertEqual(delivery["strict-tdd"], "Explicit")
 
+    def test_patrick_delivery_plugin_is_explained_in_plain_language(self) -> None:
+        items = generate_catalog.build_catalog()["items"]
+        plugin = next(item for item in items if item.get("pluginId") == "patrick-delivery@personal")
+
+        self.assertEqual(plugin["displayName"], "Patrick Delivery")
+        self.assertIn("six production workflows", plugin["description"])
+        self.assertEqual(plugin["path"], "plugins/patrick-delivery/.codex-plugin/plugin.json")
+        self.assertNotIn("Desired", {item["state"] for item in items})
+
 
 if __name__ == "__main__":
     unittest.main()
