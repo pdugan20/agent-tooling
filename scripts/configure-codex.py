@@ -120,23 +120,31 @@ def _disable_product_design_image_ideation(text: str, home: Path) -> str:
     return text
 
 
-def update_config(text: str, home: Path) -> str:
+def update_config(
+    text: str,
+    home: Path,
+    additional_disabled_skills: tuple[Path, ...] = (),
+) -> str:
     """Return an updated config without changing secrets or runtime auth."""
 
     updated = _insert_root_fallback(text)
     updated = _repair_computer_use_command(updated, home)
-    return _disable_product_design_image_ideation(updated, home)
+    updated = _disable_product_design_image_ideation(updated, home)
+    for path in additional_disabled_skills:
+        updated = _disable_skill(updated, path.resolve())
+    return updated
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--home", type=Path, default=Path.home())
+    parser.add_argument("--disable-skill", type=Path, action="append", default=[])
     args = parser.parse_args()
 
     args.config.parent.mkdir(parents=True, exist_ok=True)
     original = args.config.read_text() if args.config.exists() else ""
-    updated = update_config(original, args.home)
+    updated = update_config(original, args.home, tuple(args.disable_skill))
     if updated == original:
         return
 

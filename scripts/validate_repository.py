@@ -20,6 +20,18 @@ CUSTOM_SKILLS = {
     "feature-delivery": True,
     "production-hardening": False,
 }
+LOCAL_SKILLS = {
+    "code-native-ui-ideation",
+    "feature-delivery",
+    "production-hardening",
+}
+UPSTREAM_SKILLS = {
+    "animation-vocabulary": ("emilkowalski/skills", "skills/animation-vocabulary/SKILL.md"),
+    "apple-design": ("emilkowalski/skills", "skills/apple-design/SKILL.md"),
+    "emil-design-eng": ("emilkowalski/skills", "skills/emil-design-eng/SKILL.md"),
+    "review-animations": ("emilkowalski/skills", "skills/review-animations/SKILL.md"),
+    "swiftui-pro": ("twostraws/swiftui-agent-skill", "swiftui-pro/SKILL.md"),
+}
 EXPECTED_EXPLICIT_SUPERPOWERS = {
     "brainstorming",
     "dispatching-parallel-agents",
@@ -144,15 +156,59 @@ def validate_repository() -> None:
             "retired personal plugin marketplace must not remain in the repository"
         )
 
-    for skill_name, expected_implicit in CUSTOM_SKILLS.items():
+    local_skill_names = {
+        path.name for path in (ROOT / "skills").iterdir() if (path / "SKILL.md").is_file()
+    }
+    if local_skill_names != LOCAL_SKILLS:
+        raise ValidationError(
+            f"skills/ must contain only locally maintained workflows: {sorted(LOCAL_SKILLS)}"
+        )
+    for skill_name in LOCAL_SKILLS:
         skill_root = ROOT / "skills" / skill_name
         frontmatter = read_frontmatter(skill_root / "SKILL.md")
         if frontmatter.get("name") != skill_name:
             raise ValidationError(f"{skill_name} frontmatter name must match its directory")
+
+    for skill_name, expected_implicit in CUSTOM_SKILLS.items():
+        skill_root = ROOT / "skills" / skill_name
         actual_implicit = read_implicit_invocation(skill_root / "agents/openai.yaml")
         if actual_implicit is not expected_implicit:
             raise ValidationError(
                 f"{skill_name} allow_implicit_invocation must be {str(expected_implicit).lower()}"
+            )
+
+    skills_lock = load_json(ROOT / "skills-lock.json")
+    locked_skills = skills_lock.get("skills")
+    if skills_lock.get("version") != 1 or not isinstance(locked_skills, dict):
+        raise ValidationError("skills-lock.json must use the official version 1 schema")
+    if set(locked_skills) != set(UPSTREAM_SKILLS):
+        raise ValidationError("skills-lock.json must contain the exact upstream skill set")
+    upstream_skill_names = {
+        path.name for path in (ROOT / ".agents/skills").iterdir() if (path / "SKILL.md").is_file()
+    }
+    if upstream_skill_names != set(UPSTREAM_SKILLS):
+        raise ValidationError(".agents/skills must match the exact locked upstream skill set")
+    nested_skill_files = set((ROOT / ".agents/skills").glob("*/skills/*/SKILL.md"))
+    expected_nested_skill = ROOT / ".agents/skills/swiftui-pro/skills/swiftui-pro/SKILL.md"
+    if nested_skill_files != {expected_nested_skill}:
+        raise ValidationError("the SwiftUI upstream compatibility skill changed unexpectedly")
+    for skill_name, (expected_source, expected_path) in UPSTREAM_SKILLS.items():
+        lock_entry = locked_skills[skill_name]
+        if not isinstance(lock_entry, dict):
+            raise ValidationError(f"locked skill {skill_name} must be an object")
+        if lock_entry.get("source") != expected_source:
+            raise ValidationError(f"locked skill {skill_name} has an unexpected source")
+        if lock_entry.get("skillPath") != expected_path:
+            raise ValidationError(f"locked skill {skill_name} has an unexpected source path")
+        if lock_entry.get("sourceType") != "github" or not re.fullmatch(
+            r"[0-9a-f]{64}", str(lock_entry.get("computedHash", ""))
+        ):
+            raise ValidationError(f"locked skill {skill_name} lacks official CLI provenance")
+        claude_link = ROOT / ".claude/skills" / skill_name
+        expected_target = Path("../../.agents/skills") / skill_name
+        if not claude_link.is_symlink() or claude_link.readlink() != expected_target:
+            raise ValidationError(
+                f".claude/skills/{skill_name} must link to {expected_target.as_posix()}"
             )
 
     plugin_manifests: dict[str, list[str]] = {}
@@ -176,6 +232,9 @@ def validate_repository() -> None:
         raise ValidationError("configured Superpowers must be desired in Codex")
     if plugin_id not in plugin_manifests["claude-plugins.txt"]:
         raise ValidationError("configured Superpowers must be desired in Claude")
+    mintlify_docs_id = "mintlify-docs@pdugan20-plugins"
+    if not all(mintlify_docs_id in entries for entries in plugin_manifests.values()):
+        raise ValidationError("mintlify-docs must be desired in both Codex and Claude")
     retired_ids = {"patrick-delivery@personal", "superpowers@claude-plugins-official"}
     if any(retired_ids & set(entries) for entries in plugin_manifests.values()):
         raise ValidationError("retired delivery or official Superpowers plugins remain desired")

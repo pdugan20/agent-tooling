@@ -5,6 +5,7 @@ commit-commands@claude-plugins-official
 explanatory-output-style@claude-plugins-official
 feature-dev@claude-plugins-official
 frontend-design@claude-plugins-official
+mintlify-docs@pdugan20-plugins
 skill-creator@claude-plugins-official
 superpowers@superpowers-configured
 swift-lsp@claude-plugins-official

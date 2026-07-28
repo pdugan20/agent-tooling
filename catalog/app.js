@@ -151,9 +151,7 @@ const render = () => {
     const invocation = fragment.querySelector(".invocation");
     if (item.invocation) {
       invocation.textContent =
-        item.invocation === "Automatic"
-          ? "Can start automatically"
-          : "Only when asked";
+        item.invocation === "Automatic" ? "Auto-starts" : "Only when asked";
       invocation.classList.add(item.invocation.toLowerCase());
     } else {
       invocation.remove();
@@ -218,7 +216,7 @@ const renderFilterChips = () => {
       () => setSelect("runtime", "all"),
     ],
     state.source !== "all" && [
-      "Creator",
+      "Source",
       elements.source.selectedOptions[0].text,
       () => setSelect("source", "all"),
     ],

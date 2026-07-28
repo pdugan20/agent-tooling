@@ -4,6 +4,8 @@ default_stages: [pre-commit]
 exclude: |
   (?x)^(
     node_modules/.*|
+    \.agents/skills/.*|
+    \.claude/skills/.*|
     \.claudelint-cache/.*|
     \.ruff_cache/.*
   )$

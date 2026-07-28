@@ -2,7 +2,9 @@
 
 Audit date: 2026-07-26
 
-This inventory covers top-level Git worktrees in `/Users/patrickdugan/Documents/Github` plus the active Messenger repository at `/Users/patrickdugan/Documents/messenger`.
+This inventory records the repository collection used for the completed migration plus Messenger's separate canonical
+checkout. The audit script derives the repository collection from the `agent-tooling` checkout by default; override it
+with `AGENT_REPOSITORIES_ROOT` and `AGENT_MESSENGER_ROOT` when the checkouts use another layout.
 
 ## Migration rule
 
@@ -17,7 +19,7 @@ were squash-merged through pull requests on 2026-07-26 and 2026-07-27. GitHub re
 
 | Repository                 | Commit     | Publication status                                                  | Notes                                                                  |
 | -------------------------- | ---------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| `agent-tooling`            | `main`     | Private remote: `pdugan20/agent-tooling`                            | Shared source, installer, inventory, personal skills, and plugin policy |
+| `agent-tooling`            | `main`     | Private remote: `pdugan20/agent-tooling`                            | Shared source, installer, local workflows, locked upstream skills, and plugin policy |
 | `nextup-ios-app`           | `a2eae9f8` | [Merged PR #772](https://github.com/nxt-up/nextup-ios-app/pull/772)  | Canonical skills plus Claude symlinks                                  |
 | `nextup-backend`           | `319117e5` | [Merged PR #740](https://github.com/nxt-up/nextup-backend/pull/740)  | Canonical skills, explicit-only TDD, MCP docs, and legacy-link shim    |
 | `nextup-web`               | `fef3229`  | [Merged PR #117](https://github.com/nxt-up/nextup-web/pull/117)      | Exploration/production modes and Firebase safety                       |

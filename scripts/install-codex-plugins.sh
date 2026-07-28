@@ -20,6 +20,7 @@ ensure_marketplace() {
 ensure_marketplace firebase https://github.com/firebase/skills.git
 ensure_marketplace cloudflare https://github.com/cloudflare/skills.git
 ensure_marketplace claude-plugins-official https://github.com/anthropics/claude-plugins-official.git
+ensure_marketplace pdugan20-plugins https://github.com/pdugan20/pdugan20-plugins.git
 ensure_marketplace superpowers-configured https://github.com/pdugan20/superpowers.git
 
 installed_plugins=$(codex plugin list --json)

@@ -1,6 +1,8 @@
 {
   "generatedFrom": [
     "skills/*/SKILL.md",
+    ".agents/skills/*/SKILL.md",
+    "skills-lock.json",
     "config/superpowers.json",
     "config/codex-plugins.txt",
     "config/claude-plugins.txt",
@@ -19,8 +21,8 @@
         "codex",
         "claude"
       ],
-      "source": "personal",
-      "sourceLabel": "Built here",
+      "source": "local",
+      "sourceLabel": "Managed here",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -37,8 +39,8 @@
         "codex",
         "claude"
       ],
-      "source": "personal",
-      "sourceLabel": "Built here",
+      "source": "local",
+      "sourceLabel": "Managed here",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -50,13 +52,13 @@
       "id": "skill:swiftui-pro",
       "invocation": "Automatic",
       "name": "swiftui-pro",
-      "path": "skills/swiftui-pro/SKILL.md",
+      "path": ".agents/skills/swiftui-pro/SKILL.md",
       "runtimes": [
         "codex",
         "claude"
       ],
-      "source": "personal",
-      "sourceLabel": "Built here",
+      "source": "third-party",
+      "sourceLabel": "Paul Hudson",
       "state": "Configured",
       "type": "skill",
       "version": "1.1"
@@ -68,13 +70,13 @@
       "id": "skill:apple-design",
       "invocation": "Automatic",
       "name": "apple-design",
-      "path": "skills/apple-design/SKILL.md",
+      "path": ".agents/skills/apple-design/SKILL.md",
       "runtimes": [
         "codex",
         "claude"
       ],
-      "source": "personal",
-      "sourceLabel": "Built here",
+      "source": "third-party",
+      "sourceLabel": "Emil Kowalski",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -84,15 +86,15 @@
       "displayName": "Review Animations",
       "featured": 5,
       "id": "skill:review-animations",
-      "invocation": "Automatic",
+      "invocation": "Explicit",
       "name": "review-animations",
-      "path": "skills/review-animations/SKILL.md",
+      "path": ".agents/skills/review-animations/SKILL.md",
       "runtimes": [
         "codex",
         "claude"
       ],
-      "source": "personal",
-      "sourceLabel": "Built here",
+      "source": "third-party",
+      "sourceLabel": "Emil Kowalski",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -104,13 +106,13 @@
       "id": "skill:animation-vocabulary",
       "invocation": "Automatic",
       "name": "animation-vocabulary",
-      "path": "skills/animation-vocabulary/SKILL.md",
+      "path": ".agents/skills/animation-vocabulary/SKILL.md",
       "runtimes": [
         "codex",
         "claude"
       ],
-      "source": "personal",
-      "sourceLabel": "Built here",
+      "source": "third-party",
+      "sourceLabel": "Emil Kowalski",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -122,13 +124,13 @@
       "id": "skill:emil-design-eng",
       "invocation": "Automatic",
       "name": "emil-design-eng",
-      "path": "skills/emil-design-eng/SKILL.md",
+      "path": ".agents/skills/emil-design-eng/SKILL.md",
       "runtimes": [
         "codex",
         "claude"
       ],
-      "source": "personal",
-      "sourceLabel": "Built here",
+      "source": "third-party",
+      "sourceLabel": "Emil Kowalski",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -145,8 +147,8 @@
         "codex",
         "claude"
       ],
-      "source": "personal",
-      "sourceLabel": "Built here",
+      "source": "local",
+      "sourceLabel": "Managed here",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -155,13 +157,14 @@
       "description": "The upstream Superpowers plugin with a small maintained policy patch: strict workflows are explicit-only, the always-on session bootstrap is disabled, and browser option-picking is removed.",
       "displayName": "Superpowers (Configured)",
       "featured": 100,
-      "id": "plugin:codex:superpowers@superpowers-configured",
+      "id": "plugin:superpowers@superpowers-configured",
       "invocation": null,
       "name": "superpowers",
       "path": "config/superpowers.json",
       "pluginId": "superpowers@superpowers-configured",
       "runtimes": [
-        "codex"
+        "codex",
+        "claude"
       ],
       "source": "third-party",
       "sourceLabel": "Upstream + local policy",
@@ -173,7 +176,7 @@
       "description": "Firebase, Firestore, Auth, hosting, rules, and Xcode setup guidance.",
       "displayName": "Firebase",
       "featured": 101,
-      "id": "plugin:codex:firebase@firebase",
+      "id": "plugin:firebase@firebase",
       "invocation": null,
       "name": "firebase",
       "path": "config/codex-plugins.txt",
@@ -191,7 +194,7 @@
       "description": "Workers, Durable Objects, Wrangler, web performance, and Cloudflare platform skills.",
       "displayName": "Cloudflare",
       "featured": 102,
-      "id": "plugin:codex:cloudflare@cloudflare",
+      "id": "plugin:cloudflare@cloudflare",
       "invocation": null,
       "name": "cloudflare",
       "path": "config/codex-plugins.txt",
@@ -209,7 +212,7 @@
       "description": "Build and maintain Mintlify documentation sites.",
       "displayName": "Mintlify",
       "featured": 103,
-      "id": "plugin:codex:mintlify@claude-plugins-official",
+      "id": "plugin:mintlify@claude-plugins-official",
       "invocation": null,
       "name": "mintlify",
       "path": "config/codex-plugins.txt",
@@ -224,10 +227,29 @@
       "version": "Managed"
     },
     {
+      "description": "House-style workflows for Mintlify information architecture, editorial review, changelogs, and drift-checked reference documentation.",
+      "displayName": "Mintlify Docs",
+      "featured": 104,
+      "id": "plugin:mintlify-docs@pdugan20-plugins",
+      "invocation": null,
+      "name": "mintlify-docs",
+      "path": "config/codex-plugins.txt",
+      "pluginId": "mintlify-docs@pdugan20-plugins",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "personal",
+      "sourceLabel": "Pat Dugan",
+      "state": "Configured",
+      "type": "plugin",
+      "version": "0.2.3"
+    },
+    {
       "description": "Figma design context, design-to-code, Code Connect, SwiftUI, and motion workflows.",
       "displayName": "Figma",
-      "featured": 104,
-      "id": "plugin:codex:figma@openai-curated",
+      "featured": 105,
+      "id": "plugin:figma@openai-curated",
       "invocation": null,
       "name": "figma",
       "path": "config/codex-plugins.txt",
@@ -244,8 +266,8 @@
     {
       "description": "Repository, pull request, review, CI, and publishing workflows.",
       "displayName": "GitHub",
-      "featured": 105,
-      "id": "plugin:codex:github@openai-curated",
+      "featured": 106,
+      "id": "plugin:github@openai-curated",
       "invocation": null,
       "name": "github",
       "path": "config/codex-plugins.txt",
@@ -262,8 +284,8 @@
     {
       "description": "Inspect and triage Sentry issues, events, and production diagnostics.",
       "displayName": "Sentry",
-      "featured": 106,
-      "id": "plugin:codex:sentry@openai-curated",
+      "featured": 107,
+      "id": "plugin:sentry@openai-curated",
       "invocation": null,
       "name": "sentry",
       "path": "config/codex-plugins.txt",
@@ -280,8 +302,8 @@
     {
       "description": "Expo and React Native project workflows and platform guidance.",
       "displayName": "Expo",
-      "featured": 107,
-      "id": "plugin:codex:expo@openai-curated",
+      "featured": 108,
+      "id": "plugin:expo@openai-curated",
       "invocation": null,
       "name": "expo",
       "path": "config/codex-plugins.txt",
@@ -298,8 +320,8 @@
     {
       "description": "Next.js, React, deployment, browser verification, and Vercel platform skills.",
       "displayName": "Vercel",
-      "featured": 108,
-      "id": "plugin:codex:vercel@openai-curated",
+      "featured": 109,
+      "id": "plugin:vercel@openai-curated",
       "invocation": null,
       "name": "vercel",
       "path": "config/codex-plugins.txt",
@@ -316,8 +338,8 @@
     {
       "description": "Configure Claude Code projects and user environments.",
       "displayName": "Claude Code Setup",
-      "featured": 109,
-      "id": "plugin:claude:claude-code-setup@claude-plugins-official",
+      "featured": 110,
+      "id": "plugin:claude-code-setup@claude-plugins-official",
       "invocation": null,
       "name": "claude-code-setup",
       "path": "config/claude-plugins.txt",
@@ -334,8 +356,8 @@
     {
       "description": "Review code changes for correctness, quality, and regressions.",
       "displayName": "Code Review",
-      "featured": 110,
-      "id": "plugin:claude:code-review@claude-plugins-official",
+      "featured": 111,
+      "id": "plugin:code-review@claude-plugins-official",
       "invocation": null,
       "name": "code-review",
       "path": "config/claude-plugins.txt",
@@ -352,8 +374,8 @@
     {
       "description": "Reduce unnecessary complexity while preserving behavior.",
       "displayName": "Code Simplifier",
-      "featured": 111,
-      "id": "plugin:claude:code-simplifier@claude-plugins-official",
+      "featured": 112,
+      "id": "plugin:code-simplifier@claude-plugins-official",
       "invocation": null,
       "name": "code-simplifier",
       "path": "config/claude-plugins.txt",
@@ -370,8 +392,8 @@
     {
       "description": "Claude-native commands for structured Git commits.",
       "displayName": "Commit Commands",
-      "featured": 112,
-      "id": "plugin:claude:commit-commands@claude-plugins-official",
+      "featured": 113,
+      "id": "plugin:commit-commands@claude-plugins-official",
       "invocation": null,
       "name": "commit-commands",
       "path": "config/claude-plugins.txt",
@@ -388,8 +410,8 @@
     {
       "description": "A more explanatory response style for unfamiliar technical work.",
       "displayName": "Explanatory Output Style",
-      "featured": 113,
-      "id": "plugin:claude:explanatory-output-style@claude-plugins-official",
+      "featured": 114,
+      "id": "plugin:explanatory-output-style@claude-plugins-official",
       "invocation": null,
       "name": "explanatory-output-style",
       "path": "config/claude-plugins.txt",
@@ -406,8 +428,8 @@
     {
       "description": "Guided feature implementation workflows for Claude Code.",
       "displayName": "Feature DEV",
-      "featured": 114,
-      "id": "plugin:claude:feature-dev@claude-plugins-official",
+      "featured": 115,
+      "id": "plugin:feature-dev@claude-plugins-official",
       "invocation": null,
       "name": "feature-dev",
       "path": "config/claude-plugins.txt",
@@ -424,8 +446,8 @@
     {
       "description": "Frontend interface design and implementation guidance.",
       "displayName": "Frontend Design",
-      "featured": 115,
-      "id": "plugin:claude:frontend-design@claude-plugins-official",
+      "featured": 116,
+      "id": "plugin:frontend-design@claude-plugins-official",
       "invocation": null,
       "name": "frontend-design",
       "path": "config/claude-plugins.txt",
@@ -442,8 +464,8 @@
     {
       "description": "Create and improve reusable Claude skills.",
       "displayName": "Skill Creator",
-      "featured": 116,
-      "id": "plugin:claude:skill-creator@claude-plugins-official",
+      "featured": 117,
+      "id": "plugin:skill-creator@claude-plugins-official",
       "invocation": null,
       "name": "skill-creator",
       "path": "config/claude-plugins.txt",
@@ -458,28 +480,10 @@
       "version": "Managed"
     },
     {
-      "description": "The upstream Superpowers plugin with a small maintained policy patch: strict workflows are explicit-only, the always-on session bootstrap is disabled, and browser option-picking is removed.",
-      "displayName": "Superpowers (Configured)",
-      "featured": 117,
-      "id": "plugin:claude:superpowers@superpowers-configured",
-      "invocation": null,
-      "name": "superpowers",
-      "path": "config/superpowers.json",
-      "pluginId": "superpowers@superpowers-configured",
-      "runtimes": [
-        "claude"
-      ],
-      "source": "third-party",
-      "sourceLabel": "Upstream + local policy",
-      "state": "Configured",
-      "type": "plugin",
-      "version": "6.2.0-config.2"
-    },
-    {
       "description": "Swift language-server integration for Claude Code.",
       "displayName": "Swift LSP",
       "featured": 118,
-      "id": "plugin:claude:swift-lsp@claude-plugins-official",
+      "id": "plugin:swift-lsp@claude-plugins-official",
       "invocation": null,
       "name": "swift-lsp",
       "path": "config/claude-plugins.txt",
@@ -497,7 +501,7 @@
       "description": "TypeScript language-server integration for Claude Code.",
       "displayName": "Typescript LSP",
       "featured": 119,
-      "id": "plugin:claude:typescript-lsp@claude-plugins-official",
+      "id": "plugin:typescript-lsp@claude-plugins-official",
       "invocation": null,
       "name": "typescript-lsp",
       "path": "config/claude-plugins.txt",

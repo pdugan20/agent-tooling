@@ -61,15 +61,17 @@
             <div>
               <strong>When a skill runs</strong>
               <p>
-                “Can start automatically” means the agent may use it when it
-                fits. “Only when asked” means you must request it directly.
+                “Auto-starts” means the agent may use it when it fits. “Only
+                when asked” means you must request it directly.
               </p>
             </div>
           </div>
           <p class="delivery-explainer">
-            <strong>Built here</strong> identifies skills we own directly.
-            <strong>Superpowers (Configured)</strong> is a thin fork of the real
-            upstream plugin with our invocation and UI-ideation policy applied.
+            <strong>Managed here</strong> identifies workflows maintained in
+            this repository. Upstream skills retain their original creator and
+            lockfile provenance. <strong>Superpowers (Configured)</strong> is a
+            thin fork of the real upstream plugin with our invocation and
+            UI-ideation policy applied.
           </p>
         </section>
 
@@ -168,10 +170,11 @@
             </label>
 
             <label class="select-wrap">
-              <span class="sr-only">Filter by creator</span>
+              <span class="sr-only">Filter by source</span>
               <select id="source">
-                <option value="all">All creators</option>
-                <option value="personal">Personal</option>
+                <option value="all">All sources</option>
+                <option value="local">Managed here</option>
+                <option value="personal">Patrick</option>
                 <option value="openai">OpenAI</option>
                 <option value="anthropic">Anthropic</option>
                 <option value="third-party">Third-party</option>
@@ -184,7 +187,7 @@
                 <option value="featured">Sort: Featured</option>
                 <option value="name">Sort: Name</option>
                 <option value="type">Sort: Type</option>
-                <option value="source">Sort: Creator</option>
+                <option value="source">Sort: Source</option>
                 <option value="state">Sort: Status</option>
               </select>
             </label>
@@ -199,7 +202,7 @@
           <div class="list-header" aria-hidden="true">
             <span>Capability</span>
             <span>Works in</span>
-            <span>Made by</span>
+            <span>Source</span>
             <span>Version</span>
           </div>
           <div id="results" class="results"></div>

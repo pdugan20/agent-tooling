@@ -5,31 +5,40 @@
 ![Claude Code](https://img.shields.io/badge/Claude_Code-configured-D97757)
 ![Node](https://img.shields.io/badge/Node-22-3C873A?logo=nodedotjs&logoColor=white)
 
-Private, canonical tooling shared across Patrick's Codex and Claude Code projects: working agreements, personal
-skills, a policy-configured Superpowers fork, plugin manifests, and machine setup.
+Portable, canonical tooling shared across Codex and Claude Code projects: working agreements, reusable workflows, a
+policy-configured Superpowers fork, plugin manifests, and machine setup.
 
 ## Quick start
 
 Install and authenticate Codex, Claude Code, and GitHub CLI, then run:
 
 ```bash
-gh repo clone pdugan20/agent-tooling ~/Documents/Github/agent-tooling
-cd ~/Documents/Github/agent-tooling
+gh repo clone pdugan20/agent-tooling
+cd agent-tooling
 ./scripts/setup-new-machine.sh
 ```
+
+The checkout can live anywhere. Setup scripts resolve the repository from their own location and do not require a
+particular parent directory or repository collection layout.
 
 Restart Codex and Claude afterward. Product OAuth sessions, API keys, local toolchains, and repository-specific
 instructions remain machine- or project-local.
 
 ## Included
 
-| Area                   | Purpose                                                        | Canonical source                               |
-| ---------------------- | -------------------------------------------------------------- | ---------------------------------------------- |
-| Shared instructions    | Exploration, production, Firebase, and safety policy           | [`global/AGENTS.md`](global/AGENTS.md)         |
-| Personal skills        | Design, SwiftUI, motion, feature delivery, and hardening       | [`skills/`](skills/)                           |
-| Configured Superpowers | Upstream plugin with strict workflows made explicit-only       | [`config/superpowers.json`](config/superpowers.json) |
-| Plugin setup           | Desired Codex and Claude plugin sets                           | [`config/`](config/)                           |
-| Machine setup          | Bootstrap, refresh, configuration, and verification            | [`scripts/`](scripts/)                         |
+| Area                   | Purpose                                                  | Canonical source                                      |
+| ---------------------- | -------------------------------------------------------- | ----------------------------------------------------- |
+| Shared instructions    | Exploration, production, Firebase, and safety policy     | [`global/AGENTS.md`](global/AGENTS.md)                |
+| Local workflows        | Instructions maintained as part of this repository      | [`skills/`](skills/)                                  |
+| Upstream skills        | Official CLI-managed snapshots with source provenance   | [`.agents/skills/`](.agents/skills/), `skills-lock.json` |
+| Configured Superpowers | Upstream plugin with strict workflows made explicit-only | [`config/superpowers.json`](config/superpowers.json)  |
+| Plugin setup           | Desired Codex and Claude plugin sets                     | [`config/`](config/)                                  |
+| Machine setup          | Bootstrap, refresh, configuration, and verification      | [`scripts/`](scripts/)                                |
+
+The top-level [`skills/`](skills/) directory intentionally contains only the three workflows maintained here. The
+five third-party skills are installed at project scope by the official `skills` CLI, committed under
+[`.agents/skills/`](.agents/skills/), and tracked by `skills-lock.json`. Do not edit those upstream snapshots by
+hand; use `npm run skills:update` and review the resulting diff.
 
 ## Catalog
 
@@ -51,6 +60,7 @@ skills on the current Mac, run `npm run catalog:snapshot`, reopen the catalog wi
 | `./scripts/refresh-codex-plugins.sh`  | Refresh the desired Codex plugin set               |
 | `./scripts/refresh-claude-plugins.sh` | Refresh the desired Claude plugin set              |
 | `./scripts/verify-setup.sh`           | Compare this Mac with the desired setup            |
+| `npm run skills:update`               | Check and apply upstream skill updates for review   |
 | `npm run superpowers:check`           | Check whether the fork trails upstream             |
 | `npm run catalog`                     | Generate and serve the browser catalog             |
 | `npm run verify`                      | Run the complete local and GitHub Actions gate     |
@@ -74,6 +84,8 @@ whitespace.
 
 - [Manifest](inventory/manifest.md): ownership, runtime mapping, and what does not sync.
 - [Maintenance](inventory/maintenance.md): updates, plugin refreshes, Superpowers review, and releases.
+- [Authoring checks](inventory/authoring.md): linting, formatting, validation, and behavioral testing for skills and plugins.
+- [Outstanding work](inventory/next-steps.md): the remaining publication, updater, cleanup, and MacBook tasks.
 - [Migration record](inventory/publication.md): completed cross-repository rollout.
 - [Repository inventory](inventory/repos.md): repositories governed by the shared setup.
 - [Changelog](CHANGELOG.md): curated repository releases and upgrade notes.

@@ -1,8 +1,8 @@
 {
   "name": "agent-tooling",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
-  "description": "Development tooling for Patrick's shared Codex and Claude configuration.",
+  "description": "Portable development tooling for a shared Codex and Claude configuration.",
   "scripts": {
     "catalog": "npm run catalog:generate && python3 -m http.server 4173 --bind 127.0.0.1",
     "catalog:check": "python3 scripts/generate_catalog.py --check",
@@ -11,7 +11,8 @@
     "format": "prettier --write \"**/*.{css,html,js,json,yaml,yml}\"",
     "format:check": "prettier --check \"**/*.{css,html,js,json,yaml,yml}\"",
     "lint:claude": "claudelint check-all --strict --no-cache --format compact && claudelint validate-skills --path skills --preset strict --warnings-as-errors",
-    "lint:markdown": "markdownlint \"**/*.md\" --ignore node_modules --ignore .claudelint-cache",
+    "lint:markdown": "markdownlint \"**/*.md\" --ignore node_modules --ignore .agents/skills --ignore .claude/skills --ignore .claudelint-cache",
+    "skills:update": "npx skills update -p -y",
     "superpowers:check": "python3 scripts/check_superpowers_update.py --check",
     "test": "python3 -m unittest discover -s scripts -p 'test_*.py' -v",
     "verify": "bash scripts/verify-repo.sh"

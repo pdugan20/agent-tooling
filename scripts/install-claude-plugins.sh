@@ -9,13 +9,23 @@ if ! command -v claude >/dev/null 2>&1; then
   exit 1
 fi
 
-if ! claude plugin marketplace list --json | python3 -c '
+ensure_marketplace() {
+  local name=$1
+  local source=$2
+  if claude plugin marketplace list --json | MARKETPLACE_NAME="$name" python3 -c '
 import json, sys
+import os
 data = json.load(sys.stdin)
-raise SystemExit(0 if any(item.get("name") == "superpowers-configured" for item in data) else 1)
+target = os.environ["MARKETPLACE_NAME"]
+raise SystemExit(0 if any(item.get("name") == target for item in data) else 1)
 '; then
-  claude plugin marketplace add pdugan20/superpowers
-fi
+    return
+  fi
+  claude plugin marketplace add "$source"
+}
+
+ensure_marketplace pdugan20-plugins pdugan20/pdugan20-plugins
+ensure_marketplace superpowers-configured pdugan20/superpowers
 
 installed_plugins=$(claude plugin list --json)
 while IFS= read -r plugin; do
