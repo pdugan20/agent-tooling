@@ -2,16 +2,12 @@
 
 This checklist tracks unfinished setup work. Remove completed items rather than keeping a historical project log here.
 
-## Publish Mintlify Docs for both runtimes
+## Authentication-dependent verification
 
-- [ ] Merge the dual-runtime manifest, shared-skill compatibility, packaging, and version-sync changes in
-  `pdugan20/mintlify-docs`.
-- [ ] Release `mintlify-docs` as `v0.3.0`; confirm both plugin manifests and the release archive report `0.3.0`.
-- [ ] Merge the native Codex marketplace catalog in `pdugan20/pdugan20-plugins` and update its Claude marketplace
-  entry to `mintlify-docs` `0.3.0`.
-- [ ] Merge the desired-state, bootstrap, catalog, and documentation changes in `pdugan20/agent-tooling`.
-- [ ] Run both plugin refresh scripts, restart Codex and Claude, and run `./scripts/verify-setup.sh`.
-- [ ] Smoke-test one implicit request and one explicit invocation in each runtime.
+- [ ] Sign in to Claude Code on the current machine, start a fresh process, and smoke-test one implicit request plus
+  one explicit `mintlify-docs:review-docs` invocation. Static plugin discovery and strict validation pass at `0.3.0`;
+  live invocation is blocked only because `claude auth status` reports `loggedIn: false`. Codex passed both invocation
+  paths on July 28, 2026.
 
 ## Cleanup and portability
 

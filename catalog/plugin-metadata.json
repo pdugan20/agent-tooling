@@ -27,7 +27,7 @@
     "displayName": "Mintlify Docs",
     "source": "personal",
     "sourceLabel": "Pat Dugan",
-    "version": "0.2.3"
+    "version": "0.3.0"
   },
   "figma@openai-curated": {
     "description": "Figma design context, design-to-code, Code Connect, SwiftUI, and motion workflows.",
