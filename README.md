@@ -70,6 +70,7 @@ worktrees are skipped so the catalog does not repeat the same project profile. I
 
 The catalog labels effective availability separately from ownership and source. “All repositories” describes where
 the capability can run; it does not mean its canonical source is stored globally or updated outside this repository.
+Source names link to the canonical GitHub skill or plugin when the publisher exposes one.
 
 ## Common commands
 

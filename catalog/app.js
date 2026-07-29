@@ -78,6 +78,7 @@ const filteredItems = () => {
       item.pluginId,
       item.description,
       item.sourceLabel,
+      item.sourceUrl,
       item.availability,
       item.repository,
       item.invocation,
@@ -222,7 +223,22 @@ const render = () => {
     item.runtimes.forEach((itemRuntime) => {
       runtime.append(makeTag(runtimeLabel(itemRuntime), itemRuntime));
     });
-    fragment.querySelector(".source").textContent = item.sourceLabel;
+    const source = fragment.querySelector(".source");
+    if (item.sourceUrl) {
+      const sourceLink = document.createElement("a");
+      sourceLink.className = "source-link";
+      sourceLink.href = item.sourceUrl;
+      sourceLink.target = "_blank";
+      sourceLink.rel = "noreferrer";
+      sourceLink.textContent = item.sourceLabel;
+      sourceLink.setAttribute(
+        "aria-label",
+        `${item.sourceLabel} source for ${item.displayName || item.name}`,
+      );
+      source.append(sourceLink);
+    } else {
+      source.textContent = item.sourceLabel;
+    }
     fragment.querySelector(".version").textContent =
       item.version === "Git"
         ? "—"

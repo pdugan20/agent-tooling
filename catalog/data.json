@@ -25,6 +25,7 @@
       ],
       "source": "local",
       "sourceLabel": "Managed here",
+      "sourceUrl": "https://github.com/pdugan20/agent-tooling/blob/main/skills/feature-delivery/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -44,6 +45,7 @@
       ],
       "source": "local",
       "sourceLabel": "Managed here",
+      "sourceUrl": "https://github.com/pdugan20/agent-tooling/blob/main/skills/code-native-ui-ideation/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -63,6 +65,7 @@
       ],
       "source": "third-party",
       "sourceLabel": "Paul Hudson",
+      "sourceUrl": "https://github.com/twostraws/swiftui-agent-skill/blob/main/swiftui-pro/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "1.1"
@@ -82,6 +85,7 @@
       ],
       "source": "third-party",
       "sourceLabel": "Emil Kowalski",
+      "sourceUrl": "https://github.com/emilkowalski/skills/blob/main/skills/apple-design/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -101,6 +105,7 @@
       ],
       "source": "third-party",
       "sourceLabel": "Emil Kowalski",
+      "sourceUrl": "https://github.com/emilkowalski/skills/blob/main/skills/review-animations/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -120,6 +125,7 @@
       ],
       "source": "third-party",
       "sourceLabel": "Emil Kowalski",
+      "sourceUrl": "https://github.com/emilkowalski/skills/blob/main/skills/find-animation-opportunities/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -139,6 +145,7 @@
       ],
       "source": "third-party",
       "sourceLabel": "Emil Kowalski",
+      "sourceUrl": "https://github.com/emilkowalski/skills/blob/main/skills/animation-vocabulary/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -158,6 +165,7 @@
       ],
       "source": "third-party",
       "sourceLabel": "Emil Kowalski",
+      "sourceUrl": "https://github.com/emilkowalski/skills/blob/main/skills/emil-design-eng/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -177,6 +185,7 @@
       ],
       "source": "third-party",
       "sourceLabel": "Emil Kowalski",
+      "sourceUrl": "https://github.com/emilkowalski/skills/blob/main/skills/pick-ui-library/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -196,6 +205,7 @@
       ],
       "source": "local",
       "sourceLabel": "Managed here",
+      "sourceUrl": "https://github.com/pdugan20/agent-tooling/blob/main/skills/production-hardening/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -216,6 +226,7 @@
       ],
       "source": "third-party",
       "sourceLabel": "Upstream + local policy",
+      "sourceUrl": "https://github.com/pdugan20/superpowers",
       "state": "Configured",
       "type": "plugin",
       "version": "6.2.0-config.2"
@@ -235,6 +246,7 @@
       ],
       "source": "third-party",
       "sourceLabel": "Firebase",
+      "sourceUrl": "https://github.com/firebase/skills",
       "state": "Configured",
       "type": "plugin",
       "version": "Managed"
@@ -254,6 +266,7 @@
       ],
       "source": "third-party",
       "sourceLabel": "Cloudflare",
+      "sourceUrl": "https://github.com/cloudflare/skills",
       "state": "Configured",
       "type": "plugin",
       "version": "Managed"
@@ -273,6 +286,7 @@
       ],
       "source": "third-party",
       "sourceLabel": "Mintlify direct",
+      "sourceUrl": "https://github.com/mintlify/mintlify-claude-plugin",
       "state": "Configured",
       "type": "plugin",
       "version": "Managed"
@@ -293,6 +307,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
+      "sourceUrl": "https://github.com/pdugan20/mintlify-docs",
       "state": "Configured",
       "type": "plugin",
       "version": "0.3.0"
@@ -312,6 +327,7 @@
       ],
       "source": "third-party",
       "sourceLabel": "Sentry direct",
+      "sourceUrl": "https://github.com/getsentry/sentry-for-ai",
       "state": "Configured",
       "type": "plugin",
       "version": "Managed"
@@ -332,6 +348,7 @@
       ],
       "source": "third-party",
       "sourceLabel": "Expo direct",
+      "sourceUrl": "https://github.com/expo/skills/tree/main/plugins/expo",
       "state": "Configured",
       "type": "plugin",
       "version": "Managed"
@@ -351,6 +368,7 @@
       ],
       "source": "anthropic",
       "sourceLabel": "Anthropic official",
+      "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/claude-code-setup",
       "state": "Configured",
       "type": "plugin",
       "version": "Managed"
@@ -370,6 +388,7 @@
       ],
       "source": "anthropic",
       "sourceLabel": "Anthropic official",
+      "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/code-review",
       "state": "Configured",
       "type": "plugin",
       "version": "Managed"
@@ -389,6 +408,7 @@
       ],
       "source": "anthropic",
       "sourceLabel": "Anthropic official",
+      "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/code-simplifier",
       "state": "Configured",
       "type": "plugin",
       "version": "Managed"
@@ -408,6 +428,7 @@
       ],
       "source": "anthropic",
       "sourceLabel": "Anthropic official",
+      "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/commit-commands",
       "state": "Configured",
       "type": "plugin",
       "version": "Managed"
@@ -427,6 +448,7 @@
       ],
       "source": "anthropic",
       "sourceLabel": "Anthropic official",
+      "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/feature-dev",
       "state": "Configured",
       "type": "plugin",
       "version": "Managed"
@@ -446,6 +468,7 @@
       ],
       "source": "anthropic",
       "sourceLabel": "Anthropic official",
+      "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/frontend-design",
       "state": "Configured",
       "type": "plugin",
       "version": "Managed"
@@ -465,6 +488,7 @@
       ],
       "source": "anthropic",
       "sourceLabel": "Anthropic official",
+      "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/skill-creator",
       "state": "Configured",
       "type": "plugin",
       "version": "Managed"
@@ -484,6 +508,7 @@
       ],
       "source": "anthropic",
       "sourceLabel": "Anthropic official",
+      "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/swift-lsp",
       "state": "Configured",
       "type": "plugin",
       "version": "Managed"
@@ -503,6 +528,7 @@
       ],
       "source": "anthropic",
       "sourceLabel": "Anthropic official",
+      "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/typescript-lsp",
       "state": "Configured",
       "type": "plugin",
       "version": "Managed"
@@ -522,6 +548,7 @@
       ],
       "source": "openai",
       "sourceLabel": "Managed by Codex",
+      "sourceUrl": null,
       "state": "Managed by Codex",
       "type": "plugin",
       "version": "Managed"
@@ -541,6 +568,7 @@
       ],
       "source": "openai",
       "sourceLabel": "Managed by Codex",
+      "sourceUrl": null,
       "state": "Managed by Codex",
       "type": "plugin",
       "version": "Managed"
@@ -560,6 +588,7 @@
       ],
       "source": "openai",
       "sourceLabel": "Managed by Codex",
+      "sourceUrl": null,
       "state": "Managed by Codex",
       "type": "plugin",
       "version": "Managed"
@@ -579,6 +608,7 @@
       ],
       "source": "openai",
       "sourceLabel": "Managed by Codex",
+      "sourceUrl": null,
       "state": "Managed by Codex",
       "type": "plugin",
       "version": "Managed"
@@ -598,6 +628,7 @@
       ],
       "source": "openai",
       "sourceLabel": "Managed by Codex",
+      "sourceUrl": null,
       "state": "Managed by Codex",
       "type": "plugin",
       "version": "Managed"
@@ -617,6 +648,7 @@
       ],
       "source": "openai",
       "sourceLabel": "Managed by Codex",
+      "sourceUrl": null,
       "state": "Managed by Codex",
       "type": "plugin",
       "version": "Managed"
@@ -636,10 +668,11 @@
       ],
       "source": "openai",
       "sourceLabel": "Managed by Codex",
+      "sourceUrl": null,
       "state": "Managed by Codex",
       "type": "plugin",
       "version": "Managed"
     }
   ],
-  "schemaVersion": 2
+  "schemaVersion": 3
 }

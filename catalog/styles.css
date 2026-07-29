@@ -487,6 +487,16 @@ kbd {
   line-height: 1.4;
 }
 
+.source-link {
+  color: inherit;
+  text-decoration-color: var(--line-strong);
+  text-underline-offset: 3px;
+}
+
+.source-link:hover {
+  color: var(--accent);
+}
+
 .runtime {
   display: flex;
   flex-wrap: wrap;

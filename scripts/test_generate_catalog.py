@@ -16,7 +16,7 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 23)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
-        self.assertEqual(catalog["schemaVersion"], 2)
+        self.assertEqual(catalog["schemaVersion"], 3)
 
     def test_custom_invocation_policy_is_visible(self) -> None:
         items = generate_catalog.build_catalog()["items"]
@@ -40,7 +40,7 @@ class CatalogGenerationTests(unittest.TestCase):
     def test_upstream_skills_keep_their_provenance(self) -> None:
         items = generate_catalog.build_catalog()["items"]
         upstream = {
-            item["name"]: (item["sourceLabel"], item["path"])
+            item["name"]: (item["sourceLabel"], item["path"], item["sourceUrl"])
             for item in items
             if item["type"] == "skill" and item["source"] == "third-party"
         }
@@ -51,30 +51,37 @@ class CatalogGenerationTests(unittest.TestCase):
                 "animation-vocabulary": (
                     "Emil Kowalski",
                     ".agents/skills/animation-vocabulary/SKILL.md",
+                    "https://github.com/emilkowalski/skills/blob/main/skills/animation-vocabulary/SKILL.md",
                 ),
                 "apple-design": (
                     "Emil Kowalski",
                     ".agents/skills/apple-design/SKILL.md",
+                    "https://github.com/emilkowalski/skills/blob/main/skills/apple-design/SKILL.md",
                 ),
                 "emil-design-eng": (
                     "Emil Kowalski",
                     ".agents/skills/emil-design-eng/SKILL.md",
+                    "https://github.com/emilkowalski/skills/blob/main/skills/emil-design-eng/SKILL.md",
                 ),
                 "find-animation-opportunities": (
                     "Emil Kowalski",
                     ".agents/skills/find-animation-opportunities/SKILL.md",
+                    "https://github.com/emilkowalski/skills/blob/main/skills/find-animation-opportunities/SKILL.md",
                 ),
                 "pick-ui-library": (
                     "Emil Kowalski",
                     ".agents/skills/pick-ui-library/SKILL.md",
+                    "https://github.com/emilkowalski/skills/blob/main/skills/pick-ui-library/SKILL.md",
                 ),
                 "review-animations": (
                     "Emil Kowalski",
                     ".agents/skills/review-animations/SKILL.md",
+                    "https://github.com/emilkowalski/skills/blob/main/skills/review-animations/SKILL.md",
                 ),
                 "swiftui-pro": (
                     "Paul Hudson",
                     ".agents/skills/swiftui-pro/SKILL.md",
+                    "https://github.com/twostraws/swiftui-agent-skill/blob/main/swiftui-pro/SKILL.md",
                 ),
             },
         )
@@ -104,6 +111,7 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertEqual(len(plugins), 1)
         self.assertEqual(plugins[0]["runtimes"], ["codex", "claude"])
         self.assertEqual(plugins[0]["sourceLabel"], "Pat Dugan")
+        self.assertEqual(plugins[0]["sourceUrl"], "https://github.com/pdugan20/mintlify-docs")
 
     def test_codex_managed_plugins_are_separate_from_cli_plugins(self) -> None:
         items = generate_catalog.build_catalog()["items"]
@@ -160,6 +168,33 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertEqual(items[0]["runtimes"], ["codex", "claude"])
         self.assertEqual(items[0]["source"], "repository")
         self.assertIsNone(items[0]["pathHref"])
+        self.assertIsNone(items[0]["sourceUrl"])
+
+    def test_project_snapshot_links_locked_skills_to_their_upstream_source(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            repos_root = Path(temporary)
+            repository = repos_root / "example-app"
+            (repository / ".git").mkdir(parents=True)
+            skill_root = repository / ".agents/skills/apple-design"
+            skill_root.mkdir(parents=True)
+            (skill_root / "SKILL.md").write_text(
+                "---\nname: apple-design\ndescription: Apple design reference.\n---\n",
+                encoding="utf-8",
+            )
+            (repository / "skills-lock.json").write_text(
+                '{"version":1,"skills":{"apple-design":'
+                '{"source":"emilkowalski/skills","sourceType":"github",'
+                '"skillPath":"skills/apple-design/SKILL.md"}}}',
+                encoding="utf-8",
+            )
+
+            items = generate_catalog.project_skill_items(repos_root)
+
+        self.assertEqual(items[0]["sourceLabel"], "Emil Kowalski")
+        self.assertEqual(
+            items[0]["sourceUrl"],
+            "https://github.com/emilkowalski/skills/blob/main/skills/apple-design/SKILL.md",
+        )
 
 
 if __name__ == "__main__":

@@ -8,6 +8,7 @@ version when compatibility requires it.
 
 ### Added
 
+- Added canonical GitHub source links to catalog skill and plugin records wherever a public source exists.
 - Added Emil Kowalski's upstream-managed `find-animation-opportunities` and `pick-ui-library` skills for both
   Codex and Claude Code.
 - Documented the audited global-versus-project scope model, including the narrow project-pinned Apple reference

@@ -106,7 +106,9 @@ npm run catalog
 ```
 
 When a configured third-party plugin changes, update its short descriptive metadata only if the existing description
-is no longer accurate. CI runs `npm run catalog:check` and fails when generated data drifts from canonical inputs.
+or canonical source URL is no longer accurate. Skill and plugin source labels link to GitHub whenever the canonical
+source is public; Codex-managed bundles remain plain text unless OpenAI publishes a repository for them. CI runs
+`npm run catalog:check` and fails when generated data drifts from canonical inputs.
 
 For a private runtime comparison, run `npm run catalog:snapshot`. The resulting
 `catalog/runtime-data.local.json` contains only capability identifiers, versions, runtime state, and repository

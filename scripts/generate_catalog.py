@@ -18,6 +18,7 @@ CATALOG_DATA = CATALOG_ROOT / "data.json"
 RUNTIME_DATA = CATALOG_ROOT / "runtime-data.local.json"
 PLUGIN_METADATA = CATALOG_ROOT / "plugin-metadata.json"
 SKILLS_LOCK = ROOT / "skills-lock.json"
+AGENT_TOOLING_REPOSITORY = "https://github.com/pdugan20/agent-tooling"
 
 UPSTREAM_SOURCE_LABELS = {
     "emilkowalski/skills": "Emil Kowalski",
@@ -52,6 +53,30 @@ def display_path(path: Path) -> str:
         return path.relative_to(ROOT).as_posix()
     except ValueError:
         return path.as_posix()
+
+
+def github_file_url(repository_url: str, path: str, ref: str = "main") -> str:
+    """Return a browser URL for a file in a GitHub repository."""
+    return f"{repository_url.rstrip('/')}/blob/{ref}/{path.lstrip('/')}"
+
+
+def github_repository_url(repository: Path) -> str | None:
+    """Resolve a checkout's origin to an HTTPS GitHub repository URL."""
+    completed = subprocess.run(
+        ["git", "config", "--get", "remote.origin.url"],
+        cwd=repository,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    remote = completed.stdout.strip()
+    if remote.startswith("git@github.com:"):
+        remote = f"https://github.com/{remote.removeprefix('git@github.com:')}"
+    elif remote.startswith("ssh://git@github.com/"):
+        remote = f"https://github.com/{remote.removeprefix('ssh://git@github.com/')}"
+    if not remote.startswith("https://github.com/"):
+        return None
+    return remote.removesuffix(".git")
 
 
 def read_frontmatter(path: Path) -> dict[str, str]:
@@ -119,6 +144,7 @@ def skill_item(
     *,
     source: str = "local",
     source_label: str = "Managed here",
+    source_url: str | None = None,
 ) -> dict[str, Any]:
     skill_root = skill_path.parent
     frontmatter = read_frontmatter(skill_path)
@@ -139,6 +165,11 @@ def skill_item(
         "runtimes": ["codex", "claude"],
         "source": source,
         "sourceLabel": source_label,
+        "sourceUrl": source_url
+        or github_file_url(
+            AGENT_TOOLING_REPOSITORY,
+            skill_path.relative_to(ROOT).as_posix(),
+        ),
         "state": "Configured",
         "type": "skill",
         "version": read_skill_version(skill_path),
@@ -184,6 +215,17 @@ def project_skill_items(repos_root: Path) -> list[dict[str, Any]]:
                 if upstream_source
                 else repository.name
             )
+            repository_url = github_repository_url(repository)
+            relative_skill_path = f".agents/skills/{name}/SKILL.md"
+            source_url = None
+            if upstream_source:
+                source_url = github_file_url(
+                    f"https://github.com/{upstream_source}",
+                    lock_entry["skillPath"],
+                    lock_entry.get("ref", "main"),
+                )
+            elif repository_url:
+                source_url = github_file_url(repository_url, relative_skill_path)
             claude_skill = repository / ".claude/skills" / name / "SKILL.md"
             runtimes = ["codex"]
             if claude_skill.is_file():
@@ -204,6 +246,7 @@ def project_skill_items(repos_root: Path) -> list[dict[str, Any]]:
                     "runtimes": runtimes,
                     "source": source,
                     "sourceLabel": source_label,
+                    "sourceUrl": source_url,
                     "state": "Installed",
                     "type": "skill",
                     "version": read_skill_version(skill_path),
@@ -235,6 +278,7 @@ def plugin_item(
         "runtimes": runtimes,
         "source": metadata["source"],
         "sourceLabel": metadata["sourceLabel"],
+        "sourceUrl": metadata.get("sourceUrl"),
         "state": state,
         "type": "plugin",
         "version": metadata.get("version", "Managed"),
@@ -257,11 +301,23 @@ def build_catalog() -> dict[str, Any]:
             f"lock={sorted(locked_skills)}, files={sorted(upstream_names)}"
         )
     for path in upstream_paths:
-        source = locked_skills[path.parent.name].get("source")
+        lock_entry = locked_skills[path.parent.name]
+        source = lock_entry.get("source")
         source_label = UPSTREAM_SOURCE_LABELS.get(source)
         if not source_label:
             raise CatalogError(f"no catalog source label for locked skill source {source!r}")
-        skill_items.append(skill_item(path, source="third-party", source_label=source_label))
+        skill_items.append(
+            skill_item(
+                path,
+                source="third-party",
+                source_label=source_label,
+                source_url=github_file_url(
+                    f"https://github.com/{source}",
+                    lock_entry["skillPath"],
+                    lock_entry.get("ref", "main"),
+                ),
+            )
+        )
 
     configured: dict[str, list[str]] = {}
     for runtime in ("codex", "claude"):
@@ -308,7 +364,7 @@ def build_catalog() -> dict[str, Any]:
             "catalog/plugin-metadata.json",
         ],
         "items": items,
-        "schemaVersion": 2,
+        "schemaVersion": 3,
     }
 
 
@@ -378,6 +434,7 @@ def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
                 "runtimes": ["codex"],
                 "source": source,
                 "sourceLabel": source_label,
+                "sourceUrl": desired.get("sourceUrl") if desired else None,
                 "state": "Enabled" if plugin.get("enabled") else "Disabled",
                 "type": "plugin",
                 "version": plugin.get("version") or "Unknown",
@@ -428,7 +485,7 @@ def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
             if repos_root is not None
             else "What Codex and Claude currently report as installed on this computer."
         ),
-        "schemaVersion": 2,
+        "schemaVersion": 3,
     }
 
 

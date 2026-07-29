@@ -4,29 +4,34 @@
     "displayName": "Superpowers (Configured)",
     "source": "third-party",
     "sourceLabel": "Upstream + local policy",
+    "sourceUrl": "https://github.com/pdugan20/superpowers",
     "path": "config/superpowers.json",
     "version": "6.2.0-config.2"
   },
   "firebase@firebase": {
     "description": "Firebase, Firestore, Auth, hosting, rules, and Xcode setup guidance.",
     "source": "third-party",
-    "sourceLabel": "Firebase"
+    "sourceLabel": "Firebase",
+    "sourceUrl": "https://github.com/firebase/skills"
   },
   "cloudflare@cloudflare": {
     "description": "Workers, Durable Objects, Wrangler, web performance, and Cloudflare platform skills.",
     "source": "third-party",
-    "sourceLabel": "Cloudflare"
+    "sourceLabel": "Cloudflare",
+    "sourceUrl": "https://github.com/cloudflare/skills"
   },
   "mintlify@mintlify-marketplace": {
     "description": "Build and maintain Mintlify documentation sites.",
     "source": "third-party",
-    "sourceLabel": "Mintlify direct"
+    "sourceLabel": "Mintlify direct",
+    "sourceUrl": "https://github.com/mintlify/mintlify-claude-plugin"
   },
   "mintlify-docs@pdugan20-plugins": {
     "description": "House-style workflows for Mintlify information architecture, editorial review, changelogs, and drift-checked reference documentation.",
     "displayName": "Mintlify Docs",
     "source": "personal",
     "sourceLabel": "Pat Dugan",
+    "sourceUrl": "https://github.com/pdugan20/mintlify-docs",
     "version": "0.3.0"
   },
   "data-analytics@openai-curated-remote": {
@@ -66,12 +71,14 @@
   "sentry@claude-plugins-official": {
     "description": "Set up Sentry, inspect and debug issues, configure monitoring, and maintain SDK integrations.",
     "source": "third-party",
-    "sourceLabel": "Sentry direct"
+    "sourceLabel": "Sentry direct",
+    "sourceUrl": "https://github.com/getsentry/sentry-for-ai"
   },
   "expo@claude-plugins-official": {
     "description": "Current official Expo and React Native framework, EAS, deployment, and platform guidance.",
     "source": "third-party",
-    "sourceLabel": "Expo direct"
+    "sourceLabel": "Expo direct",
+    "sourceUrl": "https://github.com/expo/skills/tree/main/plugins/expo"
   },
   "vercel@openai-curated-remote": {
     "description": "Next.js, React, deployment, browser verification, and Vercel platform skills.",
@@ -81,46 +88,55 @@
   "claude-code-setup@claude-plugins-official": {
     "description": "Configure Claude Code projects and user environments.",
     "source": "anthropic",
-    "sourceLabel": "Anthropic official"
+    "sourceLabel": "Anthropic official",
+    "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/claude-code-setup"
   },
   "code-review@claude-plugins-official": {
     "description": "Review code changes for correctness, quality, and regressions.",
     "source": "anthropic",
-    "sourceLabel": "Anthropic official"
+    "sourceLabel": "Anthropic official",
+    "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/code-review"
   },
   "code-simplifier@claude-plugins-official": {
     "description": "Reduce unnecessary complexity while preserving behavior.",
     "source": "anthropic",
-    "sourceLabel": "Anthropic official"
+    "sourceLabel": "Anthropic official",
+    "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/code-simplifier"
   },
   "commit-commands@claude-plugins-official": {
     "description": "Claude-native commands for structured Git commits.",
     "source": "anthropic",
-    "sourceLabel": "Anthropic official"
+    "sourceLabel": "Anthropic official",
+    "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/commit-commands"
   },
   "feature-dev@claude-plugins-official": {
     "description": "Guided feature implementation workflows for Claude Code.",
     "source": "anthropic",
-    "sourceLabel": "Anthropic official"
+    "sourceLabel": "Anthropic official",
+    "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/feature-dev"
   },
   "frontend-design@claude-plugins-official": {
     "description": "Frontend interface design and implementation guidance.",
     "source": "anthropic",
-    "sourceLabel": "Anthropic official"
+    "sourceLabel": "Anthropic official",
+    "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/frontend-design"
   },
   "skill-creator@claude-plugins-official": {
     "description": "Create and improve reusable Claude skills.",
     "source": "anthropic",
-    "sourceLabel": "Anthropic official"
+    "sourceLabel": "Anthropic official",
+    "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/skill-creator"
   },
   "swift-lsp@claude-plugins-official": {
     "description": "Swift language-server integration for Claude Code.",
     "source": "anthropic",
-    "sourceLabel": "Anthropic official"
+    "sourceLabel": "Anthropic official",
+    "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/swift-lsp"
   },
   "typescript-lsp@claude-plugins-official": {
     "description": "TypeScript language-server integration for Claude Code.",
     "source": "anthropic",
-    "sourceLabel": "Anthropic official"
+    "sourceLabel": "Anthropic official",
+    "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/typescript-lsp"
   }
 }
