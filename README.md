@@ -21,6 +21,10 @@ cd agent-tooling
 The checkout can live anywhere. Setup scripts resolve the repository from their own location and do not require a
 particular parent directory or repository collection layout.
 
+The setup uses Xcode's bundled `sourcekit-lsp` for Claude's Swift code intelligence and installs the TypeScript
+language server required by Claude's TypeScript plugin. Codex does not currently load Claude's LSP plugin component;
+it continues to use project builds, type checks, linters, tests, and editor context for those languages.
+
 Restart Codex and Claude afterward. Product OAuth sessions, API keys, local toolchains, and repository-specific
 instructions remain machine- or project-local.
 

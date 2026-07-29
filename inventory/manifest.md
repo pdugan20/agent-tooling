@@ -168,6 +168,22 @@ setup unless added to `config/claude-plugins.txt`.
 `explanatory-output-style` is intentionally excluded: its SessionStart hook adds mandatory educational “Insight”
 blocks to every task, increasing verbosity and token use during lightweight iteration without adding tools.
 
+### Claude-only language servers
+
+`swift-lsp` and `typescript-lsp` are intentionally Claude-only plugins. Claude Code supports an `lspServers`
+component that connects its built-in LSP tool to separately installed language-server binaries. `swift-lsp` uses
+Xcode or Swift's `sourcekit-lsp`; `typescript-lsp` uses the globally installed `typescript-language-server` and
+`typescript` packages. `scripts/setup-new-machine.sh` installs the TypeScript prerequisites, and
+`scripts/verify-setup.sh` checks both binaries.
+
+Codex's current plugin format does not define an LSP-server component, so installing these Claude plugins through a
+Codex marketplace would create an installed record without giving Codex Claude's diagnostics or navigation tool.
+Keep them out of `config/codex-plugins.txt`. In Codex, rely on the repository's compiler, type checker, linter, tests,
+and available editor context; reassess only if OpenAI publishes an LSP plugin component.
+
+- [Claude Code LSP plugin reference](https://code.claude.com/docs/en/plugins-reference#lsp-servers)
+- [Codex plugin structure](https://developers.openai.com/plugins/build/plugins#plugin-structure)
+
 ## What does not sync through Git
 
 - Codex, Claude, GitHub, Figma, Firebase, Sentry, and other OAuth sessions

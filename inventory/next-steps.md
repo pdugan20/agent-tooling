@@ -4,14 +4,14 @@ This checklist tracks unfinished setup work. Remove completed items rather than 
 
 ## Authentication-dependent verification
 
-- [ ] Sign in to Claude Code on the current machine, start a fresh process, and smoke-test one implicit request plus
-  one explicit `mintlify-docs:review-docs` invocation. Static plugin discovery and strict validation pass at `0.3.0`;
-  live invocation is blocked only because `claude auth status` reports `loggedIn: false`. Codex passed both invocation
-  paths on July 28, 2026.
+- [ ] Authenticate the remote Codex MCP servers that need account access: Expo, Sentry, Mintlify Admin, and the four
+  protected Cloudflare endpoints. Mintlify Search and Cloudflare Docs are public. Firebase reuses Firebase CLI
+  credentials and is already authenticated on the current Mac mini.
 
 ## Cleanup and portability
 
 - [ ] Run `scripts/setup-new-machine.sh` on the MacBook, restart both products, authenticate required connectors, and
   verify the resulting setup.
 
-NextUp MCP OAuth remains intentionally deferred until its authentication flow is repaired.
+NextUp MCP OAuth remains intentionally deferred until its authentication flow is repaired. Claude and Codex skill
+discovery are already verified on the current Mac mini.

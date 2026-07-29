@@ -16,6 +16,16 @@ fail() {
   failures=$((failures + 1))
 }
 
+check_command() {
+  local command_name=$1
+  local install_hint=$2
+  if command -v "$command_name" >/dev/null 2>&1; then
+    pass "$command_name is available for Claude's LSP plugin"
+  else
+    fail "$command_name is missing; $install_hint"
+  fi
+}
+
 check_link() {
   local source=$1
   local target=$2
@@ -28,6 +38,9 @@ check_link() {
 
 check_link "$ROOT/global/AGENTS.md" "$HOME/.codex/AGENTS.md"
 check_link "$ROOT/global/AGENTS.md" "$HOME/.claude/CLAUDE.md"
+
+check_command sourcekit-lsp "install Xcode or the Swift toolchain"
+check_command typescript-language-server "run npm install --global typescript typescript-language-server"
 
 check_skill_collection() {
   local collection=$1
