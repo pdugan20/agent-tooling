@@ -165,7 +165,7 @@ h1 {
 
 .concept-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 28px;
 }
 
@@ -436,6 +436,7 @@ kbd {
 }
 
 .kind,
+.availability,
 .invocation,
 .state {
   padding: 3px 6px;
@@ -446,6 +447,18 @@ kbd {
   font-weight: 750;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+}
+
+.availability.global {
+  color: var(--accent);
+  border-color: transparent;
+  background: var(--accent-soft);
+}
+
+.availability.project {
+  color: #6f4a13;
+  border-color: transparent;
+  background: #f6ead5;
 }
 
 .invocation.automatic {

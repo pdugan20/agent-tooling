@@ -36,9 +36,10 @@ instructions remain machine- or project-local.
 | Machine setup          | Bootstrap, refresh, configuration, and verification      | [`scripts/`](scripts/)                                |
 
 The top-level [`skills/`](skills/) directory intentionally contains only the three workflows maintained here. The
-five third-party skills are installed at project scope by the official `skills` CLI, committed under
-[`.agents/skills/`](.agents/skills/), and tracked by `skills-lock.json`. Do not edit those upstream snapshots by
-hand; use `npm run skills:update` and review the resulting diff.
+seven third-party skills are installed into this repository by the official `skills` CLI, committed under
+[`.agents/skills/`](.agents/skills/), and tracked by `skills-lock.json`. That is their **management scope**. Bootstrap
+links all ten canonical skills into each agent's home-directory skill location, so their **runtime availability** is
+global across repositories. Do not edit upstream snapshots by hand; use `npm run skills:update` and review the diff.
 
 ## Catalog
 
@@ -51,6 +52,20 @@ npm run catalog
 Open [localhost:4173/catalog/](http://127.0.0.1:4173/catalog/). To compare the repository with installed plugins and
 skills on the current Mac, run `npm run catalog:snapshot`, reopen the catalog with `?runtime=local`, and choose
 **This Mac**. The snapshot is private, machine-local, and ignored by Git.
+
+To include repository-scoped skills from a folder of Git checkouts without hardcoding that folder into the setup,
+pass it when creating the private snapshot:
+
+```bash
+npm run catalog:snapshot -- --repos-root /path/to/repositories
+```
+
+The scanner reads only immediate child primary repositories and their canonical `.agents/skills` metadata. Linked
+worktrees are skipped so the catalog does not repeat the same project profile. It does not copy project skills into
+`agent-tooling` or make them global.
+
+The catalog labels effective availability separately from ownership and source. “All repositories” describes where
+the capability can run; it does not mean its canonical source is stored globally or updated outside this repository.
 
 ## Common commands
 
@@ -83,6 +98,7 @@ whitespace.
 ## Documentation
 
 - [Manifest](inventory/manifest.md): ownership, runtime mapping, and what does not sync.
+- [Scope guide](inventory/scope.md): which capabilities are global, which stay with projects, and why.
 - [Maintenance](inventory/maintenance.md): updates, plugin refreshes, Superpowers review, and releases.
 - [Authoring checks](inventory/authoring.md): linting, formatting, validation, and behavioral testing for skills and plugins.
 - [Outstanding work](inventory/next-steps.md): the remaining authentication-dependent and MacBook setup tasks.

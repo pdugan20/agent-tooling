@@ -6,6 +6,24 @@ version when compatibility requires it.
 
 ## [Unreleased]
 
+### Added
+
+- Added Emil Kowalski's upstream-managed `find-animation-opportunities` and `pick-ui-library` skills for both
+  Codex and Claude Code.
+- Documented the audited global-versus-project scope model, including the narrow project-pinned Apple reference
+  profile.
+
+### Changed
+
+- Distinguished canonical management scope from effective runtime availability in the catalog and documentation;
+  shared capabilities are now labeled “All repositories.”
+- Documented the official skills CLI's current update and cross-agent frontmatter limitations so upstream snapshots
+  remain updateable without hidden local forks.
+- Removed Claude's always-on `explanatory-output-style` plugin from desired state because its SessionStart hook adds
+  mandatory educational output and token overhead to every task.
+- Added portable project-skill discovery to the private catalog snapshot with repository and availability filters;
+  repository roots are supplied at runtime and never committed.
+
 ## [0.3.0] - 2026-07-28
 
 ### Added

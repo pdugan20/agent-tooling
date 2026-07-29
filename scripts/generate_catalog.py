@@ -21,6 +21,7 @@ SKILLS_LOCK = ROOT / "skills-lock.json"
 
 UPSTREAM_SOURCE_LABELS = {
     "emilkowalski/skills": "Emil Kowalski",
+    "Prisma-Labs-Dev/apple-skills": "Prisma Labs",
     "twostraws/swiftui-agent-skill": "Paul Hudson",
 }
 
@@ -30,8 +31,10 @@ SKILL_PRIORITY = {
     "swiftui-pro": 3,
     "apple-design": 4,
     "review-animations": 5,
-    "animation-vocabulary": 6,
-    "emil-design-eng": 7,
+    "find-animation-opportunities": 6,
+    "animation-vocabulary": 7,
+    "emil-design-eng": 8,
+    "pick-ui-library": 9,
     "production-hardening": 20,
 }
 
@@ -44,10 +47,17 @@ def load_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def display_path(path: Path) -> str:
+    try:
+        return path.relative_to(ROOT).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
 def read_frontmatter(path: Path) -> dict[str, str]:
     text = path.read_text(encoding="utf-8")
     if not text.startswith("---\n") or "\n---\n" not in text[4:]:
-        raise CatalogError(f"{path.relative_to(ROOT)} has no YAML frontmatter")
+        raise CatalogError(f"{display_path(path)} has no YAML frontmatter")
 
     block = text[4 : text.index("\n---\n", 4)]
     result: dict[str, str] = {}
@@ -114,10 +124,11 @@ def skill_item(
     frontmatter = read_frontmatter(skill_path)
     name = frontmatter.get("name")
     if not name or name != skill_root.name:
-        raise CatalogError(f"{skill_path.relative_to(ROOT)} name must match its directory")
+        raise CatalogError(f"{display_path(skill_path)} name must match its directory")
 
     display_name, short_description, invocation = read_skill_interface(skill_root, frontmatter)
     return {
+        "availability": "Global",
         "description": short_description or frontmatter.get("description", ""),
         "displayName": display_name or humanize_name(name),
         "featured": SKILL_PRIORITY.get(name, 50),
@@ -134,6 +145,73 @@ def skill_item(
     }
 
 
+def project_skill_items(repos_root: Path) -> list[dict[str, Any]]:
+    if not repos_root.is_dir():
+        raise CatalogError(f"repositories root does not exist: {repos_root}")
+
+    items: list[dict[str, Any]] = []
+    for repository in sorted(
+        path for path in repos_root.iterdir() if path.is_dir() and (path / ".git").is_dir()
+    ):
+        if repository.resolve() == ROOT.resolve():
+            continue
+        skills_root = repository / ".agents/skills"
+        if not skills_root.is_dir():
+            continue
+
+        locked_skills: dict[str, Any] = {}
+        lock_path = repository / "skills-lock.json"
+        if lock_path.is_file():
+            lock_data = load_json(lock_path)
+            if lock_data.get("version") == 1 and isinstance(lock_data.get("skills"), dict):
+                locked_skills = lock_data["skills"]
+
+        for skill_path in sorted(skills_root.glob("*/SKILL.md")):
+            skill_root = skill_path.parent
+            frontmatter = read_frontmatter(skill_path)
+            name = frontmatter.get("name")
+            if not name or name != skill_root.name:
+                raise CatalogError(f"{display_path(skill_path)} name must match its directory")
+
+            display_name, short_description, invocation = read_skill_interface(
+                skill_root, frontmatter
+            )
+            lock_entry = locked_skills.get(name, {})
+            upstream_source = lock_entry.get("source") if isinstance(lock_entry, dict) else None
+            source = "third-party" if upstream_source else "repository"
+            source_label = (
+                UPSTREAM_SOURCE_LABELS.get(upstream_source, upstream_source)
+                if upstream_source
+                else repository.name
+            )
+            claude_skill = repository / ".claude/skills" / name / "SKILL.md"
+            runtimes = ["codex"]
+            if claude_skill.is_file():
+                runtimes.append("claude")
+
+            items.append(
+                {
+                    "availability": "Project",
+                    "description": short_description or frontmatter.get("description", ""),
+                    "displayName": display_name or humanize_name(name),
+                    "featured": 600,
+                    "id": f"project-skill:{repository.name}:{name}",
+                    "invocation": invocation,
+                    "name": name,
+                    "path": f"{repository.name}/.agents/skills/{name}/SKILL.md",
+                    "pathHref": None,
+                    "repository": repository.name,
+                    "runtimes": runtimes,
+                    "source": source,
+                    "sourceLabel": source_label,
+                    "state": "Installed",
+                    "type": "skill",
+                    "version": read_skill_version(skill_path),
+                }
+            )
+    return items
+
+
 def plugin_item(
     plugin_id: str,
     runtimes: list[str],
@@ -142,6 +220,7 @@ def plugin_item(
 ) -> dict[str, Any]:
     name, _marketplace = plugin_id.split("@", 1)
     return {
+        "availability": "Global",
         "description": metadata["description"],
         "displayName": metadata.get("displayName", humanize_name(name)),
         "featured": 100 + index,
@@ -210,7 +289,7 @@ def build_catalog() -> dict[str, Any]:
             "catalog/plugin-metadata.json",
         ],
         "items": items,
-        "schemaVersion": 1,
+        "schemaVersion": 2,
     }
 
 
@@ -234,7 +313,7 @@ def run_json_command(command: list[str]) -> Any:
     return json.loads(completed.stdout)
 
 
-def build_runtime_snapshot() -> dict[str, Any]:
+def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
     canonical = build_catalog()
     canonical_skills = [item for item in canonical["items"] if item["type"] == "skill"]
     plugin_metadata = load_json(PLUGIN_METADATA)
@@ -264,6 +343,7 @@ def build_runtime_snapshot() -> dict[str, Any]:
         desired = desired_ids.get((plugin_id, "codex"))
         items.append(
             {
+                "availability": "Global",
                 "description": (
                     desired["description"]
                     if desired
@@ -293,6 +373,7 @@ def build_runtime_snapshot() -> dict[str, Any]:
         desired = desired_ids.get((plugin_id, "claude"))
         items.append(
             {
+                "availability": "Global",
                 "description": (
                     desired["description"]
                     if desired
@@ -316,11 +397,19 @@ def build_runtime_snapshot() -> dict[str, Any]:
             }
         )
 
+    if repos_root is not None:
+        items.extend(project_skill_items(repos_root))
+
     return {
         "generatedAt": datetime.now(UTC).isoformat(),
         "items": items,
-        "message": "What Codex and Claude currently report as installed on this computer.",
-        "schemaVersion": 1,
+        "message": (
+            "Installed global capabilities and project skills found under the selected "
+            "repositories root."
+            if repos_root is not None
+            else "What Codex and Claude currently report as installed on this computer."
+        ),
+        "schemaVersion": 2,
     }
 
 
@@ -344,12 +433,25 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true")
     parser.add_argument("--snapshot-runtime", action="store_true")
+    parser.add_argument(
+        "--repos-root",
+        type=Path,
+        help=(
+            "Include project-scoped skills from immediate child repositories in the private "
+            "snapshot."
+        ),
+    )
     args = parser.parse_args()
+
+    if args.repos_root is not None and not args.snapshot_runtime:
+        parser.error("--repos-root requires --snapshot-runtime")
 
     try:
         write_or_check_catalog(check=args.check)
         if args.snapshot_runtime:
-            RUNTIME_DATA.write_text(rendered_json(build_runtime_snapshot()), encoding="utf-8")
+            RUNTIME_DATA.write_text(
+                rendered_json(build_runtime_snapshot(args.repos_root)), encoding="utf-8"
+            )
             print(f"Generated private snapshot {RUNTIME_DATA.relative_to(ROOT)}.")
             print("Open /catalog/?runtime=local and choose This Mac to view it.")
     except (CatalogError, OSError, json.JSONDecodeError, subprocess.CalledProcessError) as error:
