@@ -19,6 +19,23 @@ This is the authoritative map of Patrick's shared Claude and Codex setup. The pr
 
 Do not edit generated runtime cache files. Edit this repository, rerun the setup scripts, and start a new task.
 
+## Scope model
+
+Scope has three independent meanings:
+
+- **Management scope** identifies the Git repository and lockfile that own an artifact's canonical source.
+- **Runtime availability** identifies whether the artifact can run in every repository or only a particular project.
+- **Persistence scope** identifies whether a setting is shared through Git, stored for one user, or kept only in a
+  machine-local settings file.
+
+The official `skills` CLI reports the locked upstream collection as project-scoped because `agent-tooling` owns its
+snapshots and lockfile. `bootstrap.sh` then links every canonical skill into `~/.agents/skills` and
+`~/.claude/skills`, making those skills globally available at runtime. Repository-specific skills instead live in
+that repository's `.agents/skills`, with Claude compatibility links in `.claude/skills`. Machine-only plugin choices
+belong in `.claude/settings.local.json` and do not sync.
+
+See [`scope.md`](scope.md) for the audited global profile, project profiles, and placement rules.
+
 ## Locally maintained workflows
 
 These are authored or adapted as part of this repository and live under `skills/`:
@@ -42,6 +59,8 @@ and content hashes in `skills-lock.json`.
 | `animation-vocabulary` | `emilkowalski/skills`                      | Emil Kowalski  |
 | `apple-design`         | `emilkowalski/skills`                      | Emil Kowalski  |
 | `emil-design-eng`      | `emilkowalski/skills`                      | Emil Kowalski  |
+| `find-animation-opportunities` | `emilkowalski/skills`              | Emil Kowalski  |
+| `pick-ui-library`      | `emilkowalski/skills`                      | Emil Kowalski  |
 | `review-animations`    | `emilkowalski/skills`                      | Emil Kowalski  |
 | `swiftui-pro`          | `twostraws/swiftui-agent-skill`            | Paul Hudson    |
 
@@ -120,7 +139,6 @@ Generated-image ideation is opt-in. Code-native UI ideation in the actual browse
 - `code-review`
 - `code-simplifier`
 - `commit-commands`
-- `explanatory-output-style`
 - `feature-dev`
 - `frontend-design`
 - `mintlify-docs@pdugan20-plugins`
@@ -132,6 +150,9 @@ Generated-image ideation is opt-in. Code-native UI ideation in the actual browse
 `configure-claude.py` enables the configured fork and disables `superpowers@claude-plugins-official` so only the
 policy-controlled copy is active. Disabled, project-local, and historical Claude plugins are not part of the desired
 setup unless added to `config/claude-plugins.txt`.
+
+`explanatory-output-style` is intentionally excluded: its SessionStart hook adds mandatory educational “Insight”
+blocks to every task, increasing verbosity and token use during lightweight iteration without adding tools.
 
 ## What does not sync through Git
 

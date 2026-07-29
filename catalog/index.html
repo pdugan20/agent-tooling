@@ -65,6 +65,14 @@
                 when asked” means you must request it directly.
               </p>
             </div>
+            <div>
+              <strong>Availability</strong>
+              <p>
+                “All repositories” means bootstrap exposes it globally, even
+                when its locked source is managed inside this repository.
+                Project-only capabilities live with their own repository.
+              </p>
+            </div>
           </div>
           <p class="delivery-explainer">
             <strong>Managed here</strong> identifies workflows maintained in
@@ -169,6 +177,15 @@
               </select>
             </label>
 
+            <label class="select-wrap availability-filter" hidden>
+              <span class="sr-only">Filter by availability</span>
+              <select id="availability">
+                <option value="all">All availability</option>
+                <option value="global">All repositories</option>
+                <option value="project">Project only</option>
+              </select>
+            </label>
+
             <label class="select-wrap">
               <span class="sr-only">Filter by source</span>
               <select id="source">
@@ -226,6 +243,7 @@
             <div class="title-line">
               <h3></h3>
               <span class="kind"></span>
+              <span class="availability"></span>
               <span class="invocation"></span>
               <span class="state"></span>
             </div>

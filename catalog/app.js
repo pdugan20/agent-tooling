@@ -26,6 +26,7 @@ const collections = {
 const state = {
   query: "",
   type: "all",
+  availability: "all",
   runtime: "all",
   source: "all",
   status: "all",
@@ -35,6 +36,7 @@ const state = {
 
 const elements = {
   activeFilters: document.querySelector("#active-filters"),
+  availability: document.querySelector("#availability"),
   empty: document.querySelector("#empty"),
   emptyCopy: document.querySelector("#empty-copy"),
   environment: document.querySelector("#environment"),
@@ -60,6 +62,13 @@ const matchesRuntime = (item) => {
   return item.runtimes.includes(state.runtime);
 };
 
+const matchesAvailability = (item) => {
+  if (state.availability === "all") return true;
+  if (state.availability === "global") return item.availability === "Global";
+  if (state.availability === "project") return item.availability === "Project";
+  return item.repository === state.availability.replace(/^repo:/, "");
+};
+
 const filteredItems = () => {
   const query = state.query.trim().toLowerCase();
   const filtered = activeItems().filter((item) => {
@@ -69,6 +78,8 @@ const filteredItems = () => {
       item.pluginId,
       item.description,
       item.sourceLabel,
+      item.availability,
+      item.repository,
       item.invocation,
       item.state,
       item.version,
@@ -79,6 +90,7 @@ const filteredItems = () => {
     return (
       (!query || haystack.includes(query)) &&
       (state.type === "all" || item.type === state.type) &&
+      matchesAvailability(item) &&
       matchesRuntime(item) &&
       (state.source === "all" || item.source === state.source) &&
       (state.status === "all" || item.state === state.status)
@@ -133,6 +145,24 @@ const renderScope = () => {
     ? "The setup saved in GitHub and used when configuring a new computer."
     : runtimeCatalog.message;
   document.querySelector(".status-filter").hidden = isCanonical;
+  document.querySelector(".availability-filter").hidden = isCanonical;
+};
+
+const refreshAvailabilityOptions = () => {
+  const repositories = [
+    ...new Set(
+      runtimeCatalog.items.map((item) => item.repository).filter(Boolean),
+    ),
+  ].sort();
+  elements.availability.replaceChildren(
+    new Option("All availability", "all"),
+    new Option("All repositories", "global"),
+    new Option("Project only", "project"),
+    ...repositories.map(
+      (repository) => new Option(repository, `repo:${repository}`),
+    ),
+  );
+  elements.availability.value = state.availability;
 };
 
 const render = () => {
@@ -146,6 +176,16 @@ const render = () => {
     fragment.querySelector("h3").textContent = item.displayName || item.name;
     fragment.querySelector(".kind").textContent =
       item.type === "skill" ? "Skill" : "Plugin";
+    const availability = fragment.querySelector(".availability");
+    availability.textContent =
+      item.availability === "Global"
+        ? "All repositories"
+        : item.repository
+          ? `Only ${item.repository}`
+          : item.availability;
+    availability.classList.add(
+      item.availability === "Global" ? "global" : "project",
+    );
     fragment.querySelector(".description").textContent = item.description;
 
     const invocation = fragment.querySelector(".invocation");
@@ -169,7 +209,11 @@ const render = () => {
     const path = fragment.querySelector(".path");
     if (item.path) {
       path.textContent = item.path;
-      path.href = `../${item.path}`;
+      if (item.pathHref === null) {
+        path.removeAttribute("href");
+      } else {
+        path.href = item.pathHref || `../${item.path}`;
+      }
     } else {
       path.remove();
     }
@@ -209,6 +253,11 @@ const renderFilterChips = () => {
       "Search",
       state.query,
       () => ((state.query = ""), (elements.search.value = "")),
+    ],
+    state.availability !== "all" && [
+      "Availability",
+      elements.availability.selectedOptions[0].text,
+      () => setSelect("availability", "all"),
     ],
     state.runtime !== "all" && [
       "App",
@@ -261,10 +310,12 @@ const setPressed = (selector, activeButton) => {
 const resetFilters = () => {
   state.query = "";
   state.type = "all";
+  state.availability = "all";
   state.runtime = "all";
   state.source = "all";
   state.status = "all";
   elements.search.value = "";
+  elements.availability.value = "all";
   elements.runtime.value = "all";
   elements.source.value = "all";
   elements.status.value = "all";
@@ -277,7 +328,7 @@ elements.search.addEventListener("input", (event) => {
   render();
 });
 
-["runtime", "source", "status", "sort"].forEach((key) => {
+["availability", "runtime", "source", "status", "sort"].forEach((key) => {
   elements[key].addEventListener("change", (event) => {
     state[key] = event.target.value;
     render();
@@ -313,4 +364,5 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+refreshAvailabilityOptions();
 render();

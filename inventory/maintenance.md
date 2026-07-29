@@ -17,7 +17,7 @@ but active tasks retain the skill inventory loaded when they started.
 
 ## Update upstream skills
 
-The five third-party skills in `.agents/skills/` are project-scoped installations managed by the official
+The seven third-party skills in `.agents/skills/` are project-scoped installations managed by the official
 [`skills` CLI](https://github.com/vercel-labs/skills). Their exact GitHub sources and content hashes live in
 `skills-lock.json`; the repository does not maintain hand-copied versions under `skills/`.
 

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import tempfile
 import unittest
+from pathlib import Path
 
 import generate_catalog
 
@@ -10,9 +12,11 @@ class CatalogGenerationTests(unittest.TestCase):
         catalog = generate_catalog.build_catalog()
         items = catalog["items"]
 
-        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 8)
-        self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 20)
+        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 10)
+        self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 19)
         self.assertEqual(len({item["id"] for item in items}), len(items))
+        self.assertEqual({item["availability"] for item in items}, {"Global"})
+        self.assertEqual(catalog["schemaVersion"], 2)
 
     def test_custom_invocation_policy_is_visible(self) -> None:
         items = generate_catalog.build_catalog()["items"]
@@ -56,6 +60,14 @@ class CatalogGenerationTests(unittest.TestCase):
                     "Emil Kowalski",
                     ".agents/skills/emil-design-eng/SKILL.md",
                 ),
+                "find-animation-opportunities": (
+                    "Emil Kowalski",
+                    ".agents/skills/find-animation-opportunities/SKILL.md",
+                ),
+                "pick-ui-library": (
+                    "Emil Kowalski",
+                    ".agents/skills/pick-ui-library/SKILL.md",
+                ),
                 "review-animations": (
                     "Emil Kowalski",
                     ".agents/skills/review-animations/SKILL.md",
@@ -92,6 +104,34 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertEqual(len(plugins), 1)
         self.assertEqual(plugins[0]["runtimes"], ["codex", "claude"])
         self.assertEqual(plugins[0]["sourceLabel"], "Pat Dugan")
+
+    def test_project_snapshot_discovers_shared_repository_skills(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            repos_root = Path(temporary)
+            repository = repos_root / "example-app"
+            (repository / ".git").mkdir(parents=True)
+            skill_root = repository / ".agents/skills/example-skill"
+            skill_root.mkdir(parents=True)
+            (skill_root / "SKILL.md").write_text(
+                "---\n"
+                "name: example-skill\n"
+                "description: Example project workflow.\n"
+                "---\n\n"
+                "# Example\n",
+                encoding="utf-8",
+            )
+            claude_skills = repository / ".claude/skills"
+            claude_skills.mkdir(parents=True)
+            (claude_skills / "example-skill").symlink_to(Path("../../.agents/skills/example-skill"))
+
+            items = generate_catalog.project_skill_items(repos_root)
+
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0]["availability"], "Project")
+        self.assertEqual(items[0]["repository"], "example-app")
+        self.assertEqual(items[0]["runtimes"], ["codex", "claude"])
+        self.assertEqual(items[0]["source"], "repository")
+        self.assertIsNone(items[0]["pathHref"])
 
 
 if __name__ == "__main__":

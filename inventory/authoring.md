@@ -33,6 +33,13 @@ npm run verify
 pre-commit validators, repository policy checks, and secret scanning. ClaudeLint applies strict rules only to the
 three workflows maintained here; official CLI-managed upstream snapshots are intentionally immutable.
 
+The Agent Skills specification permits only its portable frontmatter fields. Some upstream packages intentionally
+include agent-specific fields such as Claude's `context: fork` or `disable-model-invocation`; the official `skills`
+CLI does not transform those fields for Codex. Keep locked upstream snapshots unmodified and treat that validator
+output as a compatibility warning to review, not a reason to fork the skill. Apply runtime policy through
+`agents/openai.yaml`, Claude `skillOverrides`, or repository instructions when the source already supports that
+separation.
+
 For Mintlify Docs:
 
 ```bash

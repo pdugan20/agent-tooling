@@ -29,6 +29,11 @@ UPSTREAM_SKILLS = {
     "animation-vocabulary": ("emilkowalski/skills", "skills/animation-vocabulary/SKILL.md"),
     "apple-design": ("emilkowalski/skills", "skills/apple-design/SKILL.md"),
     "emil-design-eng": ("emilkowalski/skills", "skills/emil-design-eng/SKILL.md"),
+    "find-animation-opportunities": (
+        "emilkowalski/skills",
+        "skills/find-animation-opportunities/SKILL.md",
+    ),
+    "pick-ui-library": ("emilkowalski/skills", "skills/pick-ui-library/SKILL.md"),
     "review-animations": ("emilkowalski/skills", "skills/review-animations/SKILL.md"),
     "swiftui-pro": ("twostraws/swiftui-agent-skill", "swiftui-pro/SKILL.md"),
 }

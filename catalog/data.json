@@ -10,6 +10,7 @@
   ],
   "items": [
     {
+      "availability": "Global",
       "description": "Deliver substantial production-ready features",
       "displayName": "Feature Delivery",
       "featured": 1,
@@ -28,6 +29,7 @@
       "version": "Git"
     },
     {
+      "availability": "Global",
       "description": "Explore UI directions in runnable code",
       "displayName": "Code-Native UI Ideation",
       "featured": 2,
@@ -46,6 +48,7 @@
       "version": "Git"
     },
     {
+      "availability": "Global",
       "description": "Reviews SwiftUI code for modern best practices.",
       "displayName": "SwiftUI Pro",
       "featured": 3,
@@ -64,6 +67,7 @@
       "version": "1.1"
     },
     {
+      "availability": "Global",
       "description": "Apple's approach to interface design and fluid, physical motion, translated for the web. Use when building or reviewing gesture-driven UI, spring animations, drag/swipe/sheet interactions, momentum and interruptible transitions, translucent materials and depth, typography (optical sizing, tracking, leading), reduced-motion, or the design foundations (feedback, spatial consistency, restraint) behind Apple-style interfaces.",
       "displayName": "Apple Design",
       "featured": 4,
@@ -82,6 +86,7 @@
       "version": "Git"
     },
     {
+      "availability": "Global",
       "description": "Reviews animation and motion code against a high craft bar derived from Emil Kowalski's design engineering philosophy. Default to flagging; approval is earned.",
       "displayName": "Review Animations",
       "featured": 5,
@@ -100,9 +105,29 @@
       "version": "Git"
     },
     {
+      "availability": "Global",
+      "description": "Search a codebase or UI for places that don't animate but should, and reject everything that shouldn't. Read-only; it proposes motion with exact values, it does not implement it. Use when the user asks \"what could be animated here?\" or wants to \"make this feel more alive\". For fixing existing animations, use improve-animations or review-animations instead.",
+      "displayName": "Find Animation Opportunities",
+      "featured": 6,
+      "id": "skill:find-animation-opportunities",
+      "invocation": "Automatic",
+      "name": "find-animation-opportunities",
+      "path": ".agents/skills/find-animation-opportunities/SKILL.md",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "third-party",
+      "sourceLabel": "Emil Kowalski",
+      "state": "Configured",
+      "type": "skill",
+      "version": "Git"
+    },
+    {
+      "availability": "Global",
       "description": "Reverse-lookup glossary that turns a vague description of a web animation or motion effect into its exact term (\"the bouncy thing when a popover opens\" \u2192 Pop in; \"the iOS rubber-band scroll\" \u2192 Rubber-banding). Use when the user asks \"what's it called when\u2026\", or describes a motion effect without knowing its name and wants the right word to prompt an AI or designer with. For naming an effect, not designing or building one.",
       "displayName": "Animation Vocabulary",
-      "featured": 6,
+      "featured": 7,
       "id": "skill:animation-vocabulary",
       "invocation": "Automatic",
       "name": "animation-vocabulary",
@@ -118,9 +143,10 @@
       "version": "Git"
     },
     {
+      "availability": "Global",
       "description": "This skill encodes Emil Kowalski's philosophy on UI polish, component design, animation decisions, and the invisible details that make software feel great.",
       "displayName": "Emil Design ENG",
-      "featured": 7,
+      "featured": 8,
       "id": "skill:emil-design-eng",
       "invocation": "Automatic",
       "name": "emil-design-eng",
@@ -136,6 +162,26 @@
       "version": "Git"
     },
     {
+      "availability": "Global",
+      "description": "Pick the right library for a given frontend task from a curated, opinionated list \u2014 numbers, OTP inputs, charts, command menus, virtualization, drag and drop, toasts, state, styling, and more. Only runs when explicitly invoked; it does not trigger on its own.",
+      "displayName": "Pick UI Library",
+      "featured": 9,
+      "id": "skill:pick-ui-library",
+      "invocation": "Explicit",
+      "name": "pick-ui-library",
+      "path": ".agents/skills/pick-ui-library/SKILL.md",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "third-party",
+      "sourceLabel": "Emil Kowalski",
+      "state": "Configured",
+      "type": "skill",
+      "version": "Git"
+    },
+    {
+      "availability": "Global",
       "description": "Harden a selected implementation for release",
       "displayName": "Production Hardening",
       "featured": 20,
@@ -154,6 +200,7 @@
       "version": "Git"
     },
     {
+      "availability": "Global",
       "description": "The upstream Superpowers plugin with a small maintained policy patch: strict workflows are explicit-only, the always-on session bootstrap is disabled, and browser option-picking is removed.",
       "displayName": "Superpowers (Configured)",
       "featured": 100,
@@ -173,6 +220,7 @@
       "version": "6.2.0-config.2"
     },
     {
+      "availability": "Global",
       "description": "Firebase, Firestore, Auth, hosting, rules, and Xcode setup guidance.",
       "displayName": "Firebase",
       "featured": 101,
@@ -191,6 +239,7 @@
       "version": "Managed"
     },
     {
+      "availability": "Global",
       "description": "Workers, Durable Objects, Wrangler, web performance, and Cloudflare platform skills.",
       "displayName": "Cloudflare",
       "featured": 102,
@@ -209,6 +258,7 @@
       "version": "Managed"
     },
     {
+      "availability": "Global",
       "description": "Build and maintain Mintlify documentation sites.",
       "displayName": "Mintlify",
       "featured": 103,
@@ -227,6 +277,7 @@
       "version": "Managed"
     },
     {
+      "availability": "Global",
       "description": "House-style workflows for Mintlify information architecture, editorial review, changelogs, and drift-checked reference documentation.",
       "displayName": "Mintlify Docs",
       "featured": 104,
@@ -246,6 +297,7 @@
       "version": "0.3.0"
     },
     {
+      "availability": "Global",
       "description": "Figma design context, design-to-code, Code Connect, SwiftUI, and motion workflows.",
       "displayName": "Figma",
       "featured": 105,
@@ -264,6 +316,7 @@
       "version": "Managed"
     },
     {
+      "availability": "Global",
       "description": "Repository, pull request, review, CI, and publishing workflows.",
       "displayName": "GitHub",
       "featured": 106,
@@ -282,6 +335,7 @@
       "version": "Managed"
     },
     {
+      "availability": "Global",
       "description": "Inspect and triage Sentry issues, events, and production diagnostics.",
       "displayName": "Sentry",
       "featured": 107,
@@ -300,6 +354,7 @@
       "version": "Managed"
     },
     {
+      "availability": "Global",
       "description": "Expo and React Native project workflows and platform guidance.",
       "displayName": "Expo",
       "featured": 108,
@@ -318,6 +373,7 @@
       "version": "Managed"
     },
     {
+      "availability": "Global",
       "description": "Next.js, React, deployment, browser verification, and Vercel platform skills.",
       "displayName": "Vercel",
       "featured": 109,
@@ -336,6 +392,7 @@
       "version": "Managed"
     },
     {
+      "availability": "Global",
       "description": "Configure Claude Code projects and user environments.",
       "displayName": "Claude Code Setup",
       "featured": 110,
@@ -354,6 +411,7 @@
       "version": "Managed"
     },
     {
+      "availability": "Global",
       "description": "Review code changes for correctness, quality, and regressions.",
       "displayName": "Code Review",
       "featured": 111,
@@ -372,6 +430,7 @@
       "version": "Managed"
     },
     {
+      "availability": "Global",
       "description": "Reduce unnecessary complexity while preserving behavior.",
       "displayName": "Code Simplifier",
       "featured": 112,
@@ -390,6 +449,7 @@
       "version": "Managed"
     },
     {
+      "availability": "Global",
       "description": "Claude-native commands for structured Git commits.",
       "displayName": "Commit Commands",
       "featured": 113,
@@ -408,27 +468,10 @@
       "version": "Managed"
     },
     {
-      "description": "A more explanatory response style for unfamiliar technical work.",
-      "displayName": "Explanatory Output Style",
-      "featured": 114,
-      "id": "plugin:explanatory-output-style@claude-plugins-official",
-      "invocation": null,
-      "name": "explanatory-output-style",
-      "path": "config/claude-plugins.txt",
-      "pluginId": "explanatory-output-style@claude-plugins-official",
-      "runtimes": [
-        "claude"
-      ],
-      "source": "anthropic",
-      "sourceLabel": "Anthropic official",
-      "state": "Configured",
-      "type": "plugin",
-      "version": "Managed"
-    },
-    {
+      "availability": "Global",
       "description": "Guided feature implementation workflows for Claude Code.",
       "displayName": "Feature DEV",
-      "featured": 115,
+      "featured": 114,
       "id": "plugin:feature-dev@claude-plugins-official",
       "invocation": null,
       "name": "feature-dev",
@@ -444,9 +487,10 @@
       "version": "Managed"
     },
     {
+      "availability": "Global",
       "description": "Frontend interface design and implementation guidance.",
       "displayName": "Frontend Design",
-      "featured": 116,
+      "featured": 115,
       "id": "plugin:frontend-design@claude-plugins-official",
       "invocation": null,
       "name": "frontend-design",
@@ -462,9 +506,10 @@
       "version": "Managed"
     },
     {
+      "availability": "Global",
       "description": "Create and improve reusable Claude skills.",
       "displayName": "Skill Creator",
-      "featured": 117,
+      "featured": 116,
       "id": "plugin:skill-creator@claude-plugins-official",
       "invocation": null,
       "name": "skill-creator",
@@ -480,9 +525,10 @@
       "version": "Managed"
     },
     {
+      "availability": "Global",
       "description": "Swift language-server integration for Claude Code.",
       "displayName": "Swift LSP",
-      "featured": 118,
+      "featured": 117,
       "id": "plugin:swift-lsp@claude-plugins-official",
       "invocation": null,
       "name": "swift-lsp",
@@ -498,9 +544,10 @@
       "version": "Managed"
     },
     {
+      "availability": "Global",
       "description": "TypeScript language-server integration for Claude Code.",
       "displayName": "Typescript LSP",
-      "featured": 119,
+      "featured": 118,
       "id": "plugin:typescript-lsp@claude-plugins-official",
       "invocation": null,
       "name": "typescript-lsp",
@@ -516,5 +563,5 @@
       "version": "Managed"
     }
   ],
-  "schemaVersion": 1
+  "schemaVersion": 2
 }
