@@ -19,6 +19,7 @@ ensure_marketplace() {
 
 ensure_marketplace pdugan20-plugins https://github.com/pdugan20/pdugan20-plugins.git
 ensure_marketplace superpowers-configured https://github.com/pdugan20/superpowers.git
+ensure_marketplace mintlify-marketplace https://github.com/mintlify/mintlify-claude-plugin.git
 
 codex plugin marketplace upgrade
 
@@ -30,4 +31,5 @@ done <"$ROOT/config/codex-plugins.txt"
 
 python3 "$ROOT/scripts/configure-codex.py" --config "$HOME/.codex/config.toml"
 
-echo "Configured Codex plugins refreshed. Start a new Codex task to load them."
+echo "Marketplace-installed Codex plugins refreshed."
+echo "Codex-managed plugins update separately through the Plugins tab. Start a new task to load changes."

@@ -2,6 +2,7 @@ claude-code-setup@claude-plugins-official
 code-review@claude-plugins-official
 code-simplifier@claude-plugins-official
 commit-commands@claude-plugins-official
+expo@claude-plugins-official
 feature-dev@claude-plugins-official
 frontend-design@claude-plugins-official
 mintlify-docs@pdugan20-plugins

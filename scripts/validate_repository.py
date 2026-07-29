@@ -217,7 +217,11 @@ def validate_repository() -> None:
             )
 
     plugin_manifests: dict[str, list[str]] = {}
-    for manifest_path in (ROOT / "config/codex-plugins.txt", ROOT / "config/claude-plugins.txt"):
+    for manifest_path in (
+        ROOT / "config/codex-plugins.txt",
+        ROOT / "config/codex-managed-plugins.txt",
+        ROOT / "config/claude-plugins.txt",
+    ):
         entries = [
             line.strip()
             for line in manifest_path.read_text(encoding="utf-8").splitlines()
@@ -238,11 +242,45 @@ def validate_repository() -> None:
     if plugin_id not in plugin_manifests["claude-plugins.txt"]:
         raise ValidationError("configured Superpowers must be desired in Claude")
     mintlify_docs_id = "mintlify-docs@pdugan20-plugins"
-    if not all(mintlify_docs_id in entries for entries in plugin_manifests.values()):
+    if not all(
+        mintlify_docs_id in plugin_manifests[name]
+        for name in ("codex-plugins.txt", "claude-plugins.txt")
+    ):
         raise ValidationError("mintlify-docs must be desired in both Codex and Claude")
-    retired_ids = {"patrick-delivery@personal", "superpowers@claude-plugins-official"}
+    expo_id = "expo@claude-plugins-official"
+    if expo_id not in plugin_manifests["codex-plugins.txt"]:
+        raise ValidationError("the current vendor-backed Expo plugin must be desired in Codex")
+    if expo_id not in plugin_manifests["claude-plugins.txt"]:
+        raise ValidationError("the current vendor-backed Expo plugin must be desired in Claude")
+    required_direct_codex_plugins = {
+        "mintlify@mintlify-marketplace",
+        "sentry@claude-plugins-official",
+    }
+    if not required_direct_codex_plugins <= set(plugin_manifests["codex-plugins.txt"]):
+        raise ValidationError("vendor-backed Mintlify and Sentry plugins must be desired in Codex")
+    required_managed_codex_plugins = {
+        "figma@openai-curated-remote",
+        "github@openai-curated-remote",
+        "vercel@openai-curated-remote",
+    }
+    if not required_managed_codex_plugins <= set(plugin_manifests["codex-managed-plugins.txt"]):
+        raise ValidationError("Figma, GitHub, and Vercel must remain Codex-managed")
+    if set(plugin_manifests["codex-plugins.txt"]) & set(
+        plugin_manifests["codex-managed-plugins.txt"]
+    ):
+        raise ValidationError("Codex-managed plugins cannot also be CLI-managed")
+    retired_ids = {
+        "patrick-delivery@personal",
+        "superpowers@claude-plugins-official",
+        "expo@openai-curated",
+        "sentry@openai-curated",
+        "mintlify@claude-plugins-official",
+        "figma@openai-curated",
+        "github@openai-curated",
+        "vercel@openai-curated",
+    }
     if any(retired_ids & set(entries) for entries in plugin_manifests.values()):
-        raise ValidationError("retired delivery or official Superpowers plugins remain desired")
+        raise ValidationError("retired or superseded plugins remain desired")
 
     for workflow_path in (
         ROOT / ".github/workflows/ci.yml",

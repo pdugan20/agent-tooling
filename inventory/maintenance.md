@@ -114,17 +114,43 @@ metadata—not installation paths, credentials, or plugin configuration—and is
 
 ## Refresh installed Codex plugins
 
+### Choose a plugin source
+
+Prefer a vendor-maintained Git marketplace when the vendor package explicitly supports Codex and provides the full
+capability without losing a Codex-connected app. Use a Codex-curated package when it adds material app integration or
+Codex-specific compatibility. Use one active source per plugin, and never fill a version gap by copying individual
+plugin skills into this repository.
+
+The current source decisions are intentional:
+
+- vendor-backed Git packages: Expo, Sentry, Mintlify, Firebase, and Cloudflare;
+- Codex-managed packages: Figma, GitHub, and Vercel;
+- maintained personal sources: configured Superpowers and Mintlify Docs.
+
+Review direct packages for hooks, telemetry, authentication changes, manifest compatibility, removed capabilities,
+and skill-name collisions before changing this split. A higher version alone is not enough: for example, direct
+Vercel is newer but replaces the richer connected app with a read-only MCP and adds automatic session hooks plus
+default-on telemetry.
+
 Run:
 
 ```bash
 ./scripts/refresh-codex-plugins.sh
 ```
 
+This command does not install or refresh `config/codex-managed-plugins.txt`. Codex owns that account/workspace layer;
+use the Plugins tab to install missing entries and inspect their current versions. Do not add CLI copies of those
+plugins to compensate for a missing or delayed UI installation.
+
 The script refreshes Git marketplace snapshots, re-adds every configured plugin in place, reapplies the Product Design skill overrides, and reminds you to start a new task. Re-adding an installed plugin refreshes its recorded version without an uninstall. OpenAI-curated and bundled local marketplaces are refreshed by Codex application or CLI updates; the add uses whichever snapshot that installation currently exposes.
 
-The installer also removes retired plugin state through `codex plugin remove`, including orphaned caches whose
-marketplace has already been removed. `./scripts/verify-setup.sh` fails if Patrick Delivery or an unconfigured
-Superpowers copy remains installed or cached.
+The installer also removes retired and superseded CLI plugin state through `codex plugin remove`, including orphaned
+caches from personal or removed marketplaces. Shared marketplaces may retain inert downloaded package caches after
+removal; `codex plugin list --json` and the Plugins tab determine active installed state. `./scripts/verify-setup.sh`
+fails if Patrick Delivery, an unconfigured Superpowers copy, the former Expo, Sentry, or Mintlify package, or a
+duplicate CLI copy of Figma, GitHub, or Vercel remains installed. Account-managed plugins listed in
+`config/codex-managed-plugins.txt` must be checked in the Codex Plugins tab because the CLI does not authoritatively
+report that separate layer.
 
 The current Codex CLI has no `plugin update` command. Its relevant refresh primitives are `codex plugin marketplace upgrade` and `codex plugin add`.
 

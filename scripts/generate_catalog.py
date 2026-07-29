@@ -217,6 +217,9 @@ def plugin_item(
     runtimes: list[str],
     metadata: dict[str, Any],
     index: int,
+    *,
+    path: str | None = None,
+    state: str = "Configured",
 ) -> dict[str, Any]:
     name, _marketplace = plugin_id.split("@", 1)
     return {
@@ -227,12 +230,12 @@ def plugin_item(
         "id": f"plugin:{plugin_id}",
         "invocation": None,
         "name": name,
-        "path": metadata.get("path", f"config/{runtimes[0]}-plugins.txt"),
+        "path": path or metadata.get("path", f"config/{runtimes[0]}-plugins.txt"),
         "pluginId": plugin_id,
         "runtimes": runtimes,
         "source": metadata["source"],
         "sourceLabel": metadata["sourceLabel"],
-        "state": "Configured",
+        "state": state,
         "type": "plugin",
         "version": metadata.get("version", "Managed"),
     }
@@ -266,7 +269,10 @@ def build_catalog() -> dict[str, Any]:
         for plugin_id in read_plugin_entries(manifest_path):
             configured.setdefault(plugin_id, []).append(runtime)
 
-    configured_ids = set(configured)
+    managed_codex_path = ROOT / "config/codex-managed-plugins.txt"
+    managed_codex = read_plugin_entries(managed_codex_path)
+
+    configured_ids = set(configured) | set(managed_codex)
     metadata_ids = set(plugin_metadata)
     if configured_ids != metadata_ids:
         missing = sorted(configured_ids - metadata_ids)
@@ -277,6 +283,18 @@ def build_catalog() -> dict[str, Any]:
         plugin_item(plugin_id, runtimes, plugin_metadata[plugin_id], index)
         for index, (plugin_id, runtimes) in enumerate(configured.items())
     ]
+    managed_start_index = len(plugin_items)
+    plugin_items.extend(
+        plugin_item(
+            plugin_id,
+            ["codex"],
+            plugin_metadata[plugin_id],
+            managed_start_index + index,
+            path="config/codex-managed-plugins.txt",
+            state="Managed by Codex",
+        )
+        for index, plugin_id in enumerate(managed_codex)
+    )
     items = sorted(skill_items + plugin_items, key=lambda item: (item["featured"], item["name"]))
     return {
         "generatedFrom": [
@@ -285,6 +303,7 @@ def build_catalog() -> dict[str, Any]:
             "skills-lock.json",
             "config/superpowers.json",
             "config/codex-plugins.txt",
+            "config/codex-managed-plugins.txt",
             "config/claude-plugins.txt",
             "catalog/plugin-metadata.json",
         ],

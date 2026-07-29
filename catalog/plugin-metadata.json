@@ -17,10 +17,10 @@
     "source": "third-party",
     "sourceLabel": "Cloudflare"
   },
-  "mintlify@claude-plugins-official": {
+  "mintlify@mintlify-marketplace": {
     "description": "Build and maintain Mintlify documentation sites.",
     "source": "third-party",
-    "sourceLabel": "Mintlify"
+    "sourceLabel": "Mintlify direct"
   },
   "mintlify-docs@pdugan20-plugins": {
     "description": "House-style workflows for Mintlify information architecture, editorial review, changelogs, and drift-checked reference documentation.",
@@ -29,30 +29,54 @@
     "sourceLabel": "Pat Dugan",
     "version": "0.3.0"
   },
-  "figma@openai-curated": {
+  "data-analytics@openai-curated-remote": {
+    "description": "Product and business analysis, KPI, reporting, dashboard, and data-quality workflows supplied by Codex.",
+    "displayName": "Data Analytics",
+    "source": "openai",
+    "sourceLabel": "Managed by Codex"
+  },
+  "figma@openai-curated-remote": {
     "description": "Figma design context, design-to-code, Code Connect, SwiftUI, and motion workflows.",
     "source": "openai",
-    "sourceLabel": "OpenAI curated"
+    "sourceLabel": "Managed by Codex"
   },
-  "github@openai-curated": {
+  "github@openai-curated-remote": {
     "description": "Repository, pull request, review, CI, and publishing workflows.",
     "source": "openai",
-    "sourceLabel": "OpenAI curated"
+    "sourceLabel": "Managed by Codex"
   },
-  "sentry@openai-curated": {
-    "description": "Inspect and triage Sentry issues, events, and production diagnostics.",
+  "openai-developers@openai-curated-remote": {
+    "description": "OpenAI API, Agents SDK, and ChatGPT Apps development workflows supplied by Codex.",
+    "displayName": "OpenAI Developers",
     "source": "openai",
-    "sourceLabel": "OpenAI curated"
+    "sourceLabel": "Managed by Codex"
   },
-  "expo@openai-curated": {
-    "description": "Expo and React Native project workflows and platform guidance.",
+  "product-design@openai-curated-remote": {
+    "description": "Product audit and source-to-code workflows; generated-image ideation remains disabled by personal policy.",
+    "displayName": "Product Design",
     "source": "openai",
-    "sourceLabel": "OpenAI curated"
+    "sourceLabel": "Managed by Codex"
   },
-  "vercel@openai-curated": {
-    "description": "Next.js, React, deployment, browser verification, and Vercel platform skills.",
+  "slack@openai-curated-remote": {
+    "description": "Slack reading, summarization, triage, drafting, and messaging workflows supplied by Codex.",
+    "displayName": "Slack",
+    "source": "openai",
+    "sourceLabel": "Managed by Codex"
+  },
+  "sentry@claude-plugins-official": {
+    "description": "Set up Sentry, inspect and debug issues, configure monitoring, and maintain SDK integrations.",
     "source": "third-party",
-    "sourceLabel": "Vercel"
+    "sourceLabel": "Sentry direct"
+  },
+  "expo@claude-plugins-official": {
+    "description": "Current official Expo and React Native framework, EAS, deployment, and platform guidance.",
+    "source": "third-party",
+    "sourceLabel": "Expo direct"
+  },
+  "vercel@openai-curated-remote": {
+    "description": "Next.js, React, deployment, browser verification, and Vercel platform skills.",
+    "source": "openai",
+    "sourceLabel": "Managed by Codex"
   },
   "claude-code-setup@claude-plugins-official": {
     "description": "Configure Claude Code projects and user environments.",

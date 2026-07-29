@@ -1,0 +1,9 @@
+# Installed from the Codex Plugins tab and updated by Codex.
+# These are intentionally not passed to `codex plugin add`.
+data-analytics@openai-curated-remote
+figma@openai-curated-remote
+github@openai-curated-remote
+openai-developers@openai-curated-remote
+product-design@openai-curated-remote
+slack@openai-curated-remote
+vercel@openai-curated-remote

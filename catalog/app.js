@@ -179,7 +179,7 @@ const render = () => {
     const availability = fragment.querySelector(".availability");
     availability.textContent =
       item.availability === "Global"
-        ? "All repositories"
+        ? "All repos"
         : item.repository
           ? `Only ${item.repository}`
           : item.availability;

@@ -1,10 +1,7 @@
 superpowers@superpowers-configured
 firebase@firebase
 cloudflare@cloudflare
-mintlify@claude-plugins-official
+mintlify@mintlify-marketplace
 mintlify-docs@pdugan20-plugins
-figma@openai-curated
-github@openai-curated
-sentry@openai-curated
-expo@openai-curated
-vercel@openai-curated
+sentry@claude-plugins-official
+expo@claude-plugins-official

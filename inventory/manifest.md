@@ -10,7 +10,8 @@ This is the authoritative map of Patrick's shared Claude and Codex setup. The pr
 | Locally maintained workflows | `skills/*/SKILL.md`                          | `~/.agents/skills/*` and `~/.claude/skills/*`      |
 | Locked upstream skills       | `.agents/skills/*` and `skills-lock.json`    | `~/.agents/skills/*` and `~/.claude/skills/*`      |
 | Configured Superpowers state | `config/superpowers.json`                    | Fork repository and both products' plugin caches   |
-| Desired Codex plugins        | `config/codex-plugins.txt`                   | `~/.codex/config.toml` and Codex plugin caches     |
+| Marketplace-installed Codex plugins | `config/codex-plugins.txt`            | `~/.codex/config.toml` and Codex plugin caches     |
+| Codex-managed plugins        | `config/codex-managed-plugins.txt`           | Codex account/workspace and Plugins tab            |
 | Desired Claude plugins       | `config/claude-plugins.txt`                  | `~/.claude/settings.json` and Claude plugin caches |
 | Personal plugin marketplace  | `pdugan20/pdugan20-plugins`                  | Both products' marketplace snapshots               |
 | Codex machine policy         | `scripts/configure-codex.py`                 | `~/.codex/config.toml`                              |
@@ -98,27 +99,39 @@ Strict workflows:
 The fork's review, debugging, verification, and skill-authoring skills can still be selected automatically when
 relevant. Invoke strict skills as `$superpowers:<skill-name>` in Codex or `/superpowers:<skill-name>` in Claude.
 
-## Desired user-managed Codex plugins
+## Marketplace-installed Codex plugins
 
 `config/codex-plugins.txt` is the machine-readable desired-state manifest:
 
 - `superpowers@superpowers-configured`
 - `firebase@firebase`
 - `cloudflare@cloudflare`
-- `mintlify@claude-plugins-official`
+- `mintlify@mintlify-marketplace`
 - `mintlify-docs@pdugan20-plugins`
-- `figma@openai-curated`
-- `github@openai-curated`
-- `sentry@openai-curated`
-- `expo@openai-curated`
-- `vercel@openai-curated`
+- `sentry@claude-plugins-official`
+- `expo@claude-plugins-official`
 
 Each plugin may contribute many skills or MCP tools. Do not duplicate those transitive skill names here because they change with plugin versions. Use `codex plugin list --json` for exact installed versions and the Codex skill picker for the current transitive skill inventory.
 
 `mintlify-docs` is Patrick's maintained four-skill docs-site plugin. Its source remains
 [`pdugan20/mintlify-docs`](https://github.com/pdugan20/mintlify-docs); this repository records the desired installation
 without copying its skills. The official `mintlify` plugin remains installed alongside it for component and
-`docs.json` mechanics.
+`docs.json` mechanics, sourced from Mintlify's own Git marketplace rather than a stale third-party pin.
+
+Plugin sourcing is decided capability by capability. Expo and Sentry use current vendor packages because their
+former Codex-managed copies were materially behind and supplied no unique connected app.
+
+## Codex-managed plugins
+
+`config/codex-managed-plugins.txt` records plugins intentionally installed from the Codex Plugins tab. Codex updates
+and injects these through the signed-in account/workspace layer; `codex plugin list` does not reliably report that
+state, and the setup scripts must not attempt to install a second CLI copy.
+
+Figma, GitHub, and Vercel remain Codex-managed: Figma carries Codex tool-schema compatibility changes, GitHub supplies
+the connected repository app, and Vercel exposes broader deployment and project operations without the direct
+plugin's session hooks or default-on telemetry. Data Analytics, OpenAI Developers, Product Design, and Slack are also
+recorded here because they are intentionally available through the same account-managed layer. Verify this file
+against the Plugins tab after signing in on a new machine.
 
 ## Codex runtime-managed plugins
 
@@ -139,6 +152,7 @@ Generated-image ideation is opt-in. Code-native UI ideation in the actual browse
 - `code-review`
 - `code-simplifier`
 - `commit-commands`
+- `expo@claude-plugins-official`
 - `feature-dev`
 - `frontend-design`
 - `mintlify-docs@pdugan20-plugins`

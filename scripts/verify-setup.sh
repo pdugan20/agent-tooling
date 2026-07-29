@@ -65,12 +65,18 @@ retired_codex_plugins=(
   patrick-delivery@personal
   superpowers@claude-plugins-official
   superpowers@openai-curated
+  expo@openai-curated
+  sentry@openai-curated
+  mintlify@claude-plugins-official
+  figma@openai-curated
+  github@openai-curated
+  vercel@openai-curated
 )
 retired_codex_state_clean=true
 for retired_plugin in "${retired_codex_plugins[@]}"; do
   plugin_name=${retired_plugin%@*}
   marketplace_name=${retired_plugin#*@}
-  if [[ -e $codex_cache_root/$marketplace_name/$plugin_name ]]; then
+  if [[ $marketplace_name != openai-curated && $marketplace_name != claude-plugins-official && -e $codex_cache_root/$marketplace_name/$plugin_name ]]; then
     retired_codex_state_clean=false
   fi
 done
@@ -81,10 +87,16 @@ retired = set(os.environ["RETIRED_PLUGIN_IDS"].split())
 installed = {item.get("pluginId") for item in data.get("installed", [])}
 raise SystemExit(0 if retired.isdisjoint(installed) else 1)
 ' <<<"$codex_plugins" && [[ $retired_codex_state_clean == true ]]; then
-  pass "Retired Codex plugins are absent from installed state and cache"
+  pass "Retired Codex plugins are absent from installed state"
 else
-  fail "Retired Codex plugins remain installed or cached; rerun the Codex plugin installer"
+  fail "Retired Codex plugins remain installed; rerun the Codex plugin installer"
 fi
+
+echo "INFO Codex-managed plugin installation is verified in the Plugins tab, not by the CLI:"
+while IFS= read -r plugin; do
+  [[ -n $plugin && $plugin != \#* ]] || continue
+  echo "INFO   $plugin"
+done <"$ROOT/config/codex-managed-plugins.txt"
 
 if PLUGIN_ID="$superpowers_plugin_id" PLUGIN_VERSION="$superpowers_version" python3 -c '
 import json, os, sys

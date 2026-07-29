@@ -24,6 +24,10 @@ particular parent directory or repository collection layout.
 Restart Codex and Claude afterward. Product OAuth sessions, API keys, local toolchains, and repository-specific
 instructions remain machine- or project-local.
 
+The setup script installs only marketplace-managed Codex plugins. After signing in, open the Codex Plugins tab and
+confirm the entries in [`config/codex-managed-plugins.txt`](config/codex-managed-plugins.txt); Codex owns and updates
+that separate account/workspace layer.
+
 ## Included
 
 | Area                   | Purpose                                                  | Canonical source                                      |
@@ -32,7 +36,7 @@ instructions remain machine- or project-local.
 | Local workflows        | Instructions maintained as part of this repository      | [`skills/`](skills/)                                  |
 | Upstream skills        | Official CLI-managed snapshots with source provenance   | [`.agents/skills/`](.agents/skills/), `skills-lock.json` |
 | Configured Superpowers | Upstream plugin with strict workflows made explicit-only | [`config/superpowers.json`](config/superpowers.json)  |
-| Plugin setup           | Desired Codex and Claude plugin sets                     | [`config/`](config/)                                  |
+| Plugin setup           | Marketplace-installed and Codex-managed plugin sets      | [`config/`](config/)                                  |
 | Machine setup          | Bootstrap, refresh, configuration, and verification      | [`scripts/`](scripts/)                                |
 
 The top-level [`skills/`](skills/) directory intentionally contains only the three workflows maintained here. The

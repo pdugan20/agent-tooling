@@ -4,7 +4,7 @@
   "private": true,
   "description": "Portable development tooling for a shared Codex and Claude configuration.",
   "scripts": {
-    "catalog": "npm run catalog:generate && python3 -m http.server 4173 --bind 127.0.0.1",
+    "catalog": "npm run catalog:generate && python3 scripts/serve_catalog.py",
     "catalog:check": "python3 scripts/generate_catalog.py --check",
     "catalog:generate": "python3 scripts/generate_catalog.py",
     "catalog:snapshot": "python3 scripts/generate_catalog.py --snapshot-runtime",

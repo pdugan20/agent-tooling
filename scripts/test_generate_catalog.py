@@ -13,7 +13,7 @@ class CatalogGenerationTests(unittest.TestCase):
         items = catalog["items"]
 
         self.assertEqual(len([item for item in items if item["type"] == "skill"]), 10)
-        self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 19)
+        self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 23)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
         self.assertEqual(catalog["schemaVersion"], 2)
@@ -104,6 +104,34 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertEqual(len(plugins), 1)
         self.assertEqual(plugins[0]["runtimes"], ["codex", "claude"])
         self.assertEqual(plugins[0]["sourceLabel"], "Pat Dugan")
+
+    def test_codex_managed_plugins_are_separate_from_cli_plugins(self) -> None:
+        items = generate_catalog.build_catalog()["items"]
+        managed = {
+            item["pluginId"]
+            for item in items
+            if item["type"] == "plugin" and item["state"] == "Managed by Codex"
+        }
+
+        self.assertEqual(
+            managed,
+            {
+                "data-analytics@openai-curated-remote",
+                "figma@openai-curated-remote",
+                "github@openai-curated-remote",
+                "openai-developers@openai-curated-remote",
+                "product-design@openai-curated-remote",
+                "slack@openai-curated-remote",
+                "vercel@openai-curated-remote",
+            },
+        )
+        self.assertTrue(
+            all(
+                item["sourceLabel"] == "Managed by Codex"
+                for item in items
+                if item.get("pluginId") in managed
+            )
+        )
 
     def test_project_snapshot_discovers_shared_repository_skills(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

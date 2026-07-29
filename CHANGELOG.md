@@ -15,6 +15,13 @@ version when compatibility requires it.
 
 ### Changed
 
+- Split Codex account-managed plugins from marketplace-installed plugins so setup no longer installs duplicate CLI
+  copies of Figma, GitHub, or Vercel, and made the Plugins tab the documented authority for that managed layer.
+- Audited every desired Codex plugin against its vendor source. Expo, Sentry, and Mintlify now use current
+  vendor-backed Git marketplace packages; their superseded curated or pinned installs are removed during setup.
+- Kept Figma, GitHub, and Vercel on Codex-curated packages where Codex-specific tool-schema adaptation or connected
+  app capabilities outweigh the newer direct package.
+- Added the current official Expo plugin to Claude's desired state so both runtimes use the same Expo source.
 - Distinguished canonical management scope from effective runtime availability in the catalog and documentation;
   shared capabilities are now labeled “All repositories.”
 - Documented the official skills CLI's current update and cross-agent frontmatter limitations so upstream snapshots
