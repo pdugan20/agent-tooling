@@ -10,7 +10,10 @@ provenance and structure but are not reformatted as locally authored source.
 | --- | --- | --- |
 | Prettier | JSON, YAML, HTML, CSS, and JavaScript formatting | Exact npm version; check mode in CI |
 | Markdownlint | Markdown structure | Exact npm version; repository-specific rule exceptions |
-| ClaudeLint | Claude files, skills, and plugin metadata | Exact npm version; strict skill validation |
+| Claude Code validator | Claude plugin and marketplace schema | Official CLI, strict mode |
+| Codex creator validators | Skill and plugin schema plus Codex interface metadata | Built-in workflows, run before publishing |
+| Agent Ecosystem `skill-validator` | Independent portable-skill structure, references, and script checks | Version 1.5.6 pinned in `skills` CI; strict mode |
+| ClaudeLint | Shared Claude configuration and plugin-specific policy checks where it adds coverage | Exact npm version; not the canonical portable-skill validator |
 | Repository validators | Cross-file identity, version, source, and policy invariants | Unit-tested Python |
 | Skills CLI | Portable skill discovery and provenance lock generation | Pinned command version in release repositories |
 | Ruff | Python linting and formatting | Pinned pre-commit release |
@@ -29,7 +32,6 @@ maintained through Dependabot.
 | Candidate | Decision |
 | --- | --- |
 | `skills-ref` | Keep as an occasional compatibility check, not a release gate. The official project describes the reference library as demonstration-only. |
-| Agent Ecosystem `skill-validator` | Revisit if skills gain large references or scripts. Its structural checks currently overlap ClaudeLint, the repository validator, and Skills CLI discovery. |
 | Taplo | Defer until the repository owns meaningful TOML configuration; `check-toml` already catches syntax errors. |
 | yamllint and check-jsonschema | Defer because Prettier, pre-commit syntax hooks, actionlint, ClaudeLint, and repository invariants cover the current YAML and JSON surfaces. |
 | Vale or a broad dictionary spell checker | Defer until an editorial style policy is desired. Typos catches objective misspellings with less prose noise. |

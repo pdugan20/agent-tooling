@@ -20,11 +20,11 @@ RUNTIME_DATA = CATALOG_ROOT / "runtime-data.local.json"
 PLUGIN_METADATA = CATALOG_ROOT / "plugin-metadata.json"
 SKILLS_LOCK = ROOT / "skills-lock.json"
 AGENT_TOOLING_REPOSITORY = "https://github.com/pdugan20/agent-tooling"
-PATRICK_WORKFLOWS_SOURCE = "pdugan20/patrick-workflows"
+PATRICK_SKILLS_SOURCE = "pdugan20/skills"
 
 UPSTREAM_SOURCE_LABELS = {
     "emilkowalski/skills": "Emil Kowalski",
-    PATRICK_WORKFLOWS_SOURCE: "Pat Dugan",
+    PATRICK_SKILLS_SOURCE: "Pat Dugan",
     "Prisma-Labs-Dev/apple-skills": "Prisma Labs",
     "railwayapp/railway-skills": "Railway",
     "twostraws/swiftui-agent-skill": "Paul Hudson",
@@ -241,7 +241,7 @@ def project_skill_items(repos_root: Path) -> list[dict[str, Any]]:
             upstream_source = lock_entry.get("source") if isinstance(lock_entry, dict) else None
             source = (
                 "personal"
-                if upstream_source == PATRICK_WORKFLOWS_SOURCE
+                if upstream_source == PATRICK_SKILLS_SOURCE
                 else "third-party"
                 if upstream_source
                 else "repository"
@@ -353,11 +353,11 @@ def build_catalog() -> dict[str, Any]:
         source_label = UPSTREAM_SOURCE_LABELS.get(source)
         if not source_label:
             raise CatalogError(f"no catalog source label for locked skill source {source!r}")
-        is_patrick_workflow = source == PATRICK_WORKFLOWS_SOURCE
+        is_patrick_skill = source == PATRICK_SKILLS_SOURCE
         skill_items.append(
             skill_item(
                 path,
-                source="personal" if is_patrick_workflow else "third-party",
+                source="personal" if is_patrick_skill else "third-party",
                 source_label=source_label,
                 source_url=github_file_url(
                     f"https://github.com/{source}",

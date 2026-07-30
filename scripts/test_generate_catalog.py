@@ -39,9 +39,7 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertTrue(
             all(
                 item["path"].startswith(".agents/skills/")
-                and item["sourceUrl"].startswith(
-                    "https://github.com/pdugan20/patrick-workflows/blob/v1.1.0/"
-                )
+                and item["sourceUrl"].startswith("https://github.com/pdugan20/skills/blob/v2.0.0/")
                 for item in items
                 if item["type"] == "skill" and item["name"] in managed
             )
@@ -117,7 +115,7 @@ class CatalogGenerationTests(unittest.TestCase):
     def test_mintlify_docs_is_one_cross_runtime_plugin(self) -> None:
         items = generate_catalog.build_catalog()["items"]
         plugins = [
-            item for item in items if "mintlify-docs@patrick-tools" in item.get("pluginIds", [])
+            item for item in items if "mintlify-docs@patrick-plugins" in item.get("pluginIds", [])
         ]
 
         self.assertEqual(len(plugins), 1)

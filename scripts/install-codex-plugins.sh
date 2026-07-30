@@ -10,12 +10,20 @@ if ! command -v codex >/dev/null 2>&1; then
 fi
 
 installed_plugins=$(codex plugin list --json)
-if PLUGIN_ID="mintlify-docs@pdugan20-plugins" python3 -c 'import json, os, sys; data=json.load(sys.stdin); target=os.environ["PLUGIN_ID"]; raise SystemExit(0 if any(item.get("pluginId") == target for item in data.get("installed", [])) else 1)' <<<"$installed_plugins"; then
-  codex plugin remove mintlify-docs@pdugan20-plugins
-fi
-if codex plugin marketplace list | awk -v target="pdugan20-plugins" '$1 == target { found = 1 } END { exit !found }'; then
-  codex plugin marketplace remove pdugan20-plugins
-fi
+for retired_plugin in \
+  mintlify-docs@pdugan20-plugins \
+  mintlify-docs@patrick-tools \
+  patrick-workflows@pdugan20-plugins \
+  patrick-workflows@patrick-tools; do
+  if PLUGIN_ID="$retired_plugin" python3 -c 'import json, os, sys; data=json.load(sys.stdin); target=os.environ["PLUGIN_ID"]; raise SystemExit(0 if any(item.get("pluginId") == target for item in data.get("installed", [])) else 1)' <<<"$installed_plugins"; then
+    codex plugin remove "$retired_plugin"
+  fi
+done
+for retired_marketplace in pdugan20-plugins patrick-tools; do
+  if codex plugin marketplace list | awk -v target="$retired_marketplace" '$1 == target { found = 1 } END { exit !found }'; then
+    codex plugin marketplace remove "$retired_marketplace"
+  fi
+done
 
 ensure_marketplace() {
   local name=$1
@@ -29,7 +37,7 @@ ensure_marketplace firebase https://github.com/firebase/skills.git
 ensure_marketplace cloudflare https://github.com/cloudflare/skills.git
 ensure_marketplace claude-plugins-official https://github.com/anthropics/claude-plugins-official.git
 ensure_marketplace mintlify-marketplace https://github.com/mintlify/mintlify-claude-plugin.git
-ensure_marketplace patrick-tools https://github.com/pdugan20/patrick-tools.git
+ensure_marketplace patrick-plugins https://github.com/pdugan20/plugins.git
 ensure_marketplace superpowers-configured https://github.com/pdugan20/superpowers.git
 
 installed_plugins=$(codex plugin list --json)

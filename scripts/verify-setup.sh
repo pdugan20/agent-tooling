@@ -77,6 +77,9 @@ done <"$ROOT/config/codex-plugins.txt"
 retired_codex_plugins=(
   patrick-delivery@personal
   mintlify-docs@pdugan20-plugins
+  mintlify-docs@patrick-tools
+  patrick-workflows@pdugan20-plugins
+  patrick-workflows@patrick-tools
   superpowers@claude-plugins-official
   superpowers@openai-curated
   expo@openai-curated

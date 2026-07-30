@@ -23,15 +23,15 @@ CUSTOM_SKILLS = {
 }
 UPSTREAM_SKILLS = {
     "code-native-ui-ideation": (
-        "pdugan20/patrick-workflows",
+        "pdugan20/skills",
         "skills/code-native-ui-ideation/SKILL.md",
     ),
     "feature-delivery": (
-        "pdugan20/patrick-workflows",
+        "pdugan20/skills",
         "skills/feature-delivery/SKILL.md",
     ),
     "production-hardening": (
-        "pdugan20/patrick-workflows",
+        "pdugan20/skills",
         "skills/production-hardening/SKILL.md",
     ),
     "animation-vocabulary": ("emilkowalski/skills", "skills/animation-vocabulary/SKILL.md"),
@@ -45,7 +45,7 @@ UPSTREAM_SKILLS = {
     "review-animations": ("emilkowalski/skills", "skills/review-animations/SKILL.md"),
     "swiftui-pro": ("twostraws/swiftui-agent-skill", "swiftui-pro/SKILL.md"),
 }
-PATRICK_WORKFLOWS_REF = "v1.1.0"
+PATRICK_SKILLS_REF = "v2.0.0"
 EXPECTED_EXPLICIT_SUPERPOWERS = {
     "brainstorming",
     "dispatching-parallel-agents",
@@ -208,12 +208,9 @@ def validate_repository() -> None:
             raise ValidationError(f"locked skill {skill_name} has an unexpected source")
         if lock_entry.get("skillPath") != expected_path:
             raise ValidationError(f"locked skill {skill_name} has an unexpected source path")
-        if (
-            expected_source == "pdugan20/patrick-workflows"
-            and lock_entry.get("ref") != PATRICK_WORKFLOWS_REF
-        ):
+        if expected_source == "pdugan20/skills" and lock_entry.get("ref") != PATRICK_SKILLS_REF:
             raise ValidationError(
-                f"locked skill {skill_name} must pin Patrick Workflows {PATRICK_WORKFLOWS_REF}"
+                f"locked skill {skill_name} must pin Patrick Skills {PATRICK_SKILLS_REF}"
             )
         if lock_entry.get("sourceType") != "github" or not re.fullmatch(
             r"[0-9a-f]{64}", str(lock_entry.get("computedHash", ""))
@@ -251,7 +248,7 @@ def validate_repository() -> None:
         raise ValidationError("configured Superpowers must be desired in Codex")
     if plugin_id not in plugin_manifests["claude-plugins.txt"]:
         raise ValidationError("configured Superpowers must be desired in Claude")
-    mintlify_docs_id = "mintlify-docs@patrick-tools"
+    mintlify_docs_id = "mintlify-docs@patrick-plugins"
     if not all(
         mintlify_docs_id in plugin_manifests[name]
         for name in ("codex-plugins.txt", "claude-plugins.txt")
@@ -295,6 +292,9 @@ def validate_repository() -> None:
     retired_ids = {
         "patrick-delivery@personal",
         "mintlify-docs@pdugan20-plugins",
+        "mintlify-docs@patrick-tools",
+        "patrick-workflows@pdugan20-plugins",
+        "patrick-workflows@patrick-tools",
         "superpowers@claude-plugins-official",
         "expo@openai-curated",
         "sentry@openai-curated",
@@ -364,42 +364,54 @@ def validate_repository() -> None:
 
     for script_name in ("install-claude-plugins.sh", "refresh-claude-plugins.sh"):
         script = (ROOT / "scripts" / script_name).read_text(encoding="utf-8")
-        new_marketplace = script.index("ensure_marketplace patrick-tools")
-        if script.index("claude plugin uninstall mintlify-docs@pdugan20-plugins") > new_marketplace:
-            raise ValidationError(
-                f"{script_name} must retire the old plugin before adding its "
-                "replacement marketplace"
-            )
-        if script.index("claude plugin marketplace remove pdugan20-plugins") > new_marketplace:
-            raise ValidationError(
-                f"{script_name} must retire the old marketplace before adding its replacement"
-            )
+        new_marketplace = script.index("ensure_marketplace patrick-plugins")
+        for retired_id in (
+            "mintlify-docs@pdugan20-plugins",
+            "mintlify-docs@patrick-tools",
+            "patrick-workflows@pdugan20-plugins",
+            "patrick-workflows@patrick-tools",
+        ):
+            if script.index(retired_id) > new_marketplace:
+                raise ValidationError(
+                    f"{script_name} must retire {retired_id} before adding its replacement"
+                )
+        for retired_marketplace in ("pdugan20-plugins", "patrick-tools"):
+            if script.index(retired_marketplace) > new_marketplace:
+                raise ValidationError(
+                    f"{script_name} must retire {retired_marketplace} before adding its replacement"
+                )
         if "scripts/reconcile_claude_plugins.py" not in script:
             raise ValidationError(
                 f"{script_name} must disable undeclared enabled user-scoped plugins"
             )
         if "ensure_marketplace mintlify-marketplace mintlify/mintlify-claude-plugin" not in script:
             raise ValidationError(f"{script_name} must add Mintlify's canonical marketplace")
-        if "ensure_marketplace patrick-tools pdugan20/patrick-tools" not in script:
-            raise ValidationError(f"{script_name} must add Patrick's renamed marketplace")
+        if "ensure_marketplace patrick-plugins pdugan20/plugins" not in script:
+            raise ValidationError(f"{script_name} must add Patrick's plugin marketplace")
 
     for script_name in ("install-codex-plugins.sh", "refresh-codex-plugins.sh"):
         script = (ROOT / "scripts" / script_name).read_text(encoding="utf-8")
-        new_marketplace = script.index("ensure_marketplace patrick-tools")
-        if script.index("codex plugin remove mintlify-docs@pdugan20-plugins") > new_marketplace:
-            raise ValidationError(
-                f"{script_name} must retire the old plugin before adding its "
-                "replacement marketplace"
-            )
-        if script.index("codex plugin marketplace remove pdugan20-plugins") > new_marketplace:
-            raise ValidationError(
-                f"{script_name} must retire the old marketplace before adding its replacement"
-            )
+        new_marketplace = script.index("ensure_marketplace patrick-plugins")
+        for retired_id in (
+            "mintlify-docs@pdugan20-plugins",
+            "mintlify-docs@patrick-tools",
+            "patrick-workflows@pdugan20-plugins",
+            "patrick-workflows@patrick-tools",
+        ):
+            if script.index(retired_id) > new_marketplace:
+                raise ValidationError(
+                    f"{script_name} must retire {retired_id} before adding its replacement"
+                )
+        for retired_marketplace in ("pdugan20-plugins", "patrick-tools"):
+            if script.index(retired_marketplace) > new_marketplace:
+                raise ValidationError(
+                    f"{script_name} must retire {retired_marketplace} before adding its replacement"
+                )
         if (
-            "ensure_marketplace patrick-tools https://github.com/pdugan20/patrick-tools.git"
+            "ensure_marketplace patrick-plugins https://github.com/pdugan20/plugins.git"
             not in script
         ):
-            raise ValidationError(f"{script_name} must add Patrick's renamed marketplace")
+            raise ValidationError(f"{script_name} must add Patrick's plugin marketplace")
 
 
 def main() -> None:

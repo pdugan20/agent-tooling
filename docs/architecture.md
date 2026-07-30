@@ -8,7 +8,7 @@ settings are generated machine state; edit this repository rather than patching 
 | Concern | Canonical source | Runtime destination |
 | --- | --- | --- |
 | Shared working agreement | `global/AGENTS.md` | `~/.codex/AGENTS.md` and the active Claude profile |
-| Patrick workflows | `pdugan20/patrick-workflows` releases | Skills CLI snapshots and user-level links |
+| Patrick skills | `pdugan20/skills` releases | Skills CLI snapshots and user-level links |
 | Managed skill snapshots | `.agents/skills/*` and `skills-lock.json` | User-level skill links for both products |
 | Marketplace-installed Codex plugins | `config/codex-plugins.txt` | Codex configuration and plugin cache |
 | Codex-managed plugins | `config/codex-managed-plugins.txt` | Signed-in Codex account/workspace |
@@ -46,15 +46,15 @@ local behavior without copying globally installed plugin files.
 
 ## Skills
 
-The public [Patrick Workflows](https://github.com/pdugan20/patrick-workflows) repository is canonical for Patrick's
+The public [Skills](https://github.com/pdugan20/skills) repository is canonical for Patrick's
 three design and delivery skills. This repository consumes its tagged releases alongside seven third-party skills.
 All ten exact snapshots are installed by the [`skills` CLI](https://github.com/vercel-labs/skills), stored under
 `.agents/skills/`, and tracked by `skills-lock.json`. The `.claude/skills/` entries are compatibility links, not
 separate copies.
 
-Do not edit locked snapshots. Release first-party changes from Patrick Workflows, install the new tag here, and
+Do not edit locked snapshots. Release first-party changes from Skills, install the new tag here, and
 review the snapshot and lockfile diff. Run `npm run skills:update` for third-party updates. If a source needs local
-policy, prefer runtime configuration or a clearly named addition to Patrick Workflows over a silent fork.
+policy, prefer runtime configuration or a clearly named addition to Skills over a silent fork.
 
 ## Plugin layers
 
