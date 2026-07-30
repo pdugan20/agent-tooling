@@ -17,7 +17,7 @@ ensure_marketplace() {
   fi
 }
 
-ensure_marketplace pdugan20-plugins https://github.com/pdugan20/pdugan20-plugins.git
+ensure_marketplace patrick-tools https://github.com/pdugan20/patrick-tools.git
 ensure_marketplace superpowers-configured https://github.com/pdugan20/superpowers.git
 ensure_marketplace mintlify-marketplace https://github.com/mintlify/mintlify-claude-plugin.git
 
@@ -28,6 +28,14 @@ while IFS= read -r plugin; do
   echo "Refreshing $plugin"
   codex plugin add "$plugin"
 done <"$ROOT/config/codex-plugins.txt"
+
+installed_plugins=$(codex plugin list --json)
+if PLUGIN_ID="mintlify-docs@pdugan20-plugins" python3 -c 'import json, os, sys; data=json.load(sys.stdin); target=os.environ["PLUGIN_ID"]; raise SystemExit(0 if any(item.get("pluginId") == target for item in data.get("installed", [])) else 1)' <<<"$installed_plugins"; then
+  codex plugin remove mintlify-docs@pdugan20-plugins
+fi
+if codex plugin marketplace list | awk -v target="pdugan20-plugins" '$1 == target { found = 1 } END { exit !found }'; then
+  codex plugin marketplace remove pdugan20-plugins
+fi
 
 python3 "$ROOT/scripts/configure-codex.py" --config "$HOME/.codex/config.toml"
 

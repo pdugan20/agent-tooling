@@ -6,7 +6,7 @@ ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 cd "$ROOT"
 
 missing=0
-for command_name in npm python3 pre-commit actionlint gitleaks; do
+for command_name in npm python3 pre-commit actionlint gitleaks typos zizmor; do
   if ! command -v "$command_name" >/dev/null 2>&1; then
     echo "Missing required command: $command_name" >&2
     missing=1

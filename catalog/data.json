@@ -1,6 +1,5 @@
 {
   "generatedFrom": [
-    "skills/*/SKILL.md",
     ".agents/skills/*/SKILL.md",
     "skills-lock.json",
     "config/superpowers.json",
@@ -18,14 +17,14 @@
       "id": "skill:feature-delivery",
       "invocation": "Automatic",
       "name": "feature-delivery",
-      "path": "skills/feature-delivery/SKILL.md",
+      "path": ".agents/skills/feature-delivery/SKILL.md",
       "runtimes": [
         "codex",
         "claude"
       ],
-      "source": "local",
-      "sourceLabel": "Managed here",
-      "sourceUrl": "https://github.com/pdugan20/agent-tooling/blob/main/skills/feature-delivery/SKILL.md",
+      "source": "personal",
+      "sourceLabel": "Pat Dugan",
+      "sourceUrl": "https://github.com/pdugan20/patrick-workflows/blob/v1.0.0/skills/feature-delivery/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -38,14 +37,14 @@
       "id": "skill:code-native-ui-ideation",
       "invocation": "Automatic",
       "name": "code-native-ui-ideation",
-      "path": "skills/code-native-ui-ideation/SKILL.md",
+      "path": ".agents/skills/code-native-ui-ideation/SKILL.md",
       "runtimes": [
         "codex",
         "claude"
       ],
-      "source": "local",
-      "sourceLabel": "Managed here",
-      "sourceUrl": "https://github.com/pdugan20/agent-tooling/blob/main/skills/code-native-ui-ideation/SKILL.md",
+      "source": "personal",
+      "sourceLabel": "Pat Dugan",
+      "sourceUrl": "https://github.com/pdugan20/patrick-workflows/blob/v1.0.0/skills/code-native-ui-ideation/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -198,14 +197,14 @@
       "id": "skill:production-hardening",
       "invocation": "Explicit",
       "name": "production-hardening",
-      "path": "skills/production-hardening/SKILL.md",
+      "path": ".agents/skills/production-hardening/SKILL.md",
       "runtimes": [
         "codex",
         "claude"
       ],
-      "source": "local",
-      "sourceLabel": "Managed here",
-      "sourceUrl": "https://github.com/pdugan20/agent-tooling/blob/main/skills/production-hardening/SKILL.md",
+      "source": "personal",
+      "sourceLabel": "Pat Dugan",
+      "sourceUrl": "https://github.com/pdugan20/patrick-workflows/blob/v1.0.0/skills/production-hardening/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -365,18 +364,18 @@
       "description": "House-style workflows for Mintlify information architecture, editorial review, changelogs, and drift-checked reference documentation.",
       "displayName": "Mintlify Docs",
       "featured": 104,
-      "id": "plugin:mintlify-docs@pdugan20-plugins",
+      "id": "plugin:mintlify-docs@patrick-tools",
       "installations": [
         {
           "delivery": "marketplace",
           "path": "config/codex-plugins.txt",
-          "pluginId": "mintlify-docs@pdugan20-plugins",
+          "pluginId": "mintlify-docs@patrick-tools",
           "runtime": "codex"
         },
         {
           "delivery": "marketplace",
           "path": "config/claude-plugins.txt",
-          "pluginId": "mintlify-docs@pdugan20-plugins",
+          "pluginId": "mintlify-docs@patrick-tools",
           "runtime": "claude"
         }
       ],
@@ -384,7 +383,7 @@
       "name": "mintlify-docs",
       "path": null,
       "pluginIds": [
-        "mintlify-docs@pdugan20-plugins"
+        "mintlify-docs@patrick-tools"
       ],
       "runtimes": [
         "codex",
@@ -395,7 +394,7 @@
       "sourceUrl": "https://github.com/pdugan20/mintlify-docs",
       "state": "Configured",
       "type": "plugin",
-      "version": "0.3.1"
+      "version": "0.3.2"
     },
     {
       "availability": "Global",

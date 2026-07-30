@@ -52,6 +52,20 @@ repos:
         files: ^\.github/workflows/.*\.ya?ml$
         types: [yaml]
 
+      - id: typos
+        name: Typos
+        entry: typos
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: zizmor
+        name: GitHub Actions security
+        entry: zizmor --pedantic --min-severity medium --min-confidence medium --no-online-audits .
+        language: system
+        pass_filenames: false
+        always_run: true
+
       - id: claudelint
         name: ClaudeLint
         entry: npm run lint:claude

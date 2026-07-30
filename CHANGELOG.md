@@ -6,6 +6,8 @@ version when compatibility requires it.
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-07-30
+
 ### Added
 
 - Added an MIT license and standardized repository badges for CI, releases, Node.js support, and licensing.
@@ -17,6 +19,8 @@ version when compatibility requires it.
   Codex and Claude Code.
 - Documented the audited global-versus-project scope model, including the narrow project-pinned Apple reference
   profile.
+- Added Typos spelling checks, zizmor workflow-security analysis, and scheduled Lychee link validation with pinned
+  releases and documented adoption criteria.
 
 ### Changed
 
@@ -43,7 +47,16 @@ version when compatibility requires it.
   details, and made Claude setup honor the active `CLAUDE_CONFIG_DIR` profile.
 - Reconciled Claude's enabled user-scoped plugins to the canonical manifest during setup and refresh by disabling,
   rather than uninstalling, undeclared plugins.
-- Updated Mintlify Docs to v0.3.1 so both runtimes layer on Mintlify's current vendor-maintained plugin source.
+- Moved the three Patrick-owned workflows to the public, versioned `pdugan20/patrick-workflows` collection and now
+  consume its v1.0.0 release through Skills CLI-managed snapshots and provenance hashes.
+- Renamed the personal marketplace to `patrick-tools`, migrated both runtime plugin IDs, and now remove the retired
+  marketplace registration during setup and refresh.
+- Updated Mintlify Docs to v0.3.2 so both runtimes layer on Mintlify's current vendor-maintained plugin source.
+
+### Security
+
+- Added medium-or-higher GitHub Actions security enforcement and narrowed release and scheduled-workflow
+  permissions based on the zizmor audit.
 
 ## [0.3.0] - 2026-07-28
 

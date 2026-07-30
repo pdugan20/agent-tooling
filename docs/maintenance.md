@@ -1,10 +1,10 @@
 # Maintenance
 
-`agent-tooling` is the single canonical source for Patrick's shared instructions, locally maintained workflows,
-locked upstream skill set, desired plugin state, and configured Superpowers baseline. Claude and Codex consume the
-same skill files through runtime-specific symlinks; do not maintain separate copies.
+`agent-tooling` is the canonical consumer configuration for Patrick's shared instructions, locked skill set,
+desired plugin state, and configured Superpowers baseline. Patrick-owned skills are released from
+`pdugan20/patrick-workflows`; Claude and Codex consume the installed snapshots through runtime-specific symlinks.
 
-## Update shared instructions and local workflows
+## Update shared instructions
 
 1. Edit the canonical file in this repository.
 2. Validate affected skills with `quick_validate.py` and run the repository's configuration tests.
@@ -12,8 +12,13 @@ same skill files through runtime-specific symlinks; do not maintain separate cop
 4. Commit and push this repository.
 5. On another machine, pull, run `npm run bootstrap`, and start a new Claude or Codex task.
 
-After changing a local workflow, rerun `npm run bootstrap` and start new tasks. The symlinks update immediately,
-but active tasks retain the skill inventory loaded when they started.
+## Update Patrick workflows
+
+1. Edit and validate the canonical skill in `pdugan20/patrick-workflows`.
+2. Release a new semantic version there.
+3. Install that exact tag in this repository with the Skills CLI for Codex and Claude Code.
+4. Review `.agents/skills/`, `.claude/skills/`, and `skills-lock.json`.
+5. Regenerate the catalog, run `npm run bootstrap`, and start new tasks.
 
 ## Update upstream skills
 
@@ -29,8 +34,8 @@ npm run verify
 
 Review instruction changes like dependency changes: confirm their source, inspect the full diff, and smoke-test the
 affected workflow before committing. Do not patch the generated snapshot, run a global update for this repository,
-or auto-merge instruction updates. If a local customization is genuinely needed, create a clearly named local
-workflow under `skills/` instead of silently diverging the upstream copy.
+or auto-merge instruction updates. If a personal customization is genuinely needed, create a clearly named skill in
+Patrick Workflows instead of silently diverging the upstream copy.
 
 Updates remain intentionally manual for now. The CLI provides the canonical install, lock, and update operation but
 does not provide a first-party scheduled pull-request workflow. Adding custom branch and pull-request automation
@@ -153,7 +158,7 @@ report that separate layer.
 
 The current Codex CLI has no `plugin update` command. Its relevant refresh primitives are `codex plugin marketplace upgrade` and `codex plugin add`.
 
-`mintlify-docs` is refreshed from the native Codex catalog in `pdugan20/pdugan20-plugins`. Its canonical plugin code
+`mintlify-docs` is refreshed from the native Codex catalog in `pdugan20/patrick-tools`. Its canonical plugin code
 lives in `pdugan20/mintlify-docs`; update and release that repository first, then refresh the marketplace snapshot and
 re-add the configured plugin here.
 

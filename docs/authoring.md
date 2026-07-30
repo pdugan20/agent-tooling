@@ -8,13 +8,13 @@ produces a useful result.
 
 | Artifact | Primary checks | Formatting and supporting checks | Where used |
 | --- | --- | --- | --- |
-| Locally maintained skill | Codex `$skill-creator` quick validation; ClaudeLint `validate-skills` with the strict preset | Markdownlint; ShellCheck and shfmt for shell resources; Ruff for Python resources | `agent-tooling` local workflows |
-| Locked upstream skill | Official `skills` CLI lock and update review | No local rewriting; repository policy checks provenance, source path, compatibility links, and known duplicate overrides | `agent-tooling/.agents/skills` |
-| Claude plugin | `claude plugin validate . --strict`; ClaudeLint `validate-plugin` | Markdownlint, JSON/YAML formatting, package and install smoke tests | `mintlify-docs` and `pdugan20-plugins` |
-| Codex plugin | Codex `$plugin-creator` validation | JSON formatting plus a marketplace install/reinstall smoke test | `mintlify-docs` and `pdugan20-plugins` |
-| Claude marketplace | ClaudeLint `validate-plugin --preset strict --warnings-as-errors` | JSON formatting and dependency-install smoke test | `pdugan20-plugins` CI |
-| Codex marketplace | Codex `$plugin-creator` generation/validation and live install smoke test | JSON syntax validation; source tag and policy review | `pdugan20-plugins` CI and release review |
-| GitHub Actions | Actionlint | Prettier for YAML | `agent-tooling` and plugin CI |
+| Patrick-owned skill | Codex `$skill-creator` quick validation; ClaudeLint strict validation; Skills CLI discovery | Markdownlint; ShellCheck and shfmt for shell resources; Ruff for Python resources | `patrick-workflows` |
+| Locked skill snapshot | Official Skills CLI lock and update review | No local rewriting; repository policy checks provenance, source path, release ref, compatibility links, and known duplicate overrides | `agent-tooling/.agents/skills` |
+| Claude plugin | `claude plugin validate . --strict`; ClaudeLint `validate-plugin` | Markdownlint, JSON/YAML formatting, package and install smoke tests | `mintlify-docs` and `patrick-tools` |
+| Codex plugin | Codex `$plugin-creator` validation | JSON formatting plus a marketplace install/reinstall smoke test | `mintlify-docs` and `patrick-tools` |
+| Claude marketplace | ClaudeLint `validate-plugin --preset strict --warnings-as-errors` | JSON formatting and dependency-install smoke test | `patrick-tools` CI |
+| Codex marketplace | Codex `$plugin-creator` generation/validation and live install smoke test | JSON syntax validation; source tag and policy review | `patrick-tools` CI and release review |
+| GitHub Actions | actionlint and zizmor | Prettier for YAML; full commit pins | All four maintained repositories |
 | Repository scripts | ShellCheck and shfmt for shell; Ruff for Python; Prettier for JavaScript/JSON/YAML | Unit tests for behavior | `agent-tooling` verification |
 | Secrets and credentials | Gitleaks staged and full-history scans | Manual review of generated archives and runtime snapshots | `agent-tooling` pre-commit, pre-push, and CI |
 
@@ -30,8 +30,8 @@ npm run verify
 ```
 
 `npm run verify` is the complete local and GitHub Actions gate. It runs unit tests, catalog drift detection,
-pre-commit validators, repository policy checks, and secret scanning. ClaudeLint applies strict rules only to the
-three workflows maintained here; official CLI-managed upstream snapshots are intentionally immutable.
+pre-commit validators, repository policy checks, and secret scanning. ClaudeLint validates the managed skill tree
+while repository policy applies first-party invocation rules. All snapshots remain immutable in this consumer.
 
 The Agent Skills specification permits only its portable frontmatter fields. Some upstream packages intentionally
 include agent-specific fields such as Claude's `context: fork` or `disable-model-invocation`; the official `skills`
@@ -48,11 +48,12 @@ npm audit
 ```
 
 Its verification command runs strict ClaudeLint, Markdownlint, ClaudeLint's marketplace/plugin checks, and Claude
-Code's official plugin validator. CI additionally runs the install smoke test, ShellCheck, Ruff, and Actionlint.
+Code's official plugin validator. CI additionally runs the install smoke test, ShellCheck, Ruff, actionlint, Typos,
+and zizmor; Lychee runs on a network-dependent schedule.
 
-For the marketplace repository, CI validates the Claude catalog with ClaudeLint, checks the Codex catalog as JSON,
-and installs the published plugin in both runtimes. A successful install is the final packaging check because it
-exercises the same catalog and cache path users receive.
+For the marketplace repository, CI validates both catalogs and installs every published plugin in its supported
+runtimes. A successful install is the final packaging check because it exercises the same catalog and cache path
+users receive.
 
 ## Built-in authoring workflows
 

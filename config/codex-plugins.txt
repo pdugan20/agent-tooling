@@ -2,6 +2,6 @@ superpowers@superpowers-configured
 firebase@firebase
 cloudflare@cloudflare
 mintlify@mintlify-marketplace
-mintlify-docs@pdugan20-plugins
+mintlify-docs@patrick-tools
 sentry@claude-plugins-official
 expo@claude-plugins-official

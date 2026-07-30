@@ -23,7 +23,7 @@ class CatalogGenerationTests(unittest.TestCase):
         managed = {
             item["name"]: item["invocation"]
             for item in items
-            if item["sourceLabel"] == "Managed here"
+            if item["type"] == "skill" and item["sourceLabel"] == "Pat Dugan"
         }
 
         self.assertEqual(managed["feature-delivery"], "Automatic")
@@ -35,6 +35,16 @@ class CatalogGenerationTests(unittest.TestCase):
                 "feature-delivery",
                 "production-hardening",
             },
+        )
+        self.assertTrue(
+            all(
+                item["path"].startswith(".agents/skills/")
+                and item["sourceUrl"].startswith(
+                    "https://github.com/pdugan20/patrick-workflows/blob/v1.0.0/"
+                )
+                for item in items
+                if item["type"] == "skill" and item["name"] in managed
+            )
         )
 
     def test_upstream_skills_keep_their_provenance(self) -> None:
@@ -107,7 +117,7 @@ class CatalogGenerationTests(unittest.TestCase):
     def test_mintlify_docs_is_one_cross_runtime_plugin(self) -> None:
         items = generate_catalog.build_catalog()["items"]
         plugins = [
-            item for item in items if "mintlify-docs@pdugan20-plugins" in item.get("pluginIds", [])
+            item for item in items if "mintlify-docs@patrick-tools" in item.get("pluginIds", [])
         ]
 
         self.assertEqual(len(plugins), 1)
