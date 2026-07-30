@@ -47,7 +47,7 @@ jobs:
           - Recorded commit: \`$CURRENT_COMMIT\`
           - Latest upstream main: \`$LATEST_COMMIT\`
 
-          Follow \`inventory/maintenance.md#update-the-configured-superpowers-fork\`. Review and merge upstream into the thin fork, rerun its policy tests, update \`config/superpowers.json\`, then refresh both runtimes. Do not overwrite the fork's policy patches wholesale.
+          Follow \`docs/maintenance.md#update-the-configured-superpowers-fork\`. Review and merge upstream into the thin fork, rerun its policy tests, update \`config/superpowers.json\`, then refresh both runtimes. Do not overwrite the fork's policy patches wholesale.
           EOF
           )
           gh issue create --title "$title" --body "$body"

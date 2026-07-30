@@ -15,7 +15,6 @@
     "lint:claude": "claudelint check-all --strict --no-cache --format compact && claudelint validate-skills --path skills --preset strict --warnings-as-errors",
     "lint:markdown": "markdownlint \"**/*.md\" --ignore node_modules --ignore .agents/skills --ignore .claude/skills --ignore .claudelint-cache",
     "mcp:check": "python3 scripts/check_mcp_auth.py",
-    "migrations:audit": "bash scripts/audit-migration-branches.sh",
     "plugins:refresh:claude": "bash scripts/refresh-claude-plugins.sh",
     "plugins:refresh:codex": "bash scripts/refresh-codex-plugins.sh",
     "setup": "bash scripts/setup-new-machine.sh",

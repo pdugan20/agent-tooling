@@ -22,6 +22,8 @@ version when compatibility requires it.
 
 - Made the repository public, removed obsolete visibility language, and standardized documented operator commands on
   stable `npm run` entry points.
+- Consolidated current documentation around architecture, maintenance, and authoring; removed completed migration
+  ledgers and machine-specific task tracking from the maintained documentation set.
 - Split Codex account-managed plugins from marketplace-installed plugins so setup no longer installs duplicate CLI
   copies of Figma, GitHub, or Vercel, and made the Plugins tab the documented authority for that managed layer.
 - Audited every desired Codex plugin against its vendor source. Expo, Sentry, and Mintlify now use current
@@ -37,6 +39,11 @@ version when compatibility requires it.
   mandatory educational output and token overhead to every task.
 - Added portable project-skill discovery to the local catalog snapshot with repository and availability filters;
   repository roots are supplied at runtime and never committed.
+- Grouped equivalent Codex and Claude plugin packages into one catalog capability with per-runtime installation
+  details, and made Claude setup honor the active `CLAUDE_CONFIG_DIR` profile.
+- Reconciled Claude's enabled user-scoped plugins to the canonical manifest during setup and refresh by disabling,
+  rather than uninstalling, undeclared plugins.
+- Updated Mintlify Docs to v0.3.1 so both runtimes layer on Mintlify's current vendor-maintained plugin source.
 
 ## [0.3.0] - 2026-07-28
 

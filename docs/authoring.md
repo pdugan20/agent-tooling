@@ -1,4 +1,4 @@
-# Skill and plugin authoring checks
+# Skill and plugin authoring
 
 Use the narrowest validator for the artifact, then run the repository's complete verification command before
 publishing. Static checks prove structure and policy compliance; they do not prove that a skill triggers correctly or
