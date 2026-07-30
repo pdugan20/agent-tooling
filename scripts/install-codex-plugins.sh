@@ -9,6 +9,14 @@ if ! command -v codex >/dev/null 2>&1; then
   exit 1
 fi
 
+installed_plugins=$(codex plugin list --json)
+if PLUGIN_ID="mintlify-docs@pdugan20-plugins" python3 -c 'import json, os, sys; data=json.load(sys.stdin); target=os.environ["PLUGIN_ID"]; raise SystemExit(0 if any(item.get("pluginId") == target for item in data.get("installed", [])) else 1)' <<<"$installed_plugins"; then
+  codex plugin remove mintlify-docs@pdugan20-plugins
+fi
+if codex plugin marketplace list | awk -v target="pdugan20-plugins" '$1 == target { found = 1 } END { exit !found }'; then
+  codex plugin marketplace remove pdugan20-plugins
+fi
+
 ensure_marketplace() {
   local name=$1
   local source=$2
@@ -36,7 +44,6 @@ done <"$ROOT/config/codex-plugins.txt"
 
 for retired_plugin in \
   patrick-delivery@personal \
-  mintlify-docs@pdugan20-plugins \
   superpowers@claude-plugins-official \
   superpowers@openai-curated \
   expo@openai-curated \
@@ -55,10 +62,6 @@ for retired_plugin in \
     codex plugin remove "$retired_plugin"
   fi
 done
-
-if codex plugin marketplace list | awk -v target="pdugan20-plugins" '$1 == target { found = 1 } END { exit !found }'; then
-  codex plugin marketplace remove pdugan20-plugins
-fi
 
 echo "Marketplace-installed Codex plugin set is installed."
 echo "Verify config/codex-managed-plugins.txt in the Codex Plugins tab and complete any connector authentication there."

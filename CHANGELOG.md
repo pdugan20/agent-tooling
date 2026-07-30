@@ -6,6 +6,13 @@ version when compatibility requires it.
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-07-30
+
+### Fixed
+
+- Retire the legacy personal plugin and marketplace before registering or updating `patrick-tools`, preventing the
+  redirected repository from failing Codex marketplace upgrades with an identity mismatch.
+
 ## [0.4.0] - 2026-07-30
 
 ### Added
