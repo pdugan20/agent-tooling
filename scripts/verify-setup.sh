@@ -56,7 +56,6 @@ check_skill_collection() {
   done
 }
 
-check_skill_collection "$ROOT/skills"
 check_skill_collection "$ROOT/.agents/skills"
 
 codex_plugins=$(codex plugin list --json)
@@ -77,6 +76,7 @@ done <"$ROOT/config/codex-plugins.txt"
 
 retired_codex_plugins=(
   patrick-delivery@personal
+  mintlify-docs@pdugan20-plugins
   superpowers@claude-plugins-official
   superpowers@openai-curated
   expo@openai-curated

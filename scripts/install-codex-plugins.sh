@@ -21,7 +21,7 @@ ensure_marketplace firebase https://github.com/firebase/skills.git
 ensure_marketplace cloudflare https://github.com/cloudflare/skills.git
 ensure_marketplace claude-plugins-official https://github.com/anthropics/claude-plugins-official.git
 ensure_marketplace mintlify-marketplace https://github.com/mintlify/mintlify-claude-plugin.git
-ensure_marketplace pdugan20-plugins https://github.com/pdugan20/pdugan20-plugins.git
+ensure_marketplace patrick-tools https://github.com/pdugan20/patrick-tools.git
 ensure_marketplace superpowers-configured https://github.com/pdugan20/superpowers.git
 
 installed_plugins=$(codex plugin list --json)
@@ -36,6 +36,7 @@ done <"$ROOT/config/codex-plugins.txt"
 
 for retired_plugin in \
   patrick-delivery@personal \
+  mintlify-docs@pdugan20-plugins \
   superpowers@claude-plugins-official \
   superpowers@openai-curated \
   expo@openai-curated \
@@ -54,6 +55,10 @@ for retired_plugin in \
     codex plugin remove "$retired_plugin"
   fi
 done
+
+if codex plugin marketplace list | awk -v target="pdugan20-plugins" '$1 == target { found = 1 } END { exit !found }'; then
+  codex plugin marketplace remove pdugan20-plugins
+fi
 
 echo "Marketplace-installed Codex plugin set is installed."
 echo "Verify config/codex-managed-plugins.txt in the Codex Plugins tab and complete any connector authentication there."

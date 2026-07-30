@@ -1,6 +1,6 @@
 {
   "name": "agent-tooling",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "license": "MIT",
   "private": true,
   "description": "Portable development tooling for a shared Codex and Claude configuration.",
@@ -12,7 +12,7 @@
     "catalog:snapshot": "python3 scripts/generate_catalog.py --snapshot-runtime",
     "format": "prettier --write \"**/*.{css,html,js,json,yaml,yml}\"",
     "format:check": "prettier --check \"**/*.{css,html,js,json,yaml,yml}\"",
-    "lint:claude": "claudelint check-all --strict --no-cache --format compact && claudelint validate-skills --path skills --preset strict --warnings-as-errors",
+    "lint:claude": "claudelint check-all --strict --no-cache --format compact && claudelint validate-skills --path .agents/skills --preset strict --warnings-as-errors",
     "lint:markdown": "markdownlint \"**/*.md\" --ignore node_modules --ignore .agents/skills --ignore .claude/skills --ignore .claudelint-cache",
     "mcp:check": "python3 scripts/check_mcp_auth.py",
     "plugins:refresh:claude": "bash scripts/refresh-claude-plugins.sh",

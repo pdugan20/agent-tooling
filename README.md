@@ -41,16 +41,17 @@ that separate account/workspace layer.
 | Area                   | Purpose                                                  | Canonical source                                      |
 | ---------------------- | -------------------------------------------------------- | ----------------------------------------------------- |
 | Shared instructions    | Exploration, production, Firebase, and safety policy     | [`global/AGENTS.md`](global/AGENTS.md)                |
-| Local workflows        | Instructions maintained as part of this repository      | [`skills/`](skills/)                                  |
-| Upstream skills        | Official CLI-managed snapshots with source provenance   | [`.agents/skills/`](.agents/skills/), `skills-lock.json` |
+| Patrick workflows      | Versioned design and delivery skills                     | [`pdugan20/patrick-workflows`](https://github.com/pdugan20/patrick-workflows) |
+| Managed skill snapshots | Skills CLI installations with source provenance         | [`.agents/skills/`](.agents/skills/), `skills-lock.json` |
 | Plugin setup           | Marketplace-installed and Codex-managed plugin sets      | [`config/`](config/)                                  |
 | Machine setup          | Bootstrap, refresh, configuration, and verification      | [`scripts/`](scripts/)                                |
 
-The top-level [`skills/`](skills/) directory intentionally contains only the three workflows maintained here. The
-seven third-party skills are installed into this repository by the official `skills` CLI, committed under
-[`.agents/skills/`](.agents/skills/), and tracked by `skills-lock.json`. That is their **management scope**. Bootstrap
-links all ten canonical skills into each agent's home-directory skill location, so their **runtime availability** is
-global across repositories. Do not edit upstream snapshots by hand; use `npm run skills:update` and review the diff.
+All ten skills are installed into this repository by the Skills CLI, committed under
+[`.agents/skills/`](.agents/skills/), and tracked by `skills-lock.json`. The three Patrick workflows come from the
+tagged public [Patrick Workflows](https://github.com/pdugan20/patrick-workflows) collection; the other seven retain
+their original publisher provenance. Bootstrap links every canonical snapshot into each agent's home-directory skill
+location, so their **runtime availability** is global across repositories. Do not edit snapshots by hand. Use
+`npm run skills:update` for upstream updates, or install a new Patrick Workflows tag explicitly, and review the diff.
 
 ## Catalog
 
@@ -106,20 +107,22 @@ so documentation and automation share memorable, stable command names while the 
 nvm use
 npm ci
 python3 -m pip install pre-commit==4.6.1
-brew install actionlint gitleaks
+brew install actionlint gitleaks lychee typos-cli zizmor
 pre-commit install --hook-type pre-commit --hook-type pre-push
 npm run verify
 ```
 
 The `ci` job is the stable required check. Verification covers unit tests, skill validation, Markdown and formatting,
 Python and shell quality, workflow syntax, catalog drift, repository policy, full-history secret scanning, and
-whitespace.
+whitespace. It also checks spelling with Typos and GitHub Actions security with zizmor. Network-dependent link
+validation runs on a weekly schedule.
 
 ## Documentation
 
 - [Architecture and scope](docs/architecture.md): sources of truth, runtime layers, placement rules, and persistence.
 - [Maintenance](docs/maintenance.md): updates, plugin refreshes, Superpowers review, and releases.
 - [Authoring](docs/authoring.md): linting, formatting, validation, and behavioral testing for skills and plugins.
+- [Quality tooling](docs/quality-tooling.md): adopted checks, version policy, and deferred alternatives.
 - [Changelog](CHANGELOG.md): curated repository releases and upgrade notes.
 - [Issues](https://github.com/pdugan20/agent-tooling/issues): current bugs, setup follow-ups, and proposed improvements.
 

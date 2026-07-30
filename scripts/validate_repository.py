@@ -17,15 +17,23 @@ CHANGELOG = ROOT / "CHANGELOG.md"
 SEMVER_RE = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
 RELEASE_TAG_RE = re.compile(r"^v(?P<version>\d+\.\d+\.\d+)$")
 CUSTOM_SKILLS = {
+    "code-native-ui-ideation": True,
     "feature-delivery": True,
     "production-hardening": False,
 }
-LOCAL_SKILLS = {
-    "code-native-ui-ideation",
-    "feature-delivery",
-    "production-hardening",
-}
 UPSTREAM_SKILLS = {
+    "code-native-ui-ideation": (
+        "pdugan20/patrick-workflows",
+        "skills/code-native-ui-ideation/SKILL.md",
+    ),
+    "feature-delivery": (
+        "pdugan20/patrick-workflows",
+        "skills/feature-delivery/SKILL.md",
+    ),
+    "production-hardening": (
+        "pdugan20/patrick-workflows",
+        "skills/production-hardening/SKILL.md",
+    ),
     "animation-vocabulary": ("emilkowalski/skills", "skills/animation-vocabulary/SKILL.md"),
     "apple-design": ("emilkowalski/skills", "skills/apple-design/SKILL.md"),
     "emil-design-eng": ("emilkowalski/skills", "skills/emil-design-eng/SKILL.md"),
@@ -37,6 +45,7 @@ UPSTREAM_SKILLS = {
     "review-animations": ("emilkowalski/skills", "skills/review-animations/SKILL.md"),
     "swiftui-pro": ("twostraws/swiftui-agent-skill", "swiftui-pro/SKILL.md"),
 }
+PATRICK_WORKFLOWS_REF = "v1.0.0"
 EXPECTED_EXPLICIT_SUPERPOWERS = {
     "brainstorming",
     "dispatching-parallel-agents",
@@ -161,21 +170,15 @@ def validate_repository() -> None:
             "retired personal plugin marketplace must not remain in the repository"
         )
 
-    local_skill_names = {
-        path.name for path in (ROOT / "skills").iterdir() if (path / "SKILL.md").is_file()
-    }
-    if local_skill_names != LOCAL_SKILLS:
-        raise ValidationError(
-            f"skills/ must contain only locally maintained workflows: {sorted(LOCAL_SKILLS)}"
-        )
-    for skill_name in LOCAL_SKILLS:
-        skill_root = ROOT / "skills" / skill_name
+    legacy_skills_root = ROOT / "skills"
+    if legacy_skills_root.exists() and any(legacy_skills_root.glob("*/SKILL.md")):
+        raise ValidationError("skills/ must not duplicate CLI-managed skill snapshots")
+
+    for skill_name, expected_implicit in CUSTOM_SKILLS.items():
+        skill_root = ROOT / ".agents/skills" / skill_name
         frontmatter = read_frontmatter(skill_root / "SKILL.md")
         if frontmatter.get("name") != skill_name:
             raise ValidationError(f"{skill_name} frontmatter name must match its directory")
-
-    for skill_name, expected_implicit in CUSTOM_SKILLS.items():
-        skill_root = ROOT / "skills" / skill_name
         actual_implicit = read_implicit_invocation(skill_root / "agents/openai.yaml")
         if actual_implicit is not expected_implicit:
             raise ValidationError(
@@ -205,6 +208,13 @@ def validate_repository() -> None:
             raise ValidationError(f"locked skill {skill_name} has an unexpected source")
         if lock_entry.get("skillPath") != expected_path:
             raise ValidationError(f"locked skill {skill_name} has an unexpected source path")
+        if (
+            expected_source == "pdugan20/patrick-workflows"
+            and lock_entry.get("ref") != PATRICK_WORKFLOWS_REF
+        ):
+            raise ValidationError(
+                f"locked skill {skill_name} must pin Patrick Workflows {PATRICK_WORKFLOWS_REF}"
+            )
         if lock_entry.get("sourceType") != "github" or not re.fullmatch(
             r"[0-9a-f]{64}", str(lock_entry.get("computedHash", ""))
         ):
@@ -241,7 +251,7 @@ def validate_repository() -> None:
         raise ValidationError("configured Superpowers must be desired in Codex")
     if plugin_id not in plugin_manifests["claude-plugins.txt"]:
         raise ValidationError("configured Superpowers must be desired in Claude")
-    mintlify_docs_id = "mintlify-docs@pdugan20-plugins"
+    mintlify_docs_id = "mintlify-docs@patrick-tools"
     if not all(
         mintlify_docs_id in plugin_manifests[name]
         for name in ("codex-plugins.txt", "claude-plugins.txt")
@@ -284,6 +294,7 @@ def validate_repository() -> None:
         raise ValidationError("Codex-managed plugins cannot also be CLI-managed")
     retired_ids = {
         "patrick-delivery@personal",
+        "mintlify-docs@pdugan20-plugins",
         "superpowers@claude-plugins-official",
         "expo@openai-curated",
         "sentry@openai-curated",
@@ -318,10 +329,26 @@ def validate_repository() -> None:
     )
     if not all(command in pre_commit for command in required_gitleaks_hooks):
         raise ValidationError("pre-commit must scan staged changes and full history")
+    required_quality_hooks = (
+        "entry: typos",
+        "entry: zizmor --pedantic --min-severity medium --min-confidence medium "
+        "--no-online-audits .",
+    )
+    if not all(command in pre_commit for command in required_quality_hooks):
+        raise ValidationError("pre-commit must run spelling and workflow security checks")
 
     verification = (ROOT / "scripts/verify-repo.sh").read_text(encoding="utf-8")
     if "gitleaks git --redact --no-banner --verbose ." not in verification:
         raise ValidationError("repository verification must scan full Git history")
+    if "pre-commit actionlint gitleaks typos zizmor" not in verification:
+        raise ValidationError("repository verification must require all standalone quality tools")
+
+    ci_tools = (ROOT / "scripts/install-ci-tools.sh").read_text(encoding="utf-8")
+    required_ci_tools = ("actionlint", "gitleaks", "typos", "zizmor")
+    if not all(
+        f"install_archive \\\n  {tool_name} \\" in ci_tools for tool_name in required_ci_tools
+    ):
+        raise ValidationError("CI tool installer must provision the full quality toolchain")
 
     for script_name in (
         "bootstrap.sh",
@@ -343,6 +370,16 @@ def validate_repository() -> None:
             )
         if "ensure_marketplace mintlify-marketplace mintlify/mintlify-claude-plugin" not in script:
             raise ValidationError(f"{script_name} must add Mintlify's canonical marketplace")
+        if "ensure_marketplace patrick-tools pdugan20/patrick-tools" not in script:
+            raise ValidationError(f"{script_name} must add Patrick's renamed marketplace")
+
+    for script_name in ("install-codex-plugins.sh", "refresh-codex-plugins.sh"):
+        script = (ROOT / "scripts" / script_name).read_text(encoding="utf-8")
+        if (
+            "ensure_marketplace patrick-tools https://github.com/pdugan20/patrick-tools.git"
+            not in script
+        ):
+            raise ValidationError(f"{script_name} must add Patrick's renamed marketplace")
 
 
 def main() -> None:

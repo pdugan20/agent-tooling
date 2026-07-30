@@ -5,14 +5,21 @@ on:
     - cron: "0 17 * * 1"
   workflow_dispatch:
 
-permissions:
-  contents: read
-  issues: write
+permissions: {}
+
+concurrency:
+  group: ${{ github.repository }}-${{ github.workflow }}
+  cancel-in-progress: true
 
 jobs:
   check:
+    name: Check configured fork
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      contents: read
+      # Required only when the scheduled check opens an update issue.
+      issues: write
     steps:
       - name: Check out repository
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
@@ -27,7 +34,7 @@ jobs:
       - name: Open update issue
         if: steps.superpowers.outputs.outdated == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
           CURRENT_COMMIT: ${{ steps.superpowers.outputs.currentCommit }}
           LATEST_COMMIT: ${{ steps.superpowers.outputs.latestCommit }}
           UPSTREAM_VERSION: ${{ steps.superpowers.outputs.upstreamVersion }}

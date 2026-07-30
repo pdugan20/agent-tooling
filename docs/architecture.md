@@ -8,8 +8,8 @@ settings are generated machine state; edit this repository rather than patching 
 | Concern | Canonical source | Runtime destination |
 | --- | --- | --- |
 | Shared working agreement | `global/AGENTS.md` | `~/.codex/AGENTS.md` and the active Claude profile |
-| Locally maintained skills | `skills/*/SKILL.md` | User-level skill links for both products |
-| Upstream skills | `.agents/skills/*` and `skills-lock.json` | User-level skill links for both products |
+| Patrick workflows | `pdugan20/patrick-workflows` releases | Skills CLI snapshots and user-level links |
+| Managed skill snapshots | `.agents/skills/*` and `skills-lock.json` | User-level skill links for both products |
 | Marketplace-installed Codex plugins | `config/codex-plugins.txt` | Codex configuration and plugin cache |
 | Codex-managed plugins | `config/codex-managed-plugins.txt` | Signed-in Codex account/workspace |
 | Claude plugins | `config/claude-plugins.txt` | Claude user settings and plugin cache |
@@ -46,13 +46,15 @@ local behavior without copying globally installed plugin files.
 
 ## Skills
 
-The top-level `skills/` directory contains workflows maintained in this repository. `.agents/skills/` contains exact
-third-party snapshots installed by the official [`skills` CLI](https://github.com/vercel-labs/skills) and tracked by
-`skills-lock.json`. The `.claude/skills/` entries are compatibility links, not separate copies.
+The public [Patrick Workflows](https://github.com/pdugan20/patrick-workflows) repository is canonical for Patrick's
+three design and delivery skills. This repository consumes its tagged releases alongside seven third-party skills.
+All ten exact snapshots are installed by the [`skills` CLI](https://github.com/vercel-labs/skills), stored under
+`.agents/skills/`, and tracked by `skills-lock.json`. The `.claude/skills/` entries are compatibility links, not
+separate copies.
 
-Do not edit locked snapshots. Run `npm run skills:update`, review the snapshot and lockfile diff, and then run
-`npm run verify`. If a source needs local policy, prefer runtime configuration or a clearly named local skill over a
-silent fork.
+Do not edit locked snapshots. Release first-party changes from Patrick Workflows, install the new tag here, and
+review the snapshot and lockfile diff. Run `npm run skills:update` for third-party updates. If a source needs local
+policy, prefer runtime configuration or a clearly named addition to Patrick Workflows over a silent fork.
 
 ## Plugin layers
 

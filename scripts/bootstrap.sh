@@ -41,9 +41,19 @@ done
 remove_legacy_link "$HOME/plugins/patrick-delivery" "$ROOT/plugins/patrick-delivery"
 remove_legacy_link "$HOME/.agents/plugins/marketplace.json" "$ROOT/.agents/plugins/marketplace.json"
 
-for upstream_skill in animation-vocabulary apple-design emil-design-eng review-animations swiftui-pro; do
-  remove_legacy_link "$HOME/.agents/skills/$upstream_skill" "$ROOT/skills/$upstream_skill"
-  remove_legacy_link "$claude_config_dir/skills/$upstream_skill" "$ROOT/skills/$upstream_skill"
+for managed_skill in \
+  animation-vocabulary \
+  apple-design \
+  code-native-ui-ideation \
+  emil-design-eng \
+  feature-delivery \
+  find-animation-opportunities \
+  pick-ui-library \
+  production-hardening \
+  review-animations \
+  swiftui-pro; do
+  remove_legacy_link "$HOME/.agents/skills/$managed_skill" "$ROOT/skills/$managed_skill"
+  remove_legacy_link "$claude_config_dir/skills/$managed_skill" "$ROOT/skills/$managed_skill"
 done
 
 link_skill_collection() {
@@ -59,7 +69,6 @@ link_skill_collection() {
   done
 }
 
-link_skill_collection "$ROOT/skills"
 link_skill_collection "$ROOT/.agents/skills"
 
 python3 "$ROOT/scripts/configure-claude.py" --settings "$claude_config_dir/settings.json"

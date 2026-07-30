@@ -13,11 +13,25 @@
       "skillPath": "skills/apple-design/SKILL.md",
       "computedHash": "8b94db67cb9edaad5f1501010804caa610131f1d2dfda0a27664b2e858deade3"
     },
+    "code-native-ui-ideation": {
+      "source": "pdugan20/patrick-workflows",
+      "ref": "v1.0.0",
+      "sourceType": "github",
+      "skillPath": "skills/code-native-ui-ideation/SKILL.md",
+      "computedHash": "2f51cdffc44789bf7e66ef224fd81cf4146380310a743affdb8044b3543fe169"
+    },
     "emil-design-eng": {
       "source": "emilkowalski/skills",
       "sourceType": "github",
       "skillPath": "skills/emil-design-eng/SKILL.md",
       "computedHash": "41b0a4dc1a27164fe297845a6c6850a39e9242c42c9be999967fcee9df2c5974"
+    },
+    "feature-delivery": {
+      "source": "pdugan20/patrick-workflows",
+      "ref": "v1.0.0",
+      "sourceType": "github",
+      "skillPath": "skills/feature-delivery/SKILL.md",
+      "computedHash": "75aad5ca49bbe1cb4e315e0aac3d00cbfc22e7e6a11fd08a88b144b7ce65314c"
     },
     "find-animation-opportunities": {
       "source": "emilkowalski/skills",
@@ -30,6 +44,13 @@
       "sourceType": "github",
       "skillPath": "skills/pick-ui-library/SKILL.md",
       "computedHash": "f8d4d2cf4677bf54b14f35f62a741add93541bfcb67863315a40164365161b49"
+    },
+    "production-hardening": {
+      "source": "pdugan20/patrick-workflows",
+      "ref": "v1.0.0",
+      "sourceType": "github",
+      "skillPath": "skills/production-hardening/SKILL.md",
+      "computedHash": "90fce7b617ac609014e29ef4ac9bb8ed8b089075e2f579fe402a617b1059cf06"
     },
     "review-animations": {
       "source": "emilkowalski/skills",
