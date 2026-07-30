@@ -3,10 +3,9 @@
 [![CI](https://github.com/pdugan20/agent-tooling/actions/workflows/ci.yml/badge.svg)](https://github.com/pdugan20/agent-tooling/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/pdugan20/agent-tooling?logo=github)](https://github.com/pdugan20/agent-tooling/releases)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.22.2-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?logo=opensourceinitiative&logoColor=white)](https://opensource.org/licenses/MIT)
 
 Portable, canonical tooling shared across Codex and Claude Code projects: working agreements, reusable workflows, a
-policy-configured Superpowers fork, plugin manifests, and machine setup.
+reconciled plugin inventory, and machine setup.
 
 ## Quick start
 
@@ -42,7 +41,6 @@ that separate account/workspace layer.
 | Shared instructions    | Exploration, production, Firebase, and safety policy     | [`global/AGENTS.md`](global/AGENTS.md)                |
 | Local workflows        | Instructions maintained as part of this repository      | [`skills/`](skills/)                                  |
 | Upstream skills        | Official CLI-managed snapshots with source provenance   | [`.agents/skills/`](.agents/skills/), `skills-lock.json` |
-| Configured Superpowers | Upstream plugin with strict workflows made explicit-only | [`config/superpowers.json`](config/superpowers.json)  |
 | Plugin setup           | Marketplace-installed and Codex-managed plugin sets      | [`config/`](config/)                                  |
 | Machine setup          | Bootstrap, refresh, configuration, and verification      | [`scripts/`](scripts/)                                |
 
@@ -94,7 +92,6 @@ capabilities, not package records.
 | `npm run setup:check`            | Compare this Mac with the desired setup            |
 | `npm run mcp:check`              | Check machine-local Codex MCP authentication       |
 | `npm run skills:update`          | Check and apply upstream skill updates for review  |
-| `npm run superpowers:check`      | Check whether the fork trails upstream             |
 | `npm run catalog`                | Generate and serve the browser catalog             |
 | `npm run verify`                 | Run the complete local and GitHub Actions gate     |
 
@@ -129,10 +126,6 @@ whitespace.
 
 ## Releases
 
-Repository releases use `vMAJOR.MINOR.PATCH` tags and curated notes from `CHANGELOG.md`. The configured Superpowers
-fork has its own upstream-derived version and release process. See the
-[maintenance guide](inventory/maintenance.md#release-agent-tooling) for both update paths.
-
-## License
-
-Licensed under the [MIT License](LICENSE).
+Repository releases use `vMAJOR.MINOR.PATCH` tags and curated notes from `CHANGELOG.md`. See the
+[maintenance guide](inventory/maintenance.md#release-agent-tooling) for the release workflow and component-specific
+update procedures.
