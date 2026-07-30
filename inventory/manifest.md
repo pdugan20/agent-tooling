@@ -1,6 +1,8 @@
 # Agent tooling manifest
 
-This is the authoritative map of Patrick's shared Claude and Codex setup. The private Git repository at `pdugan20/agent-tooling` is the canonical source; runtime caches and settings under the home directory are generated machine state.
+This is the authoritative map of Patrick's shared Claude and Codex setup. The public Git repository at
+`pdugan20/agent-tooling` is the canonical source; runtime caches and settings under the home directory are generated
+machine state.
 
 ## Canonical sources
 
@@ -173,8 +175,8 @@ blocks to every task, increasing verbosity and token use during lightweight iter
 `swift-lsp` and `typescript-lsp` are intentionally Claude-only plugins. Claude Code supports an `lspServers`
 component that connects its built-in LSP tool to separately installed language-server binaries. `swift-lsp` uses
 Xcode or Swift's `sourcekit-lsp`; `typescript-lsp` uses the globally installed `typescript-language-server` and
-`typescript` packages. `scripts/setup-new-machine.sh` installs the TypeScript prerequisites, and
-`scripts/verify-setup.sh` checks both binaries.
+`typescript` packages. `npm run setup` installs the TypeScript prerequisites, and `npm run setup:check` checks both
+binaries.
 
 Codex's current plugin format does not define an LSP-server component, so installing these Claude plugins through a
 Codex marketplace would create an installed record without giving Codex Claude's diagnostics or navigation tool.
@@ -202,7 +204,8 @@ Keep credentials and personal data out of this repository.
 codex plugin list --json
 codex plugin marketplace list
 claude plugin list --json
-./scripts/verify-setup.sh
+npm run setup:check
+npm run mcp:check
 npm run catalog:snapshot
 ```
 

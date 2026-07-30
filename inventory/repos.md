@@ -19,7 +19,7 @@ were squash-merged through pull requests on 2026-07-26 and 2026-07-27. GitHub re
 
 | Repository                 | Commit     | Publication status                                                  | Notes                                                                  |
 | -------------------------- | ---------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| `agent-tooling`            | `main`     | Private remote: `pdugan20/agent-tooling`                            | Shared source, installer, local workflows, locked upstream skills, and plugin policy |
+| `agent-tooling`            | `main`     | Public remote: `pdugan20/agent-tooling`                             | Shared source, installer, local workflows, locked upstream skills, and plugin policy |
 | `nextup-ios-app`           | `a2eae9f8` | [Merged PR #772](https://github.com/nxt-up/nextup-ios-app/pull/772)  | Canonical skills plus Claude symlinks                                  |
 | `nextup-backend`           | `319117e5` | [Merged PR #740](https://github.com/nxt-up/nextup-backend/pull/740)  | Canonical skills, explicit-only TDD, MCP docs, and legacy-link shim    |
 | `nextup-web`               | `fef3229`  | [Merged PR #117](https://github.com/nxt-up/nextup-web/pull/117)      | Exploration/production modes and Firebase safety                       |
@@ -101,9 +101,9 @@ Do not migrate these separately:
 ## Remaining optional decisions
 
 - Decide whether `github-automation` and `github-portfolio-ops` should remain local-only, be archived, or receive
-  private remotes before attempting to sync them.
+  GitHub remotes before attempting to sync them.
 - Retry NextUp MCP OAuth later if that integration is needed. This remains machine-local and must not be committed.
-- Use `./scripts/audit-migration-branches.sh --fetch --merged` for future post-merge verification.
+- Use `npm run migrations:audit -- --fetch --merged` for future post-merge verification.
 
 ## Local environment status and follow-ups
 

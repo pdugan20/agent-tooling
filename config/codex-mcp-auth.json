@@ -1,0 +1,21 @@
+{
+  "oauthRequired": [
+    "expo",
+    "Mintlify Admin",
+    "cloudflare-api",
+    "cloudflare-bindings",
+    "cloudflare-builds",
+    "cloudflare-observability"
+  ],
+  "knownBlocked": {
+    "sentry": {
+      "issue": "https://github.com/openai/codex/issues/34684",
+      "reason": "Codex drops the OAuth issuer callback parameter required by Sentry."
+    }
+  },
+  "noOAuthRequired": {
+    "Mintlify Search": "Public documentation search endpoint.",
+    "cloudflare-docs": "Public documentation endpoint.",
+    "firebase": "Uses Firebase CLI authentication instead of Codex MCP OAuth."
+  }
+}

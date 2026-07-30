@@ -9,7 +9,7 @@ branch. GitHub then removed every temporary `codex/agent-workflow-migration` rem
 Run the durable post-merge audit with:
 
 ```bash
-./scripts/audit-migration-branches.sh --fetch --merged
+npm run migrations:audit -- --fetch --merged
 ```
 
 That audit verifies each recorded squash-merge commit remains reachable from the current remote default branch and
@@ -68,7 +68,7 @@ that no temporary migration branch has reappeared.
 
 ## Deliberate exclusions and remaining optional work
 
-- `github-automation` (`5e0f4b5`) and `github-portfolio-ops` (`6f38a51`) remain local-only. Creating private remotes or
+- `github-automation` (`5e0f4b5`) and `github-portfolio-ops` (`6f38a51`) remain local-only. Creating GitHub remotes or
   archiving them is a separate decision.
 - NextUp MCP OAuth remains intentionally deferred. No credentials were stored; retry with
   `codex mcp login nextup-mcp-dev` and then confirm `codex mcp list` reports OAuth authentication.

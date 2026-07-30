@@ -10,9 +10,9 @@ same skill files through runtime-specific symlinks; do not maintain separate cop
 2. Validate affected skills with `quick_validate.py` and run the repository's configuration tests.
 3. Regenerate the catalog when skill metadata or plugin state changes.
 4. Commit and push this repository.
-5. On another machine, pull, run `./scripts/bootstrap.sh`, and start a new Claude or Codex task.
+5. On another machine, pull, run `npm run bootstrap`, and start a new Claude or Codex task.
 
-After changing a local workflow, rerun `./scripts/bootstrap.sh` and start new tasks. The symlinks update immediately,
+After changing a local workflow, rerun `npm run bootstrap` and start new tasks. The symlinks update immediately,
 but active tasks retain the skill inventory loaded when they started.
 
 ## Update upstream skills
@@ -50,18 +50,19 @@ Install the repository development dependencies once as documented in `README.md
 npm run verify
 ```
 
-This is the exact `ci` status check used by GitHub Actions. It validates the canonical files and repository policy without inspecting authenticated runtime state. Continue to use `./scripts/verify-setup.sh` separately after applying the setup on a real machine.
+This is the exact `ci` status check used by GitHub Actions. It validates the canonical files and repository policy
+without inspecting authenticated runtime state. Continue to use `npm run setup:check` separately after applying the
+setup on a real machine.
 
 ClaudeLint is intentionally strict for workflows maintained in this repository. Locked upstream snapshots are
 excluded from local style rewrites and lint policy; their integrity and provenance are enforced through
 `skills-lock.json`. `scripts/validate_repository.py` separately validates that split, the configured Superpowers
 baseline, and desired plugin state.
 
-### Secret-scanning fallback
+### Secret scanning
 
-GitHub-native secret scanning and push protection are unavailable for this user-owned private repository under the current account model. GitHub documents private-repository Secret Protection as an organization or enterprise product, so enabling it would require a separate ownership, plan, and billing decision.
-
-The repository instead fails closed through Gitleaks at three points:
+GitHub scans public repositories for supported secrets automatically, and account-level push protection helps block
+secrets before they are pushed. Gitleaks remains an independent defense-in-depth check at three points:
 
 - staged changes in the local pre-commit hook;
 - full Git history in the local pre-push hook;
@@ -110,7 +111,7 @@ or canonical source URL is no longer accurate. Skill and plugin source labels li
 source is public; Codex-managed bundles remain plain text unless OpenAI publishes a repository for them. CI runs
 `npm run catalog:check` and fails when generated data drifts from canonical inputs.
 
-For a private runtime comparison, run `npm run catalog:snapshot`. The resulting
+For a machine-local runtime comparison, run `npm run catalog:snapshot`. The resulting
 `catalog/runtime-data.local.json` contains only capability identifiers, versions, runtime state, and repository
 metadata—not installation paths, credentials, or plugin configuration—and is ignored by Git.
 
@@ -137,7 +138,7 @@ default-on telemetry.
 Run:
 
 ```bash
-./scripts/refresh-codex-plugins.sh
+npm run plugins:refresh:codex
 ```
 
 This command does not install or refresh `config/codex-managed-plugins.txt`. Codex owns that account/workspace layer;
@@ -148,7 +149,7 @@ The script refreshes Git marketplace snapshots, re-adds every configured plugin 
 
 The installer also removes retired and superseded CLI plugin state through `codex plugin remove`, including orphaned
 caches from personal or removed marketplaces. Shared marketplaces may retain inert downloaded package caches after
-removal; `codex plugin list --json` and the Plugins tab determine active installed state. `./scripts/verify-setup.sh`
+removal; `codex plugin list --json` and the Plugins tab determine active installed state. `npm run setup:check`
 fails if Patrick Delivery, an unconfigured Superpowers copy, the former Expo, Sentry, or Mintlify package, or a
 duplicate CLI copy of Figma, GitHub, or Vercel remains installed. Account-managed plugins listed in
 `config/codex-managed-plugins.txt` must be checked in the Codex Plugins tab because the CLI does not authoritatively
@@ -163,7 +164,7 @@ re-add the configured plugin here.
 Refresh the desired Claude plugin set with:
 
 ```bash
-./scripts/refresh-claude-plugins.sh
+npm run plugins:refresh:claude
 ```
 
 Underneath, this runs `claude plugin marketplace update` and `claude plugin update` for the entries in `config/claude-plugins.txt`. Claude requires a restart after a plugin update.
@@ -193,8 +194,8 @@ To update safely:
    `claude plugin validate .`.
 5. Push the fork, then update `upstreamVersion`, `upstreamCommit`, and `forkVersion` in
    `config/superpowers.json`. Regenerate the catalog and run `npm run verify` here.
-6. Run `./scripts/refresh-codex-plugins.sh` and `./scripts/refresh-claude-plugins.sh`, restart both products, and run
-   `./scripts/verify-setup.sh`.
+6. Run `npm run plugins:refresh:codex` and `npm run plugins:refresh:claude`, restart both products, and run
+   `npm run setup:check`.
 7. Start new tasks and smoke-test one automatic workflow (for example debugging) plus negative prompts for TDD,
    brainstorming, worktrees, and the browser option picker.
 
@@ -205,4 +206,7 @@ The current baseline is upstream `6.2.0` at commit
 
 Patrick's default visual ideation surface is runnable code in the real project, browser, or relevant simulator. Generated-image ideation is opt-in.
 
-`scripts/configure-codex.py` disables Product Design's `index` router and `ideate` skill when their installed cache paths are present. It intentionally leaves audit, URL-to-code, image-to-code from an existing reference, design QA, research, user context, and sharing available. Because plugin cache paths include versions, rerun `./scripts/bootstrap.sh` after a Codex or Product Design update, then start a new task.
+`scripts/configure-codex.py` disables Product Design's `index` router and `ideate` skill when their installed cache
+paths are present. It intentionally leaves audit, URL-to-code, image-to-code from an existing reference, design QA,
+research, user context, and sharing available. Because plugin cache paths include versions, rerun
+`npm run bootstrap` after a Codex or Product Design update, then start a new task.

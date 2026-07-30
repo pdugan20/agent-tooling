@@ -8,6 +8,8 @@ version when compatibility requires it.
 
 ### Added
 
+- Added an MIT license and standardized repository badges for CI, releases, Node.js support, and licensing.
+- Added `npm run mcp:check` as a repeatable machine-local MCP authentication status check.
 - Added canonical GitHub source links to catalog skill and plugin records wherever a public source exists.
 - Documented that Claude's LSP plugins are runtime-specific, installed the TypeScript language-server prerequisite
   during new-machine setup, and added binary checks to setup verification.
@@ -18,6 +20,8 @@ version when compatibility requires it.
 
 ### Changed
 
+- Made the repository public, removed obsolete visibility language, and standardized documented operator commands on
+  stable `npm run` entry points.
 - Split Codex account-managed plugins from marketplace-installed plugins so setup no longer installs duplicate CLI
   copies of Figma, GitHub, or Vercel, and made the Plugins tab the documented authority for that managed layer.
 - Audited every desired Codex plugin against its vendor source. Expo, Sentry, and Mintlify now use current
@@ -31,7 +35,7 @@ version when compatibility requires it.
   remain updateable without hidden local forks.
 - Removed Claude's always-on `explanatory-output-style` plugin from desired state because its SessionStart hook adds
   mandatory educational output and token overhead to every task.
-- Added portable project-skill discovery to the private catalog snapshot with repository and availability filters;
+- Added portable project-skill discovery to the local catalog snapshot with repository and availability filters;
   repository roots are supplied at runtime and never committed.
 
 ## [0.3.0] - 2026-07-28
@@ -81,12 +85,12 @@ version when compatibility requires it.
 
 ### Security
 
-- Added staged, pre-push, and full-history Gitleaks checks as the private-repository secret-scanning fallback.
+- Added staged, pre-push, and full-history Gitleaks checks as complementary secret-scanning layers.
 - Kept credentials, OAuth sessions, production data, and machine-specific trust state outside the Git-backed setup.
 
 ### Upgrade notes
 
-Pull the repository, run `./scripts/bootstrap.sh`, refresh the configured Codex and Claude plugins, and start new
+Pull the repository, run `npm run bootstrap`, refresh the configured Codex and Claude plugins, and start new
 tasks in both products.
 
 [unreleased]: https://github.com/pdugan20/agent-tooling/compare/v0.3.0...HEAD

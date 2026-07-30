@@ -1,9 +1,9 @@
 # Agent Tooling
 
 [![CI](https://github.com/pdugan20/agent-tooling/actions/workflows/ci.yml/badge.svg)](https://github.com/pdugan20/agent-tooling/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/pdugan20/agent-tooling)](https://github.com/pdugan20/agent-tooling/releases/latest)
-[![License](https://img.shields.io/github/license/pdugan20/agent-tooling)](LICENSE)
-![Node](https://img.shields.io/badge/Node-22-3C873A?logo=nodedotjs&logoColor=white)
+[![Release](https://img.shields.io/github/v/release/pdugan20/agent-tooling?logo=github)](https://github.com/pdugan20/agent-tooling/releases)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.22.2-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?logo=opensourceinitiative&logoColor=white)](https://opensource.org/licenses/MIT)
 
 Portable, canonical tooling shared across Codex and Claude Code projects: working agreements, reusable workflows, a
 policy-configured Superpowers fork, plugin manifests, and machine setup.
@@ -15,7 +15,7 @@ Install and authenticate Codex, Claude Code, and GitHub CLI, then run:
 ```bash
 gh repo clone pdugan20/agent-tooling
 cd agent-tooling
-./scripts/setup-new-machine.sh
+npm run setup
 ```
 
 The checkout can live anywhere. Setup scripts resolve the repository from their own location and do not require a
@@ -59,10 +59,10 @@ npm run catalog
 
 Open [localhost:4173/catalog/](http://127.0.0.1:4173/catalog/). To compare the repository with installed plugins and
 skills on the current Mac, run `npm run catalog:snapshot`, reopen the catalog with `?runtime=local`, and choose
-**This Mac**. The snapshot is private, machine-local, and ignored by Git.
+**This Mac**. The snapshot is machine-local and ignored by Git.
 
 To include repository-scoped skills from a folder of Git checkouts without hardcoding that folder into the setup,
-pass it when creating the private snapshot:
+pass it when creating the local snapshot:
 
 ```bash
 npm run catalog:snapshot -- --repos-root /path/to/repositories
@@ -78,16 +78,21 @@ Source names link to the canonical GitHub skill or plugin when the publisher exp
 
 ## Common commands
 
-| Command                               | Purpose                                            |
-| ------------------------------------- | -------------------------------------------------- |
-| `./scripts/bootstrap.sh`              | Reapply shared links and non-secret runtime policy |
-| `./scripts/refresh-codex-plugins.sh`  | Refresh the desired Codex plugin set               |
-| `./scripts/refresh-claude-plugins.sh` | Refresh the desired Claude plugin set              |
-| `./scripts/verify-setup.sh`           | Compare this Mac with the desired setup            |
-| `npm run skills:update`               | Check and apply upstream skill updates for review   |
-| `npm run superpowers:check`           | Check whether the fork trails upstream             |
-| `npm run catalog`                     | Generate and serve the browser catalog             |
-| `npm run verify`                      | Run the complete local and GitHub Actions gate     |
+| Command                          | Purpose                                            |
+| -------------------------------- | -------------------------------------------------- |
+| `npm run setup`                  | Configure the complete setup on a new machine      |
+| `npm run bootstrap`              | Reapply shared links and non-secret runtime policy |
+| `npm run plugins:refresh:codex`  | Refresh the desired Codex plugin set               |
+| `npm run plugins:refresh:claude` | Refresh the desired Claude plugin set              |
+| `npm run setup:check`            | Compare this Mac with the desired setup            |
+| `npm run mcp:check`              | Check machine-local Codex MCP authentication       |
+| `npm run skills:update`          | Check and apply upstream skill updates for review  |
+| `npm run superpowers:check`      | Check whether the fork trails upstream             |
+| `npm run catalog`                | Generate and serve the browser catalog             |
+| `npm run verify`                 | Run the complete local and GitHub Actions gate     |
+
+`npm run` commands are the supported user-facing interface. They delegate to the scripts in [`scripts/`](scripts/)
+so documentation and automation share memorable, stable command names while the implementation can evolve.
 
 ## Development
 
@@ -120,3 +125,7 @@ whitespace.
 Repository releases use `vMAJOR.MINOR.PATCH` tags and curated notes from `CHANGELOG.md`. The configured Superpowers
 fork has its own upstream-derived version and release process. See the
 [maintenance guide](inventory/maintenance.md#release-agent-tooling) for both update paths.
+
+## License
+
+Licensed under the [MIT License](LICENSE).

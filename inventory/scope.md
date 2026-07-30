@@ -37,12 +37,12 @@ The full Apple Skills plugin is deliberately not installed. `swiftui-pro` remain
 ## Persistence and machine setup
 
 - Git-tracked `AGENTS.md`, `.agents/skills`, `.claude/skills` links, and `skills-lock.json` travel with a project.
-- `agent-tooling` global sources travel through its Git repository and become active after `./scripts/bootstrap.sh` on each machine.
-- User-level plugin installations and product settings must be recreated by `./scripts/setup-new-machine.sh` or the refresh scripts.
+- `agent-tooling` global sources travel through its Git repository and become active after `npm run bootstrap` on each machine.
+- User-level plugin installations and product settings must be recreated by `npm run setup` or the plugin refresh commands.
 - `.claude/settings.local.json`, OAuth sessions, secrets, API keys, simulator state, and toolchains are machine-local and do not sync through Git.
 
 For upstream project skills, run `npx skills update -p -y` in that project, review the snapshot and lockfile diff, and run the project's verification. The current CLI does not document a read-only update check. Locally maintained project skills update with the application code.
 
-The canonical browser catalog remains the portable global manifest. Its private “This Mac” snapshot can also index
+The canonical browser catalog remains the portable global manifest. Its local “This Mac” snapshot can also index
 project skills without committing machine paths: run
 `npm run catalog:snapshot -- --repos-root /path/to/repositories`, then filter by availability or repository.
