@@ -30,11 +30,11 @@ class RepositoryValidationTests(unittest.TestCase):
         for skill_name in validate_repository.CUSTOM_SKILLS:
             self.assertEqual(
                 skills_lock["skills"][skill_name]["source"],
-                "pdugan20/patrick-workflows",
+                "pdugan20/skills",
             )
             self.assertEqual(
                 skills_lock["skills"][skill_name]["ref"],
-                validate_repository.PATRICK_WORKFLOWS_REF,
+                validate_repository.PATRICK_SKILLS_REF,
             )
         self.assertEqual(
             set((validate_repository.ROOT / ".agents/skills").glob("*/skills/*/SKILL.md")),
@@ -70,16 +70,22 @@ class RepositoryValidationTests(unittest.TestCase):
             self.assertTrue((claude_profile / "skills/code-native-ui-ideation").is_symlink())
             self.assertFalse((home / ".claude").exists())
 
-    def test_legacy_marketplace_is_retired_before_replacement_registration(self) -> None:
+    def test_retired_marketplaces_are_removed_before_replacement_registration(self) -> None:
         for runtime in ("claude", "codex"):
             for operation in ("install", "refresh"):
                 script = (
                     validate_repository.ROOT / "scripts" / f"{operation}-{runtime}-plugins.sh"
                 ).read_text(encoding="utf-8")
-                self.assertLess(
-                    script.index(f"{runtime} plugin marketplace remove pdugan20-plugins"),
-                    script.index("ensure_marketplace patrick-tools"),
-                )
+                replacement = script.index("ensure_marketplace patrick-plugins")
+                for retired_marketplace in ("pdugan20-plugins", "patrick-tools"):
+                    self.assertLess(script.index(retired_marketplace), replacement)
+                for retired_plugin in (
+                    "mintlify-docs@pdugan20-plugins",
+                    "mintlify-docs@patrick-tools",
+                    "patrick-workflows@pdugan20-plugins",
+                    "patrick-workflows@patrick-tools",
+                ):
+                    self.assertLess(script.index(retired_plugin), replacement)
 
     def test_release_tag_must_match_repository_version(self) -> None:
         with (

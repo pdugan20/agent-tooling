@@ -14,8 +14,8 @@
       "computedHash": "8b94db67cb9edaad5f1501010804caa610131f1d2dfda0a27664b2e858deade3"
     },
     "code-native-ui-ideation": {
-      "source": "pdugan20/patrick-workflows",
-      "ref": "v1.1.0",
+      "source": "pdugan20/skills",
+      "ref": "v2.0.0",
       "sourceType": "github",
       "skillPath": "skills/code-native-ui-ideation/SKILL.md",
       "computedHash": "1b272e6401eecc663ff151e5210a145c9b54a872b1b1975e0211330316721ca9"
@@ -27,8 +27,8 @@
       "computedHash": "41b0a4dc1a27164fe297845a6c6850a39e9242c42c9be999967fcee9df2c5974"
     },
     "feature-delivery": {
-      "source": "pdugan20/patrick-workflows",
-      "ref": "v1.1.0",
+      "source": "pdugan20/skills",
+      "ref": "v2.0.0",
       "sourceType": "github",
       "skillPath": "skills/feature-delivery/SKILL.md",
       "computedHash": "8d1ad4ff5c6cbc3fedbb3069346795935ea281910c6d6168e78f075c3e5b9fbf"
@@ -46,8 +46,8 @@
       "computedHash": "f8d4d2cf4677bf54b14f35f62a741add93541bfcb67863315a40164365161b49"
     },
     "production-hardening": {
-      "source": "pdugan20/patrick-workflows",
-      "ref": "v1.1.0",
+      "source": "pdugan20/skills",
+      "ref": "v2.0.0",
       "sourceType": "github",
       "skillPath": "skills/production-hardening/SKILL.md",
       "computedHash": "26650d1abd7f1f067af0b72c435fbe645f01e040b524cb212c0b10882d9baf42"

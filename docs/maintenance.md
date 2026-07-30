@@ -2,7 +2,7 @@
 
 `agent-tooling` is the canonical consumer configuration for Patrick's shared instructions, locked skill set,
 desired plugin state, and configured Superpowers baseline. Patrick-owned skills are released from
-`pdugan20/patrick-workflows`; Claude and Codex consume the installed snapshots through runtime-specific symlinks.
+`pdugan20/skills`; Claude and Codex consume the installed snapshots through runtime-specific symlinks.
 
 ## Update shared instructions
 
@@ -14,7 +14,7 @@ desired plugin state, and configured Superpowers baseline. Patrick-owned skills 
 
 ## Update Patrick workflows
 
-1. Edit and validate the canonical skill in `pdugan20/patrick-workflows`.
+1. Edit and validate the canonical skill in `pdugan20/skills`.
 2. Release a new semantic version there.
 3. Install that exact tag in this repository with the Skills CLI for Codex and Claude Code.
 4. Review `.agents/skills/`, `.claude/skills/`, and `skills-lock.json`.
@@ -35,7 +35,7 @@ npm run verify
 Review instruction changes like dependency changes: confirm their source, inspect the full diff, and smoke-test the
 affected workflow before committing. Do not patch the generated snapshot, run a global update for this repository,
 or auto-merge instruction updates. If a personal customization is genuinely needed, create a clearly named skill in
-Patrick Workflows instead of silently diverging the upstream copy.
+Skills instead of silently diverging the upstream copy.
 
 Updates remain intentionally manual for now. The CLI provides the canonical install, lock, and update operation but
 does not provide a first-party scheduled pull-request workflow. Adding custom branch and pull-request automation
@@ -158,7 +158,7 @@ report that separate layer.
 
 The current Codex CLI has no `plugin update` command. Its relevant refresh primitives are `codex plugin marketplace upgrade` and `codex plugin add`.
 
-`mintlify-docs` is refreshed from the native Codex catalog in `pdugan20/patrick-tools`. Its canonical plugin code
+`mintlify-docs` is refreshed from the native Codex catalog in `pdugan20/plugins`. Its canonical plugin code
 lives in `pdugan20/mintlify-docs`; update and release that repository first, then refresh the marketplace snapshot and
 re-add the configured plugin here.
 

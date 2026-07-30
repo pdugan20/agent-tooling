@@ -6,6 +6,25 @@ version when compatibility requires it.
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-07-30
+
+### Changed
+
+- Migrated Patrick-owned skill provenance from `pdugan20/patrick-workflows` v1.1.0 to the canonical
+  `pdugan20/skills` v2.0.0 release.
+- Migrated Claude Code and Codex from the `patrick-tools` marketplace to `patrick-plugins` at `pdugan20/plugins`.
+- Updated Mintlify Docs to 0.3.3 and documented the maintained third-party skill validator as an independent release
+  gate.
+- Updated the pinned ClaudeLint development dependency to 0.7.1 for the renamed marketplace guidance while keeping
+  its role limited to shared configuration and plugin-specific checks.
+- Updated the generated catalog, authoring guidance, setup scripts, and verification policy to use artifact-accurate
+  skill and plugin terminology.
+
+### Upgrade notes
+
+Pull the repository and run `npm run setup`. The setup removes the retired `pdugan20-plugins` and `patrick-tools`
+marketplaces and their old plugin IDs before registering `patrick-plugins`.
+
 ## [0.4.2] - 2026-07-30
 
 ### Changed
@@ -134,7 +153,8 @@ workflow snapshots.
 Pull the repository, run `npm run bootstrap`, refresh the configured Codex and Claude plugins, and start new
 tasks in both products.
 
-[unreleased]: https://github.com/pdugan20/agent-tooling/compare/v0.4.2...HEAD
+[unreleased]: https://github.com/pdugan20/agent-tooling/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/pdugan20/agent-tooling/compare/v0.4.2...v0.5.0
 [0.4.2]: https://github.com/pdugan20/agent-tooling/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/pdugan20/agent-tooling/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/pdugan20/agent-tooling/compare/v0.3.0...v0.4.0

@@ -5,7 +5,7 @@
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.22.2-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?logo=opensourceinitiative&logoColor=white)](https://opensource.org/licenses/MIT)
 
-Portable, canonical tooling shared across Codex and Claude Code projects: working agreements, reusable workflows, a
+Portable, canonical tooling shared across Codex and Claude Code projects: working agreements, reusable skills, a
 reconciled plugin inventory, and machine setup.
 
 ## Quick start
@@ -41,17 +41,17 @@ that separate account/workspace layer.
 | Area                   | Purpose                                                  | Canonical source                                      |
 | ---------------------- | -------------------------------------------------------- | ----------------------------------------------------- |
 | Shared instructions    | Exploration, production, Firebase, and safety policy     | [`global/AGENTS.md`](global/AGENTS.md)                |
-| Patrick workflows      | Versioned design and delivery skills                     | [`pdugan20/patrick-workflows`](https://github.com/pdugan20/patrick-workflows) |
+| Patrick skills         | Versioned design and delivery skills                     | [`pdugan20/skills`](https://github.com/pdugan20/skills) |
 | Managed skill snapshots | Skills CLI installations with source provenance         | [`.agents/skills/`](.agents/skills/), `skills-lock.json` |
 | Plugin setup           | Marketplace-installed and Codex-managed plugin sets      | [`config/`](config/)                                  |
 | Machine setup          | Bootstrap, refresh, configuration, and verification      | [`scripts/`](scripts/)                                |
 
 All ten skills are installed into this repository by the Skills CLI, committed under
-[`.agents/skills/`](.agents/skills/), and tracked by `skills-lock.json`. The three Patrick workflows come from the
-tagged public [Patrick Workflows](https://github.com/pdugan20/patrick-workflows) collection; the other seven retain
+[`.agents/skills/`](.agents/skills/), and tracked by `skills-lock.json`. The three Patrick skills come from the
+tagged public [Skills](https://github.com/pdugan20/skills) collection; the other seven retain
 their original publisher provenance. Bootstrap links every canonical snapshot into each agent's home-directory skill
 location, so their **runtime availability** is global across repositories. Do not edit snapshots by hand. Use
-`npm run skills:update` for upstream updates, or install a new Patrick Workflows tag explicitly, and review the diff.
+`npm run skills:update` for upstream updates, or install a new Skills tag explicitly, and review the diff.
 
 ## Catalog
 
