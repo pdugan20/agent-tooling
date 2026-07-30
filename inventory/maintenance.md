@@ -111,6 +111,11 @@ or canonical source URL is no longer accurate. Skill and plugin source labels li
 source is public; Codex-managed bundles remain plain text unless OpenAI publishes a repository for them. CI runs
 `npm run catalog:check` and fails when generated data drifts from canonical inputs.
 
+Assign a stable `capabilityId` when Codex and Claude use different package IDs for the same logical integration. The
+catalog then renders one capability row with per-app package ID, delivery method, version, and state. Keep
+semantically different capabilities separate even when their names are related—for example, Mintlify and Mintlify
+Docs remain distinct.
+
 For a machine-local runtime comparison, run `npm run catalog:snapshot`. The resulting
 `catalog/runtime-data.local.json` contains only capability identifiers, versions, runtime state, and repository
 metadata—not installation paths, credentials, or plugin configuration—and is ignored by Git.
@@ -168,6 +173,15 @@ npm run plugins:refresh:claude
 ```
 
 Underneath, this runs `claude plugin marketplace update` and `claude plugin update` for the entries in `config/claude-plugins.txt`. Claude requires a restart after a plugin update.
+
+`npm run setup:check` requires the enabled user-scoped Claude set to match that manifest exactly, ignoring only
+skill-directory compatibility records. Unknown enabled plugins are reported by exact ID and must be classified,
+added deliberately, or removed; setup does not silently adopt or delete them.
+
+Capabilities needed by only one repository belong with that repository instead of this global manifest. For
+example, `rss-feed-generator` pins Railway's canonical `use-railway` Agent Skill once under `.agents/skills` and
+links it into Claude. This gives both agents the same project-scoped source without installing either runtime's
+Railway plugin globally.
 
 The Claude and Codex installations of `mintlify-docs` use the same tagged source release. The source repository keeps
 separate `.claude-plugin` and `.codex-plugin` manifests only for runtime packaging; both manifests point at the same

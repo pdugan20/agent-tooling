@@ -1,6 +1,10 @@
 from __future__ import annotations
 
+import os
+import subprocess
+import tempfile
 import unittest
+from pathlib import Path
 from unittest import mock
 
 import validate_repository
@@ -35,6 +39,35 @@ class RepositoryValidationTests(unittest.TestCase):
             set((validate_repository.ROOT / ".agents/skills").glob("*/skills/*/SKILL.md")),
             {validate_repository.ROOT / ".agents/skills/swiftui-pro/skills/swiftui-pro/SKILL.md"},
         )
+
+    def test_bootstrap_honors_claude_config_dir(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            temporary_root = Path(temporary)
+            home = temporary_root / "home"
+            claude_profile = temporary_root / "active-claude"
+            home.mkdir()
+            env = os.environ.copy()
+            env.update(
+                {
+                    "HOME": str(home),
+                    "CLAUDE_CONFIG_DIR": str(claude_profile),
+                }
+            )
+
+            subprocess.run(
+                ["bash", str(validate_repository.ROOT / "scripts/bootstrap.sh")],
+                check=True,
+                capture_output=True,
+                text=True,
+                env=env,
+            )
+
+            self.assertEqual(
+                (claude_profile / "CLAUDE.md").readlink(),
+                validate_repository.ROOT / "global/AGENTS.md",
+            )
+            self.assertTrue((claude_profile / "skills/code-native-ui-ideation").is_symlink())
+            self.assertFalse((home / ".claude").exists())
 
     def test_release_tag_must_match_repository_version(self) -> None:
         with (

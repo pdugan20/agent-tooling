@@ -75,7 +75,14 @@ const filteredItems = () => {
     const haystack = [
       item.name,
       item.displayName,
-      item.pluginId,
+      ...(item.pluginIds || []),
+      ...(item.installations || []).flatMap((installation) => [
+        installation.pluginId,
+        installation.runtime,
+        installation.delivery,
+        installation.state,
+        installation.version,
+      ]),
       item.description,
       item.sourceLabel,
       item.sourceUrl,
@@ -200,7 +207,7 @@ const render = () => {
 
     const status = fragment.querySelector(".state");
     if (state.scope === "local") {
-      const statusLabels = { Enabled: "On", Disabled: "Off" };
+      const statusLabels = { Enabled: "On", Disabled: "Off", Partial: "Mixed" };
       status.textContent = statusLabels[item.state] || item.state;
       status.classList.add(item.state.toLowerCase());
     } else {
@@ -217,6 +224,45 @@ const render = () => {
       }
     } else {
       path.remove();
+    }
+
+    const installationPanel = fragment.querySelector(".installation-panel");
+    if (item.installations?.length) {
+      const body = installationPanel.querySelector("tbody");
+      item.installations.forEach((installation) => {
+        const row = document.createElement("tr");
+        const app = document.createElement("td");
+        const deliveryCell = document.createElement("td");
+        const packageCell = document.createElement("td");
+        const packageId = document.createElement("code");
+        const installationStatus = document.createElement("td");
+        const delivery =
+          installation.delivery === "managed"
+            ? "Managed by Codex"
+            : installation.delivery === "runtime"
+              ? "Bundled with app"
+              : "Marketplace plugin";
+        const statusParts = [
+          installation.state === "Enabled"
+            ? "On"
+            : installation.state === "Disabled"
+              ? "Off"
+              : installation.state,
+          installation.version,
+        ].filter(Boolean);
+
+        app.textContent = runtimeLabel(installation.runtime);
+        deliveryCell.textContent = delivery;
+        packageId.textContent = installation.pluginId;
+        packageCell.append(packageId);
+        installationStatus.textContent =
+          statusParts.join(" · ") ||
+          (installation.delivery === "managed" ? "Auto-updated" : "Desired");
+        row.append(app, deliveryCell, packageCell, installationStatus);
+        body.append(row);
+      });
+    } else {
+      installationPanel.remove();
     }
 
     const runtime = fragment.querySelector(".runtime");
@@ -239,12 +285,51 @@ const render = () => {
     } else {
       source.textContent = item.sourceLabel;
     }
-    fragment.querySelector(".version").textContent =
-      item.version === "Git"
-        ? "—"
-        : item.version === "Managed"
-          ? "Auto-updated"
-          : item.version;
+    const version = fragment.querySelector(".version");
+    if (item.installations?.length) {
+      const count = item.installations.length;
+      const toggle = document.createElement("button");
+      const toggleLabel = document.createElement("span");
+      const toggleIcon = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "svg",
+      );
+      const toggleIconPath = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path",
+      );
+      const panelId = `installations-${item.id.replace(/[^a-z0-9-]/gi, "-")}`;
+      installationPanel.id = panelId;
+      toggle.type = "button";
+      toggle.className = "installation-toggle";
+      toggleLabel.textContent = `${count} ${count === 1 ? "install" : "installs"}`;
+      toggleIcon.classList.add("installation-caret");
+      toggleIcon.setAttribute("viewBox", "0 0 12 12");
+      toggleIcon.setAttribute("aria-hidden", "true");
+      toggleIconPath.setAttribute("d", "M2.5 4.25 6 7.75 9.5 4.25");
+      toggleIconPath.setAttribute("fill", "none");
+      toggleIconPath.setAttribute("stroke", "currentColor");
+      toggleIconPath.setAttribute("stroke-linecap", "round");
+      toggleIconPath.setAttribute("stroke-linejoin", "round");
+      toggleIconPath.setAttribute("stroke-width", "1.25");
+      toggleIcon.append(toggleIconPath);
+      toggle.append(toggleLabel, toggleIcon);
+      toggle.setAttribute("aria-controls", panelId);
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.addEventListener("click", () => {
+        const expanded = toggle.getAttribute("aria-expanded") === "true";
+        toggle.setAttribute("aria-expanded", String(!expanded));
+        installationPanel.hidden = expanded;
+      });
+      version.append(toggle);
+    } else {
+      version.textContent =
+        item.version === "Git"
+          ? "—"
+          : item.version === "Managed"
+            ? "Auto-updated"
+            : item.version;
+    }
 
     article.dataset.type = item.type;
     elements.results.append(fragment);

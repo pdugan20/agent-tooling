@@ -3,6 +3,7 @@
 set -euo pipefail
 
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+claude_config_dir=${CLAUDE_CONFIG_DIR:-"$HOME/.claude"}
 failures=0
 superpowers_plugin_id=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["pluginId"])' "$ROOT/config/superpowers.json")
 superpowers_version=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["forkVersion"])' "$ROOT/config/superpowers.json")
@@ -37,7 +38,7 @@ check_link() {
 }
 
 check_link "$ROOT/global/AGENTS.md" "$HOME/.codex/AGENTS.md"
-check_link "$ROOT/global/AGENTS.md" "$HOME/.claude/CLAUDE.md"
+check_link "$ROOT/global/AGENTS.md" "$claude_config_dir/CLAUDE.md"
 
 check_command sourcekit-lsp "install Xcode or the Swift toolchain"
 check_command typescript-language-server "run npm install --global typescript typescript-language-server"
@@ -51,7 +52,7 @@ check_skill_collection() {
     [[ -f $skill_dir/SKILL.md ]] || continue
     skill_name=${skill_dir##*/}
     check_link "$skill_dir" "$HOME/.agents/skills/$skill_name"
-    check_link "$skill_dir" "$HOME/.claude/skills/$skill_name"
+    check_link "$skill_dir" "$claude_config_dir/skills/$skill_name"
   done
 }
 
@@ -139,15 +140,46 @@ raise SystemExit(0 if any(item.get("id") == target and item.get("scope") == "use
   fi
 done <"$ROOT/config/claude-plugins.txt"
 
+if CLAUDE_PLUGIN_MANIFEST="$ROOT/config/claude-plugins.txt" python3 -c '
+import json, os, sys
+from pathlib import Path
+
+desired = {
+    line.strip()
+    for line in Path(os.environ["CLAUDE_PLUGIN_MANIFEST"]).read_text().splitlines()
+    if line.strip() and not line.lstrip().startswith("#")
+}
+actual = {
+    item.get("id")
+    for item in json.load(sys.stdin)
+    if item.get("scope") == "user"
+    and item.get("enabled")
+    and not item.get("id", "").endswith("@skills-dir")
+}
+missing = sorted(desired - actual)
+extra = sorted(actual - desired)
+if missing:
+    print("Missing desired Claude plugins: " + ", ".join(missing), file=sys.stderr)
+if extra:
+    print("Undeclared enabled Claude plugins: " + ", ".join(extra), file=sys.stderr)
+raise SystemExit(1 if missing or extra else 0)
+' <<<"$claude_plugins"; then
+  pass "Enabled user-scoped Claude plugins exactly match the manifest"
+else
+  fail "Claude plugin drift detected; reconcile the IDs reported above"
+fi
+
 if PLUGIN_ID="$superpowers_plugin_id" PLUGIN_VERSION="$superpowers_version" python3 -c '
 import json, os, sys
 data = json.load(sys.stdin)
-matches = [item for item in data if item.get("id") == os.environ["PLUGIN_ID"] and item.get("scope") == "user"]
-raise SystemExit(0 if len(matches) == 1 and matches[0].get("enabled") and matches[0].get("version") == os.environ["PLUGIN_VERSION"] else 1)
+matches = [item for item in data if item.get("id", "").startswith("superpowers@") and item.get("scope") == "user" and item.get("enabled")]
+expected = os.environ["PLUGIN_ID"]
+version = os.environ["PLUGIN_VERSION"]
+raise SystemExit(0 if len(matches) == 1 and matches[0].get("id") == expected and matches[0].get("version") == version else 1)
 ' <<<"$claude_plugins"; then
-  pass "Configured Superpowers $superpowers_version is enabled in Claude"
+  pass "Configured Superpowers $superpowers_version is the only enabled Claude Superpowers plugin"
 else
-  fail "Claude must enable $superpowers_plugin_id at $superpowers_version"
+  fail "Claude must enable only $superpowers_plugin_id at $superpowers_version"
 fi
 
 if PLUGIN_ID="$superpowers_plugin_id" python3 -c '
@@ -155,7 +187,7 @@ import json, os, sys
 data = json.load(sys.stdin)
 enabled = data.get("enabledPlugins", {})
 raise SystemExit(0 if enabled.get("superpowers@claude-plugins-official") is False and enabled.get(os.environ["PLUGIN_ID"]) is True else 1)
-' <"$HOME/.claude/settings.json"; then
+' <"$claude_config_dir/settings.json"; then
   pass "Claude routes Superpowers to the configured fork"
 else
   fail "Claude must disable official Superpowers and enable $superpowers_plugin_id"
