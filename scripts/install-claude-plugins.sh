@@ -10,6 +10,20 @@ if ! command -v claude >/dev/null 2>&1; then
   exit 1
 fi
 
+if claude plugin list --json | python3 -c '
+import json, sys
+target = "mintlify-docs@pdugan20-plugins"
+raise SystemExit(0 if any(item.get("id") == target and item.get("scope") == "user" for item in json.load(sys.stdin)) else 1)
+'; then
+  claude plugin uninstall mintlify-docs@pdugan20-plugins --scope user --yes
+fi
+if claude plugin marketplace list --json | python3 -c '
+import json, sys
+raise SystemExit(0 if any(item.get("name") == "pdugan20-plugins" for item in json.load(sys.stdin)) else 1)
+'; then
+  claude plugin marketplace remove pdugan20-plugins
+fi
+
 ensure_marketplace() {
   local name=$1
   local source=$2
@@ -60,20 +74,6 @@ done < <(
   python3 "$ROOT/scripts/reconcile_claude_plugins.py" \
     --manifest "$ROOT/config/claude-plugins.txt" <<<"$(claude plugin list --json)"
 )
-
-if claude plugin list --json | python3 -c '
-import json, sys
-target = "mintlify-docs@pdugan20-plugins"
-raise SystemExit(0 if any(item.get("id") == target and item.get("scope") == "user" for item in json.load(sys.stdin)) else 1)
-'; then
-  claude plugin uninstall mintlify-docs@pdugan20-plugins --scope user --yes
-fi
-if claude plugin marketplace list --json | python3 -c '
-import json, sys
-raise SystemExit(0 if any(item.get("name") == "pdugan20-plugins" for item in json.load(sys.stdin)) else 1)
-'; then
-  claude plugin marketplace remove pdugan20-plugins
-fi
 
 python3 "$ROOT/scripts/configure-claude.py" --settings "$claude_config_dir/settings.json"
 

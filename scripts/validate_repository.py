@@ -364,6 +364,16 @@ def validate_repository() -> None:
 
     for script_name in ("install-claude-plugins.sh", "refresh-claude-plugins.sh"):
         script = (ROOT / "scripts" / script_name).read_text(encoding="utf-8")
+        new_marketplace = script.index("ensure_marketplace patrick-tools")
+        if script.index("claude plugin uninstall mintlify-docs@pdugan20-plugins") > new_marketplace:
+            raise ValidationError(
+                f"{script_name} must retire the old plugin before adding its "
+                "replacement marketplace"
+            )
+        if script.index("claude plugin marketplace remove pdugan20-plugins") > new_marketplace:
+            raise ValidationError(
+                f"{script_name} must retire the old marketplace before adding its replacement"
+            )
         if "scripts/reconcile_claude_plugins.py" not in script:
             raise ValidationError(
                 f"{script_name} must disable undeclared enabled user-scoped plugins"
@@ -375,6 +385,16 @@ def validate_repository() -> None:
 
     for script_name in ("install-codex-plugins.sh", "refresh-codex-plugins.sh"):
         script = (ROOT / "scripts" / script_name).read_text(encoding="utf-8")
+        new_marketplace = script.index("ensure_marketplace patrick-tools")
+        if script.index("codex plugin remove mintlify-docs@pdugan20-plugins") > new_marketplace:
+            raise ValidationError(
+                f"{script_name} must retire the old plugin before adding its "
+                "replacement marketplace"
+            )
+        if script.index("codex plugin marketplace remove pdugan20-plugins") > new_marketplace:
+            raise ValidationError(
+                f"{script_name} must retire the old marketplace before adding its replacement"
+            )
         if (
             "ensure_marketplace patrick-tools https://github.com/pdugan20/patrick-tools.git"
             not in script
