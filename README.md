@@ -3,13 +3,15 @@
 [![CI](https://github.com/pdugan20/agent-tooling/actions/workflows/ci.yml/badge.svg)](https://github.com/pdugan20/agent-tooling/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/pdugan20/agent-tooling?logo=github)](https://github.com/pdugan20/agent-tooling/releases)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.22.2-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?logo=opensourceinitiative&logoColor=white)](https://opensource.org/licenses/MIT)
 
 Portable, canonical tooling shared across Codex and Claude Code projects: working agreements, reusable workflows, a
 reconciled plugin inventory, and machine setup.
 
 ## Quick start
 
-Install and authenticate Codex, Claude Code, and GitHub CLI, then run:
+Prerequisites are macOS, Node.js 22.22.2 or newer, Python 3, Xcode or a Swift toolchain providing `sourcekit-lsp`,
+Codex CLI, Claude Code, and GitHub CLI. Authenticate the three CLIs, then run:
 
 ```bash
 gh repo clone pdugan20/agent-tooling
@@ -28,7 +30,7 @@ language server required by Claude's TypeScript plugin. Codex does not currently
 it continues to use project builds, type checks, linters, tests, and editor context for those languages.
 
 Restart Codex and Claude afterward. Product OAuth sessions, API keys, local toolchains, and repository-specific
-instructions remain machine- or project-local.
+instructions remain machine- or project-local. Run `npm run mcp:check` after authenticating Codex connectors.
 
 The setup script installs only marketplace-managed Codex plugins. After signing in, open the Codex Plugins tab and
 confirm the entries in [`config/codex-managed-plugins.txt`](config/codex-managed-plugins.txt); Codex owns and updates
@@ -115,17 +117,14 @@ whitespace.
 
 ## Documentation
 
-- [Manifest](inventory/manifest.md): ownership, runtime mapping, and what does not sync.
-- [Scope guide](inventory/scope.md): which capabilities are global, which stay with projects, and why.
-- [Maintenance](inventory/maintenance.md): updates, plugin refreshes, Superpowers review, and releases.
-- [Authoring checks](inventory/authoring.md): linting, formatting, validation, and behavioral testing for skills and plugins.
-- [Outstanding work](inventory/next-steps.md): the remaining authentication-dependent and MacBook setup tasks.
-- [Migration record](inventory/publication.md): completed cross-repository rollout.
-- [Repository inventory](inventory/repos.md): repositories governed by the shared setup.
+- [Architecture and scope](docs/architecture.md): sources of truth, runtime layers, placement rules, and persistence.
+- [Maintenance](docs/maintenance.md): updates, plugin refreshes, Superpowers review, and releases.
+- [Authoring](docs/authoring.md): linting, formatting, validation, and behavioral testing for skills and plugins.
 - [Changelog](CHANGELOG.md): curated repository releases and upgrade notes.
+- [Issues](https://github.com/pdugan20/agent-tooling/issues): current bugs, setup follow-ups, and proposed improvements.
 
 ## Releases
 
-Repository releases use `vMAJOR.MINOR.PATCH` tags and curated notes from `CHANGELOG.md`. See the
-[maintenance guide](inventory/maintenance.md#release-agent-tooling) for the release workflow and component-specific
-update procedures.
+Repository releases use `vMAJOR.MINOR.PATCH` tags and curated notes from `CHANGELOG.md`. The configured Superpowers
+fork has its own upstream-derived version and release process. See the
+[maintenance guide](docs/maintenance.md#release-agent-tooling) for both update paths.

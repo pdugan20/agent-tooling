@@ -335,6 +335,15 @@ def validate_repository() -> None:
         if '"$HOME/.claude/' in script:
             raise ValidationError(f"{script_name} must not bypass CLAUDE_CONFIG_DIR")
 
+    for script_name in ("install-claude-plugins.sh", "refresh-claude-plugins.sh"):
+        script = (ROOT / "scripts" / script_name).read_text(encoding="utf-8")
+        if "scripts/reconcile_claude_plugins.py" not in script:
+            raise ValidationError(
+                f"{script_name} must disable undeclared enabled user-scoped plugins"
+            )
+        if "ensure_marketplace mintlify-marketplace mintlify/mintlify-claude-plugin" not in script:
+            raise ValidationError(f"{script_name} must add Mintlify's canonical marketplace")
+
 
 def main() -> None:
     parser = argparse.ArgumentParser()

@@ -1,4 +1,4 @@
-# Agent tooling maintenance
+# Maintenance
 
 `agent-tooling` is the single canonical source for Patrick's shared instructions, locally maintained workflows,
 locked upstream skill set, desired plugin state, and configured Superpowers baseline. Claude and Codex consume the
@@ -61,8 +61,8 @@ baseline, and desired plugin state.
 
 ### Secret scanning
 
-GitHub scans public repositories for supported secrets automatically, and account-level push protection helps block
-secrets before they are pushed. Gitleaks remains an independent defense-in-depth check at three points:
+GitHub secret scanning and repository push protection are enabled. Gitleaks remains an independent defense-in-depth
+check at three points:
 
 - staged changes in the local pre-commit hook;
 - full Git history in the local pre-push hook;
@@ -79,22 +79,20 @@ repository's release number.
 1. Move the completed entries from `[Unreleased]` into a dated version section in `CHANGELOG.md`.
 2. Bump the root `package.json` version according to SemVer and refresh `package-lock.json`.
 3. Run `npm run verify` and merge the verified change to `main`.
-4. Create and push an annotated repository tag from that merge commit:
+4. Create and push an annotated repository tag from that merge commit, substituting the release version:
 
    ```bash
-   git tag -a v0.3.0 -m "v0.3.0"
-   git push origin v0.3.0
+   VERSION=0.4.0
+   git tag -a "v$VERSION" -m "v$VERSION"
+   git push origin "v$VERSION"
    ```
 
-5. Confirm the release workflow created a GitHub Release titled `v0.3.0` with the matching curated changelog notes.
+5. Confirm the release workflow created the matching GitHub Release with the curated changelog notes.
 6. On each machine, pull and rerun the relevant bootstrap or refresh commands from the release's upgrade notes.
 
 The release workflow rejects malformed tags, tags that differ from the root package version, and versions without a
 changelog section. It publishes release notes only; it does not publish an npm package, update runtime caches, or
 install plugins on other machines.
-
-Patrick Delivery's historical `patrick-delivery-v0.2.0` tag remains valid history. Future GitHub releases use the
-repository-wide `vMAJOR.MINOR.PATCH` convention.
 
 ## Maintain the catalog
 
@@ -129,16 +127,9 @@ capability without losing a Codex-connected app. Use a Codex-curated package whe
 Codex-specific compatibility. Use one active source per plugin, and never fill a version gap by copying individual
 plugin skills into this repository.
 
-The current source decisions are intentional:
-
-- vendor-backed Git packages: Expo, Sentry, Mintlify, Firebase, and Cloudflare;
-- Codex-managed packages: Figma, GitHub, and Vercel;
-- maintained personal sources: configured Superpowers and Mintlify Docs.
-
 Review direct packages for hooks, telemetry, authentication changes, manifest compatibility, removed capabilities,
-and skill-name collisions before changing this split. A higher version alone is not enough: for example, direct
-Vercel is newer but replaces the richer connected app with a read-only MCP and adds automatic session hooks plus
-default-on telemetry.
+and skill-name collisions before changing this split. A higher version alone is not enough. The manifests and
+catalog metadata record the current source decisions without duplicating them here.
 
 Run:
 
@@ -155,8 +146,8 @@ The script refreshes Git marketplace snapshots, re-adds every configured plugin 
 The installer also removes retired and superseded CLI plugin state through `codex plugin remove`, including orphaned
 caches from personal or removed marketplaces. Shared marketplaces may retain inert downloaded package caches after
 removal; `codex plugin list --json` and the Plugins tab determine active installed state. `npm run setup:check`
-fails if Patrick Delivery, an unconfigured Superpowers copy, the former Expo, Sentry, or Mintlify package, or a
-duplicate CLI copy of Figma, GitHub, or Vercel remains installed. Account-managed plugins listed in
+fails if a retired plugin, an unconfigured Superpowers copy, or a duplicate managed plugin remains installed.
+Account-managed plugins listed in
 `config/codex-managed-plugins.txt` must be checked in the Codex Plugins tab because the CLI does not authoritatively
 report that separate layer.
 
@@ -175,8 +166,9 @@ npm run plugins:refresh:claude
 Underneath, this runs `claude plugin marketplace update` and `claude plugin update` for the entries in `config/claude-plugins.txt`. Claude requires a restart after a plugin update.
 
 `npm run setup:check` requires the enabled user-scoped Claude set to match that manifest exactly, ignoring only
-skill-directory compatibility records. Unknown enabled plugins are reported by exact ID and must be classified,
-added deliberately, or removed; setup does not silently adopt or delete them.
+skill-directory compatibility records. Installation and refresh use Claude's official `plugin disable` command to
+turn off undeclared user-scoped plugins without uninstalling them. Add a capability deliberately to the manifest
+before refreshing when it should remain part of the shared setup.
 
 Capabilities needed by only one repository belong with that repository instead of this global manifest. For
 example, `rss-feed-generator` pins Railway's canonical `use-railway` Agent Skill once under `.agents/skills` and
@@ -213,14 +205,5 @@ To update safely:
 7. Start new tasks and smoke-test one automatic workflow (for example debugging) plus negative prompts for TDD,
    brainstorming, worktrees, and the browser option picker.
 
-The current baseline is upstream `6.2.0` at commit
-`44c9b2d6e889982ac18c27d05a19fefe335194e1`; the configured fork version is `6.2.0-config.2`.
-
-## Product Design policy
-
-Patrick's default visual ideation surface is runnable code in the real project, browser, or relevant simulator. Generated-image ideation is opt-in.
-
-`scripts/configure-codex.py` disables Product Design's `index` router and `ideate` skill when their installed cache
-paths are present. It intentionally leaves audit, URL-to-code, image-to-code from an existing reference, design QA,
-research, user context, and sharing available. Because plugin cache paths include versions, rerun
-`npm run bootstrap` after a Codex or Product Design update, then start a new task.
+Because plugin cache paths can include versions, rerun `npm run bootstrap` after a Codex or Product Design update,
+then start a new task so the configured skill overrides point at the current installation.

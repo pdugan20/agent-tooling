@@ -649,10 +649,7 @@ def main() -> None:
     parser.add_argument(
         "--repos-root",
         type=Path,
-        help=(
-            "Include project-scoped skills from immediate child repositories in the private "
-            "snapshot."
-        ),
+        help="Include project skills from immediate child repositories in the local snapshot.",
     )
     args = parser.parse_args()
 
@@ -665,7 +662,7 @@ def main() -> None:
             RUNTIME_DATA.write_text(
                 rendered_json(build_runtime_snapshot(args.repos_root)), encoding="utf-8"
             )
-            print(f"Generated private snapshot {RUNTIME_DATA.relative_to(ROOT)}.")
+            print(f"Generated local snapshot {RUNTIME_DATA.relative_to(ROOT)}.")
             print("Open /catalog/?runtime=local and choose This Mac to view it.")
     except (CatalogError, OSError, json.JSONDecodeError, subprocess.CalledProcessError) as error:
         raise SystemExit(f"Catalog generation failed: {error}") from error

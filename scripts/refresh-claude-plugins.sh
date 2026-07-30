@@ -27,6 +27,7 @@ raise SystemExit(0 if any(item.get("name") == target for item in data) else 1)
 
 ensure_marketplace pdugan20-plugins pdugan20/pdugan20-plugins
 ensure_marketplace superpowers-configured pdugan20/superpowers
+ensure_marketplace mintlify-marketplace mintlify/mintlify-claude-plugin
 
 claude plugin marketplace update
 
@@ -62,6 +63,15 @@ raise SystemExit(0 if any(item.get("id") == target and item.get("scope") == "use
   fi
   claude plugin enable "$plugin" --scope user
 done <"$ROOT/config/claude-plugins.txt"
+
+while IFS= read -r plugin; do
+  [[ -n $plugin ]] || continue
+  echo "Disabling undeclared user-scoped Claude plugin: $plugin"
+  claude plugin disable "$plugin" --scope user
+done < <(
+  python3 "$ROOT/scripts/reconcile_claude_plugins.py" \
+    --manifest "$ROOT/config/claude-plugins.txt" <<<"$(claude plugin list --json)"
+)
 
 python3 "$ROOT/scripts/configure-claude.py" --settings "$claude_config_dir/settings.json"
 

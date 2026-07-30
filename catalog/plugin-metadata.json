@@ -34,7 +34,7 @@
     "source": "personal",
     "sourceLabel": "Pat Dugan",
     "sourceUrl": "https://github.com/pdugan20/mintlify-docs",
-    "version": "0.3.0"
+    "version": "0.3.1"
   },
   "data-analytics@openai-curated-remote": {
     "description": "Product and business analysis, KPI, reporting, dashboard, and data-quality workflows supplied by Codex.",
