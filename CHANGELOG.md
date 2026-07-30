@@ -6,6 +6,20 @@ version when compatibility requires it.
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-07-30
+
+### Changed
+
+- Updated the three Patrick Workflows snapshots and provenance locks from v1.0.0 to v1.1.0.
+- Adopted the expanded code-native UI ideation stage gate, shared comparison contract, platform guidance, evaluation
+  fixtures, and explicit graduation cleanup boundary.
+- Regenerated the catalog against the tagged v1.1.0 skill sources and descriptions.
+
+### Upgrade notes
+
+Pull the repository, run `npm run bootstrap`, and start new Claude Code and Codex tasks so they load the v1.1.0
+workflow snapshots.
+
 ## [0.4.1] - 2026-07-30
 
 ### Fixed
@@ -120,6 +134,9 @@ version when compatibility requires it.
 Pull the repository, run `npm run bootstrap`, refresh the configured Codex and Claude plugins, and start new
 tasks in both products.
 
-[unreleased]: https://github.com/pdugan20/agent-tooling/compare/v0.3.0...HEAD
+[unreleased]: https://github.com/pdugan20/agent-tooling/compare/v0.4.2...HEAD
+[0.4.2]: https://github.com/pdugan20/agent-tooling/compare/v0.4.1...v0.4.2
+[0.4.1]: https://github.com/pdugan20/agent-tooling/compare/v0.4.0...v0.4.1
+[0.4.0]: https://github.com/pdugan20/agent-tooling/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/pdugan20/agent-tooling/compare/patrick-delivery-v0.2.0...v0.3.0
 [0.2.0]: https://github.com/pdugan20/agent-tooling/releases/tag/patrick-delivery-v0.2.0

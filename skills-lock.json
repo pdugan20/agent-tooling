@@ -15,10 +15,10 @@
     },
     "code-native-ui-ideation": {
       "source": "pdugan20/patrick-workflows",
-      "ref": "v1.0.0",
+      "ref": "v1.1.0",
       "sourceType": "github",
       "skillPath": "skills/code-native-ui-ideation/SKILL.md",
-      "computedHash": "2f51cdffc44789bf7e66ef224fd81cf4146380310a743affdb8044b3543fe169"
+      "computedHash": "1b272e6401eecc663ff151e5210a145c9b54a872b1b1975e0211330316721ca9"
     },
     "emil-design-eng": {
       "source": "emilkowalski/skills",
@@ -28,10 +28,10 @@
     },
     "feature-delivery": {
       "source": "pdugan20/patrick-workflows",
-      "ref": "v1.0.0",
+      "ref": "v1.1.0",
       "sourceType": "github",
       "skillPath": "skills/feature-delivery/SKILL.md",
-      "computedHash": "75aad5ca49bbe1cb4e315e0aac3d00cbfc22e7e6a11fd08a88b144b7ce65314c"
+      "computedHash": "8d1ad4ff5c6cbc3fedbb3069346795935ea281910c6d6168e78f075c3e5b9fbf"
     },
     "find-animation-opportunities": {
       "source": "emilkowalski/skills",
@@ -47,10 +47,10 @@
     },
     "production-hardening": {
       "source": "pdugan20/patrick-workflows",
-      "ref": "v1.0.0",
+      "ref": "v1.1.0",
       "sourceType": "github",
       "skillPath": "skills/production-hardening/SKILL.md",
-      "computedHash": "90fce7b617ac609014e29ef4ac9bb8ed8b089075e2f579fe402a617b1059cf06"
+      "computedHash": "26650d1abd7f1f067af0b72c435fbe645f01e040b524cb212c0b10882d9baf42"
     },
     "review-animations": {
       "source": "emilkowalski/skills",

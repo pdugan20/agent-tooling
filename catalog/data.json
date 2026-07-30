@@ -24,7 +24,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/patrick-workflows/blob/v1.0.0/skills/feature-delivery/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/patrick-workflows/blob/v1.1.0/skills/feature-delivery/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -44,7 +44,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/patrick-workflows/blob/v1.0.0/skills/code-native-ui-ideation/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/patrick-workflows/blob/v1.1.0/skills/code-native-ui-ideation/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -204,7 +204,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/patrick-workflows/blob/v1.0.0/skills/production-hardening/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/patrick-workflows/blob/v1.1.0/skills/production-hardening/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"

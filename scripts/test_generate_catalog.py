@@ -40,7 +40,7 @@ class CatalogGenerationTests(unittest.TestCase):
             all(
                 item["path"].startswith(".agents/skills/")
                 and item["sourceUrl"].startswith(
-                    "https://github.com/pdugan20/patrick-workflows/blob/v1.0.0/"
+                    "https://github.com/pdugan20/patrick-workflows/blob/v1.1.0/"
                 )
                 for item in items
                 if item["type"] == "skill" and item["name"] in managed

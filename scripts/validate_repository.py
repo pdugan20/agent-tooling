@@ -45,7 +45,7 @@ UPSTREAM_SKILLS = {
     "review-animations": ("emilkowalski/skills", "skills/review-animations/SKILL.md"),
     "swiftui-pro": ("twostraws/swiftui-agent-skill", "swiftui-pro/SKILL.md"),
 }
-PATRICK_WORKFLOWS_REF = "v1.0.0"
+PATRICK_WORKFLOWS_REF = "v1.1.0"
 EXPECTED_EXPLICIT_SUPERPOWERS = {
     "brainstorming",
     "dispatching-parallel-agents",
