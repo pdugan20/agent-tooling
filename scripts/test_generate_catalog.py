@@ -13,10 +13,10 @@ class CatalogGenerationTests(unittest.TestCase):
         items = catalog["items"]
 
         self.assertEqual(len([item for item in items if item["type"] == "skill"]), 10)
-        self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 23)
+        self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 25)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
-        self.assertEqual(catalog["schemaVersion"], 3)
+        self.assertEqual(catalog["schemaVersion"], 4)
 
     def test_custom_invocation_policy_is_visible(self) -> None:
         items = generate_catalog.build_catalog()["items"]
@@ -89,7 +89,9 @@ class CatalogGenerationTests(unittest.TestCase):
     def test_superpowers_plugin_provenance_is_explicit(self) -> None:
         items = generate_catalog.build_catalog()["items"]
         plugins = [
-            item for item in items if item.get("pluginId") == "superpowers@superpowers-configured"
+            item
+            for item in items
+            if "superpowers@superpowers-configured" in item.get("pluginIds", [])
         ]
 
         self.assertEqual(len(plugins), 1)
@@ -105,7 +107,7 @@ class CatalogGenerationTests(unittest.TestCase):
     def test_mintlify_docs_is_one_cross_runtime_plugin(self) -> None:
         items = generate_catalog.build_catalog()["items"]
         plugins = [
-            item for item in items if item.get("pluginId") == "mintlify-docs@pdugan20-plugins"
+            item for item in items if "mintlify-docs@pdugan20-plugins" in item.get("pluginIds", [])
         ]
 
         self.assertEqual(len(plugins), 1)
@@ -116,9 +118,11 @@ class CatalogGenerationTests(unittest.TestCase):
     def test_codex_managed_plugins_are_separate_from_cli_plugins(self) -> None:
         items = generate_catalog.build_catalog()["items"]
         managed = {
-            item["pluginId"]
+            installation["pluginId"]
             for item in items
-            if item["type"] == "plugin" and item["state"] == "Managed by Codex"
+            if item["type"] == "plugin"
+            for installation in item["installations"]
+            if installation["delivery"] == "managed"
         }
 
         self.assertEqual(
@@ -135,10 +139,30 @@ class CatalogGenerationTests(unittest.TestCase):
         )
         self.assertTrue(
             all(
-                item["sourceLabel"] == "Managed by Codex"
+                installation["runtime"] == "codex" and installation["delivery"] == "managed"
                 for item in items
-                if item.get("pluginId") in managed
+                if item["type"] == "plugin"
+                for installation in item["installations"]
+                if installation["pluginId"] in managed
             )
+        )
+
+    def test_agent_specific_plugin_ids_merge_into_logical_capabilities(self) -> None:
+        plugins = {
+            item["name"]: item
+            for item in generate_catalog.build_catalog()["items"]
+            if item["type"] == "plugin"
+        }
+
+        for name in ("cloudflare", "figma", "firebase", "github", "vercel"):
+            self.assertEqual(plugins[name]["runtimes"], ["codex", "claude"])
+            self.assertEqual(len(plugins[name]["installations"]), 2)
+        self.assertEqual(
+            {item["pluginId"] for item in plugins["figma"]["installations"]},
+            {
+                "figma@openai-curated-remote",
+                "figma@claude-plugins-official",
+            },
         )
 
     def test_project_snapshot_discovers_shared_repository_skills(self) -> None:
@@ -151,7 +175,9 @@ class CatalogGenerationTests(unittest.TestCase):
             (skill_root / "SKILL.md").write_text(
                 "---\n"
                 "name: example-skill\n"
-                "description: Example project workflow.\n"
+                "description: >\n"
+                "  Example project workflow shared by both\n"
+                "  supported agents.\n"
                 "---\n\n"
                 "# Example\n",
                 encoding="utf-8",
@@ -164,11 +190,18 @@ class CatalogGenerationTests(unittest.TestCase):
 
         self.assertEqual(len(items), 1)
         self.assertEqual(items[0]["availability"], "Project")
+        self.assertEqual(
+            items[0]["description"],
+            "Example project workflow shared by both supported agents.",
+        )
         self.assertEqual(items[0]["repository"], "example-app")
         self.assertEqual(items[0]["runtimes"], ["codex", "claude"])
         self.assertEqual(items[0]["source"], "repository")
         self.assertIsNone(items[0]["pathHref"])
         self.assertIsNone(items[0]["sourceUrl"])
+
+    def test_humanizes_use_railway_without_an_acronym(self) -> None:
+        self.assertEqual(generate_catalog.humanize_name("use-railway"), "Use Railway")
 
     def test_project_snapshot_links_locked_skills_to_their_upstream_source(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

@@ -25,20 +25,23 @@ The desired Codex and Claude plugin manifests are also user-level machine setup.
 
 | Repository | Project-scoped skills | Why they stay local |
 | --- | --- | --- |
-| `nextup-backend` | 23 NextUp-maintained backend, Firebase, recommendation, notification, testing, and deployment workflows | They encode NextUp schemas, scripts, operations, and safety boundaries. Planning, strict TDD, algorithm TDD, and notification sending are explicit-only. |
+| `nextup-backend` | 20 NextUp-maintained backend, Firebase, recommendation, notification, testing, and deployment workflows | They encode NextUp schemas, scripts, operations, and safety boundaries. Notification sending remains explicit-only. |
 | `nextup-ios-app` | 19 NextUp-maintained workflows plus locked `hig`, `swift-concurrency`, and `swift-testing` references | The local workflows encode the app's build, test, simulator, analytics, release, and documentation systems. The narrow upstream Apple profile is pinned only where it is useful. |
 | `audiobook-ios` | Locked `hig`, `swift-concurrency`, and `swift-testing` references | The project benefits from the same narrow Apple reference profile while keeping iOS 18 availability constraints in its `AGENTS.md`. |
 | `rewind` | `add-media`, `media-search`, `changelog-writer` | These name Rewind's live admin API, credentials, media domains, and documentation format. |
-| `messenger` | None | Expo/React Native work uses the global design and delivery profile plus installed Expo/Firebase/Figma capabilities. Project behavior lives in `AGENTS.md`. |
+| `messenger` | None | Expo/React Native work uses the global design and delivery profile plus installed Expo and Figma capabilities. Project behavior lives in `AGENTS.md`. |
 | `pat-portfolio` | None | React work uses the global design, animation, UI-library, and delivery profile. Project behavior lives in `AGENTS.md`. |
+| `rss-feed-generator` | Locked `use-railway` skill | Railway operations apply only to this deployed service. The canonical Railway skill is shared by Codex and Claude through the project's `.agents/skills` source and Claude compatibility link; do not add Railway to either global plugin manifest. |
 
 The full Apple Skills plugin is deliberately not installed. `swiftui-pro` remains global and primary; the two native apps pin only three factual/reference skills from `Prisma-Labs-Dev/apple-skills`. Upstream files remain unmodified so the official lock/update path continues to work.
 
 ## Persistence and machine setup
 
 - Git-tracked `AGENTS.md`, `.agents/skills`, `.claude/skills` links, and `skills-lock.json` travel with a project.
-- `agent-tooling` global sources travel through its Git repository and become active after `npm run bootstrap` on each machine.
+- `agent-tooling` global sources travel through its Git repository and become active after `npm run bootstrap` on each machine. Claude paths use `$CLAUDE_CONFIG_DIR` when set and otherwise default to `~/.claude`.
 - User-level plugin installations and product settings must be recreated by `npm run setup` or the plugin refresh commands.
+- Project-scoped plugins belong in the consuming repository's tracked agent configuration and should be installed
+  with the runtime's project scope. They must not be promoted to a user-level manifest for convenience.
 - `.claude/settings.local.json`, OAuth sessions, secrets, API keys, simulator state, and toolchains are machine-local and do not sync through Git.
 
 For upstream project skills, run `npx skills update -p -y` in that project, review the snapshot and lockfile diff, and run the project's verification. The current CLI does not document a read-only update check. Locally maintained project skills update with the application code.

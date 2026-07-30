@@ -3,6 +3,7 @@
 set -euo pipefail
 
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+claude_config_dir=${CLAUDE_CONFIG_DIR:-"$HOME/.claude"}
 
 link_path() {
   local source=$1
@@ -30,11 +31,11 @@ remove_legacy_link() {
 }
 
 link_path "$ROOT/global/AGENTS.md" "$HOME/.codex/AGENTS.md"
-link_path "$ROOT/global/AGENTS.md" "$HOME/.claude/CLAUDE.md"
+link_path "$ROOT/global/AGENTS.md" "$claude_config_dir/CLAUDE.md"
 
 for legacy_skill in execute-plan feature-delivery formal-spec production-hardening strict-tdd write-plan; do
   remove_legacy_link \
-    "$HOME/.claude/skills/$legacy_skill" \
+    "$claude_config_dir/skills/$legacy_skill" \
     "$ROOT/plugins/patrick-delivery/skills/$legacy_skill"
 done
 remove_legacy_link "$HOME/plugins/patrick-delivery" "$ROOT/plugins/patrick-delivery"
@@ -42,7 +43,7 @@ remove_legacy_link "$HOME/.agents/plugins/marketplace.json" "$ROOT/.agents/plugi
 
 for upstream_skill in animation-vocabulary apple-design emil-design-eng review-animations swiftui-pro; do
   remove_legacy_link "$HOME/.agents/skills/$upstream_skill" "$ROOT/skills/$upstream_skill"
-  remove_legacy_link "$HOME/.claude/skills/$upstream_skill" "$ROOT/skills/$upstream_skill"
+  remove_legacy_link "$claude_config_dir/skills/$upstream_skill" "$ROOT/skills/$upstream_skill"
 done
 
 link_skill_collection() {
@@ -54,14 +55,14 @@ link_skill_collection() {
     [[ -f $skill_dir/SKILL.md ]] || continue
     skill_name=${skill_dir##*/}
     link_path "$skill_dir" "$HOME/.agents/skills/$skill_name"
-    link_path "$skill_dir" "$HOME/.claude/skills/$skill_name"
+    link_path "$skill_dir" "$claude_config_dir/skills/$skill_name"
   done
 }
 
 link_skill_collection "$ROOT/skills"
 link_skill_collection "$ROOT/.agents/skills"
 
-python3 "$ROOT/scripts/configure-claude.py" --settings "$HOME/.claude/settings.json"
+python3 "$ROOT/scripts/configure-claude.py" --settings "$claude_config_dir/settings.json"
 
 codex_config="$HOME/.codex/config.toml"
 mkdir -p "$(dirname "$codex_config")"

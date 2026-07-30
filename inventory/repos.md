@@ -107,12 +107,12 @@ Do not migrate these separately:
 
 ## Local environment status and follow-ups
 
-- Codex CLI `0.145.0` is installed and passes a fresh-process exploration-mode smoke test. The stale `supports_reasoning_summaries` model-cache warning and skill-description budget warning no longer appear.
+- Codex CLI `0.146.0` is installed and passes a fresh-process exploration-mode smoke test. The stale `supports_reasoning_summaries` model-cache warning no longer appears.
 - The Computer Use MCP command now uses its verified absolute executable path. `codex doctor` reports the MCP configuration locally consistent; `scripts/configure-codex.py` applies the same non-secret repair idempotently on other machines when that executable exists.
 - The NextUp backend MCP endpoint is configured and advertises OAuth correctly, but authentication is intentionally deferred because the 2026-07-26 browser flow did not complete. No credentials were stored; `codex mcp list` reports `Not logged in`. Retry later with `codex mcp login nextup-mcp-dev`, approve `library:read` and `ugc:write` in the browser, then confirm the listing shows OAuth.
 - All applicable checks on all 23 migration pull requests passed before merge. NextUp backend's rerun included documentation quality, pre-commit, Firebase deployment validation, unit coverage, Firebase emulator integration, and the final CI gate. ClaudeLint passed Dogfood and its complete Node/macOS/Linux matrix. ClaudeNotes passed lint, build, tests, database lint/RLS tests, type-drift detection, security, and its final CI gate.
 - NextUp backend CI warns that `hashicorp/setup-terraform` still targets deprecated Node.js 20 and is being forced onto Node.js 24. This predates and is unrelated to the agent-workflow migration; update the pinned action separately.
-- A fresh Codex `0.145.0` process logs non-blocking validation warnings from bundled OpenAI plugins: the spreadsheet skill's icons escape its asset directory, and template-creator supplies more than three default prompts. These are upstream cache contents, not personal-plugin defects; do not patch generated plugin caches.
+- A fresh Codex `0.146.0` process logs non-blocking validation warnings from bundled OpenAI plugins: the spreadsheet skill's icons escape its asset directory, and template-creator supplies more than three default prompts. These are upstream cache contents, not personal-plugin defects; do not patch generated plugin caches.
 - The fresh process also logged transient rollout lookup fallbacks, while `codex doctor` independently reported healthy databases and exact rollout/state-DB parity. Reinvestigate only if thread listing or resume behavior becomes visibly incorrect.
 - During the migration audit, a no-tool Claude startup loaded about 34.5k context tokens and passed the routing smoke
   test. This is historical migration evidence, not a live authentication check. Keep configuration smoke tests to one

@@ -265,6 +265,19 @@ def validate_repository() -> None:
     }
     if not required_managed_codex_plugins <= set(plugin_manifests["codex-managed-plugins.txt"]):
         raise ValidationError("Figma, GitHub, and Vercel must remain Codex-managed")
+    required_claude_plugins = {
+        "cloudflare@claude-plugins-official",
+        "figma@claude-plugins-official",
+        "firebase@claude-plugins-official",
+        "github@claude-plugins-official",
+        "mintlify@mintlify-marketplace",
+        "plugin-dev@claude-plugins-official",
+        "sentry@claude-plugins-official",
+        "supabase@claude-plugins-official",
+        "vercel@claude-plugins-official",
+    }
+    if not required_claude_plugins <= set(plugin_manifests["claude-plugins.txt"]):
+        raise ValidationError("the canonical Claude capability set is incomplete")
     if set(plugin_manifests["codex-plugins.txt"]) & set(
         plugin_manifests["codex-managed-plugins.txt"]
     ):
@@ -275,12 +288,18 @@ def validate_repository() -> None:
         "expo@openai-curated",
         "sentry@openai-curated",
         "mintlify@claude-plugins-official",
+        "playwright@claude-plugins-official",
         "figma@openai-curated",
         "github@openai-curated",
         "vercel@openai-curated",
     }
     if any(retired_ids & set(entries) for entries in plugin_manifests.values()):
         raise ValidationError("retired or superseded plugins remain desired")
+    if "railway@claude-plugins-official" in plugin_manifests["claude-plugins.txt"]:
+        raise ValidationError(
+            "Railway uses a shared project skill in rss-feed-generator "
+            "and must not be globally desired"
+        )
 
     for workflow_path in (
         ROOT / ".github/workflows/ci.yml",
@@ -303,6 +322,18 @@ def validate_repository() -> None:
     verification = (ROOT / "scripts/verify-repo.sh").read_text(encoding="utf-8")
     if "gitleaks git --redact --no-banner --verbose ." not in verification:
         raise ValidationError("repository verification must scan full Git history")
+
+    for script_name in (
+        "bootstrap.sh",
+        "install-claude-plugins.sh",
+        "refresh-claude-plugins.sh",
+        "verify-setup.sh",
+    ):
+        script = (ROOT / "scripts" / script_name).read_text(encoding="utf-8")
+        if 'claude_config_dir=${CLAUDE_CONFIG_DIR:-"$HOME/.claude"}' not in script:
+            raise ValidationError(f"{script_name} must resolve the active Claude config directory")
+        if '"$HOME/.claude/' in script:
+            raise ValidationError(f"{script_name} must not bypass CLAUDE_CONFIG_DIR")
 
 
 def main() -> None:

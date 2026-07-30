@@ -21,6 +21,9 @@ npm run setup
 The checkout can live anywhere. Setup scripts resolve the repository from their own location and do not require a
 particular parent directory or repository collection layout.
 
+If `CLAUDE_CONFIG_DIR` is set, setup, refresh, and verification use that active Claude profile instead of
+`~/.claude`. Existing non-symlink instruction or skill paths are never replaced automatically.
+
 The setup uses Xcode's bundled `sourcekit-lsp` for Claude's Swift code intelligence and installs the TypeScript
 language server required by Claude's TypeScript plugin. Codex does not currently load Claude's LSP plugin component;
 it continues to use project builds, type checks, linters, tests, and editor context for those languages.
@@ -75,6 +78,10 @@ worktrees are skipped so the catalog does not repeat the same project profile. I
 The catalog labels effective availability separately from ownership and source. “All repositories” describes where
 the capability can run; it does not mean its canonical source is stored globally or updated outside this repository.
 Source names link to the canonical GitHub skill or plugin when the publisher exposes one.
+
+Plugins are grouped by logical capability. When Codex and Claude use different package IDs for the same capability,
+the catalog shows one row with separate installation details for each app. Summary counts therefore count
+capabilities, not package records.
 
 ## Common commands
 

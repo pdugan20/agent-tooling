@@ -3,6 +3,7 @@
 set -euo pipefail
 
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+claude_config_dir=${CLAUDE_CONFIG_DIR:-"$HOME/.claude"}
 
 if ! command -v claude >/dev/null 2>&1; then
   echo "Claude Code is not installed." >&2
@@ -50,6 +51,6 @@ else:
   esac
 done <"$ROOT/config/claude-plugins.txt"
 
-python3 "$ROOT/scripts/configure-claude.py" --settings "$HOME/.claude/settings.json"
+python3 "$ROOT/scripts/configure-claude.py" --settings "$claude_config_dir/settings.json"
 
 echo "Claude plugin set is installed. Restart Claude Code to load updates."

@@ -8,16 +8,16 @@ machine state.
 
 | Concern                      | Canonical source                             | Runtime destination                                |
 | ---------------------------- | -------------------------------------------- | -------------------------------------------------- |
-| Global working agreement     | `global/AGENTS.md`                           | `~/.codex/AGENTS.md` and `~/.claude/CLAUDE.md`     |
-| Locally maintained workflows | `skills/*/SKILL.md`                          | `~/.agents/skills/*` and `~/.claude/skills/*`      |
-| Locked upstream skills       | `.agents/skills/*` and `skills-lock.json`    | `~/.agents/skills/*` and `~/.claude/skills/*`      |
+| Global working agreement     | `global/AGENTS.md`                           | `~/.codex/AGENTS.md` and `$CLAUDE_CONFIG_DIR/CLAUDE.md` |
+| Locally maintained workflows | `skills/*/SKILL.md`                          | `~/.agents/skills/*` and `$CLAUDE_CONFIG_DIR/skills/*`  |
+| Locked upstream skills       | `.agents/skills/*` and `skills-lock.json`    | `~/.agents/skills/*` and `$CLAUDE_CONFIG_DIR/skills/*`  |
 | Configured Superpowers state | `config/superpowers.json`                    | Fork repository and both products' plugin caches   |
 | Marketplace-installed Codex plugins | `config/codex-plugins.txt`            | `~/.codex/config.toml` and Codex plugin caches     |
 | Codex-managed plugins        | `config/codex-managed-plugins.txt`           | Codex account/workspace and Plugins tab            |
-| Desired Claude plugins       | `config/claude-plugins.txt`                  | `~/.claude/settings.json` and Claude plugin caches |
+| Desired Claude plugins       | `config/claude-plugins.txt`                  | `$CLAUDE_CONFIG_DIR/settings.json` and Claude plugin caches |
 | Personal plugin marketplace  | `pdugan20/pdugan20-plugins`                  | Both products' marketplace snapshots               |
 | Codex machine policy         | `scripts/configure-codex.py`                 | `~/.codex/config.toml`                              |
-| Claude machine policy        | `scripts/configure-claude.py`                | `~/.claude/settings.json`                           |
+| Claude machine policy        | `scripts/configure-claude.py`                | `$CLAUDE_CONFIG_DIR/settings.json`                  |
 | Repository-specific guidance | Each repository's `AGENTS.md`                | Travels with that repository                       |
 
 Do not edit generated runtime cache files. Edit this repository, rerun the setup scripts, and start a new task.
@@ -31,11 +31,13 @@ Scope has three independent meanings:
 - **Persistence scope** identifies whether a setting is shared through Git, stored for one user, or kept only in a
   machine-local settings file.
 
+`$CLAUDE_CONFIG_DIR` in this table means the active Claude profile, with `~/.claude` used when the variable is unset.
+
 The official `skills` CLI reports the locked upstream collection as project-scoped because `agent-tooling` owns its
-snapshots and lockfile. `bootstrap.sh` then links every canonical skill into `~/.agents/skills` and
-`~/.claude/skills`, making those skills globally available at runtime. Repository-specific skills instead live in
-that repository's `.agents/skills`, with Claude compatibility links in `.claude/skills`. Machine-only plugin choices
-belong in `.claude/settings.local.json` and do not sync.
+snapshots and lockfile. `bootstrap.sh` then links every canonical skill into `~/.agents/skills` and the active Claude
+profile's `skills` directory, making those skills globally available at runtime. Repository-specific skills instead
+live in that repository's `.agents/skills`, with Claude compatibility links in `.claude/skills`. Machine-only plugin
+choices belong in the active profile's `settings.local.json` and do not sync.
 
 See [`scope.md`](scope.md) for the audited global profile, project profiles, and placement rules.
 
@@ -148,24 +150,26 @@ Generated-image ideation is opt-in. Code-native UI ideation in the actual browse
 
 ## Desired Claude plugins
 
-`config/claude-plugins.txt` records the user-scoped Claude plugin set currently preserved for compatibility:
+`config/claude-plugins.txt` is the machine-readable desired state for enabled user-scoped Claude plugins. It includes:
 
-- `claude-code-setup`
-- `code-review`
-- `code-simplifier`
-- `commit-commands`
-- `expo@claude-plugins-official`
-- `feature-dev`
-- `frontend-design`
-- `mintlify-docs@pdugan20-plugins`
-- `skill-creator`
-- `swift-lsp`
-- `typescript-lsp`
-- `superpowers@superpowers-configured`
+- shared service capabilities: Cloudflare, Expo, Figma, Firebase, GitHub, Mintlify, Mintlify Docs, Sentry, Supabase,
+  and Vercel;
+- general Claude workflows: Claude Code Setup, Code Review, Code Simplifier, Commit Commands, Feature Development,
+  Frontend Design, Plugin Development, and Skill Creator;
+- the configured Superpowers fork and Claude-only Swift and TypeScript LSP integrations.
+
+The exact package IDs remain in the manifest. Shared logical capabilities can have different app-specific package
+IDs—for example, Codex uses `firebase@firebase` while Claude uses `firebase@claude-plugins-official`. The catalog
+groups those records into one Firebase row and shows both installations underneath it.
 
 `configure-claude.py` enables the configured fork and disables `superpowers@claude-plugins-official` so only the
 policy-controlled copy is active. Disabled, project-local, and historical Claude plugins are not part of the desired
 setup unless added to `config/claude-plugins.txt`.
+
+Playwright is intentionally excluded because browser automation is not part of the desired Claude profile. Railway
+is also excluded globally: `rss-feed-generator` pins Railway's canonical `use-railway` skill in the project for both
+agents. `npm run setup:check` reports any enabled user plugin that is missing from the manifest instead of silently
+accepting local drift.
 
 `explanatory-output-style` is intentionally excluded: its SessionStart hook adds mandatory educational “Insight”
 blocks to every task, increasing verbosity and token use during lightweight iteration without adding tools.

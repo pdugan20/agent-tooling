@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import subprocess
 from datetime import UTC, datetime
@@ -23,6 +24,7 @@ AGENT_TOOLING_REPOSITORY = "https://github.com/pdugan20/agent-tooling"
 UPSTREAM_SOURCE_LABELS = {
     "emilkowalski/skills": "Emil Kowalski",
     "Prisma-Labs-Dev/apple-skills": "Prisma Labs",
+    "railwayapp/railway-skills": "Railway",
     "twostraws/swiftui-agent-skill": "Paul Hudson",
 }
 
@@ -86,11 +88,32 @@ def read_frontmatter(path: Path) -> dict[str, str]:
 
     block = text[4 : text.index("\n---\n", 4)]
     result: dict[str, str] = {}
-    for line in block.splitlines():
+    lines = block.splitlines()
+    index = 0
+    while index < len(lines):
+        line = lines[index]
         if line.startswith((" ", "\t")) or ":" not in line:
+            index += 1
             continue
         key, value = line.split(":", 1)
-        result[key.strip()] = value.strip().strip("\"'")
+        value = value.strip()
+        if value in {">", ">-", ">+", "|", "|-", "|+"}:
+            style = value[0]
+            continuation: list[str] = []
+            index += 1
+            while index < len(lines) and (
+                not lines[index].strip() or lines[index].startswith((" ", "\t"))
+            ):
+                continuation.append(lines[index].strip())
+                index += 1
+            result[key.strip()] = (
+                " ".join(part for part in continuation if part)
+                if style == ">"
+                else "\n".join(continuation).strip()
+            )
+            continue
+        result[key.strip()] = value.strip("\"'")
+        index += 1
     return result
 
 
@@ -108,7 +131,12 @@ def read_skill_version(path: Path) -> str:
 
 
 def humanize_name(name: str) -> str:
-    special_names = {"figma": "Figma", "github": "GitHub", "swiftui": "SwiftUI"}
+    special_names = {
+        "figma": "Figma",
+        "github": "GitHub",
+        "swiftui": "SwiftUI",
+        "use": "Use",
+    }
     return " ".join(
         special_names.get(part, part.upper() if len(part) <= 3 else part.title())
         for part in name.split("-")
@@ -256,25 +284,36 @@ def project_skill_items(repos_root: Path) -> list[dict[str, Any]]:
 
 
 def plugin_item(
-    plugin_id: str,
-    runtimes: list[str],
+    capability_id: str,
+    installations: list[dict[str, Any]],
     metadata: dict[str, Any],
     index: int,
-    *,
-    path: str | None = None,
-    state: str = "Configured",
 ) -> dict[str, Any]:
-    name, _marketplace = plugin_id.split("@", 1)
+    runtime_order = {"codex": 0, "claude": 1}
+    installations = sorted(
+        installations,
+        key=lambda item: (runtime_order.get(item["runtime"], 99), item["pluginId"]),
+    )
+    plugin_ids = list(dict.fromkeys(item["pluginId"] for item in installations))
+    runtimes = list(dict.fromkeys(item["runtime"] for item in installations))
+    name = plugin_ids[0].split("@", 1)[0]
+    paths = list(dict.fromkeys(item["path"] for item in installations))
+    state = (
+        "Managed by Codex"
+        if all(item["delivery"] == "managed" for item in installations)
+        else "Configured"
+    )
     return {
         "availability": "Global",
         "description": metadata["description"],
         "displayName": metadata.get("displayName", humanize_name(name)),
         "featured": 100 + index,
-        "id": f"plugin:{plugin_id}",
+        "id": f"plugin:{capability_id}",
+        "installations": installations,
         "invocation": None,
         "name": name,
-        "path": path or metadata.get("path", f"config/{runtimes[0]}-plugins.txt"),
-        "pluginId": plugin_id,
+        "path": metadata.get("path") or (paths[0] if len(paths) == 1 else None),
+        "pluginIds": plugin_ids,
         "runtimes": runtimes,
         "source": metadata["source"],
         "sourceLabel": metadata["sourceLabel"],
@@ -319,38 +358,56 @@ def build_catalog() -> dict[str, Any]:
             )
         )
 
-    configured: dict[str, list[str]] = {}
+    plugin_groups: dict[str, list[dict[str, Any]]] = {}
     for runtime in ("codex", "claude"):
         manifest_path = ROOT / f"config/{runtime}-plugins.txt"
         for plugin_id in read_plugin_entries(manifest_path):
-            configured.setdefault(plugin_id, []).append(runtime)
+            capability_id = plugin_metadata[plugin_id].get("capabilityId", plugin_id)
+            plugin_groups.setdefault(capability_id, []).append(
+                {
+                    "delivery": "marketplace",
+                    "path": manifest_path.relative_to(ROOT).as_posix(),
+                    "pluginId": plugin_id,
+                    "runtime": runtime,
+                }
+            )
 
     managed_codex_path = ROOT / "config/codex-managed-plugins.txt"
     managed_codex = read_plugin_entries(managed_codex_path)
 
-    configured_ids = set(configured) | set(managed_codex)
+    configured_ids = {
+        installation["pluginId"]
+        for installations in plugin_groups.values()
+        for installation in installations
+    } | set(managed_codex)
     metadata_ids = set(plugin_metadata)
     if configured_ids != metadata_ids:
         missing = sorted(configured_ids - metadata_ids)
         stale = sorted(metadata_ids - configured_ids)
         raise CatalogError(f"plugin metadata mismatch; missing={missing}, stale={stale}")
 
-    plugin_items = [
-        plugin_item(plugin_id, runtimes, plugin_metadata[plugin_id], index)
-        for index, (plugin_id, runtimes) in enumerate(configured.items())
-    ]
-    managed_start_index = len(plugin_items)
-    plugin_items.extend(
-        plugin_item(
-            plugin_id,
-            ["codex"],
-            plugin_metadata[plugin_id],
-            managed_start_index + index,
-            path="config/codex-managed-plugins.txt",
-            state="Managed by Codex",
+    for plugin_id in managed_codex:
+        capability_id = plugin_metadata[plugin_id].get("capabilityId", plugin_id)
+        plugin_groups.setdefault(capability_id, []).append(
+            {
+                "delivery": "managed",
+                "path": "config/codex-managed-plugins.txt",
+                "pluginId": plugin_id,
+                "runtime": "codex",
+            }
         )
-        for index, plugin_id in enumerate(managed_codex)
-    )
+
+    plugin_items = []
+    for index, (capability_id, installations) in enumerate(plugin_groups.items()):
+        primary_id = installations[0]["pluginId"]
+        plugin_items.append(
+            plugin_item(
+                capability_id,
+                installations,
+                plugin_metadata[primary_id],
+                index,
+            )
+        )
     items = sorted(skill_items + plugin_items, key=lambda item: (item["featured"], item["name"]))
     return {
         "generatedFrom": [
@@ -364,7 +421,7 @@ def build_catalog() -> dict[str, Any]:
             "catalog/plugin-metadata.json",
         ],
         "items": items,
-        "schemaVersion": 3,
+        "schemaVersion": 4,
     }
 
 
@@ -393,10 +450,10 @@ def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
     canonical_skills = [item for item in canonical["items"] if item["type"] == "skill"]
     plugin_metadata = load_json(PLUGIN_METADATA)
     desired_ids = {
-        (item["pluginId"], runtime): item
+        (installation["pluginId"], installation["runtime"]): item
         for item in canonical["items"]
         if item["type"] == "plugin"
-        for runtime in item["runtimes"]
+        for installation in item["installations"]
     }
     items: list[dict[str, Any]] = []
     codex_data = run_json_command(["codex", "plugin", "list", "--json"])
@@ -404,7 +461,8 @@ def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
         installed_runtimes = []
         if (Path.home() / ".agents/skills" / skill["name"] / "SKILL.md").exists():
             installed_runtimes.append("codex")
-        if (Path.home() / ".claude/skills" / skill["name"] / "SKILL.md").exists():
+        claude_config_dir = Path(os.environ.get("CLAUDE_CONFIG_DIR", Path.home() / ".claude"))
+        if (claude_config_dir / "skills" / skill["name"] / "SKILL.md").exists():
             installed_runtimes.append("claude")
         if installed_runtimes:
             runtime_skill = dict(skill)
@@ -416,8 +474,14 @@ def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
         plugin_id = plugin["pluginId"]
         source, source_label = source_details(plugin_id, plugin_metadata)
         desired = desired_ids.get((plugin_id, "codex"))
+        capability_id = (
+            desired["id"].removeprefix("plugin:")
+            if desired
+            else plugin_metadata.get(plugin_id, {}).get("capabilityId", plugin_id)
+        )
         items.append(
             {
+                "capabilityId": capability_id,
                 "availability": "Global",
                 "description": (
                     desired["description"]
@@ -427,6 +491,20 @@ def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
                 "displayName": desired["displayName"] if desired else humanize_name(plugin["name"]),
                 "featured": 200 + (0 if desired else 100) + index,
                 "id": f"runtime:codex:{plugin_id}",
+                "installations": [
+                    {
+                        "delivery": (
+                            "runtime"
+                            if plugin_id.rsplit("@", 1)[-1]
+                            in {"openai-bundled", "openai-primary-runtime"}
+                            else "marketplace"
+                        ),
+                        "pluginId": plugin_id,
+                        "runtime": "codex",
+                        "state": "Enabled" if plugin.get("enabled") else "Disabled",
+                        "version": plugin.get("version") or "Unknown",
+                    }
+                ],
                 "invocation": None,
                 "name": plugin["name"],
                 "path": desired["path"] if desired else None,
@@ -445,10 +523,18 @@ def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
     user_plugins = [plugin for plugin in claude_data if plugin.get("scope") == "user"]
     for index, plugin in enumerate(user_plugins):
         plugin_id = plugin["id"]
+        if plugin_id.endswith("@skills-dir"):
+            continue
         source, source_label = source_details(plugin_id, plugin_metadata)
         desired = desired_ids.get((plugin_id, "claude"))
+        capability_id = (
+            desired["id"].removeprefix("plugin:")
+            if desired
+            else plugin_metadata.get(plugin_id, {}).get("capabilityId", plugin_id)
+        )
         items.append(
             {
+                "capabilityId": capability_id,
                 "availability": "Global",
                 "description": (
                     desired["description"]
@@ -460,6 +546,15 @@ def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
                 ),
                 "featured": 400 + (0 if desired else 100) + index,
                 "id": f"runtime:claude:{plugin_id}",
+                "installations": [
+                    {
+                        "delivery": "marketplace",
+                        "pluginId": plugin_id,
+                        "runtime": "claude",
+                        "state": "Enabled" if plugin.get("enabled") else "Disabled",
+                        "version": plugin.get("version") or "Unknown",
+                    }
+                ],
                 "invocation": None,
                 "name": plugin_id.split("@", 1)[0],
                 "path": desired["path"] if desired else None,
@@ -473,6 +568,8 @@ def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
             }
         )
 
+    items = merge_runtime_plugins(items)
+
     if repos_root is not None:
         items.extend(project_skill_items(repos_root))
 
@@ -485,8 +582,48 @@ def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
             if repos_root is not None
             else "What Codex and Claude currently report as installed on this computer."
         ),
-        "schemaVersion": 3,
+        "schemaVersion": 4,
     }
+
+
+def merge_runtime_plugins(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    runtime_order = {"codex": 0, "claude": 1}
+    non_plugins = [item for item in items if item["type"] != "plugin"]
+    groups: dict[str, list[dict[str, Any]]] = {}
+    for item in items:
+        if item["type"] == "plugin":
+            groups.setdefault(item["capabilityId"], []).append(item)
+
+    merged = []
+    for capability_id, group in groups.items():
+        primary = next((item for item in group if item.get("path")), group[0])
+        installations = [
+            installation for item in group for installation in item.get("installations", [])
+        ]
+        installations.sort(
+            key=lambda item: (runtime_order.get(item["runtime"], 99), item["pluginId"])
+        )
+        runtimes = list(dict.fromkeys(item["runtime"] for item in installations))
+        states = {item["state"] for item in installations}
+        versions = [f"{humanize_name(item['runtime'])} {item['version']}" for item in installations]
+        merged_item = dict(primary)
+        merged_item.update(
+            {
+                "id": f"runtime:capability:{capability_id}",
+                "installations": installations,
+                "pluginIds": list(dict.fromkeys(item["pluginId"] for item in installations)),
+                "runtimes": runtimes,
+                "state": states.pop() if len(states) == 1 else "Partial",
+                "version": versions[0].split(" ", 1)[1]
+                if len(versions) == 1
+                else " · ".join(versions),
+            }
+        )
+        merged_item.pop("capabilityId", None)
+        merged_item.pop("pluginId", None)
+        merged.append(merged_item)
+
+    return non_plugins + merged
 
 
 def rendered_json(data: dict[str, Any]) -> str:

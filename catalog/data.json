@@ -216,10 +216,26 @@
       "displayName": "Superpowers (Configured)",
       "featured": 100,
       "id": "plugin:superpowers@superpowers-configured",
+      "installations": [
+        {
+          "delivery": "marketplace",
+          "path": "config/codex-plugins.txt",
+          "pluginId": "superpowers@superpowers-configured",
+          "runtime": "codex"
+        },
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "superpowers@superpowers-configured",
+          "runtime": "claude"
+        }
+      ],
       "invocation": null,
       "name": "superpowers",
       "path": "config/superpowers.json",
-      "pluginId": "superpowers@superpowers-configured",
+      "pluginIds": [
+        "superpowers@superpowers-configured"
+      ],
       "runtimes": [
         "codex",
         "claude"
@@ -236,13 +252,31 @@
       "description": "Firebase, Firestore, Auth, hosting, rules, and Xcode setup guidance.",
       "displayName": "Firebase",
       "featured": 101,
-      "id": "plugin:firebase@firebase",
+      "id": "plugin:firebase",
+      "installations": [
+        {
+          "delivery": "marketplace",
+          "path": "config/codex-plugins.txt",
+          "pluginId": "firebase@firebase",
+          "runtime": "codex"
+        },
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "firebase@claude-plugins-official",
+          "runtime": "claude"
+        }
+      ],
       "invocation": null,
       "name": "firebase",
-      "path": "config/codex-plugins.txt",
-      "pluginId": "firebase@firebase",
+      "path": null,
+      "pluginIds": [
+        "firebase@firebase",
+        "firebase@claude-plugins-official"
+      ],
       "runtimes": [
-        "codex"
+        "codex",
+        "claude"
       ],
       "source": "third-party",
       "sourceLabel": "Firebase",
@@ -256,13 +290,31 @@
       "description": "Workers, Durable Objects, Wrangler, web performance, and Cloudflare platform skills.",
       "displayName": "Cloudflare",
       "featured": 102,
-      "id": "plugin:cloudflare@cloudflare",
+      "id": "plugin:cloudflare",
+      "installations": [
+        {
+          "delivery": "marketplace",
+          "path": "config/codex-plugins.txt",
+          "pluginId": "cloudflare@cloudflare",
+          "runtime": "codex"
+        },
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "cloudflare@claude-plugins-official",
+          "runtime": "claude"
+        }
+      ],
       "invocation": null,
       "name": "cloudflare",
-      "path": "config/codex-plugins.txt",
-      "pluginId": "cloudflare@cloudflare",
+      "path": null,
+      "pluginIds": [
+        "cloudflare@cloudflare",
+        "cloudflare@claude-plugins-official"
+      ],
       "runtimes": [
-        "codex"
+        "codex",
+        "claude"
       ],
       "source": "third-party",
       "sourceLabel": "Cloudflare",
@@ -277,12 +329,29 @@
       "displayName": "Mintlify",
       "featured": 103,
       "id": "plugin:mintlify@mintlify-marketplace",
+      "installations": [
+        {
+          "delivery": "marketplace",
+          "path": "config/codex-plugins.txt",
+          "pluginId": "mintlify@mintlify-marketplace",
+          "runtime": "codex"
+        },
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "mintlify@mintlify-marketplace",
+          "runtime": "claude"
+        }
+      ],
       "invocation": null,
       "name": "mintlify",
-      "path": "config/codex-plugins.txt",
-      "pluginId": "mintlify@mintlify-marketplace",
+      "path": null,
+      "pluginIds": [
+        "mintlify@mintlify-marketplace"
+      ],
       "runtimes": [
-        "codex"
+        "codex",
+        "claude"
       ],
       "source": "third-party",
       "sourceLabel": "Mintlify direct",
@@ -297,10 +366,26 @@
       "displayName": "Mintlify Docs",
       "featured": 104,
       "id": "plugin:mintlify-docs@pdugan20-plugins",
+      "installations": [
+        {
+          "delivery": "marketplace",
+          "path": "config/codex-plugins.txt",
+          "pluginId": "mintlify-docs@pdugan20-plugins",
+          "runtime": "codex"
+        },
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "mintlify-docs@pdugan20-plugins",
+          "runtime": "claude"
+        }
+      ],
       "invocation": null,
       "name": "mintlify-docs",
-      "path": "config/codex-plugins.txt",
-      "pluginId": "mintlify-docs@pdugan20-plugins",
+      "path": null,
+      "pluginIds": [
+        "mintlify-docs@pdugan20-plugins"
+      ],
       "runtimes": [
         "codex",
         "claude"
@@ -318,12 +403,29 @@
       "displayName": "Sentry",
       "featured": 105,
       "id": "plugin:sentry@claude-plugins-official",
+      "installations": [
+        {
+          "delivery": "marketplace",
+          "path": "config/codex-plugins.txt",
+          "pluginId": "sentry@claude-plugins-official",
+          "runtime": "codex"
+        },
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "sentry@claude-plugins-official",
+          "runtime": "claude"
+        }
+      ],
       "invocation": null,
       "name": "sentry",
-      "path": "config/codex-plugins.txt",
-      "pluginId": "sentry@claude-plugins-official",
+      "path": null,
+      "pluginIds": [
+        "sentry@claude-plugins-official"
+      ],
       "runtimes": [
-        "codex"
+        "codex",
+        "claude"
       ],
       "source": "third-party",
       "sourceLabel": "Sentry direct",
@@ -338,10 +440,26 @@
       "displayName": "Expo",
       "featured": 106,
       "id": "plugin:expo@claude-plugins-official",
+      "installations": [
+        {
+          "delivery": "marketplace",
+          "path": "config/codex-plugins.txt",
+          "pluginId": "expo@claude-plugins-official",
+          "runtime": "codex"
+        },
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "expo@claude-plugins-official",
+          "runtime": "claude"
+        }
+      ],
       "invocation": null,
       "name": "expo",
-      "path": "config/codex-plugins.txt",
-      "pluginId": "expo@claude-plugins-official",
+      "path": null,
+      "pluginIds": [
+        "expo@claude-plugins-official"
+      ],
       "runtimes": [
         "codex",
         "claude"
@@ -359,10 +477,20 @@
       "displayName": "Claude Code Setup",
       "featured": 107,
       "id": "plugin:claude-code-setup@claude-plugins-official",
+      "installations": [
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "claude-code-setup@claude-plugins-official",
+          "runtime": "claude"
+        }
+      ],
       "invocation": null,
       "name": "claude-code-setup",
       "path": "config/claude-plugins.txt",
-      "pluginId": "claude-code-setup@claude-plugins-official",
+      "pluginIds": [
+        "claude-code-setup@claude-plugins-official"
+      ],
       "runtimes": [
         "claude"
       ],
@@ -379,10 +507,20 @@
       "displayName": "Code Review",
       "featured": 108,
       "id": "plugin:code-review@claude-plugins-official",
+      "installations": [
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "code-review@claude-plugins-official",
+          "runtime": "claude"
+        }
+      ],
       "invocation": null,
       "name": "code-review",
       "path": "config/claude-plugins.txt",
-      "pluginId": "code-review@claude-plugins-official",
+      "pluginIds": [
+        "code-review@claude-plugins-official"
+      ],
       "runtimes": [
         "claude"
       ],
@@ -399,10 +537,20 @@
       "displayName": "Code Simplifier",
       "featured": 109,
       "id": "plugin:code-simplifier@claude-plugins-official",
+      "installations": [
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "code-simplifier@claude-plugins-official",
+          "runtime": "claude"
+        }
+      ],
       "invocation": null,
       "name": "code-simplifier",
       "path": "config/claude-plugins.txt",
-      "pluginId": "code-simplifier@claude-plugins-official",
+      "pluginIds": [
+        "code-simplifier@claude-plugins-official"
+      ],
       "runtimes": [
         "claude"
       ],
@@ -419,10 +567,20 @@
       "displayName": "Commit Commands",
       "featured": 110,
       "id": "plugin:commit-commands@claude-plugins-official",
+      "installations": [
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "commit-commands@claude-plugins-official",
+          "runtime": "claude"
+        }
+      ],
       "invocation": null,
       "name": "commit-commands",
       "path": "config/claude-plugins.txt",
-      "pluginId": "commit-commands@claude-plugins-official",
+      "pluginIds": [
+        "commit-commands@claude-plugins-official"
+      ],
       "runtimes": [
         "claude"
       ],
@@ -439,10 +597,20 @@
       "displayName": "Feature DEV",
       "featured": 111,
       "id": "plugin:feature-dev@claude-plugins-official",
+      "installations": [
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "feature-dev@claude-plugins-official",
+          "runtime": "claude"
+        }
+      ],
       "invocation": null,
       "name": "feature-dev",
       "path": "config/claude-plugins.txt",
-      "pluginId": "feature-dev@claude-plugins-official",
+      "pluginIds": [
+        "feature-dev@claude-plugins-official"
+      ],
       "runtimes": [
         "claude"
       ],
@@ -455,14 +623,62 @@
     },
     {
       "availability": "Global",
+      "description": "Figma design context, design-to-code, Code Connect, SwiftUI, and motion workflows.",
+      "displayName": "Figma",
+      "featured": 112,
+      "id": "plugin:figma",
+      "installations": [
+        {
+          "delivery": "managed",
+          "path": "config/codex-managed-plugins.txt",
+          "pluginId": "figma@openai-curated-remote",
+          "runtime": "codex"
+        },
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "figma@claude-plugins-official",
+          "runtime": "claude"
+        }
+      ],
+      "invocation": null,
+      "name": "figma",
+      "path": null,
+      "pluginIds": [
+        "figma@openai-curated-remote",
+        "figma@claude-plugins-official"
+      ],
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "third-party",
+      "sourceLabel": "Figma",
+      "sourceUrl": "https://github.com/figma/mcp-server-guide",
+      "state": "Configured",
+      "type": "plugin",
+      "version": "Managed"
+    },
+    {
+      "availability": "Global",
       "description": "Frontend interface design and implementation guidance.",
       "displayName": "Frontend Design",
-      "featured": 112,
+      "featured": 113,
       "id": "plugin:frontend-design@claude-plugins-official",
+      "installations": [
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "frontend-design@claude-plugins-official",
+          "runtime": "claude"
+        }
+      ],
       "invocation": null,
       "name": "frontend-design",
       "path": "config/claude-plugins.txt",
-      "pluginId": "frontend-design@claude-plugins-official",
+      "pluginIds": [
+        "frontend-design@claude-plugins-official"
+      ],
       "runtimes": [
         "claude"
       ],
@@ -475,14 +691,92 @@
     },
     {
       "availability": "Global",
+      "description": "Repository, pull request, review, CI, and publishing workflows.",
+      "displayName": "GitHub",
+      "featured": 114,
+      "id": "plugin:github",
+      "installations": [
+        {
+          "delivery": "managed",
+          "path": "config/codex-managed-plugins.txt",
+          "pluginId": "github@openai-curated-remote",
+          "runtime": "codex"
+        },
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "github@claude-plugins-official",
+          "runtime": "claude"
+        }
+      ],
+      "invocation": null,
+      "name": "github",
+      "path": null,
+      "pluginIds": [
+        "github@openai-curated-remote",
+        "github@claude-plugins-official"
+      ],
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "third-party",
+      "sourceLabel": "GitHub",
+      "sourceUrl": "https://github.com/github/github-mcp-server",
+      "state": "Configured",
+      "type": "plugin",
+      "version": "Managed"
+    },
+    {
+      "availability": "Global",
+      "description": "Create and validate Claude Code plugins, including hooks, commands, agents, skills, and MCP integrations.",
+      "displayName": "Plugin Development",
+      "featured": 115,
+      "id": "plugin:plugin-dev@claude-plugins-official",
+      "installations": [
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "plugin-dev@claude-plugins-official",
+          "runtime": "claude"
+        }
+      ],
+      "invocation": null,
+      "name": "plugin-dev",
+      "path": "config/claude-plugins.txt",
+      "pluginIds": [
+        "plugin-dev@claude-plugins-official"
+      ],
+      "runtimes": [
+        "claude"
+      ],
+      "source": "anthropic",
+      "sourceLabel": "Anthropic official",
+      "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/plugin-dev",
+      "state": "Configured",
+      "type": "plugin",
+      "version": "Managed"
+    },
+    {
+      "availability": "Global",
       "description": "Create and improve reusable Claude skills.",
       "displayName": "Skill Creator",
-      "featured": 113,
+      "featured": 116,
       "id": "plugin:skill-creator@claude-plugins-official",
+      "installations": [
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "skill-creator@claude-plugins-official",
+          "runtime": "claude"
+        }
+      ],
       "invocation": null,
       "name": "skill-creator",
       "path": "config/claude-plugins.txt",
-      "pluginId": "skill-creator@claude-plugins-official",
+      "pluginIds": [
+        "skill-creator@claude-plugins-official"
+      ],
       "runtimes": [
         "claude"
       ],
@@ -495,14 +789,54 @@
     },
     {
       "availability": "Global",
+      "description": "Manage Supabase databases, authentication, storage, and realtime services.",
+      "displayName": "Supabase",
+      "featured": 117,
+      "id": "plugin:supabase@claude-plugins-official",
+      "installations": [
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "supabase@claude-plugins-official",
+          "runtime": "claude"
+        }
+      ],
+      "invocation": null,
+      "name": "supabase",
+      "path": "config/claude-plugins.txt",
+      "pluginIds": [
+        "supabase@claude-plugins-official"
+      ],
+      "runtimes": [
+        "claude"
+      ],
+      "source": "third-party",
+      "sourceLabel": "Supabase",
+      "sourceUrl": "https://github.com/supabase-community/supabase-plugin",
+      "state": "Configured",
+      "type": "plugin",
+      "version": "Managed"
+    },
+    {
+      "availability": "Global",
       "description": "Swift language-server integration for Claude Code.",
       "displayName": "Swift LSP",
-      "featured": 114,
+      "featured": 118,
       "id": "plugin:swift-lsp@claude-plugins-official",
+      "installations": [
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "swift-lsp@claude-plugins-official",
+          "runtime": "claude"
+        }
+      ],
       "invocation": null,
       "name": "swift-lsp",
       "path": "config/claude-plugins.txt",
-      "pluginId": "swift-lsp@claude-plugins-official",
+      "pluginIds": [
+        "swift-lsp@claude-plugins-official"
+      ],
       "runtimes": [
         "claude"
       ],
@@ -517,12 +851,22 @@
       "availability": "Global",
       "description": "TypeScript language-server integration for Claude Code.",
       "displayName": "Typescript LSP",
-      "featured": 115,
+      "featured": 119,
       "id": "plugin:typescript-lsp@claude-plugins-official",
+      "installations": [
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "typescript-lsp@claude-plugins-official",
+          "runtime": "claude"
+        }
+      ],
       "invocation": null,
       "name": "typescript-lsp",
       "path": "config/claude-plugins.txt",
-      "pluginId": "typescript-lsp@claude-plugins-official",
+      "pluginIds": [
+        "typescript-lsp@claude-plugins-official"
+      ],
       "runtimes": [
         "claude"
       ],
@@ -535,54 +879,62 @@
     },
     {
       "availability": "Global",
+      "description": "Next.js, React, deployment, browser verification, and Vercel platform skills.",
+      "displayName": "Vercel",
+      "featured": 120,
+      "id": "plugin:vercel",
+      "installations": [
+        {
+          "delivery": "managed",
+          "path": "config/codex-managed-plugins.txt",
+          "pluginId": "vercel@openai-curated-remote",
+          "runtime": "codex"
+        },
+        {
+          "delivery": "marketplace",
+          "path": "config/claude-plugins.txt",
+          "pluginId": "vercel@claude-plugins-official",
+          "runtime": "claude"
+        }
+      ],
+      "invocation": null,
+      "name": "vercel",
+      "path": null,
+      "pluginIds": [
+        "vercel@openai-curated-remote",
+        "vercel@claude-plugins-official"
+      ],
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "third-party",
+      "sourceLabel": "Vercel",
+      "sourceUrl": "https://github.com/vercel/vercel-plugin",
+      "state": "Configured",
+      "type": "plugin",
+      "version": "Managed"
+    },
+    {
+      "availability": "Global",
       "description": "Product and business analysis, KPI, reporting, dashboard, and data-quality workflows supplied by Codex.",
       "displayName": "Data Analytics",
-      "featured": 116,
+      "featured": 121,
       "id": "plugin:data-analytics@openai-curated-remote",
+      "installations": [
+        {
+          "delivery": "managed",
+          "path": "config/codex-managed-plugins.txt",
+          "pluginId": "data-analytics@openai-curated-remote",
+          "runtime": "codex"
+        }
+      ],
       "invocation": null,
       "name": "data-analytics",
       "path": "config/codex-managed-plugins.txt",
-      "pluginId": "data-analytics@openai-curated-remote",
-      "runtimes": [
-        "codex"
+      "pluginIds": [
+        "data-analytics@openai-curated-remote"
       ],
-      "source": "openai",
-      "sourceLabel": "Managed by Codex",
-      "sourceUrl": null,
-      "state": "Managed by Codex",
-      "type": "plugin",
-      "version": "Managed"
-    },
-    {
-      "availability": "Global",
-      "description": "Figma design context, design-to-code, Code Connect, SwiftUI, and motion workflows.",
-      "displayName": "Figma",
-      "featured": 117,
-      "id": "plugin:figma@openai-curated-remote",
-      "invocation": null,
-      "name": "figma",
-      "path": "config/codex-managed-plugins.txt",
-      "pluginId": "figma@openai-curated-remote",
-      "runtimes": [
-        "codex"
-      ],
-      "source": "openai",
-      "sourceLabel": "Managed by Codex",
-      "sourceUrl": null,
-      "state": "Managed by Codex",
-      "type": "plugin",
-      "version": "Managed"
-    },
-    {
-      "availability": "Global",
-      "description": "Repository, pull request, review, CI, and publishing workflows.",
-      "displayName": "GitHub",
-      "featured": 118,
-      "id": "plugin:github@openai-curated-remote",
-      "invocation": null,
-      "name": "github",
-      "path": "config/codex-managed-plugins.txt",
-      "pluginId": "github@openai-curated-remote",
       "runtimes": [
         "codex"
       ],
@@ -597,12 +949,22 @@
       "availability": "Global",
       "description": "OpenAI API, Agents SDK, and ChatGPT Apps development workflows supplied by Codex.",
       "displayName": "OpenAI Developers",
-      "featured": 119,
+      "featured": 122,
       "id": "plugin:openai-developers@openai-curated-remote",
+      "installations": [
+        {
+          "delivery": "managed",
+          "path": "config/codex-managed-plugins.txt",
+          "pluginId": "openai-developers@openai-curated-remote",
+          "runtime": "codex"
+        }
+      ],
       "invocation": null,
       "name": "openai-developers",
       "path": "config/codex-managed-plugins.txt",
-      "pluginId": "openai-developers@openai-curated-remote",
+      "pluginIds": [
+        "openai-developers@openai-curated-remote"
+      ],
       "runtimes": [
         "codex"
       ],
@@ -617,12 +979,22 @@
       "availability": "Global",
       "description": "Product audit and source-to-code workflows; generated-image ideation remains disabled by personal policy.",
       "displayName": "Product Design",
-      "featured": 120,
+      "featured": 123,
       "id": "plugin:product-design@openai-curated-remote",
+      "installations": [
+        {
+          "delivery": "managed",
+          "path": "config/codex-managed-plugins.txt",
+          "pluginId": "product-design@openai-curated-remote",
+          "runtime": "codex"
+        }
+      ],
       "invocation": null,
       "name": "product-design",
       "path": "config/codex-managed-plugins.txt",
-      "pluginId": "product-design@openai-curated-remote",
+      "pluginIds": [
+        "product-design@openai-curated-remote"
+      ],
       "runtimes": [
         "codex"
       ],
@@ -637,32 +1009,22 @@
       "availability": "Global",
       "description": "Slack reading, summarization, triage, drafting, and messaging workflows supplied by Codex.",
       "displayName": "Slack",
-      "featured": 121,
+      "featured": 124,
       "id": "plugin:slack@openai-curated-remote",
+      "installations": [
+        {
+          "delivery": "managed",
+          "path": "config/codex-managed-plugins.txt",
+          "pluginId": "slack@openai-curated-remote",
+          "runtime": "codex"
+        }
+      ],
       "invocation": null,
       "name": "slack",
       "path": "config/codex-managed-plugins.txt",
-      "pluginId": "slack@openai-curated-remote",
-      "runtimes": [
-        "codex"
+      "pluginIds": [
+        "slack@openai-curated-remote"
       ],
-      "source": "openai",
-      "sourceLabel": "Managed by Codex",
-      "sourceUrl": null,
-      "state": "Managed by Codex",
-      "type": "plugin",
-      "version": "Managed"
-    },
-    {
-      "availability": "Global",
-      "description": "Next.js, React, deployment, browser verification, and Vercel platform skills.",
-      "displayName": "Vercel",
-      "featured": 122,
-      "id": "plugin:vercel@openai-curated-remote",
-      "invocation": null,
-      "name": "vercel",
-      "path": "config/codex-managed-plugins.txt",
-      "pluginId": "vercel@openai-curated-remote",
       "runtimes": [
         "codex"
       ],
@@ -674,5 +1036,5 @@
       "version": "Managed"
     }
   ],
-  "schemaVersion": 3
+  "schemaVersion": 4
 }

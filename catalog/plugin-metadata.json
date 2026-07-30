@@ -9,12 +9,14 @@
     "version": "6.2.0-config.2"
   },
   "firebase@firebase": {
+    "capabilityId": "firebase",
     "description": "Firebase, Firestore, Auth, hosting, rules, and Xcode setup guidance.",
     "source": "third-party",
     "sourceLabel": "Firebase",
     "sourceUrl": "https://github.com/firebase/skills"
   },
   "cloudflare@cloudflare": {
+    "capabilityId": "cloudflare",
     "description": "Workers, Durable Objects, Wrangler, web performance, and Cloudflare platform skills.",
     "source": "third-party",
     "sourceLabel": "Cloudflare",
@@ -41,14 +43,18 @@
     "sourceLabel": "Managed by Codex"
   },
   "figma@openai-curated-remote": {
+    "capabilityId": "figma",
     "description": "Figma design context, design-to-code, Code Connect, SwiftUI, and motion workflows.",
-    "source": "openai",
-    "sourceLabel": "Managed by Codex"
+    "source": "third-party",
+    "sourceLabel": "Figma",
+    "sourceUrl": "https://github.com/figma/mcp-server-guide"
   },
   "github@openai-curated-remote": {
+    "capabilityId": "github",
     "description": "Repository, pull request, review, CI, and publishing workflows.",
-    "source": "openai",
-    "sourceLabel": "Managed by Codex"
+    "source": "third-party",
+    "sourceLabel": "GitHub",
+    "sourceUrl": "https://github.com/github/github-mcp-server"
   },
   "openai-developers@openai-curated-remote": {
     "description": "OpenAI API, Agents SDK, and ChatGPT Apps development workflows supplied by Codex.",
@@ -81,9 +87,59 @@
     "sourceUrl": "https://github.com/expo/skills/tree/main/plugins/expo"
   },
   "vercel@openai-curated-remote": {
+    "capabilityId": "vercel",
     "description": "Next.js, React, deployment, browser verification, and Vercel platform skills.",
-    "source": "openai",
-    "sourceLabel": "Managed by Codex"
+    "source": "third-party",
+    "sourceLabel": "Vercel",
+    "sourceUrl": "https://github.com/vercel/vercel-plugin"
+  },
+  "cloudflare@claude-plugins-official": {
+    "capabilityId": "cloudflare",
+    "description": "Workers, Durable Objects, Wrangler, web performance, and Cloudflare platform skills.",
+    "source": "third-party",
+    "sourceLabel": "Cloudflare",
+    "sourceUrl": "https://github.com/cloudflare/skills"
+  },
+  "figma@claude-plugins-official": {
+    "capabilityId": "figma",
+    "description": "Figma design context, design-to-code, Code Connect, SwiftUI, and motion workflows.",
+    "source": "third-party",
+    "sourceLabel": "Figma",
+    "sourceUrl": "https://github.com/figma/mcp-server-guide"
+  },
+  "firebase@claude-plugins-official": {
+    "capabilityId": "firebase",
+    "description": "Firebase, Firestore, Auth, hosting, rules, and Xcode setup guidance.",
+    "source": "third-party",
+    "sourceLabel": "Firebase",
+    "sourceUrl": "https://github.com/firebase/skills"
+  },
+  "github@claude-plugins-official": {
+    "capabilityId": "github",
+    "description": "Repository, pull request, review, CI, and publishing workflows.",
+    "source": "third-party",
+    "sourceLabel": "GitHub",
+    "sourceUrl": "https://github.com/github/github-mcp-server"
+  },
+  "plugin-dev@claude-plugins-official": {
+    "description": "Create and validate Claude Code plugins, including hooks, commands, agents, skills, and MCP integrations.",
+    "displayName": "Plugin Development",
+    "source": "anthropic",
+    "sourceLabel": "Anthropic official",
+    "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/plugin-dev"
+  },
+  "supabase@claude-plugins-official": {
+    "description": "Manage Supabase databases, authentication, storage, and realtime services.",
+    "source": "third-party",
+    "sourceLabel": "Supabase",
+    "sourceUrl": "https://github.com/supabase-community/supabase-plugin"
+  },
+  "vercel@claude-plugins-official": {
+    "capabilityId": "vercel",
+    "description": "Next.js, React, deployment, browser verification, and Vercel platform skills.",
+    "source": "third-party",
+    "sourceLabel": "Vercel",
+    "sourceUrl": "https://github.com/vercel/vercel-plugin"
   },
   "claude-code-setup@claude-plugins-official": {
     "description": "Configure Claude Code projects and user environments.",
