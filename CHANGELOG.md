@@ -6,6 +6,28 @@ version when compatibility requires it.
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-07-31
+
+### Added
+
+- Added `feature-spike`, `analyze-ui-video`, `align-ui-to-design-system`, and
+  `audit-design-system-health` as shared Skills CLI snapshots for Codex and
+  Claude Code.
+
+### Changed
+
+- Updated all eleven Patrick-owned skill snapshots and provenance locks to
+  `pdugan20/skills` v2.4.0, including the expanded `feature-delivery` and
+  design-system-distance support in `code-native-ui-ideation`.
+- Updated catalog counts, source links, invocation-policy checks, and
+  terminology for the complete eighteen-skill inventory.
+
+### Upgrade notes
+
+Pull the repository and run `npm run setup`, then start new Codex and Claude
+Code tasks so both runtimes load the v2.4.0 skill snapshots and Patrick Plugins
+v3.3.0 marketplace catalog.
+
 ## [0.6.0] - 2026-07-30
 
 ### Changed
@@ -166,7 +188,8 @@ workflow snapshots.
 Pull the repository, run `npm run bootstrap`, refresh the configured Codex and Claude plugins, and start new
 tasks in both products.
 
-[unreleased]: https://github.com/pdugan20/agent-tooling/compare/v0.6.0...HEAD
+[unreleased]: https://github.com/pdugan20/agent-tooling/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/pdugan20/agent-tooling/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/pdugan20/agent-tooling/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/pdugan20/agent-tooling/compare/v0.4.2...v0.5.0
 [0.4.2]: https://github.com/pdugan20/agent-tooling/compare/v0.4.1...v0.4.2
