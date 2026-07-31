@@ -11,6 +11,7 @@ fi
 
 installed_plugins=$(codex plugin list --json)
 for retired_plugin in \
+  mintlify-docs@patrick-plugins \
   mintlify-docs@pdugan20-plugins \
   mintlify-docs@patrick-tools \
   patrick-workflows@pdugan20-plugins \
@@ -52,6 +53,7 @@ done <"$ROOT/config/codex-plugins.txt"
 
 for retired_plugin in \
   patrick-delivery@personal \
+  mintlify-docs@patrick-plugins \
   superpowers@claude-plugins-official \
   superpowers@openai-curated \
   expo@openai-curated \

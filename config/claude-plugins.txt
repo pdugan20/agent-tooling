@@ -9,7 +9,6 @@ figma@claude-plugins-official
 firebase@claude-plugins-official
 frontend-design@claude-plugins-official
 github@claude-plugins-official
-mintlify-docs@patrick-plugins
 mintlify@mintlify-marketplace
 plugin-dev@claude-plugins-official
 sentry@claude-plugins-official

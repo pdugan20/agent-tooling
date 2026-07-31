@@ -12,8 +12,8 @@ class CatalogGenerationTests(unittest.TestCase):
         catalog = generate_catalog.build_catalog()
         items = catalog["items"]
 
-        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 10)
-        self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 25)
+        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 14)
+        self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 24)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
         self.assertEqual(catalog["schemaVersion"], 4)
@@ -33,13 +33,17 @@ class CatalogGenerationTests(unittest.TestCase):
             {
                 "code-native-ui-ideation",
                 "feature-delivery",
+                "generate-mintlify-reference",
                 "production-hardening",
+                "review-mintlify-docs",
+                "scaffold-mintlify-site",
+                "write-mintlify-changelog",
             },
         )
         self.assertTrue(
             all(
                 item["path"].startswith(".agents/skills/")
-                and item["sourceUrl"].startswith("https://github.com/pdugan20/skills/blob/v2.0.0/")
+                and item["sourceUrl"].startswith("https://github.com/pdugan20/skills/blob/v2.1.0/")
                 for item in items
                 if item["type"] == "skill" and item["name"] in managed
             )
@@ -112,16 +116,31 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertTrue(all(plugin["version"] == "6.2.0-config.2" for plugin in plugins))
         self.assertNotIn("Desired", {item["state"] for item in items})
 
-    def test_mintlify_docs_is_one_cross_runtime_plugin(self) -> None:
+    def test_mintlify_docs_workflows_are_personal_skills(self) -> None:
         items = generate_catalog.build_catalog()["items"]
-        plugins = [
-            item for item in items if "mintlify-docs@patrick-plugins" in item.get("pluginIds", [])
-        ]
+        plugin_ids = {
+            plugin_id
+            for item in items
+            if item["type"] == "plugin"
+            for plugin_id in item.get("pluginIds", [])
+        }
+        personal_skills = {
+            item["name"]
+            for item in items
+            if item["type"] == "skill" and item["sourceLabel"] == "Pat Dugan"
+        }
 
-        self.assertEqual(len(plugins), 1)
-        self.assertEqual(plugins[0]["runtimes"], ["codex", "claude"])
-        self.assertEqual(plugins[0]["sourceLabel"], "Pat Dugan")
-        self.assertEqual(plugins[0]["sourceUrl"], "https://github.com/pdugan20/mintlify-docs")
+        self.assertNotIn("mintlify-docs@patrick-plugins", plugin_ids)
+        self.assertTrue(
+            {
+                "generate-mintlify-reference",
+                "review-mintlify-docs",
+                "scaffold-mintlify-site",
+                "write-mintlify-changelog",
+            }
+            <= personal_skills
+        )
+        self.assertIn("mintlify@mintlify-marketplace", plugin_ids)
 
     def test_codex_managed_plugins_are_separate_from_cli_plugins(self) -> None:
         items = generate_catalog.build_catalog()["items"]

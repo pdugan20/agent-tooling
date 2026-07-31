@@ -12,7 +12,7 @@ desired plugin state, and configured Superpowers baseline. Patrick-owned skills 
 4. Commit and push this repository.
 5. On another machine, pull, run `npm run bootstrap`, and start a new Claude or Codex task.
 
-## Update Patrick workflows
+## Update Patrick skills
 
 1. Edit and validate the canonical skill in `pdugan20/skills`.
 2. Release a new semantic version there.
@@ -158,9 +158,10 @@ report that separate layer.
 
 The current Codex CLI has no `plugin update` command. Its relevant refresh primitives are `codex plugin marketplace upgrade` and `codex plugin add`.
 
-`mintlify-docs` is refreshed from the native Codex catalog in `pdugan20/plugins`. Its canonical plugin code
-lives in `pdugan20/mintlify-docs`; update and release that repository first, then refresh the marketplace snapshot and
-re-add the configured plugin here.
+Patrick's Mintlify workflows are installed from the same tagged `pdugan20/skills`
+release as the design and delivery skills. The separate `mintlify-docs` plugin is
+retired and removed by the install and refresh scripts. Mintlify's official
+plugin remains installed for current product mechanics.
 
 Refresh the desired Claude plugin set with:
 
@@ -180,9 +181,9 @@ example, `rss-feed-generator` pins Railway's canonical `use-railway` Agent Skill
 links it into Claude. This gives both agents the same project-scoped source without installing either runtime's
 Railway plugin globally.
 
-The Claude and Codex installations of `mintlify-docs` use the same tagged source release. The source repository keeps
-separate `.claude-plugin` and `.codex-plugin` manifests only for runtime packaging; both manifests point at the same
-`skills/` directory and are versioned together.
+The `.agents/skills/` snapshots and `.claude/skills/` compatibility links give
+both runtimes the same Patrick-owned skill contents without a second plugin
+installation.
 
 ## Update the configured Superpowers fork
 

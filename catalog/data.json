@@ -24,7 +24,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.0.0/skills/feature-delivery/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.1.0/skills/feature-delivery/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -44,7 +44,107 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.0.0/skills/code-native-ui-ideation/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.1.0/skills/code-native-ui-ideation/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "Git"
+    },
+    {
+      "availability": "Global",
+      "description": "Harden a selected implementation for release",
+      "displayName": "Production Hardening",
+      "featured": 3,
+      "id": "skill:production-hardening",
+      "invocation": "Explicit",
+      "name": "production-hardening",
+      "path": ".agents/skills/production-hardening/SKILL.md",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "personal",
+      "sourceLabel": "Pat Dugan",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.1.0/skills/production-hardening/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "Git"
+    },
+    {
+      "availability": "Global",
+      "description": "Create a project-specific Mintlify site",
+      "displayName": "Scaffold Mintlify Site",
+      "featured": 4,
+      "id": "skill:scaffold-mintlify-site",
+      "invocation": "Automatic",
+      "name": "scaffold-mintlify-site",
+      "path": ".agents/skills/scaffold-mintlify-site/SKILL.md",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "personal",
+      "sourceLabel": "Pat Dugan",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.1.0/skills/scaffold-mintlify-site/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "Git"
+    },
+    {
+      "availability": "Global",
+      "description": "Audit Mintlify content and navigation",
+      "displayName": "Review Mintlify Docs",
+      "featured": 5,
+      "id": "skill:review-mintlify-docs",
+      "invocation": "Automatic",
+      "name": "review-mintlify-docs",
+      "path": ".agents/skills/review-mintlify-docs/SKILL.md",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "personal",
+      "sourceLabel": "Pat Dugan",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.1.0/skills/review-mintlify-docs/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "Git"
+    },
+    {
+      "availability": "Global",
+      "description": "Generate source-backed reference docs",
+      "displayName": "Generate Mintlify Reference",
+      "featured": 6,
+      "id": "skill:generate-mintlify-reference",
+      "invocation": "Automatic",
+      "name": "generate-mintlify-reference",
+      "path": ".agents/skills/generate-mintlify-reference/SKILL.md",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "personal",
+      "sourceLabel": "Pat Dugan",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.1.0/skills/generate-mintlify-reference/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "Git"
+    },
+    {
+      "availability": "Global",
+      "description": "Write reader-facing Mintlify updates",
+      "displayName": "Write Mintlify Changelog",
+      "featured": 7,
+      "id": "skill:write-mintlify-changelog",
+      "invocation": "Automatic",
+      "name": "write-mintlify-changelog",
+      "path": ".agents/skills/write-mintlify-changelog/SKILL.md",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "personal",
+      "sourceLabel": "Pat Dugan",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.1.0/skills/write-mintlify-changelog/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -53,7 +153,7 @@
       "availability": "Global",
       "description": "Reviews SwiftUI code for modern best practices.",
       "displayName": "SwiftUI Pro",
-      "featured": 3,
+      "featured": 10,
       "id": "skill:swiftui-pro",
       "invocation": "Automatic",
       "name": "swiftui-pro",
@@ -73,7 +173,7 @@
       "availability": "Global",
       "description": "Apple's approach to interface design and fluid, physical motion, translated for the web. Use when building or reviewing gesture-driven UI, spring animations, drag/swipe/sheet interactions, momentum and interruptible transitions, translucent materials and depth, typography (optical sizing, tracking, leading), reduced-motion, or the design foundations (feedback, spatial consistency, restraint) behind Apple-style interfaces.",
       "displayName": "Apple Design",
-      "featured": 4,
+      "featured": 11,
       "id": "skill:apple-design",
       "invocation": "Automatic",
       "name": "apple-design",
@@ -93,7 +193,7 @@
       "availability": "Global",
       "description": "Reviews animation and motion code against a high craft bar derived from Emil Kowalski's design engineering philosophy. Default to flagging; approval is earned.",
       "displayName": "Review Animations",
-      "featured": 5,
+      "featured": 12,
       "id": "skill:review-animations",
       "invocation": "Explicit",
       "name": "review-animations",
@@ -113,7 +213,7 @@
       "availability": "Global",
       "description": "Search a codebase or UI for places that don't animate but should, and reject everything that shouldn't. Read-only; it proposes motion with exact values, it does not implement it. Use when the user asks \"what could be animated here?\" or wants to \"make this feel more alive\". For fixing existing animations, use improve-animations or review-animations instead.",
       "displayName": "Find Animation Opportunities",
-      "featured": 6,
+      "featured": 13,
       "id": "skill:find-animation-opportunities",
       "invocation": "Automatic",
       "name": "find-animation-opportunities",
@@ -133,7 +233,7 @@
       "availability": "Global",
       "description": "Reverse-lookup glossary that turns a vague description of a web animation or motion effect into its exact term (\"the bouncy thing when a popover opens\" \u2192 Pop in; \"the iOS rubber-band scroll\" \u2192 Rubber-banding). Use when the user asks \"what's it called when\u2026\", or describes a motion effect without knowing its name and wants the right word to prompt an AI or designer with. For naming an effect, not designing or building one.",
       "displayName": "Animation Vocabulary",
-      "featured": 7,
+      "featured": 14,
       "id": "skill:animation-vocabulary",
       "invocation": "Automatic",
       "name": "animation-vocabulary",
@@ -153,7 +253,7 @@
       "availability": "Global",
       "description": "This skill encodes Emil Kowalski's philosophy on UI polish, component design, animation decisions, and the invisible details that make software feel great.",
       "displayName": "Emil Design ENG",
-      "featured": 8,
+      "featured": 15,
       "id": "skill:emil-design-eng",
       "invocation": "Automatic",
       "name": "emil-design-eng",
@@ -173,7 +273,7 @@
       "availability": "Global",
       "description": "Pick the right library for a given frontend task from a curated, opinionated list \u2014 numbers, OTP inputs, charts, command menus, virtualization, drag and drop, toasts, state, styling, and more. Only runs when explicitly invoked; it does not trigger on its own.",
       "displayName": "Pick UI Library",
-      "featured": 9,
+      "featured": 16,
       "id": "skill:pick-ui-library",
       "invocation": "Explicit",
       "name": "pick-ui-library",
@@ -185,26 +285,6 @@
       "source": "third-party",
       "sourceLabel": "Emil Kowalski",
       "sourceUrl": "https://github.com/emilkowalski/skills/blob/main/skills/pick-ui-library/SKILL.md",
-      "state": "Configured",
-      "type": "skill",
-      "version": "Git"
-    },
-    {
-      "availability": "Global",
-      "description": "Harden a selected implementation for release",
-      "displayName": "Production Hardening",
-      "featured": 20,
-      "id": "skill:production-hardening",
-      "invocation": "Explicit",
-      "name": "production-hardening",
-      "path": ".agents/skills/production-hardening/SKILL.md",
-      "runtimes": [
-        "codex",
-        "claude"
-      ],
-      "source": "personal",
-      "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.0.0/skills/production-hardening/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -361,46 +441,9 @@
     },
     {
       "availability": "Global",
-      "description": "House-style workflows for Mintlify information architecture, editorial review, changelogs, and drift-checked reference documentation.",
-      "displayName": "Mintlify Docs",
-      "featured": 104,
-      "id": "plugin:mintlify-docs@patrick-plugins",
-      "installations": [
-        {
-          "delivery": "marketplace",
-          "path": "config/codex-plugins.txt",
-          "pluginId": "mintlify-docs@patrick-plugins",
-          "runtime": "codex"
-        },
-        {
-          "delivery": "marketplace",
-          "path": "config/claude-plugins.txt",
-          "pluginId": "mintlify-docs@patrick-plugins",
-          "runtime": "claude"
-        }
-      ],
-      "invocation": null,
-      "name": "mintlify-docs",
-      "path": null,
-      "pluginIds": [
-        "mintlify-docs@patrick-plugins"
-      ],
-      "runtimes": [
-        "codex",
-        "claude"
-      ],
-      "source": "personal",
-      "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/mintlify-docs",
-      "state": "Configured",
-      "type": "plugin",
-      "version": "0.3.3"
-    },
-    {
-      "availability": "Global",
       "description": "Set up Sentry, inspect and debug issues, configure monitoring, and maintain SDK integrations.",
       "displayName": "Sentry",
-      "featured": 105,
+      "featured": 104,
       "id": "plugin:sentry@claude-plugins-official",
       "installations": [
         {
@@ -437,7 +480,7 @@
       "availability": "Global",
       "description": "Current official Expo and React Native framework, EAS, deployment, and platform guidance.",
       "displayName": "Expo",
-      "featured": 106,
+      "featured": 105,
       "id": "plugin:expo@claude-plugins-official",
       "installations": [
         {
@@ -474,7 +517,7 @@
       "availability": "Global",
       "description": "Configure Claude Code projects and user environments.",
       "displayName": "Claude Code Setup",
-      "featured": 107,
+      "featured": 106,
       "id": "plugin:claude-code-setup@claude-plugins-official",
       "installations": [
         {
@@ -504,7 +547,7 @@
       "availability": "Global",
       "description": "Review code changes for correctness, quality, and regressions.",
       "displayName": "Code Review",
-      "featured": 108,
+      "featured": 107,
       "id": "plugin:code-review@claude-plugins-official",
       "installations": [
         {
@@ -534,7 +577,7 @@
       "availability": "Global",
       "description": "Reduce unnecessary complexity while preserving behavior.",
       "displayName": "Code Simplifier",
-      "featured": 109,
+      "featured": 108,
       "id": "plugin:code-simplifier@claude-plugins-official",
       "installations": [
         {
@@ -564,7 +607,7 @@
       "availability": "Global",
       "description": "Claude-native commands for structured Git commits.",
       "displayName": "Commit Commands",
-      "featured": 110,
+      "featured": 109,
       "id": "plugin:commit-commands@claude-plugins-official",
       "installations": [
         {
@@ -594,7 +637,7 @@
       "availability": "Global",
       "description": "Guided feature implementation workflows for Claude Code.",
       "displayName": "Feature DEV",
-      "featured": 111,
+      "featured": 110,
       "id": "plugin:feature-dev@claude-plugins-official",
       "installations": [
         {
@@ -624,7 +667,7 @@
       "availability": "Global",
       "description": "Figma design context, design-to-code, Code Connect, SwiftUI, and motion workflows.",
       "displayName": "Figma",
-      "featured": 112,
+      "featured": 111,
       "id": "plugin:figma",
       "installations": [
         {
@@ -662,7 +705,7 @@
       "availability": "Global",
       "description": "Frontend interface design and implementation guidance.",
       "displayName": "Frontend Design",
-      "featured": 113,
+      "featured": 112,
       "id": "plugin:frontend-design@claude-plugins-official",
       "installations": [
         {
@@ -692,7 +735,7 @@
       "availability": "Global",
       "description": "Repository, pull request, review, CI, and publishing workflows.",
       "displayName": "GitHub",
-      "featured": 114,
+      "featured": 113,
       "id": "plugin:github",
       "installations": [
         {
@@ -730,7 +773,7 @@
       "availability": "Global",
       "description": "Create and validate Claude Code plugins, including hooks, commands, agents, skills, and MCP integrations.",
       "displayName": "Plugin Development",
-      "featured": 115,
+      "featured": 114,
       "id": "plugin:plugin-dev@claude-plugins-official",
       "installations": [
         {
@@ -760,7 +803,7 @@
       "availability": "Global",
       "description": "Create and improve reusable Claude skills.",
       "displayName": "Skill Creator",
-      "featured": 116,
+      "featured": 115,
       "id": "plugin:skill-creator@claude-plugins-official",
       "installations": [
         {
@@ -790,7 +833,7 @@
       "availability": "Global",
       "description": "Manage Supabase databases, authentication, storage, and realtime services.",
       "displayName": "Supabase",
-      "featured": 117,
+      "featured": 116,
       "id": "plugin:supabase@claude-plugins-official",
       "installations": [
         {
@@ -820,7 +863,7 @@
       "availability": "Global",
       "description": "Swift language-server integration for Claude Code.",
       "displayName": "Swift LSP",
-      "featured": 118,
+      "featured": 117,
       "id": "plugin:swift-lsp@claude-plugins-official",
       "installations": [
         {
@@ -850,7 +893,7 @@
       "availability": "Global",
       "description": "TypeScript language-server integration for Claude Code.",
       "displayName": "Typescript LSP",
-      "featured": 119,
+      "featured": 118,
       "id": "plugin:typescript-lsp@claude-plugins-official",
       "installations": [
         {
@@ -880,7 +923,7 @@
       "availability": "Global",
       "description": "Next.js, React, deployment, browser verification, and Vercel platform skills.",
       "displayName": "Vercel",
-      "featured": 120,
+      "featured": 119,
       "id": "plugin:vercel",
       "installations": [
         {
@@ -918,7 +961,7 @@
       "availability": "Global",
       "description": "Product and business analysis, KPI, reporting, dashboard, and data-quality workflows supplied by Codex.",
       "displayName": "Data Analytics",
-      "featured": 121,
+      "featured": 120,
       "id": "plugin:data-analytics@openai-curated-remote",
       "installations": [
         {
@@ -948,7 +991,7 @@
       "availability": "Global",
       "description": "OpenAI API, Agents SDK, and ChatGPT Apps development workflows supplied by Codex.",
       "displayName": "OpenAI Developers",
-      "featured": 122,
+      "featured": 121,
       "id": "plugin:openai-developers@openai-curated-remote",
       "installations": [
         {
@@ -978,7 +1021,7 @@
       "availability": "Global",
       "description": "Product audit and source-to-code workflows; generated-image ideation remains disabled by personal policy.",
       "displayName": "Product Design",
-      "featured": 123,
+      "featured": 122,
       "id": "plugin:product-design@openai-curated-remote",
       "installations": [
         {
@@ -1008,7 +1051,7 @@
       "availability": "Global",
       "description": "Slack reading, summarization, triage, drafting, and messaging workflows supplied by Codex.",
       "displayName": "Slack",
-      "featured": 124,
+      "featured": 123,
       "id": "plugin:slack@openai-curated-remote",
       "installations": [
         {
