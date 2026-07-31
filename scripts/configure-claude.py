@@ -8,11 +8,14 @@ from pathlib import Path
 
 OFFICIAL_SUPERPOWERS = "superpowers@claude-plugins-official"
 CONFIGURED_SUPERPOWERS = "superpowers@superpowers-configured"
-EXPLICIT_PERSONAL_SKILLS = (
+EXPLICIT_PERSONAL_SKILLS = ("review-animations",)
+RETIRED_SKILLS = (
+    "execute-plan",
+    "formal-spec",
     "production-hardening",
-    "review-animations",
+    "strict-tdd",
+    "write-plan",
 )
-RETIRED_SKILLS = ("execute-plan", "formal-spec", "strict-tdd", "write-plan")
 
 
 def update_settings(data: dict[str, object]) -> dict[str, object]:

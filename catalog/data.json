@@ -24,7 +24,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/feature-delivery/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.0.0/skills/feature-delivery/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -44,27 +44,27 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/code-native-ui-ideation/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.0.0/skills/code-native-ui-ideation/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
     },
     {
       "availability": "Global",
-      "description": "Harden a selected implementation for release",
-      "displayName": "Production Hardening",
+      "description": "Scaffold repositories to the right maturity",
+      "displayName": "Bootstrap Repository",
       "featured": 3,
-      "id": "skill:production-hardening",
-      "invocation": "Explicit",
-      "name": "production-hardening",
-      "path": ".agents/skills/production-hardening/SKILL.md",
+      "id": "skill:bootstrap-repository",
+      "invocation": "Automatic",
+      "name": "bootstrap-repository",
+      "path": ".agents/skills/bootstrap-repository/SKILL.md",
       "runtimes": [
         "codex",
         "claude"
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/production-hardening/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.0.0/skills/bootstrap-repository/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -84,7 +84,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/scaffold-mintlify-site/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.0.0/skills/scaffold-mintlify-site/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -104,7 +104,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/review-mintlify-docs/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.0.0/skills/review-mintlify-docs/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -124,7 +124,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/generate-mintlify-reference/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.0.0/skills/generate-mintlify-reference/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -144,7 +144,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/write-mintlify-changelog/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.0.0/skills/write-mintlify-changelog/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -304,7 +304,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/align-ui-to-design-system/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.0.0/skills/align-ui-to-design-system/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -324,7 +324,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/analyze-ui-video/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.0.0/skills/analyze-ui-video/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -344,7 +344,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/audit-design-system-health/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.0.0/skills/audit-design-system-health/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -364,7 +364,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/feature-spike/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.0.0/skills/feature-spike/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"

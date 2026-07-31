@@ -12,7 +12,7 @@ Use for visual design, UI variants, motion tuning, prototypes, copy changes, and
 - Do not require a formal spec, implementation plan, worktree, test-first cycle, or commit.
 - Keep changes easy to inspect and undo.
 - Verify the changed surface proportionally: render it, exercise the interaction, take a screenshot when useful, and run a focused compile or check when practical.
-- Ask before expanding a small design iteration into architecture or production-hardening work.
+- Ask before expanding a small design iteration into architecture or production hardening work.
 
 ## Code-native visual ideation
 
@@ -43,7 +43,7 @@ The configured Superpowers fork enforces explicit-only invocation for brainstorm
 
 In Codex, invoke strict workflows with `$superpowers:<skill-name>`. In Claude, use `/superpowers:<skill-name>`. Common examples are `brainstorming`, `test-driven-development`, `writing-plans`, `executing-plans`, `using-git-worktrees`, and `finishing-a-development-branch`.
 
-The personal `feature-delivery` skill is the exception: it may trigger automatically for substantial production feature implementation. It uses proportional planning, risk-based testing, implementation checkpoints, and production verification without implicitly invoking strict TDD, mandatory brainstorming, worktrees, or branch-finishing workflows. Invoke the personal `production-hardening` skill explicitly when a selected implementation needs a dedicated release-readiness audit.
+The personal `feature-delivery` skill is the exception: it may trigger automatically for substantial production feature implementation. It uses proportional planning, risk-based testing, implementation checkpoints, and production verification without implicitly invoking strict TDD, mandatory brainstorming, worktrees, or branch-finishing workflows. When a selected implementation needs a dedicated release-readiness audit, ask for hardening explicitly and follow the repository's production instructions or a separately requested release-readiness capability.
 
 The configured Superpowers plugin is maintained as a thin fork of `obra/superpowers`. It disables the always-on session bootstrap and removes the brainstorming Visual Companion/browser option-picker. Do not restore either behavior through repository-level instructions.
 

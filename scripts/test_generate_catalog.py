@@ -27,18 +27,18 @@ class CatalogGenerationTests(unittest.TestCase):
         }
 
         self.assertEqual(managed["feature-delivery"], "Automatic")
-        self.assertEqual(managed["production-hardening"], "Explicit")
+        self.assertEqual(managed["bootstrap-repository"], "Automatic")
         self.assertEqual(
             set(managed),
             {
                 "align-ui-to-design-system",
                 "analyze-ui-video",
                 "audit-design-system-health",
+                "bootstrap-repository",
                 "code-native-ui-ideation",
                 "feature-delivery",
                 "feature-spike",
                 "generate-mintlify-reference",
-                "production-hardening",
                 "review-mintlify-docs",
                 "scaffold-mintlify-site",
                 "write-mintlify-changelog",
@@ -47,7 +47,7 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertTrue(
             all(
                 item["path"].startswith(".agents/skills/")
-                and item["sourceUrl"].startswith("https://github.com/pdugan20/skills/blob/v2.4.0/")
+                and item["sourceUrl"].startswith("https://github.com/pdugan20/skills/blob/v3.0.0/")
                 for item in items
                 if item["type"] == "skill" and item["name"] in managed
             )

@@ -60,6 +60,13 @@ for managed_skill in \
   remove_legacy_link "$claude_config_dir/skills/$managed_skill" "$ROOT/skills/$managed_skill"
 done
 
+remove_legacy_link \
+  "$HOME/.agents/skills/production-hardening" \
+  "$ROOT/.agents/skills/production-hardening"
+remove_legacy_link \
+  "$claude_config_dir/skills/production-hardening" \
+  "$ROOT/.agents/skills/production-hardening"
+
 link_skill_collection() {
   local collection=$1
   local skill_dir

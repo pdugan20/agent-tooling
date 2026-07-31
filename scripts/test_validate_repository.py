@@ -47,6 +47,11 @@ class RepositoryValidationTests(unittest.TestCase):
             home = temporary_root / "home"
             claude_profile = temporary_root / "active-claude"
             home.mkdir()
+            (home / ".agents/skills").mkdir(parents=True)
+            claude_profile.joinpath("skills").mkdir(parents=True)
+            retired_target = validate_repository.ROOT / ".agents/skills/production-hardening"
+            (home / ".agents/skills/production-hardening").symlink_to(retired_target)
+            (claude_profile / "skills/production-hardening").symlink_to(retired_target)
             env = os.environ.copy()
             env.update(
                 {
@@ -68,6 +73,8 @@ class RepositoryValidationTests(unittest.TestCase):
                 validate_repository.ROOT / "global/AGENTS.md",
             )
             self.assertTrue((claude_profile / "skills/code-native-ui-ideation").is_symlink())
+            self.assertFalse((home / ".agents/skills/production-hardening").is_symlink())
+            self.assertFalse((claude_profile / "skills/production-hardening").is_symlink())
             self.assertFalse((home / ".claude").exists())
 
     def test_retired_marketplaces_are_removed_before_replacement_registration(self) -> None:

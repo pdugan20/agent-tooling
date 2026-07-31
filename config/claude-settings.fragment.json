@@ -4,7 +4,6 @@
     "superpowers@superpowers-configured": true
   },
   "skillOverrides": {
-    "production-hardening": "user-invocable-only",
     "review-animations": "user-invocable-only"
   }
 }

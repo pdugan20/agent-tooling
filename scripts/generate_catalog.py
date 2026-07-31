@@ -33,7 +33,7 @@ UPSTREAM_SOURCE_LABELS = {
 SKILL_PRIORITY = {
     "feature-delivery": 1,
     "code-native-ui-ideation": 2,
-    "production-hardening": 3,
+    "bootstrap-repository": 3,
     "scaffold-mintlify-site": 4,
     "review-mintlify-docs": 5,
     "generate-mintlify-reference": 6,

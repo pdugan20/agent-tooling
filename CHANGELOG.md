@@ -6,6 +6,31 @@ version when compatibility requires it.
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-07-31
+
+### Added
+
+- Added `bootstrap-repository` as a shared Skills CLI snapshot for Codex and
+  Claude Code.
+
+### Changed
+
+- Updated all eleven Patrick-owned skill snapshots and provenance locks to
+  `pdugan20/skills` v3.0.0 and aligned setup with Patrick Plugins v3.4.0.
+- Updated the shared production instructions, Claude routing overrides,
+  catalog, and setup cleanup for the current skill collection.
+
+### Removed
+
+- Removed the retired `production-hardening` snapshot, compatibility link, and
+  invocation override.
+
+### Upgrade notes
+
+Pull the repository and run `npm run setup`, then start new Codex and Claude
+Code tasks. Setup removes any remaining `production-hardening` runtime link,
+loads the v3.0.0 skill snapshots, and refreshes Patrick Plugins v3.4.0.
+
 ## [0.7.0] - 2026-07-31
 
 ### Added
@@ -188,7 +213,8 @@ workflow snapshots.
 Pull the repository, run `npm run bootstrap`, refresh the configured Codex and Claude plugins, and start new
 tasks in both products.
 
-[unreleased]: https://github.com/pdugan20/agent-tooling/compare/v0.7.0...HEAD
+[unreleased]: https://github.com/pdugan20/agent-tooling/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/pdugan20/agent-tooling/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/pdugan20/agent-tooling/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/pdugan20/agent-tooling/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/pdugan20/agent-tooling/compare/v0.4.2...v0.5.0
