@@ -1,6 +1,20 @@
 {
   "version": 1,
   "skills": {
+    "align-ui-to-design-system": {
+      "source": "pdugan20/skills",
+      "ref": "v2.4.0",
+      "sourceType": "github",
+      "skillPath": "skills/align-ui-to-design-system/SKILL.md",
+      "computedHash": "134c75915f2b76b62f0d860a0e9e5e87e958b307b1ebba7db527a059b7b49f02"
+    },
+    "analyze-ui-video": {
+      "source": "pdugan20/skills",
+      "ref": "v2.4.0",
+      "sourceType": "github",
+      "skillPath": "skills/analyze-ui-video/SKILL.md",
+      "computedHash": "06d3e758308ffff106fee61ddeac0f1681c772caf3ad6f77c096b34d52c0294b"
+    },
     "animation-vocabulary": {
       "source": "emilkowalski/skills",
       "sourceType": "github",
@@ -13,12 +27,19 @@
       "skillPath": "skills/apple-design/SKILL.md",
       "computedHash": "8b94db67cb9edaad5f1501010804caa610131f1d2dfda0a27664b2e858deade3"
     },
+    "audit-design-system-health": {
+      "source": "pdugan20/skills",
+      "ref": "v2.4.0",
+      "sourceType": "github",
+      "skillPath": "skills/audit-design-system-health/SKILL.md",
+      "computedHash": "8b360e17ee4b1852518976e481e25a2cfd8a610abc564258e6bc35f2092c281e"
+    },
     "code-native-ui-ideation": {
       "source": "pdugan20/skills",
-      "ref": "v2.1.0",
+      "ref": "v2.4.0",
       "sourceType": "github",
       "skillPath": "skills/code-native-ui-ideation/SKILL.md",
-      "computedHash": "3ae6a043465351ea11047e960491d9dba497f51debfe994d982f29e6153adb11"
+      "computedHash": "bc0926403b0884b3c38c372477064455054276bce3f847d6002cc211920c3925"
     },
     "emil-design-eng": {
       "source": "emilkowalski/skills",
@@ -28,10 +49,17 @@
     },
     "feature-delivery": {
       "source": "pdugan20/skills",
-      "ref": "v2.1.0",
+      "ref": "v2.4.0",
       "sourceType": "github",
       "skillPath": "skills/feature-delivery/SKILL.md",
-      "computedHash": "ea56aa51056c145798361ce6b85db7048056cd156089f31efbea42a3f434848a"
+      "computedHash": "afb29ebb38ebbc64631eee54343dbb85178703101e73a7e0c199244c7b57d8c2"
+    },
+    "feature-spike": {
+      "source": "pdugan20/skills",
+      "ref": "v2.4.0",
+      "sourceType": "github",
+      "skillPath": "skills/feature-spike/SKILL.md",
+      "computedHash": "6269bc594e4e6884e292ecf8366bc33f6a2fda26b55022758f605169d42a02c0"
     },
     "find-animation-opportunities": {
       "source": "emilkowalski/skills",
@@ -41,7 +69,7 @@
     },
     "generate-mintlify-reference": {
       "source": "pdugan20/skills",
-      "ref": "v2.1.0",
+      "ref": "v2.4.0",
       "sourceType": "github",
       "skillPath": "skills/generate-mintlify-reference/SKILL.md",
       "computedHash": "14f3bbe3514a90a5695ada99db604493b73d21abcd0b6405a5b7baa6ef0e6ac0"
@@ -54,7 +82,7 @@
     },
     "production-hardening": {
       "source": "pdugan20/skills",
-      "ref": "v2.1.0",
+      "ref": "v2.4.0",
       "sourceType": "github",
       "skillPath": "skills/production-hardening/SKILL.md",
       "computedHash": "03675371e5537766dd4b72d38c70b9a4a322e2ca273abb78971681f15d2c2b8c"
@@ -67,14 +95,14 @@
     },
     "review-mintlify-docs": {
       "source": "pdugan20/skills",
-      "ref": "v2.1.0",
+      "ref": "v2.4.0",
       "sourceType": "github",
       "skillPath": "skills/review-mintlify-docs/SKILL.md",
-      "computedHash": "99727fb3f498cf5081cb9bfaad9916ff9fccdded8f2c6e2bb4bb7c0d80ed384a"
+      "computedHash": "5886ce04b8f4f4fa528a8607ccf7f0bfbd1653852b6889c80646d2dc92e8fd96"
     },
     "scaffold-mintlify-site": {
       "source": "pdugan20/skills",
-      "ref": "v2.1.0",
+      "ref": "v2.4.0",
       "sourceType": "github",
       "skillPath": "skills/scaffold-mintlify-site/SKILL.md",
       "computedHash": "4e0fe665444cfd3df8e9422e80839212b6efcc768b800099003cab3c854ed720"
@@ -88,10 +116,10 @@
     },
     "write-mintlify-changelog": {
       "source": "pdugan20/skills",
-      "ref": "v2.1.0",
+      "ref": "v2.4.0",
       "sourceType": "github",
       "skillPath": "skills/write-mintlify-changelog/SKILL.md",
-      "computedHash": "9c28821601ddadbd3d4ba55239428bc87283e42c4723538c891144623fea45f8"
+      "computedHash": "565d7fdb61fbeb62ae22cec88e348de7ad250eb83d63bcb4ac40217883d62ac7"
     }
   }
 }

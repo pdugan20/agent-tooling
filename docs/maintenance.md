@@ -158,7 +158,7 @@ report that separate layer.
 
 The current Codex CLI has no `plugin update` command. Its relevant refresh primitives are `codex plugin marketplace upgrade` and `codex plugin add`.
 
-Patrick's Mintlify workflows are installed from the same tagged `pdugan20/skills`
+Patrick's Mintlify skills are installed from the same tagged `pdugan20/skills`
 release as the design and delivery skills. The separate `mintlify-docs` plugin is
 retired and removed by the install and refresh scripts. Mintlify's official
 plugin remains installed for current product mechanics.

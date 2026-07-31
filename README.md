@@ -46,8 +46,8 @@ that separate account/workspace layer.
 | Plugin setup           | Marketplace-installed and Codex-managed plugin sets      | [`config/`](config/)                                  |
 | Machine setup          | Bootstrap, refresh, configuration, and verification      | [`scripts/`](scripts/)                                |
 
-All fourteen skills are installed into this repository by the Skills CLI, committed under
-[`.agents/skills/`](.agents/skills/), and tracked by `skills-lock.json`. The seven Patrick skills come from the
+All eighteen skills are installed into this repository by the Skills CLI, committed under
+[`.agents/skills/`](.agents/skills/), and tracked by `skills-lock.json`. The eleven Patrick skills come from the
 tagged public [Skills](https://github.com/pdugan20/skills) collection; the other seven retain
 their original publisher provenance. Bootstrap links every canonical snapshot into each agent's home-directory skill
 location, so their **runtime availability** is global across repositories. Do not edit snapshots by hand. Use

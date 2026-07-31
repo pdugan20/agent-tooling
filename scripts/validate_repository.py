@@ -17,8 +17,12 @@ CHANGELOG = ROOT / "CHANGELOG.md"
 SEMVER_RE = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
 RELEASE_TAG_RE = re.compile(r"^v(?P<version>\d+\.\d+\.\d+)$")
 CUSTOM_SKILLS = {
+    "align-ui-to-design-system": True,
+    "analyze-ui-video": True,
+    "audit-design-system-health": True,
     "code-native-ui-ideation": True,
     "feature-delivery": True,
+    "feature-spike": True,
     "generate-mintlify-reference": True,
     "production-hardening": False,
     "review-mintlify-docs": True,
@@ -26,6 +30,18 @@ CUSTOM_SKILLS = {
     "write-mintlify-changelog": True,
 }
 UPSTREAM_SKILLS = {
+    "align-ui-to-design-system": (
+        "pdugan20/skills",
+        "skills/align-ui-to-design-system/SKILL.md",
+    ),
+    "analyze-ui-video": (
+        "pdugan20/skills",
+        "skills/analyze-ui-video/SKILL.md",
+    ),
+    "audit-design-system-health": (
+        "pdugan20/skills",
+        "skills/audit-design-system-health/SKILL.md",
+    ),
     "code-native-ui-ideation": (
         "pdugan20/skills",
         "skills/code-native-ui-ideation/SKILL.md",
@@ -33,6 +49,10 @@ UPSTREAM_SKILLS = {
     "feature-delivery": (
         "pdugan20/skills",
         "skills/feature-delivery/SKILL.md",
+    ),
+    "feature-spike": (
+        "pdugan20/skills",
+        "skills/feature-spike/SKILL.md",
     ),
     "generate-mintlify-reference": (
         "pdugan20/skills",
@@ -65,7 +85,7 @@ UPSTREAM_SKILLS = {
     "review-animations": ("emilkowalski/skills", "skills/review-animations/SKILL.md"),
     "swiftui-pro": ("twostraws/swiftui-agent-skill", "swiftui-pro/SKILL.md"),
 }
-PATRICK_SKILLS_REF = "v2.1.0"
+PATRICK_SKILLS_REF = "v2.4.0"
 EXPECTED_EXPLICIT_SUPERPOWERS = {
     "brainstorming",
     "dispatching-parallel-agents",

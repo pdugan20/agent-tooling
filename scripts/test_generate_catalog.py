@@ -12,7 +12,7 @@ class CatalogGenerationTests(unittest.TestCase):
         catalog = generate_catalog.build_catalog()
         items = catalog["items"]
 
-        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 14)
+        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 18)
         self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 24)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
@@ -31,8 +31,12 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertEqual(
             set(managed),
             {
+                "align-ui-to-design-system",
+                "analyze-ui-video",
+                "audit-design-system-health",
                 "code-native-ui-ideation",
                 "feature-delivery",
+                "feature-spike",
                 "generate-mintlify-reference",
                 "production-hardening",
                 "review-mintlify-docs",
@@ -43,7 +47,7 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertTrue(
             all(
                 item["path"].startswith(".agents/skills/")
-                and item["sourceUrl"].startswith("https://github.com/pdugan20/skills/blob/v2.1.0/")
+                and item["sourceUrl"].startswith("https://github.com/pdugan20/skills/blob/v2.4.0/")
                 for item in items
                 if item["type"] == "skill" and item["name"] in managed
             )
@@ -116,7 +120,7 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertTrue(all(plugin["version"] == "6.2.0-config.2" for plugin in plugins))
         self.assertNotIn("Desired", {item["state"] for item in items})
 
-    def test_mintlify_docs_workflows_are_personal_skills(self) -> None:
+    def test_mintlify_docs_are_personal_skills(self) -> None:
         items = generate_catalog.build_catalog()["items"]
         plugin_ids = {
             plugin_id

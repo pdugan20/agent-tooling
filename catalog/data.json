@@ -11,7 +11,7 @@
   "items": [
     {
       "availability": "Global",
-      "description": "Deliver substantial production-ready features",
+      "description": "Coordinate features from idea through rollout",
       "displayName": "Feature Delivery",
       "featured": 1,
       "id": "skill:feature-delivery",
@@ -24,7 +24,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.1.0/skills/feature-delivery/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/feature-delivery/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -44,7 +44,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.1.0/skills/code-native-ui-ideation/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/code-native-ui-ideation/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -64,7 +64,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.1.0/skills/production-hardening/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/production-hardening/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -84,7 +84,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.1.0/skills/scaffold-mintlify-site/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/scaffold-mintlify-site/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -104,7 +104,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.1.0/skills/review-mintlify-docs/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/review-mintlify-docs/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -124,7 +124,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.1.0/skills/generate-mintlify-reference/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/generate-mintlify-reference/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -144,7 +144,7 @@
       ],
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.1.0/skills/write-mintlify-changelog/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/write-mintlify-changelog/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -285,6 +285,86 @@
       "source": "third-party",
       "sourceLabel": "Emil Kowalski",
       "sourceUrl": "https://github.com/emilkowalski/skills/blob/main/skills/pick-ui-library/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "Git"
+    },
+    {
+      "availability": "Global",
+      "description": "Review one UI against its design system",
+      "displayName": "Align UI to Design System",
+      "featured": 50,
+      "id": "skill:align-ui-to-design-system",
+      "invocation": "Automatic",
+      "name": "align-ui-to-design-system",
+      "path": ".agents/skills/align-ui-to-design-system/SKILL.md",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "personal",
+      "sourceLabel": "Pat Dugan",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/align-ui-to-design-system/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "Git"
+    },
+    {
+      "availability": "Global",
+      "description": "Dissect UI recordings against real code",
+      "displayName": "Analyze UI Video",
+      "featured": 50,
+      "id": "skill:analyze-ui-video",
+      "invocation": "Automatic",
+      "name": "analyze-ui-video",
+      "path": ".agents/skills/analyze-ui-video/SKILL.md",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "personal",
+      "sourceLabel": "Pat Dugan",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/analyze-ui-video/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "Git"
+    },
+    {
+      "availability": "Global",
+      "description": "Find design drift and consolidation opportunities",
+      "displayName": "Audit Design-System Health",
+      "featured": 50,
+      "id": "skill:audit-design-system-health",
+      "invocation": "Automatic",
+      "name": "audit-design-system-health",
+      "path": ".agents/skills/audit-design-system-health/SKILL.md",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "personal",
+      "sourceLabel": "Pat Dugan",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/audit-design-system-health/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "Git"
+    },
+    {
+      "availability": "Global",
+      "description": "Test feature value or feasibility before investing",
+      "displayName": "Feature Spike",
+      "featured": 50,
+      "id": "skill:feature-spike",
+      "invocation": "Automatic",
+      "name": "feature-spike",
+      "path": ".agents/skills/feature-spike/SKILL.md",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "personal",
+      "sourceLabel": "Pat Dugan",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v2.4.0/skills/feature-spike/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
