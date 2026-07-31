@@ -10,11 +10,11 @@ produces a useful result.
 | --- | --- | --- | --- |
 | Patrick-owned skill | Codex `$skill-creator` quick validation; Claude's official strict plugin validation; `agent-ecosystem/skill-validator` strict validation; Skills CLI discovery | Repository policy; Markdownlint; ShellCheck and shfmt for shell resources; Ruff for Python resources | `skills` |
 | Locked skill snapshot | Official Skills CLI lock and update review | No local rewriting; repository policy checks provenance, source path, release ref, compatibility links, and known duplicate overrides | `agent-tooling/.agents/skills` |
-| Claude plugin | `claude plugin validate . --strict`; repository policy validation | Markdownlint, JSON/YAML formatting, package and install smoke tests | `mintlify-docs` and `plugins` |
-| Codex plugin | Codex `$plugin-creator` validation | JSON formatting plus a marketplace install/reinstall smoke test | `mintlify-docs` and `plugins` |
+| Claude plugin | `claude plugin validate . --strict`; repository policy validation | Markdownlint, JSON/YAML formatting, package and install smoke tests | `plugins` |
+| Codex plugin | Codex `$plugin-creator` validation | JSON formatting plus a marketplace install/reinstall smoke test | `plugins` |
 | Claude marketplace | `claude plugin validate . --strict`; repository policy validation | JSON formatting and dependency-install smoke test | `plugins` CI |
 | Codex marketplace | Codex `$plugin-creator` generation/validation and live install smoke test | JSON syntax validation; source tag and policy review | `plugins` CI and release review |
-| GitHub Actions | actionlint and zizmor | Prettier for YAML; full commit pins | All four maintained repositories |
+| GitHub Actions | actionlint and zizmor | Prettier for YAML; full commit pins | Maintained repositories |
 | Repository scripts | ShellCheck and shfmt for shell; Ruff for Python; Prettier for JavaScript/JSON/YAML | Unit tests for behavior | `agent-tooling` verification |
 | Secrets and credentials | Gitleaks staged and full-history scans | Manual review of generated archives and runtime snapshots | `agent-tooling` pre-commit, pre-push, and CI |
 
@@ -39,17 +39,6 @@ CLI does not transform those fields for Codex. Keep locked upstream snapshots un
 output as a compatibility warning to review, not a reason to fork the skill. Apply runtime policy through
 `agents/openai.yaml`, Claude `skillOverrides`, or repository instructions when the source already supports that
 separation.
-
-For Mintlify Docs:
-
-```bash
-npm run verify
-npm audit
-```
-
-Its verification command runs strict ClaudeLint, Markdownlint, ClaudeLint's marketplace/plugin checks, and Claude
-Code's official plugin validator. CI additionally runs the install smoke test, ShellCheck, Ruff, actionlint, Typos,
-and zizmor; Lychee runs on a network-dependent schedule.
 
 For the marketplace repository, CI validates both catalogs and installs every published plugin in its supported
 runtimes. A successful install is the final packaging check because it exercises the same catalog and cache path

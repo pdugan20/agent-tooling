@@ -11,6 +11,7 @@ if ! command -v claude >/dev/null 2>&1; then
 fi
 
 for retired_plugin in \
+  mintlify-docs@patrick-plugins \
   mintlify-docs@pdugan20-plugins \
   mintlify-docs@patrick-tools \
   patrick-workflows@pdugan20-plugins \

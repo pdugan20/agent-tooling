@@ -33,14 +33,18 @@ UPSTREAM_SOURCE_LABELS = {
 SKILL_PRIORITY = {
     "feature-delivery": 1,
     "code-native-ui-ideation": 2,
-    "swiftui-pro": 3,
-    "apple-design": 4,
-    "review-animations": 5,
-    "find-animation-opportunities": 6,
-    "animation-vocabulary": 7,
-    "emil-design-eng": 8,
-    "pick-ui-library": 9,
-    "production-hardening": 20,
+    "production-hardening": 3,
+    "scaffold-mintlify-site": 4,
+    "review-mintlify-docs": 5,
+    "generate-mintlify-reference": 6,
+    "write-mintlify-changelog": 7,
+    "swiftui-pro": 10,
+    "apple-design": 11,
+    "review-animations": 12,
+    "find-animation-opportunities": 13,
+    "animation-vocabulary": 14,
+    "emil-design-eng": 15,
+    "pick-ui-library": 16,
 }
 
 

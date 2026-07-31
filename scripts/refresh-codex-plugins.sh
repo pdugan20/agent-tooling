@@ -11,6 +11,7 @@ fi
 
 installed_plugins=$(codex plugin list --json)
 for retired_plugin in \
+  mintlify-docs@patrick-plugins \
   mintlify-docs@pdugan20-plugins \
   mintlify-docs@patrick-tools \
   patrick-workflows@pdugan20-plugins \

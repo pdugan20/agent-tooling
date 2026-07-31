@@ -48,9 +48,13 @@ for managed_skill in \
   emil-design-eng \
   feature-delivery \
   find-animation-opportunities \
+  generate-mintlify-reference \
   pick-ui-library \
   production-hardening \
+  review-mintlify-docs \
   review-animations \
+  scaffold-mintlify-site \
+  write-mintlify-changelog \
   swiftui-pro; do
   remove_legacy_link "$HOME/.agents/skills/$managed_skill" "$ROOT/skills/$managed_skill"
   remove_legacy_link "$claude_config_dir/skills/$managed_skill" "$ROOT/skills/$managed_skill"

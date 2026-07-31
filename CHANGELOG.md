@@ -6,6 +6,19 @@ version when compatibility requires it.
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-07-30
+
+### Changed
+
+- Updated all seven Patrick-owned skill snapshots and provenance locks to `pdugan20/skills` v2.1.0.
+- Added `scaffold-mintlify-site`, `review-mintlify-docs`, `generate-mintlify-reference`, and `write-mintlify-changelog` as shared Skills CLI snapshots for Codex and Claude Code.
+- Removed `mintlify-docs@patrick-plugins` from both desired plugin sets while retaining Mintlify's official plugin for current product mechanics.
+- Updated setup, refresh, verification, catalog, and authoring documentation for the combined skill collection.
+
+### Upgrade notes
+
+Pull the repository and run `npm run setup`. Setup links the four documentation skills into both runtimes and removes the retired `mintlify-docs@patrick-plugins` installation. Start new Codex and Claude Code tasks afterward.
+
 ## [0.5.0] - 2026-07-30
 
 ### Changed
@@ -153,7 +166,8 @@ workflow snapshots.
 Pull the repository, run `npm run bootstrap`, refresh the configured Codex and Claude plugins, and start new
 tasks in both products.
 
-[unreleased]: https://github.com/pdugan20/agent-tooling/compare/v0.5.0...HEAD
+[unreleased]: https://github.com/pdugan20/agent-tooling/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/pdugan20/agent-tooling/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/pdugan20/agent-tooling/compare/v0.4.2...v0.5.0
 [0.4.2]: https://github.com/pdugan20/agent-tooling/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/pdugan20/agent-tooling/compare/v0.4.0...v0.4.1

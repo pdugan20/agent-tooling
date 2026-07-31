@@ -80,6 +80,7 @@ class RepositoryValidationTests(unittest.TestCase):
                 for retired_marketplace in ("pdugan20-plugins", "patrick-tools"):
                     self.assertLess(script.index(retired_marketplace), replacement)
                 for retired_plugin in (
+                    "mintlify-docs@patrick-plugins",
                     "mintlify-docs@pdugan20-plugins",
                     "mintlify-docs@patrick-tools",
                     "patrick-workflows@pdugan20-plugins",

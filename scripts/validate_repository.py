@@ -19,7 +19,11 @@ RELEASE_TAG_RE = re.compile(r"^v(?P<version>\d+\.\d+\.\d+)$")
 CUSTOM_SKILLS = {
     "code-native-ui-ideation": True,
     "feature-delivery": True,
+    "generate-mintlify-reference": True,
     "production-hardening": False,
+    "review-mintlify-docs": True,
+    "scaffold-mintlify-site": True,
+    "write-mintlify-changelog": True,
 }
 UPSTREAM_SKILLS = {
     "code-native-ui-ideation": (
@@ -30,9 +34,25 @@ UPSTREAM_SKILLS = {
         "pdugan20/skills",
         "skills/feature-delivery/SKILL.md",
     ),
+    "generate-mintlify-reference": (
+        "pdugan20/skills",
+        "skills/generate-mintlify-reference/SKILL.md",
+    ),
     "production-hardening": (
         "pdugan20/skills",
         "skills/production-hardening/SKILL.md",
+    ),
+    "review-mintlify-docs": (
+        "pdugan20/skills",
+        "skills/review-mintlify-docs/SKILL.md",
+    ),
+    "scaffold-mintlify-site": (
+        "pdugan20/skills",
+        "skills/scaffold-mintlify-site/SKILL.md",
+    ),
+    "write-mintlify-changelog": (
+        "pdugan20/skills",
+        "skills/write-mintlify-changelog/SKILL.md",
     ),
     "animation-vocabulary": ("emilkowalski/skills", "skills/animation-vocabulary/SKILL.md"),
     "apple-design": ("emilkowalski/skills", "skills/apple-design/SKILL.md"),
@@ -45,7 +65,7 @@ UPSTREAM_SKILLS = {
     "review-animations": ("emilkowalski/skills", "skills/review-animations/SKILL.md"),
     "swiftui-pro": ("twostraws/swiftui-agent-skill", "swiftui-pro/SKILL.md"),
 }
-PATRICK_SKILLS_REF = "v2.0.0"
+PATRICK_SKILLS_REF = "v2.1.0"
 EXPECTED_EXPLICIT_SUPERPOWERS = {
     "brainstorming",
     "dispatching-parallel-agents",
@@ -248,12 +268,6 @@ def validate_repository() -> None:
         raise ValidationError("configured Superpowers must be desired in Codex")
     if plugin_id not in plugin_manifests["claude-plugins.txt"]:
         raise ValidationError("configured Superpowers must be desired in Claude")
-    mintlify_docs_id = "mintlify-docs@patrick-plugins"
-    if not all(
-        mintlify_docs_id in plugin_manifests[name]
-        for name in ("codex-plugins.txt", "claude-plugins.txt")
-    ):
-        raise ValidationError("mintlify-docs must be desired in both Codex and Claude")
     expo_id = "expo@claude-plugins-official"
     if expo_id not in plugin_manifests["codex-plugins.txt"]:
         raise ValidationError("the current vendor-backed Expo plugin must be desired in Codex")
@@ -291,6 +305,7 @@ def validate_repository() -> None:
         raise ValidationError("Codex-managed plugins cannot also be CLI-managed")
     retired_ids = {
         "patrick-delivery@personal",
+        "mintlify-docs@patrick-plugins",
         "mintlify-docs@pdugan20-plugins",
         "mintlify-docs@patrick-tools",
         "patrick-workflows@pdugan20-plugins",
@@ -366,6 +381,7 @@ def validate_repository() -> None:
         script = (ROOT / "scripts" / script_name).read_text(encoding="utf-8")
         new_marketplace = script.index("ensure_marketplace patrick-plugins")
         for retired_id in (
+            "mintlify-docs@patrick-plugins",
             "mintlify-docs@pdugan20-plugins",
             "mintlify-docs@patrick-tools",
             "patrick-workflows@pdugan20-plugins",
@@ -393,6 +409,7 @@ def validate_repository() -> None:
         script = (ROOT / "scripts" / script_name).read_text(encoding="utf-8")
         new_marketplace = script.index("ensure_marketplace patrick-plugins")
         for retired_id in (
+            "mintlify-docs@patrick-plugins",
             "mintlify-docs@pdugan20-plugins",
             "mintlify-docs@patrick-tools",
             "patrick-workflows@pdugan20-plugins",
