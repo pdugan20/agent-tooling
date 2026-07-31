@@ -16,6 +16,7 @@ class ConfigureClaudeTests(unittest.TestCase):
         data = {
             "enabledPlugins": {"unrelated@example": True},
             "skillOverrides": {
+                "production-hardening": "user-invocable-only",
                 "strict-tdd": "user-invocable-only",
                 "unrelated-skill": "name-only",
             },
@@ -27,10 +28,7 @@ class ConfigureClaudeTests(unittest.TestCase):
         self.assertIs(updated["enabledPlugins"]["superpowers@claude-plugins-official"], False)
         self.assertIs(updated["enabledPlugins"]["superpowers@superpowers-configured"], True)
         self.assertNotIn("strict-tdd", updated["skillOverrides"])
-        self.assertEqual(
-            updated["skillOverrides"]["production-hardening"],
-            "user-invocable-only",
-        )
+        self.assertNotIn("production-hardening", updated["skillOverrides"])
         self.assertEqual(updated["skillOverrides"]["unrelated-skill"], "name-only")
 
 

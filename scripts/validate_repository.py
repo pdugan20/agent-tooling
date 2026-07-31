@@ -20,11 +20,11 @@ CUSTOM_SKILLS = {
     "align-ui-to-design-system": True,
     "analyze-ui-video": True,
     "audit-design-system-health": True,
+    "bootstrap-repository": True,
     "code-native-ui-ideation": True,
     "feature-delivery": True,
     "feature-spike": True,
     "generate-mintlify-reference": True,
-    "production-hardening": False,
     "review-mintlify-docs": True,
     "scaffold-mintlify-site": True,
     "write-mintlify-changelog": True,
@@ -42,6 +42,10 @@ UPSTREAM_SKILLS = {
         "pdugan20/skills",
         "skills/audit-design-system-health/SKILL.md",
     ),
+    "bootstrap-repository": (
+        "pdugan20/skills",
+        "skills/bootstrap-repository/SKILL.md",
+    ),
     "code-native-ui-ideation": (
         "pdugan20/skills",
         "skills/code-native-ui-ideation/SKILL.md",
@@ -57,10 +61,6 @@ UPSTREAM_SKILLS = {
     "generate-mintlify-reference": (
         "pdugan20/skills",
         "skills/generate-mintlify-reference/SKILL.md",
-    ),
-    "production-hardening": (
-        "pdugan20/skills",
-        "skills/production-hardening/SKILL.md",
     ),
     "review-mintlify-docs": (
         "pdugan20/skills",
@@ -85,7 +85,7 @@ UPSTREAM_SKILLS = {
     "review-animations": ("emilkowalski/skills", "skills/review-animations/SKILL.md"),
     "swiftui-pro": ("twostraws/swiftui-agent-skill", "swiftui-pro/SKILL.md"),
 }
-PATRICK_SKILLS_REF = "v2.4.0"
+PATRICK_SKILLS_REF = "v3.0.0"
 EXPECTED_EXPLICIT_SUPERPOWERS = {
     "brainstorming",
     "dispatching-parallel-agents",

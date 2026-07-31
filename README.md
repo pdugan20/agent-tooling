@@ -41,7 +41,7 @@ that separate account/workspace layer.
 | Area                   | Purpose                                                  | Canonical source                                      |
 | ---------------------- | -------------------------------------------------------- | ----------------------------------------------------- |
 | Shared instructions    | Exploration, production, Firebase, and safety policy     | [`global/AGENTS.md`](global/AGENTS.md)                |
-| Patrick skills         | Versioned design, delivery, and documentation skills     | [`pdugan20/skills`](https://github.com/pdugan20/skills) |
+| Patrick skills         | Versioned repository, design, delivery, and documentation skills | [`pdugan20/skills`](https://github.com/pdugan20/skills) |
 | Managed skill snapshots | Skills CLI installations with source provenance         | [`.agents/skills/`](.agents/skills/), `skills-lock.json` |
 | Plugin setup           | Marketplace-installed and Codex-managed plugin sets      | [`config/`](config/)                                  |
 | Machine setup          | Bootstrap, refresh, configuration, and verification      | [`scripts/`](scripts/)                                |
