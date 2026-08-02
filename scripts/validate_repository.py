@@ -25,6 +25,7 @@ CUSTOM_SKILLS = {
     "feature-delivery": True,
     "feature-spike": True,
     "generate-mintlify-reference": True,
+    "integrate-app-intents": True,
     "review-mintlify-docs": True,
     "scaffold-mintlify-site": True,
     "tune-mobile-client-performance": True,
@@ -63,6 +64,10 @@ UPSTREAM_SKILLS = {
         "pdugan20/skills",
         "skills/generate-mintlify-reference/SKILL.md",
     ),
+    "integrate-app-intents": (
+        "pdugan20/skills",
+        "skills/integrate-app-intents/SKILL.md",
+    ),
     "review-mintlify-docs": (
         "pdugan20/skills",
         "skills/review-mintlify-docs/SKILL.md",
@@ -94,7 +99,7 @@ UPSTREAM_SKILLS = {
         "skills/xcodebuildmcp/SKILL.md",
     ),
 }
-PATRICK_SKILLS_REF = "v3.1.0"
+PATRICK_SKILLS_REF = "v3.2.0"
 XCODEBUILDMCP_REF = "v2.7.0"
 EXPECTED_EXPLICIT_SUPERPOWERS = {
     "brainstorming",
