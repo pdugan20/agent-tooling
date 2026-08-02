@@ -40,6 +40,7 @@ SKILL_PRIORITY = {
     "generate-mintlify-reference": 6,
     "write-mintlify-changelog": 7,
     "xcodebuildmcp": 8,
+    "tune-mobile-client-performance": 9,
     "swiftui-pro": 10,
     "apple-design": 11,
     "review-animations": 12,

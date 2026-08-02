@@ -47,8 +47,8 @@ that separate account/workspace layer.
 | Plugin setup           | Marketplace-installed and Codex-managed plugin sets      | [`config/`](config/)                                  |
 | Machine setup          | Bootstrap, refresh, configuration, and verification      | [`scripts/`](scripts/)                                |
 
-All nineteen skills are installed into this repository by the Skills CLI, committed under
-[`.agents/skills/`](.agents/skills/), and tracked by `skills-lock.json`. The eleven Patrick skills come from the
+All twenty skills are installed into this repository by the Skills CLI, committed under
+[`.agents/skills/`](.agents/skills/), and tracked by `skills-lock.json`. The twelve Patrick skills come from the
 tagged public [Skills](https://github.com/pdugan20/skills) collection; the other eight retain
 their original publisher provenance. Bootstrap links every canonical snapshot into each agent's home-directory skill
 location, so their **runtime availability** is global across repositories. Do not edit snapshots by hand. Use
@@ -57,6 +57,10 @@ location, so their **runtime availability** is global across repositories. Do no
 The Codex pilot pins XcodeBuildMCP and its official upstream skill to v2.7.0. Bootstrap enables only Simulator,
 semantic UI automation, and debugging workflows, disables the tool's own Sentry telemetry, and leaves visual
 inspection to computer use. Start a new Codex task after setup so the MCP tool inventory reloads.
+
+The first-party `tune-mobile-client-performance` skill is pinned from Patrick Skills v3.1.0. It routes a concrete
+SwiftUI, Swift, React Native, or Expo runtime symptom through evidence collection and causal tuning; it does not
+replace Instruments, device evidence, or the structured Xcode and Simulator pilot.
 
 ## Catalog
 
