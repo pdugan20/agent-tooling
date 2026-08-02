@@ -120,6 +120,13 @@
       "sourceType": "github",
       "skillPath": "skills/write-mintlify-changelog/SKILL.md",
       "computedHash": "565d7fdb61fbeb62ae22cec88e348de7ad250eb83d63bcb4ac40217883d62ac7"
+    },
+    "xcodebuildmcp": {
+      "source": "getsentry/XcodeBuildMCP",
+      "ref": "v2.7.0",
+      "sourceType": "github",
+      "skillPath": "skills/xcodebuildmcp/SKILL.md",
+      "computedHash": "cb153f421215de51d3b2fb0a1b6ebbd5c97f2268eba2e1eb70cfd623cc3a2ccb"
     }
   }
 }

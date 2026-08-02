@@ -14,6 +14,20 @@ SPEC.loader.exec_module(configure_codex)
 
 
 class ConfigureCodexTests(unittest.TestCase):
+    MANAGED_MCP_SERVERS = {
+        "xcodebuildmcp": {
+            "command": "npx",
+            "args": ["--yes", "xcodebuildmcp@2.7.0", "mcp"],
+            "enabled": True,
+            "env": {
+                "XCODEBUILDMCP_ENABLED_WORKFLOWS": "simulator,ui-automation,debugging",
+                "XCODEBUILDMCP_SENTRY_DISABLED": "true",
+            },
+            "startup_timeout_sec": 120,
+            "tool_timeout_sec": 300,
+        }
+    }
+
     def test_disables_product_design_router_and_image_ideation(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             home = Path(directory)
@@ -67,6 +81,79 @@ class ConfigureCodexTests(unittest.TestCase):
             self.assertEqual(
                 parsed["skills"]["config"],
                 [{"path": str(nested_skill.resolve()), "enabled": False}],
+            )
+
+    def test_adds_pinned_managed_mcp_server_idempotently(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            home = Path(directory)
+            original = 'model = "test"\n'
+
+            updated = configure_codex.update_config(
+                original,
+                home,
+                managed_mcp_servers=self.MANAGED_MCP_SERVERS,
+            )
+            parsed = tomllib.loads(updated)
+
+            self.assertEqual(
+                parsed["mcp_servers"]["xcodebuildmcp"],
+                self.MANAGED_MCP_SERVERS["xcodebuildmcp"],
+            )
+            self.assertEqual(
+                configure_codex.update_config(
+                    updated,
+                    home,
+                    managed_mcp_servers=self.MANAGED_MCP_SERVERS,
+                ),
+                updated,
+            )
+
+    def test_replaces_stale_managed_mcp_server_without_touching_neighbors(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            home = Path(directory)
+            original = (
+                "[mcp_servers.xcodebuildmcp]\n"
+                'command = "npx"\n'
+                'args = ["--yes", "xcodebuildmcp@latest", "mcp"]\n\n'
+                "[mcp_servers.other]\n"
+                'command = "other-server"\n'
+            )
+
+            updated = configure_codex.update_config(
+                original,
+                home,
+                managed_mcp_servers=self.MANAGED_MCP_SERVERS,
+            )
+            parsed = tomllib.loads(updated)
+
+            self.assertEqual(parsed["mcp_servers"]["other"]["command"], "other-server")
+            self.assertEqual(
+                parsed["mcp_servers"]["xcodebuildmcp"],
+                self.MANAGED_MCP_SERVERS["xcodebuildmcp"],
+            )
+
+    def test_replaces_managed_mcp_server_without_consuming_array_tables(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            home = Path(directory)
+            original = (
+                "[mcp_servers.xcodebuildmcp]\n"
+                'command = "npx"\n'
+                'args = ["--yes", "xcodebuildmcp@latest", "mcp"]\n\n'
+                "[[skills.config]]\n"
+                'path = "/tmp/example/SKILL.md"\n'
+                "enabled = false\n"
+            )
+
+            updated = configure_codex.update_config(
+                original,
+                home,
+                managed_mcp_servers=self.MANAGED_MCP_SERVERS,
+            )
+            parsed = tomllib.loads(updated)
+
+            self.assertEqual(
+                parsed["skills"]["config"],
+                [{"path": "/tmp/example/SKILL.md", "enabled": False}],
             )
 
 

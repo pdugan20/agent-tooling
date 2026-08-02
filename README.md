@@ -43,15 +43,20 @@ that separate account/workspace layer.
 | Shared instructions    | Exploration, production, Firebase, and safety policy     | [`global/AGENTS.md`](global/AGENTS.md)                |
 | Patrick skills         | Versioned repository, design, delivery, and documentation skills | [`pdugan20/skills`](https://github.com/pdugan20/skills) |
 | Managed skill snapshots | Skills CLI installations with source provenance         | [`.agents/skills/`](.agents/skills/), `skills-lock.json` |
+| Managed Codex MCP       | Pinned Xcode, Simulator, logging, and LLDB automation    | [`config/codex-mcp-servers.json`](config/codex-mcp-servers.json) |
 | Plugin setup           | Marketplace-installed and Codex-managed plugin sets      | [`config/`](config/)                                  |
 | Machine setup          | Bootstrap, refresh, configuration, and verification      | [`scripts/`](scripts/)                                |
 
-All eighteen skills are installed into this repository by the Skills CLI, committed under
+All nineteen skills are installed into this repository by the Skills CLI, committed under
 [`.agents/skills/`](.agents/skills/), and tracked by `skills-lock.json`. The eleven Patrick skills come from the
-tagged public [Skills](https://github.com/pdugan20/skills) collection; the other seven retain
+tagged public [Skills](https://github.com/pdugan20/skills) collection; the other eight retain
 their original publisher provenance. Bootstrap links every canonical snapshot into each agent's home-directory skill
 location, so their **runtime availability** is global across repositories. Do not edit snapshots by hand. Use
 `npm run skills:update` for upstream updates, or install a new Skills tag explicitly, and review the diff.
+
+The Codex pilot pins XcodeBuildMCP and its official upstream skill to v2.7.0. Bootstrap enables only Simulator,
+semantic UI automation, and debugging workflows, disables the tool's own Sentry telemetry, and leaves visual
+inspection to computer use. Start a new Codex task after setup so the MCP tool inventory reloads.
 
 ## Catalog
 

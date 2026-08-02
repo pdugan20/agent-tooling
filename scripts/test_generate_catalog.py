@@ -12,11 +12,15 @@ class CatalogGenerationTests(unittest.TestCase):
         catalog = generate_catalog.build_catalog()
         items = catalog["items"]
 
-        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 18)
+        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 19)
         self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 24)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
         self.assertEqual(catalog["schemaVersion"], 4)
+        self.assertEqual(
+            next(item for item in items if item["name"] == "xcodebuildmcp")["displayName"],
+            "XcodeBuildMCP",
+        )
 
     def test_custom_invocation_policy_is_visible(self) -> None:
         items = generate_catalog.build_catalog()["items"]
@@ -98,6 +102,11 @@ class CatalogGenerationTests(unittest.TestCase):
                     "Paul Hudson",
                     ".agents/skills/swiftui-pro/SKILL.md",
                     "https://github.com/twostraws/swiftui-agent-skill/blob/main/swiftui-pro/SKILL.md",
+                ),
+                "xcodebuildmcp": (
+                    "Sentry",
+                    ".agents/skills/xcodebuildmcp/SKILL.md",
+                    "https://github.com/getsentry/XcodeBuildMCP/blob/v2.7.0/skills/xcodebuildmcp/SKILL.md",
                 ),
             },
         )

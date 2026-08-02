@@ -47,6 +47,14 @@ The personal `feature-delivery` skill is the exception: it may trigger automatic
 
 The configured Superpowers plugin is maintained as a thin fork of `obra/superpowers`. It disables the always-on session bootstrap and removes the brainstorming Visual Companion/browser option-picker. Do not restore either behavior through repository-level instructions.
 
+## Apple build, Simulator, and runtime evidence
+
+- Prefer the pinned XcodeBuildMCP capability for Apple project discovery, builds, tests, launches, semantic Simulator actions, captured runtime logs, and LLDB inspection when its tools are available.
+- Use computer use for perceptual and visual judgment, Simulator chrome and permissions, coordinate-only or custom-rendered controls, and interactions whose accessibility tree is incomplete. Refresh semantic snapshots after navigation or layout changes; element references are screen-state scoped.
+- Use Instruments or `xctrace`, and physical-device or distribution evidence when the performance claim requires them. A successful build, semantic UI snapshot, Simulator stack, or aggregate FPS reading does not establish animation smoothness or device performance.
+- For a visual performance problem, use structured automation to reproduce and gather logs, computer use or recordings to judge the visible miss, and Instruments to attribute missed deadlines. Keep the scenario, build, cache, network, and device conditions equivalent across comparisons.
+- Fall back to repository-supported `xcodebuild`, `xcrun`, or `simctl` commands when XcodeBuildMCP is unavailable or cannot represent the required surface; do not block ordinary Apple work on the integration.
+
 ## Firebase and Firestore safety
 
 - Prefer emulators for development, rules tests, destructive experiments, and bulk operations.

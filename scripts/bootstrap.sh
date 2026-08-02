@@ -89,6 +89,7 @@ mkdir -p "$(dirname "$codex_config")"
 touch "$codex_config"
 python3 "$ROOT/scripts/configure-codex.py" \
   --config "$codex_config" \
+  --mcp-servers "$ROOT/config/codex-mcp-servers.json" \
   --disable-skill "$ROOT/.agents/skills/swiftui-pro/skills/swiftui-pro/SKILL.md"
 
 echo "Agent tooling links and routing settings are configured."

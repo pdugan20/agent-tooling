@@ -1,0 +1,13 @@
+{
+  "xcodebuildmcp": {
+    "args": ["--yes", "xcodebuildmcp@2.7.0", "mcp"],
+    "command": "npx",
+    "enabled": true,
+    "env": {
+      "XCODEBUILDMCP_ENABLED_WORKFLOWS": "simulator,ui-automation,debugging",
+      "XCODEBUILDMCP_SENTRY_DISABLED": "true"
+    },
+    "startup_timeout_sec": 120,
+    "tool_timeout_sec": 300
+  }
+}

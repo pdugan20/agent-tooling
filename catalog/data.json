@@ -151,6 +151,26 @@
     },
     {
       "availability": "Global",
+      "description": "Official skill for XcodeBuildMCP. Use when doing iOS/macOS/watchOS/tvOS/visionOS work (build, test, run, debug, log, UI automation).",
+      "displayName": "XcodeBuildMCP",
+      "featured": 8,
+      "id": "skill:xcodebuildmcp",
+      "invocation": "Automatic",
+      "name": "xcodebuildmcp",
+      "path": ".agents/skills/xcodebuildmcp/SKILL.md",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "third-party",
+      "sourceLabel": "Sentry",
+      "sourceUrl": "https://github.com/getsentry/XcodeBuildMCP/blob/v2.7.0/skills/xcodebuildmcp/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "Git"
+    },
+    {
+      "availability": "Global",
       "description": "Reviews SwiftUI code for modern best practices.",
       "displayName": "SwiftUI Pro",
       "featured": 10,

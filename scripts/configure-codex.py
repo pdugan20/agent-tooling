@@ -11,6 +11,7 @@ import re
 import tempfile
 import tomllib
 from pathlib import Path
+from typing import Any
 
 FALLBACK_LINE = 'project_doc_fallback_filenames = ["CLAUDE.md"]'
 FALLBACK_RE = re.compile(r"^project_doc_fallback_filenames\s*=.*$", re.MULTILINE)
@@ -25,6 +26,8 @@ COMPUTER_USE_SUFFIX = (
 )
 PRODUCT_DESIGN_DISABLED_SKILLS = ("ideate", "index")
 SKILL_CONFIG_HEADER = "[[skills.config]]"
+MCP_NAME_RE = re.compile(r"^[A-Za-z0-9_-]+$")
+MCP_ENV_KEY_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 
 
 def _insert_root_fallback(text: str) -> str:
@@ -120,10 +123,80 @@ def _disable_product_design_image_ideation(text: str, home: Path) -> str:
     return text
 
 
+def _render_mcp_server(name: str, spec: dict[str, Any]) -> str:
+    if not MCP_NAME_RE.fullmatch(name):
+        raise ValueError(f"Invalid managed MCP server name: {name}")
+
+    command = spec.get("command")
+    args = spec.get("args", [])
+    env = spec.get("env", {})
+    if not isinstance(command, str) or not command:
+        raise ValueError(f"Managed MCP server {name} requires a command")
+    if not isinstance(args, list) or not all(isinstance(item, str) for item in args):
+        raise ValueError(f"Managed MCP server {name} args must be strings")
+    if not isinstance(env, dict) or not all(
+        isinstance(key, str) and MCP_ENV_KEY_RE.fullmatch(key) and isinstance(value, str)
+        for key, value in env.items()
+    ):
+        raise ValueError(f"Managed MCP server {name} env must map safe keys to strings")
+
+    lines = [
+        f"[mcp_servers.{name}]",
+        f"command = {json.dumps(command)}",
+        f"args = {json.dumps(args)}",
+        f"enabled = {'true' if spec.get('enabled', True) else 'false'}",
+    ]
+    if env:
+        rendered_env = ", ".join(
+            f"{key} = {json.dumps(value)}" for key, value in sorted(env.items())
+        )
+        lines.append(f"env = {{ {rendered_env} }}")
+    for field in ("startup_timeout_sec", "tool_timeout_sec"):
+        value = spec.get(field)
+        if value is not None:
+            if not isinstance(value, (int, float)) or isinstance(value, bool) or value <= 0:
+                raise ValueError(f"Managed MCP server {name} {field} must be positive")
+            lines.append(f"{field} = {value}")
+    return "\n".join(lines) + "\n"
+
+
+def _upsert_mcp_server(text: str, name: str, spec: dict[str, Any]) -> str:
+    rendered = _render_mcp_server(name, spec)
+    header = re.compile(rf"(?m)^\[mcp_servers\.{re.escape(name)}\]\s*$")
+    match = header.search(text)
+    if match is None:
+        separator = "" if not text.strip() else "\n\n"
+        return text.rstrip() + separator + rendered
+
+    end = len(text)
+    table_prefix = f"mcp_servers.{name}."
+    for candidate in re.finditer(r"(?m)^\[\[?([^\]\n]+)\]\]?\s*$", text[match.end() :]):
+        table_name = candidate.group(1)
+        if table_name.startswith(table_prefix):
+            continue
+        end = match.end() + candidate.start()
+        break
+
+    prefix = text[: match.start()].rstrip()
+    suffix = text[end:].lstrip("\n")
+    parts = [part for part in (prefix, rendered.rstrip(), suffix.rstrip()) if part]
+    return "\n\n".join(parts) + "\n"
+
+
+def load_mcp_servers(path: Path) -> dict[str, dict[str, Any]]:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(data, dict) or not all(
+        isinstance(name, str) and isinstance(spec, dict) for name, spec in data.items()
+    ):
+        raise ValueError("Managed MCP server manifest must be an object of server specs")
+    return data
+
+
 def update_config(
     text: str,
     home: Path,
     additional_disabled_skills: tuple[Path, ...] = (),
+    managed_mcp_servers: dict[str, dict[str, Any]] | None = None,
 ) -> str:
     """Return an updated config without changing secrets or runtime auth."""
 
@@ -132,6 +205,8 @@ def update_config(
     updated = _disable_product_design_image_ideation(updated, home)
     for path in additional_disabled_skills:
         updated = _disable_skill(updated, path.resolve())
+    for name, spec in sorted((managed_mcp_servers or {}).items()):
+        updated = _upsert_mcp_server(updated, name, spec)
     return updated
 
 
@@ -140,11 +215,18 @@ def main() -> None:
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--home", type=Path, default=Path.home())
     parser.add_argument("--disable-skill", type=Path, action="append", default=[])
+    parser.add_argument("--mcp-servers", type=Path)
     args = parser.parse_args()
 
     args.config.parent.mkdir(parents=True, exist_ok=True)
     original = args.config.read_text() if args.config.exists() else ""
-    updated = update_config(original, args.home, tuple(args.disable_skill))
+    managed_mcp_servers = load_mcp_servers(args.mcp_servers) if args.mcp_servers else None
+    updated = update_config(
+        original,
+        args.home,
+        tuple(args.disable_skill),
+        managed_mcp_servers,
+    )
     if updated == original:
         return
 

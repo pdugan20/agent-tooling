@@ -37,6 +37,10 @@ class RepositoryValidationTests(unittest.TestCase):
                 validate_repository.PATRICK_SKILLS_REF,
             )
         self.assertEqual(
+            skills_lock["skills"]["xcodebuildmcp"]["ref"],
+            validate_repository.XCODEBUILDMCP_REF,
+        )
+        self.assertEqual(
             set((validate_repository.ROOT / ".agents/skills").glob("*/skills/*/SKILL.md")),
             {validate_repository.ROOT / ".agents/skills/swiftui-pro/skills/swiftui-pro/SKILL.md"},
         )

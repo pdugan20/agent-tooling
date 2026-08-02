@@ -12,6 +12,7 @@ settings are generated machine state; edit this repository rather than patching 
 | Managed skill snapshots | `.agents/skills/*` and `skills-lock.json` | User-level skill links for both products |
 | Marketplace-installed Codex plugins | `config/codex-plugins.txt` | Codex configuration and plugin cache |
 | Codex-managed plugins | `config/codex-managed-plugins.txt` | Signed-in Codex account/workspace |
+| Managed Codex MCP servers | `config/codex-mcp-servers.json` | `~/.codex/config.toml` |
 | Claude plugins | `config/claude-plugins.txt` | Claude user settings and plugin cache |
 | Configured Superpowers policy | `config/superpowers.json` | The maintained fork and both plugin caches |
 | Machine policy | `scripts/configure-codex.py` and `scripts/configure-claude.py` | Product settings files |
@@ -56,6 +57,21 @@ separate copies.
 Do not edit locked snapshots. Release first-party changes from Skills, install the new tag here, and
 review the snapshot and lockfile diff. Run `npm run skills:update` for third-party updates. If a source needs local
 policy, prefer runtime configuration or a clearly named addition to Skills over a silent fork.
+
+## Managed Codex MCP servers
+
+`config/codex-mcp-servers.json` is the exact, non-secret desired state for standalone Codex MCP servers that should
+survive machine setup. `scripts/configure-codex.py` converges only those named tables in `~/.codex/config.toml` and
+preserves unrelated servers and authentication state. `scripts/verify-setup.sh` checks the resulting configuration.
+
+The initial XcodeBuildMCP entry is deliberately a Codex-only pilot. It pins the npm package and matching upstream
+skill to v2.7.0, enables only Simulator, semantic UI automation, and debugging, and disables XcodeBuildMCP's Sentry
+telemetry. Runtime log capture is part of the Simulator launch workflow; `logging` is not a current v2.7.0 workflow
+name. Computer use remains the visual complement, and Instruments or `xctrace` remains the performance profiler.
+
+Promote another standalone MCP into this manifest only when its behavior should be global, its command and version
+can be pinned without secrets, setup can verify it, and a plugin or repository-local configuration is not the better
+ownership boundary.
 
 ## Plugin layers
 

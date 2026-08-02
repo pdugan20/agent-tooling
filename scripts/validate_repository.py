@@ -84,8 +84,13 @@ UPSTREAM_SKILLS = {
     "pick-ui-library": ("emilkowalski/skills", "skills/pick-ui-library/SKILL.md"),
     "review-animations": ("emilkowalski/skills", "skills/review-animations/SKILL.md"),
     "swiftui-pro": ("twostraws/swiftui-agent-skill", "swiftui-pro/SKILL.md"),
+    "xcodebuildmcp": (
+        "getsentry/XcodeBuildMCP",
+        "skills/xcodebuildmcp/SKILL.md",
+    ),
 }
 PATRICK_SKILLS_REF = "v3.0.0"
+XCODEBUILDMCP_REF = "v2.7.0"
 EXPECTED_EXPLICIT_SUPERPOWERS = {
     "brainstorming",
     "dispatching-parallel-agents",
@@ -251,6 +256,13 @@ def validate_repository() -> None:
         if expected_source == "pdugan20/skills" and lock_entry.get("ref") != PATRICK_SKILLS_REF:
             raise ValidationError(
                 f"locked skill {skill_name} must pin Patrick Skills {PATRICK_SKILLS_REF}"
+            )
+        if (
+            expected_source == "getsentry/XcodeBuildMCP"
+            and lock_entry.get("ref") != XCODEBUILDMCP_REF
+        ):
+            raise ValidationError(
+                f"locked skill {skill_name} must pin XcodeBuildMCP {XCODEBUILDMCP_REF}"
             )
         if lock_entry.get("sourceType") != "github" or not re.fullmatch(
             r"[0-9a-f]{64}", str(lock_entry.get("computedHash", ""))
