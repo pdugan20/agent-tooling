@@ -24,6 +24,7 @@ PATRICK_SKILLS_SOURCE = "pdugan20/skills"
 
 UPSTREAM_SOURCE_LABELS = {
     "emilkowalski/skills": "Emil Kowalski",
+    "getsentry/XcodeBuildMCP": "Sentry",
     PATRICK_SKILLS_SOURCE: "Pat Dugan",
     "Prisma-Labs-Dev/apple-skills": "Prisma Labs",
     "railwayapp/railway-skills": "Railway",
@@ -38,6 +39,8 @@ SKILL_PRIORITY = {
     "review-mintlify-docs": 5,
     "generate-mintlify-reference": 6,
     "write-mintlify-changelog": 7,
+    "xcodebuildmcp": 8,
+    "tune-mobile-client-performance": 9,
     "swiftui-pro": 10,
     "apple-design": 11,
     "review-animations": 12,
@@ -142,6 +145,7 @@ def humanize_name(name: str) -> str:
         "github": "GitHub",
         "swiftui": "SwiftUI",
         "use": "Use",
+        "xcodebuildmcp": "XcodeBuildMCP",
     }
     return " ".join(
         special_names.get(part, part.upper() if len(part) <= 3 else part.title())

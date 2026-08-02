@@ -20,9 +20,15 @@ desired plugin state, and configured Superpowers baseline. Patrick-owned skills 
 4. Review `.agents/skills/`, `.claude/skills/`, and `skills-lock.json`.
 5. Regenerate the catalog, run `npm run bootstrap`, and start new tasks.
 
+Use the tag URL form; `owner/repository@tag` is parsed as a skill selector by current Skills CLI releases:
+
+```bash
+npx skills add https://github.com/pdugan20/skills/tree/vX.Y.Z --agent codex claude-code --skill '*' -y
+```
+
 ## Update upstream skills
 
-The seven third-party skills in `.agents/skills/` are project-scoped installations managed by the official
+The eight third-party skills in `.agents/skills/` are project-scoped installations managed by the official
 [`skills` CLI](https://github.com/vercel-labs/skills). Their exact GitHub sources and content hashes live in
 `skills-lock.json`; the repository does not maintain hand-copied versions under `skills/`.
 

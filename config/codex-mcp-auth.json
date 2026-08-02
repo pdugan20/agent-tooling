@@ -16,6 +16,7 @@
   "noOAuthRequired": {
     "Mintlify Search": "Public documentation search endpoint.",
     "cloudflare-docs": "Public documentation endpoint.",
-    "firebase": "Uses Firebase CLI authentication instead of Codex MCP OAuth."
+    "firebase": "Uses Firebase CLI authentication instead of Codex MCP OAuth.",
+    "xcodebuildmcp": "Local stdio server for Xcode, Simulator, logging, and LLDB workflows."
   }
 }

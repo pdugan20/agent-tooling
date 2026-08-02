@@ -58,6 +58,22 @@ check_skill_collection() {
 
 check_skill_collection "$ROOT/.agents/skills"
 
+if python3 - "$HOME/.codex/config.toml" "$ROOT/config/codex-mcp-servers.json" <<'PY'; then
+import json
+import sys
+import tomllib
+from pathlib import Path
+
+config = tomllib.loads(Path(sys.argv[1]).read_text())
+expected = json.loads(Path(sys.argv[2]).read_text())
+actual = config.get("mcp_servers", {})
+raise SystemExit(0 if all(actual.get(name) == spec for name, spec in expected.items()) else 1)
+PY
+  pass "Managed Codex MCP servers match the pinned manifest"
+else
+  fail "Managed Codex MCP servers drifted; rerun bootstrap"
+fi
+
 codex_plugins=$(codex plugin list --json)
 codex_cache_root=${CODEX_HOME:-"$HOME/.codex"}/plugins/cache
 while IFS= read -r plugin; do

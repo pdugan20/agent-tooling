@@ -27,6 +27,7 @@ CUSTOM_SKILLS = {
     "generate-mintlify-reference": True,
     "review-mintlify-docs": True,
     "scaffold-mintlify-site": True,
+    "tune-mobile-client-performance": True,
     "write-mintlify-changelog": True,
 }
 UPSTREAM_SKILLS = {
@@ -70,6 +71,10 @@ UPSTREAM_SKILLS = {
         "pdugan20/skills",
         "skills/scaffold-mintlify-site/SKILL.md",
     ),
+    "tune-mobile-client-performance": (
+        "pdugan20/skills",
+        "skills/tune-mobile-client-performance/SKILL.md",
+    ),
     "write-mintlify-changelog": (
         "pdugan20/skills",
         "skills/write-mintlify-changelog/SKILL.md",
@@ -84,8 +89,13 @@ UPSTREAM_SKILLS = {
     "pick-ui-library": ("emilkowalski/skills", "skills/pick-ui-library/SKILL.md"),
     "review-animations": ("emilkowalski/skills", "skills/review-animations/SKILL.md"),
     "swiftui-pro": ("twostraws/swiftui-agent-skill", "swiftui-pro/SKILL.md"),
+    "xcodebuildmcp": (
+        "getsentry/XcodeBuildMCP",
+        "skills/xcodebuildmcp/SKILL.md",
+    ),
 }
-PATRICK_SKILLS_REF = "v3.0.0"
+PATRICK_SKILLS_REF = "v3.1.0"
+XCODEBUILDMCP_REF = "v2.7.0"
 EXPECTED_EXPLICIT_SUPERPOWERS = {
     "brainstorming",
     "dispatching-parallel-agents",
@@ -251,6 +261,13 @@ def validate_repository() -> None:
         if expected_source == "pdugan20/skills" and lock_entry.get("ref") != PATRICK_SKILLS_REF:
             raise ValidationError(
                 f"locked skill {skill_name} must pin Patrick Skills {PATRICK_SKILLS_REF}"
+            )
+        if (
+            expected_source == "getsentry/XcodeBuildMCP"
+            and lock_entry.get("ref") != XCODEBUILDMCP_REF
+        ):
+            raise ValidationError(
+                f"locked skill {skill_name} must pin XcodeBuildMCP {XCODEBUILDMCP_REF}"
             )
         if lock_entry.get("sourceType") != "github" or not re.fullmatch(
             r"[0-9a-f]{64}", str(lock_entry.get("computedHash", ""))

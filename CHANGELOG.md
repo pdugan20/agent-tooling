@@ -6,6 +6,20 @@ version when compatibility requires it.
 
 ## [Unreleased]
 
+### Added
+
+- Added a Codex-first XcodeBuildMCP v2.7.0 pilot with its official upstream skill, exact managed MCP configuration,
+  setup drift checks, and runtime-auth inventory coverage.
+- Added `tune-mobile-client-performance` from Patrick Skills v3.1.0 as a shared exact-tag snapshot for causal
+  SwiftUI, Swift, React Native, and Expo performance diagnosis and tuning.
+
+### Changed
+
+- Documented the combined Apple workflow: XcodeBuildMCP for structured builds, Simulator actions, logs, and LLDB;
+  computer use for visual and perceptual inspection; and Instruments or `xctrace` for performance attribution.
+- Updated all twelve Patrick-owned skill provenance locks to `pdugan20/skills` v3.1.0 and refreshed the twenty-skill
+  catalog.
+
 ## [0.8.0] - 2026-07-31
 
 ### Added
