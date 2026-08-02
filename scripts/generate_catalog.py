@@ -41,13 +41,14 @@ SKILL_PRIORITY = {
     "write-mintlify-changelog": 7,
     "xcodebuildmcp": 8,
     "tune-mobile-client-performance": 9,
-    "swiftui-pro": 10,
-    "apple-design": 11,
-    "review-animations": 12,
-    "find-animation-opportunities": 13,
-    "animation-vocabulary": 14,
-    "emil-design-eng": 15,
-    "pick-ui-library": 16,
+    "integrate-app-intents": 10,
+    "swiftui-pro": 11,
+    "apple-design": 12,
+    "review-animations": 13,
+    "find-animation-opportunities": 14,
+    "animation-vocabulary": 15,
+    "emil-design-eng": 16,
+    "pick-ui-library": 17,
 }
 
 

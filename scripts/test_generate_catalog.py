@@ -12,7 +12,7 @@ class CatalogGenerationTests(unittest.TestCase):
         catalog = generate_catalog.build_catalog()
         items = catalog["items"]
 
-        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 20)
+        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 21)
         self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 24)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
@@ -43,6 +43,7 @@ class CatalogGenerationTests(unittest.TestCase):
                 "feature-delivery",
                 "feature-spike",
                 "generate-mintlify-reference",
+                "integrate-app-intents",
                 "review-mintlify-docs",
                 "scaffold-mintlify-site",
                 "tune-mobile-client-performance",
@@ -52,7 +53,7 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertTrue(
             all(
                 item["path"].startswith(".agents/skills/")
-                and item["sourceUrl"].startswith("https://github.com/pdugan20/skills/blob/v3.1.0/")
+                and item["sourceUrl"].startswith("https://github.com/pdugan20/skills/blob/v3.2.0/")
                 for item in items
                 if item["type"] == "skill" and item["name"] in managed
             )
