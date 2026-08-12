@@ -17,7 +17,7 @@ updates:
       include: scope
     ignore:
       - dependency-name: "*"
-        update-types: [version-update:semver-major]
+        update-types: ["version-update:semver-major"]
     groups:
       development-tooling:
         dependency-type: development
@@ -39,7 +39,7 @@ updates:
       include: scope
     ignore:
       - dependency-name: "*"
-        update-types: [version-update:semver-major]
+        update-types: ["version-update:semver-major"]
     groups:
       actions-minor-patch:
         update-types: [minor, patch]
