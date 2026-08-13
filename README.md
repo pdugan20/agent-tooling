@@ -9,7 +9,7 @@ reconciled plugin inventory, and machine setup.
 
 ## Quick start
 
-Prerequisites are macOS, Node.js 22.22.2 or newer, Python 3, Xcode or a Swift toolchain providing `sourcekit-lsp`,
+Prerequisites are macOS, Node.js 24.19.0, Python 3, Xcode or a Swift toolchain providing `sourcekit-lsp`,
 Codex CLI, Claude Code, and GitHub CLI. Authenticate the three CLIs, then run:
 
 ```bash
