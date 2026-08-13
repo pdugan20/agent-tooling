@@ -2,7 +2,6 @@
 
 [![CI](https://github.com/pdugan20/agent-tooling/actions/workflows/ci.yml/badge.svg)](https://github.com/pdugan20/agent-tooling/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/pdugan20/agent-tooling?logo=github)](https://github.com/pdugan20/agent-tooling/releases)
-[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.22.2-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?logo=opensourceinitiative&logoColor=white)](https://opensource.org/licenses/MIT)
 
 Portable, canonical tooling shared across Codex and Claude Code projects: working agreements, reusable skills, a
