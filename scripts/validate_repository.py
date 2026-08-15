@@ -14,8 +14,13 @@ SUPERPOWERS_CONFIG = ROOT / "config/superpowers.json"
 ROOT_PACKAGE = ROOT / "package.json"
 PACKAGE_LOCK = ROOT / "package-lock.json"
 CHANGELOG = ROOT / "CHANGELOG.md"
+RENOVATE_CONFIG = ROOT / "renovate.json"
 SEMVER_RE = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
 RELEASE_TAG_RE = re.compile(r"^v(?P<version>\d+\.\d+\.\d+)$")
+EXPECTED_RENOVATE_BOOTSTRAP = {
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "enabled": False,
+}
 CUSTOM_SKILLS = {
     "align-ui-to-design-system": True,
     "analyze-ui-video": True,
@@ -176,7 +181,21 @@ def validate_release_tag(tag: str) -> str:
     return version
 
 
+def validate_dependency_automation_bootstrap() -> None:
+    renovate = load_json(RENOVATE_CONFIG)
+    if (
+        set(renovate) != set(EXPECTED_RENOVATE_BOOTSTRAP)
+        or renovate.get("$schema") != EXPECTED_RENOVATE_BOOTSTRAP["$schema"]
+        or renovate.get("enabled") is not False
+    ):
+        raise ValidationError(
+            "Renovate bootstrap must remain exactly disabled until hosted access, "
+            "ownership transfer, and activation are separately proven"
+        )
+
+
 def validate_repository() -> None:
+    validate_dependency_automation_bootstrap()
     package_version = repository_version()
     package_lock = load_json(PACKAGE_LOCK)
     if package_lock.get("version") != package_version:

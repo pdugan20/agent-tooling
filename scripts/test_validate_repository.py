@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 import subprocess
 import tempfile
@@ -13,6 +14,55 @@ import validate_repository
 class RepositoryValidationTests(unittest.TestCase):
     def test_current_repository_is_valid(self) -> None:
         validate_repository.validate_repository()
+
+    def test_dependency_automation_bootstrap_is_fail_closed(self) -> None:
+        validate_repository.validate_dependency_automation_bootstrap()
+
+        for invalid_value in (True, 0, 0.0, None, "false"):
+            with (
+                self.subTest(invalid_value=invalid_value),
+                tempfile.TemporaryDirectory() as temporary,
+            ):
+                renovate = Path(temporary) / "renovate.json"
+                renovate.write_text(
+                    json.dumps(
+                        {
+                            "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+                            "enabled": invalid_value,
+                        }
+                    ),
+                    encoding="utf-8",
+                )
+                with (
+                    mock.patch.object(validate_repository, "RENOVATE_CONFIG", renovate),
+                    self.assertRaisesRegex(
+                        validate_repository.ValidationError,
+                        "must remain exactly disabled",
+                    ),
+                ):
+                    validate_repository.validate_dependency_automation_bootstrap()
+
+    def test_dependency_automation_bootstrap_rejects_unproven_policy(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            renovate = Path(temporary) / "renovate.json"
+            renovate.write_text(
+                json.dumps(
+                    {
+                        "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+                        "enabled": False,
+                        "extends": ["config:recommended"],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with (
+                mock.patch.object(validate_repository, "RENOVATE_CONFIG", renovate),
+                self.assertRaisesRegex(
+                    validate_repository.ValidationError,
+                    "must remain exactly disabled",
+                ),
+            ):
+                validate_repository.validate_dependency_automation_bootstrap()
 
     def test_superpowers_configuration_tracks_upstream_and_fork(self) -> None:
         configuration = validate_repository.load_json(validate_repository.SUPERPOWERS_CONFIG)
