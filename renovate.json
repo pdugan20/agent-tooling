@@ -1,4 +1,89 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "enabled": false
+  "enabled": true,
+  "extends": ["config:recommended"],
+  "enabledManagers": ["npm", "github-actions"],
+  "semanticCommits": "enabled",
+  "semanticCommitType": "chore",
+  "semanticCommitScope": "deps",
+  "timezone": "America/Los_Angeles",
+  "dependencyDashboard": true,
+  "dependencyDashboardAutoclose": true,
+  "labels": ["dependencies"],
+  "branchConcurrentLimit": 3,
+  "prConcurrentLimit": 3,
+  "prHourlyLimit": 2,
+  "rebaseWhen": "behind-base-branch",
+  "platformAutomerge": true,
+  "automergeType": "pr",
+  "automergeStrategy": "squash",
+  "internalChecksFilter": "strict",
+  "vulnerabilityAlerts": {
+    "enabled": false
+  },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 6am on monday"],
+    "dependencyDashboardApproval": true,
+    "automerge": false
+  },
+  "packageRules": [
+    {
+      "description": "Default every enabled manager to dashboard approval",
+      "matchManagers": ["npm", "github-actions"],
+      "dependencyDashboardApproval": true,
+      "automerge": false
+    },
+    {
+      "description": "Stable npm development patch and minor updates",
+      "matchManagers": ["npm"],
+      "matchDepTypes": ["devDependencies"],
+      "matchCurrentVersion": "/^[1-9]\\d*\\.\\d+\\.\\d+$/",
+      "matchUpdateTypes": ["patch", "minor"],
+      "groupName": "development dependencies",
+      "minimumReleaseAge": "7 days",
+      "dependencyDashboardApproval": false,
+      "automerge": true
+    },
+    {
+      "description": "Pre-1.0 npm development patch updates",
+      "matchManagers": ["npm"],
+      "matchDepTypes": ["devDependencies"],
+      "matchCurrentVersion": "/^0\\.\\d+\\.\\d+$/",
+      "matchUpdateTypes": ["patch"],
+      "groupName": "pre-1.0 development dependencies",
+      "minimumReleaseAge": "7 days",
+      "dependencyDashboardApproval": false,
+      "automerge": true
+    },
+    {
+      "description": "Stable GitHub Actions patch and minor updates",
+      "matchManagers": ["github-actions"],
+      "matchCurrentVersion": "/^v?[1-9]\\d*\\.\\d+\\.\\d+$/",
+      "matchUpdateTypes": ["patch", "minor"],
+      "groupName": "github actions",
+      "minimumReleaseAge": "14 days",
+      "dependencyDashboardApproval": false,
+      "automerge": true
+    },
+    {
+      "description": "Pre-1.0 minor updates require exception handling",
+      "matchCurrentVersion": "/^0\\./",
+      "matchUpdateTypes": ["minor", "major"],
+      "dependencyDashboardApproval": true,
+      "automerge": false
+    },
+    {
+      "description": "All major updates require exception handling",
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true,
+      "automerge": false
+    },
+    {
+      "description": "Unsafe update types require manual approval",
+      "matchUpdateTypes": ["digest", "pin", "pinDigest", "lockFileMaintenance"],
+      "dependencyDashboardApproval": true,
+      "automerge": false
+    }
+  ]
 }

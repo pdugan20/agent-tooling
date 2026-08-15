@@ -36,11 +36,11 @@ jobs:
         with:
           python-version-file: .python-version
 
-      - name: Validate release tag
-        run: python scripts/validate_repository.py --release-tag "$GITHUB_REF_NAME"
-
       - name: Install npm dependencies
         run: npm ci
+
+      - name: Validate release tag
+        run: python scripts/validate_repository.py --release-tag "$GITHUB_REF_NAME"
 
       - name: Install pre-commit
         run: python -m pip install pre-commit==4.6.1
