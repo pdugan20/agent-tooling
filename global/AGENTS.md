@@ -51,9 +51,10 @@ When a repository installs the `mattpocock/skills` planning set, the split is: S
 
 ## Agent cost discipline
 
-- Run at most one review or research subagent at a time, and ask before launching any; never run a high-effort multi-agent review (`/code-review ... high` and similar) on the most expensive model.
-- Stop at each milestone (a PR opened, a ticket done) with a one-line status of what is still running and how long it will take; do not chain the next ticket without a nod.
-- Prefer direct, minimal verification (dry-run scripts, fixture tests, contract tests) over subagent fan-out.
+- Multi-agent review and research are fine; run the workers (finders, verifiers, research sweeps) on the cheapest model that can do the job and reserve the expensive tier for orchestration and judgment. Never fan out on the expensive tier without first stating the model, the agent count, and the expected cost.
+- Pick review depth by change class: docs, config, and skill snapshots get no agent review (lint and contract tests are the review); tooling and CI changes get one reviewer subagent at medium effort on a cheap model; product code that touches data, auth, privacy, or sync gets a multi-agent review with cheap workers and one expensive judge, or `/code-review ultra` (cloud, separately billed, user-triggered).
+- Prefer fresh-context subagents to forks; a fork copies the whole conversation into every worker, so use it only when the conversation itself is the input.
+- Work in stated batches (for example "finish these two tickets, then report") and report at the end of each batch with what ran, roughly what it cost, and what is next; do not chain unbounded work.
 
 ## Apple build, Simulator, and runtime evidence
 
