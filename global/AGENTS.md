@@ -47,6 +47,14 @@ The personal `feature-delivery` skill is the exception: it may trigger automatic
 
 The configured Superpowers plugin is maintained as a thin fork of `obra/superpowers`. It disables the always-on session bootstrap and removes the brainstorming Visual Companion/browser option-picker. Do not restore either behavior through repository-level instructions.
 
+When a repository installs the `mattpocock/skills` planning set, the split is: Superpowers keeps the plan document and its execution (`writing-plans`, `executing-plans`, `subagent-driven-development`); `grill-with-docs` owns decisions recorded as ADRs and glossary terms; `to-tickets` and `wayfinder` own the issue-tracker layer (tracer-bullet tickets with blocking edges, multi-session decision maps). Do not add a skill that duplicates either side, and do not fan out for planning.
+
+## Agent cost discipline
+
+- Run at most one review or research subagent at a time, and ask before launching any; never run a high-effort multi-agent review (`/code-review ... high` and similar) on the most expensive model.
+- Stop at each milestone (a PR opened, a ticket done) with a one-line status of what is still running and how long it will take; do not chain the next ticket without a nod.
+- Prefer direct, minimal verification (dry-run scripts, fixture tests, contract tests) over subagent fan-out.
+
 ## Apple build, Simulator, and runtime evidence
 
 - Prefer the pinned XcodeBuildMCP capability for Apple project discovery, builds, tests, launches, semantic Simulator actions, captured runtime logs, and LLDB inspection when its tools are available.

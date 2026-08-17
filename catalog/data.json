@@ -431,6 +431,26 @@
     },
     {
       "availability": "Global",
+      "description": "Helps users discover and install agent skills when they ask questions like \"how do I do X\", \"find a skill for X\", \"is there a skill that can...\", or express interest in extending capabilities. This skill should be used when the user is looking for functionality that might exist as an installable skill.",
+      "displayName": "Find Skills",
+      "featured": 50,
+      "id": "skill:find-skills",
+      "invocation": "Automatic",
+      "name": "find-skills",
+      "path": ".agents/skills/find-skills/SKILL.md",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "third-party",
+      "sourceLabel": "Vercel Labs",
+      "sourceUrl": "https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "Git"
+    },
+    {
+      "availability": "Global",
       "description": "The upstream Superpowers plugin with a small maintained policy patch: strict workflows are explicit-only, the always-on session bootstrap is disabled, and browser option-picking is removed.",
       "displayName": "Superpowers (Configured)",
       "featured": 100,

@@ -129,6 +129,10 @@ UPSTREAM_SKILLS = {
         "pdugan20/skills",
         "skills/align-ui-to-design-system/SKILL.md",
     ),
+    "find-skills": (
+        "vercel-labs/skills",
+        "skills/find-skills/SKILL.md",
+    ),
     "analyze-ui-video": (
         "pdugan20/skills",
         "skills/analyze-ui-video/SKILL.md",

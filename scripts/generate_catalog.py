@@ -29,6 +29,7 @@ UPSTREAM_SOURCE_LABELS = {
     "Prisma-Labs-Dev/apple-skills": "Prisma Labs",
     "railwayapp/railway-skills": "Railway",
     "twostraws/swiftui-agent-skill": "Paul Hudson",
+    "vercel-labs/skills": "Vercel Labs",
 }
 
 SKILL_PRIORITY = {

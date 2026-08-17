@@ -12,7 +12,7 @@ class CatalogGenerationTests(unittest.TestCase):
         catalog = generate_catalog.build_catalog()
         items = catalog["items"]
 
-        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 21)
+        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 22)
         self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 24)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
@@ -99,6 +99,11 @@ class CatalogGenerationTests(unittest.TestCase):
                     "Emil Kowalski",
                     ".agents/skills/review-animations/SKILL.md",
                     "https://github.com/emilkowalski/skills/blob/main/skills/review-animations/SKILL.md",
+                ),
+                "find-skills": (
+                    "Vercel Labs",
+                    ".agents/skills/find-skills/SKILL.md",
+                    "https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md",
                 ),
                 "swiftui-pro": (
                     "Paul Hudson",
