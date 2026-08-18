@@ -63,7 +63,7 @@ equivalent.
 
 Two lists in this repository make skills invisible rather than owner-approved:
 
-- `config/superpowers.json` -> `explicitOnlySkills` (nine skills)
+- `config/superpowers.json` -> `explicitOnlySkills`
 - `EXPLICIT_PERSONAL_SKILLS` in `scripts/configure-claude.py` (`review-animations`)
 
 Both use the fork patch or `user-invocable-only`, so the agent cannot see or propose

@@ -46,10 +46,12 @@ that separate account/workspace layer.
 | Plugin setup           | Marketplace-installed and Codex-managed plugin sets      | [`config/`](config/)                                  |
 | Machine setup          | Bootstrap, refresh, configuration, and verification      | [`scripts/`](scripts/)                                |
 
-All twenty-two skills are installed into this repository by the Skills CLI, committed under
-[`.agents/skills/`](.agents/skills/), and tracked by `skills-lock.json`. The thirteen Patrick skills come from the
-tagged public [Skills](https://github.com/pdugan20/skills) collection; the other nine retain
-their original publisher provenance (`find-skills` from `vercel-labs/skills` is the skills.sh discovery helper: `npx skills find <query>`). Bootstrap links every canonical snapshot into each agent's home-directory skill
+Every skill is installed into this repository by the Skills CLI, committed under
+[`.agents/skills/`](.agents/skills/), and tracked by `skills-lock.json`. Most come from the tagged public
+[Skills](https://github.com/pdugan20/skills) collection; the rest retain their original publisher provenance
+(`find-skills` from `vercel-labs/skills` is the skills.sh discovery helper: `npx skills find <query>`). The
+current set, with counts and per-skill provenance, is generated rather than written down: run `npm run catalog`, or
+read `skills-lock.json`. Bootstrap links every canonical snapshot into each agent's home-directory skill
 location, so their **runtime availability** is global across repositories. Do not edit snapshots by hand. Use
 `npm run skills:update` for upstream updates, or install a new Skills tag explicitly, and review the diff.
 

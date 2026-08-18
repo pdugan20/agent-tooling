@@ -831,6 +831,35 @@ def validate_repository() -> None:
             raise ValidationError(f"{script_name} must add Patrick's plugin marketplace")
 
 
+# Counts of skills or plugins drift the moment the set changes, and prose has no gate to
+# catch it. The README claimed "twenty-one skills" while twenty-two were locked. State
+# the count only where something fails when it is wrong: a test, or generated catalog
+# output. A dated measurement ("Measured 2026-08-17: twelve skills were set to on") is a
+# record of a past observation, not a live count, so lines naming a date are exempt.
+COUNT_WORDS = (
+    "eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|"
+    "eighteen|nineteen|twenty|twenty-one|twenty-two|twenty-three|twenty-four"
+)
+PROSE_COUNT_RE = re.compile(rf"\b({COUNT_WORDS}|\d+)\s+(skills|plugins)\b", re.IGNORECASE)
+MEASUREMENT_RE = re.compile(r"\b20\d\d-\d\d-\d\d\b")
+
+
+def validate_prose_counts() -> None:
+    documents = [ROOT / "README.md", *sorted((ROOT / "docs").glob("*.md"))]
+    documents += sorted((ROOT / "global").glob("*.md"))
+    for document in documents:
+        for number, line in enumerate(document.read_text(encoding="utf-8").splitlines(), 1):
+            if MEASUREMENT_RE.search(line):
+                continue
+            match = PROSE_COUNT_RE.search(line)
+            if match:
+                raise ValidationError(
+                    f"{document.relative_to(ROOT)}:{number} hard-codes a count "
+                    f"({match.group(0)!r}). Counts drift; cite the generated catalog or "
+                    "skills-lock.json instead, or date the line if it is a measurement."
+                )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--release-tag")
@@ -838,6 +867,7 @@ def main() -> None:
 
     try:
         validate_repository()
+        validate_prose_counts()
         if args.release_tag:
             version = validate_release_tag(args.release_tag)
             print(f"Agent tooling release tag matches repository version {version}.")

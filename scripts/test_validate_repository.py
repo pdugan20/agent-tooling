@@ -525,6 +525,24 @@ jobs:
             with self.assertRaisesRegex(validate_repository.ValidationError, r"no \[1.2.3\]"):
                 validate_repository.validate_release_tag("v1.2.3")
 
+    def test_prose_counts_are_rejected(self) -> None:
+        # The README claimed "twenty-one skills" while twenty-two were locked. Prose has
+        # no gate, so the count silently rotted.
+        self.assertIsNotNone(validate_repository.PROSE_COUNT_RE.search("All twenty-two skills are"))
+        self.assertIsNotNone(validate_repository.PROSE_COUNT_RE.search("the other nine plugins"))
+        self.assertIsNotNone(validate_repository.PROSE_COUNT_RE.search("22 skills are installed"))
+
+    def test_prose_counts_ignore_unrelated_nouns(self) -> None:
+        self.assertIsNone(validate_repository.PROSE_COUNT_RE.search("twelve commits scanned"))
+
+    def test_dated_measurements_are_exempt(self) -> None:
+        # A measurement records a past observation and does not drift.
+        line = "Measured 2026-08-17: twelve skills were set to `on`."
+        self.assertIsNotNone(validate_repository.MEASUREMENT_RE.search(line))
+
+    def test_current_repository_has_no_prose_counts(self) -> None:
+        validate_repository.validate_prose_counts()
+
 
 if __name__ == "__main__":
     unittest.main()
