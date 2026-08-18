@@ -31,6 +31,16 @@ class ConfigureClaudeTests(unittest.TestCase):
         self.assertNotIn("production-hardening", updated["skillOverrides"])
         self.assertEqual(updated["skillOverrides"]["unrelated-skill"], "name-only")
 
+    def test_output_style_is_selected(self) -> None:
+        self.assertEqual(configure_claude.update_settings({})["outputStyle"], "simple-english")
+
+    def test_output_style_replaces_a_previous_choice(self) -> None:
+        # The style is managed, not merely defaulted: a stale value from an earlier
+        # release must not survive, or a machine keeps writing in the old style.
+        data = {"outputStyle": "explanatory"}
+
+        self.assertEqual(configure_claude.update_settings(data)["outputStyle"], "simple-english")
+
 
 if __name__ == "__main__":
     unittest.main()

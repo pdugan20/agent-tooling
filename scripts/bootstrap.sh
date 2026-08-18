@@ -33,6 +33,13 @@ remove_legacy_link() {
 link_path "$ROOT/global/AGENTS.md" "$HOME/.codex/AGENTS.md"
 link_path "$ROOT/global/AGENTS.md" "$claude_config_dir/CLAUDE.md"
 
+# Output styles shape every response the main agent writes, in every session,
+# without being invoked. A skill cannot do that: it applies only when called.
+for style in "$ROOT"/global/output-styles/*.md; do
+  [[ -f $style ]] || continue
+  link_path "$style" "$claude_config_dir/output-styles/${style##*/}"
+done
+
 for legacy_skill in execute-plan feature-delivery formal-spec production-hardening strict-tdd write-plan; do
   remove_legacy_link \
     "$claude_config_dir/skills/$legacy_skill" \

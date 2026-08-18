@@ -9,6 +9,10 @@ from pathlib import Path
 OFFICIAL_SUPERPOWERS = "superpowers@claude-plugins-official"
 CONFIGURED_SUPERPOWERS = "superpowers@superpowers-configured"
 EXPLICIT_PERSONAL_SKILLS = ("review-animations",)
+# ASD-STE100 Simplified Technical English. Applies to every response the main
+# agent writes, in every session, with no invocation. See
+# global/output-styles/simple-english.md and docs/output-styles.md.
+OUTPUT_STYLE = "simple-english"
 RETIRED_SKILLS = (
     "execute-plan",
     "formal-spec",
@@ -24,6 +28,7 @@ def update_settings(data: dict[str, object]) -> dict[str, object]:
     if not isinstance(plugins, dict) or not isinstance(overrides, dict):
         raise ValueError("enabledPlugins and skillOverrides must be JSON objects")
 
+    data["outputStyle"] = OUTPUT_STYLE
     plugins[OFFICIAL_SUPERPOWERS] = False
     plugins[CONFIGURED_SUPERPOWERS] = True
     for skill in EXPLICIT_PERSONAL_SKILLS:
