@@ -38,7 +38,9 @@ include agent-specific fields such as Claude's `context: fork` or `disable-model
 CLI does not transform those fields for Codex. Keep locked upstream snapshots unmodified and treat that validator
 output as a compatibility warning to review, not a reason to fork the skill. Apply runtime policy through
 `agents/openai.yaml`, Claude `skillOverrides`, or repository instructions when the source already supports that
-separation.
+separation. `skillOverrides` cannot override a skill's own `disable-model-invocation`, and
+`user-invocable-only` hides a skill from the agent rather than gating it behind approval. See
+[Skill visibility and invocation](skill-invocation.md) before choosing a value.
 
 For the marketplace repository, CI validates both catalogs and installs every published plugin in its supported
 runtimes. A successful install is the final packaging check because it exercises the same catalog and cache path

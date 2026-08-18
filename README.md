@@ -135,6 +135,7 @@ validation runs on a weekly schedule.
 - [Maintenance](docs/maintenance.md): updates, plugin refreshes, Superpowers review, and releases.
 - [Authoring](docs/authoring.md): linting, formatting, validation, and behavioral testing for skills and plugins.
 - [Quality tooling](docs/quality-tooling.md): adopted checks, version policy, and deferred alternatives.
+- [Skill visibility and invocation](docs/skill-invocation.md): the two gates, what each `skillOverrides` value does, and the measured precedence.
 - [Output styles](docs/output-styles.md): how the agent writes by default, and why a style rather than a skill.
 - [Changelog](CHANGELOG.md): curated repository releases and upgrade notes.
 - [Issues](https://github.com/pdugan20/agent-tooling/issues): current bugs, setup follow-ups, and proposed improvements.

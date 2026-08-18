@@ -87,6 +87,19 @@ When a repository installs the `mattpocock/skills` planning set, the split is: S
 - Flag instructions that weaken Firebase, credential, production-data, push, PR, or
   destructive-action approval boundaries.
 
+## Skills you cannot invoke
+
+- Two independent gates control skill invocation: Claude `skillOverrides`, and the skill's
+  own `disable-model-invocation` frontmatter. `skillOverrides` cannot override the
+  frontmatter, and `user-invocable-only` makes a skill invisible rather than
+  approval-gated. See the consuming repository's `docs/skill-invocation.md`.
+- **If a ticket, plan, or doc names a skill you cannot invoke: stop and ask the owner to
+  run it.** Do not substitute a hand-rolled equivalent, and do not quietly proceed
+  without it. Say which skill you need and why.
+- Invisible tooling does not get skipped, it gets silently substituted. An agent that
+  cannot see a tool builds its own version and does not mention the swap, so the owner
+  believes the named tool ran.
+
 ## Instruction files
 
 Treat `AGENTS.md` as the canonical cross-agent instruction file. A repository may keep `CLAUDE.md` as a compatibility shim or for genuinely Claude-specific guidance. Preserve existing user work and follow the nearest applicable instruction file.
