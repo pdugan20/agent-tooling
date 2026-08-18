@@ -59,6 +59,10 @@ When a repository installs the `mattpocock/skills` planning set, the split is: S
 ## Apple build, Simulator, and runtime evidence
 
 - Prefer the pinned XcodeBuildMCP capability for Apple project discovery, builds, tests, launches, semantic Simulator actions, captured runtime logs, and LLDB inspection when its tools are available.
+- Keep automated Apple build artifacts bounded. Builds from temporary clones or worktrees must set a stable DerivedData location per canonical project; never allow each worktree path to create a new cache under Xcode's default global DerivedData directory.
+- Reuse one DerivedData location for serial automation. For concurrent builds, use a fixed, small pool keyed by worker slot and clean the slot when its task ends; do not create an unbounded cache keyed by task, thread, clone, or worktree ID.
+- After `session_show_defaults`, treat a missing or worktree-local `derivedDataPath` as incomplete XcodeBuildMCP context. Set it with `session_set_defaults` to a bounded path under `~/DerivedData/<canonical-project>-slot-<n>` before building or testing; use the serial slot unless the task is explicitly running concurrent Apple builds.
+- For repository-supported `xcodebuild` fallbacks, pass the same bounded path with `-derivedDataPath`; do not rely on Xcode's implicit global cache location from a temporary checkout.
 - Use computer use for perceptual and visual judgment, Simulator chrome and permissions, coordinate-only or custom-rendered controls, and interactions whose accessibility tree is incomplete. Refresh semantic snapshots after navigation or layout changes; element references are screen-state scoped.
 - Use Instruments or `xctrace`, and physical-device or distribution evidence when the performance claim requires them. A successful build, semantic UI snapshot, Simulator stack, or aggregate FPS reading does not establish animation smoothness or device performance.
 - For a visual performance problem, use structured automation to reproduce and gather logs, computer use or recordings to judge the visible miss, and Instruments to attribute missed deadlines. Keep the scenario, build, cache, network, and device conditions equivalent across comparisons.
@@ -72,6 +76,16 @@ When a repository installs the `mattpocock/skills` planning set, the split is: S
 - Treat the Admin SDK as privileged: it bypasses Firestore Security Rules and relies on IAM and application checks.
 - Never copy raw production data, credentials, tokens, or personal data into prompts, logs, fixtures, or reports.
 - For new Firestore query shapes, assess index requirements before treating the implementation as complete.
+
+## Code Review Rules
+
+- Flag changes that make strict planning, TDD, worktrees, parallel-agent orchestration,
+  image generation, deployment, or live-data mutation implicit rather than opt-in.
+- Flag skill or plugin changes that duplicate canonical instructions, break portable
+  `SKILL.md` content with runtime-specific metadata, or omit relevant routing and
+  adversarial evaluation updates.
+- Flag instructions that weaken Firebase, credential, production-data, push, PR, or
+  destructive-action approval boundaries.
 
 ## Instruction files
 
