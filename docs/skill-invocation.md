@@ -55,9 +55,25 @@ hand-rolls an equivalent and does not mention it. That happened on 2026-08-17, w
 ticket named `xcode-build-benchmark`, the agent could not start it, and it benchmarked by
 hand without saying so.
 
-The fix is the rule in `global/AGENTS.md`: when a ticket, plan, or doc names a skill the
-agent cannot invoke, it must stop and ask, and must not substitute a hand-rolled
-equivalent.
+The fix is the rule in `global/AGENTS.md`: when a ticket, plan, or doc requires an action
+from a skill the agent cannot invoke, it must stop and ask, and must not substitute a
+hand-rolled equivalent.
+
+That rule applies when the named skill still has work to do. It does not make every
+downstream implementation step another invocation of the planning skill. Keep these
+surfaces distinct:
+
+- `wayfinder` owns creating and resolving a decision map;
+- `to-tickets` owns publishing tracer-bullet tickets and their blocking edges; and
+- the repository's ordinary delivery cycle owns implementing already-decided work.
+
+If a map or ticket has already established a finite implementation batch, one explicit
+owner approval can authorize the agent to work through that batch without asking for the
+planning skill again after every item. The agent must keep the batch in the same active
+work session where the skill's own instructions require that, and must not claim the
+skill ran during ordinary implementation. A new invocation is needed only when the next
+step actually changes the map, publishes tracker state, or otherwise requires the gated
+skill to act.
 
 ## Open decision: the explicit-only sets
 
