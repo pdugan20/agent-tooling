@@ -49,10 +49,18 @@ The configured Superpowers plugin is maintained as a thin fork of `obra/superpow
 
 When a repository installs the `mattpocock/skills` planning set, the split is: Superpowers keeps the plan document and its execution (`writing-plans`, `executing-plans`, `subagent-driven-development`); `grill-with-docs` owns decisions recorded as ADRs and glossary terms; `to-tickets` and `wayfinder` own the issue-tracker layer (tracer-bullet tickets with blocking edges, multi-session decision maps). Do not add a skill that duplicates either side, and do not fan out for planning.
 
+## Bounded batch authorization
+
+- When Patrick approves a named, finite batch (for example, "continue through the rest of Batch 1" or "do all recommended items in this batch"), treat that as authorization to complete the identified items without stopping for routine confirmations between them.
+- State the batch boundary before execution, keep progress updates informational, and report once the batch reaches a clear verification or decision boundary. A progress update is not a request for Patrick to re-authorize the next item.
+- Explicit-only planning and tracker skills remain explicit-only. Use them to create or resolve the map, decision, or ticket artifact they own. Once the artifact contains a decided implementation batch, execute that batch through the repository's ordinary delivery cycle; do not repeatedly invoke the planning skill, and do not claim it ran during ordinary implementation.
+- Repeated skill invocation is required only when the next item genuinely needs the skill to perform a new gated action, such as changing the map, publishing tickets, or conducting another owner-approved analysis pass. A historical skill mention or an already-decided ticket does not require another invocation.
+- Batch authorization never expands scope to a new product decision, dependency, destructive action, live-data mutation, deployment, push, pull request, or merge unless the applicable repository rules and Patrick's authorization already allow it. Pause when evidence contradicts the agreed direction or when one of those real boundaries is reached.
+
 ## Agent cost discipline
 
 - Multi-agent review and research are fine; run the workers (finders, verifiers, research sweeps) on the cheapest model that can do the job and reserve the expensive tier for orchestration and judgment. Never fan out on the expensive tier without first stating the model, the agent count, and the expected cost.
-- Pick review depth by change class: docs, config, and skill snapshots get no agent review (lint and contract tests are the review); tooling and CI changes get one reviewer subagent at medium effort on a cheap model; product code that touches data, auth, privacy, or sync gets a multi-agent review with cheap workers and one expensive judge, or `/code-review ultra` (cloud, separately billed, user-triggered).
+- Pick review depth by change class: docs, config, and skill snapshots get no agent review (lint and contract tests are the review); tooling and CI changes get one reviewer subagent at medium effort on a cheap model; product code that touches data, auth, privacy, or sync gets a multi-agent review with cheap workers and one expensive judge, or the runtime's equivalent independent deep review (`/code-review ultra` in Claude is cloud-hosted, separately billed, and user-triggered).
 - Prefer fresh-context subagents to forks; a fork copies the whole conversation into every worker, so use it only when the conversation itself is the input.
 - Work in stated batches (for example "finish these two tickets, then report") and report at the end of each batch with what ran, roughly what it cost, and what is next; do not chain unbounded work.
 
@@ -93,9 +101,10 @@ When a repository installs the `mattpocock/skills` planning set, the split is: S
   own `disable-model-invocation` frontmatter. `skillOverrides` cannot override the
   frontmatter, and `user-invocable-only` makes a skill invisible rather than
   approval-gated. See the consuming repository's `docs/skill-invocation.md`.
-- **If a ticket, plan, or doc names a skill you cannot invoke: stop and ask the owner to
-  run it.** Do not substitute a hand-rolled equivalent, and do not quietly proceed
-  without it. Say which skill you need and why.
+- **If a ticket, plan, or doc requires an action from a skill you cannot invoke: stop and
+  ask the owner to run it.** Do not substitute a hand-rolled equivalent, and do not
+  quietly proceed without it. A historical mention or already-decided implementation
+  ticket does not require another invocation.
 - Invisible tooling does not get skipped, it gets silently substituted. An agent that
   cannot see a tool builds its own version and does not mention the swap, so the owner
   believes the named tool ran.
