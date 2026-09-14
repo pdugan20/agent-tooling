@@ -11,11 +11,13 @@
   "items": [
     {
       "availability": "Global",
+      "contentHash": "c859cfacfc099b696e2ff3a3a6c8bef95c2f98e93d70cc8151ddd9bee2c12d57",
       "description": "Coordinate features from idea through rollout",
       "displayName": "Feature Delivery",
       "featured": 1,
       "id": "skill:feature-delivery",
       "invocation": "Automatic",
+      "lockedRef": "v3.2.0",
       "name": "feature-delivery",
       "path": ".agents/skills/feature-delivery/SKILL.md",
       "runtimes": [
@@ -31,11 +33,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "6c64ec7cb732d6b6099776ce6e5f96a64aecb61ae03e58c0a519a19401fe6f24",
       "description": "Explore UI directions in runnable code",
       "displayName": "Code-Native UI Ideation",
       "featured": 2,
       "id": "skill:code-native-ui-ideation",
       "invocation": "Automatic",
+      "lockedRef": "v3.2.0",
       "name": "code-native-ui-ideation",
       "path": ".agents/skills/code-native-ui-ideation/SKILL.md",
       "runtimes": [
@@ -51,11 +55,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "783d148e2c7920b72f6783aa9ff74f059e2ac376c469404cf452cbad2ea57258",
       "description": "Scaffold repositories to the right maturity",
       "displayName": "Bootstrap Repository",
       "featured": 3,
       "id": "skill:bootstrap-repository",
       "invocation": "Automatic",
+      "lockedRef": "v3.2.0",
       "name": "bootstrap-repository",
       "path": ".agents/skills/bootstrap-repository/SKILL.md",
       "runtimes": [
@@ -71,11 +77,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "4e0fe665444cfd3df8e9422e80839212b6efcc768b800099003cab3c854ed720",
       "description": "Create a project-specific Mintlify site",
       "displayName": "Scaffold Mintlify Site",
       "featured": 4,
       "id": "skill:scaffold-mintlify-site",
       "invocation": "Automatic",
+      "lockedRef": "v3.2.0",
       "name": "scaffold-mintlify-site",
       "path": ".agents/skills/scaffold-mintlify-site/SKILL.md",
       "runtimes": [
@@ -91,11 +99,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "5886ce04b8f4f4fa528a8607ccf7f0bfbd1653852b6889c80646d2dc92e8fd96",
       "description": "Audit Mintlify content and navigation",
       "displayName": "Review Mintlify Docs",
       "featured": 5,
       "id": "skill:review-mintlify-docs",
       "invocation": "Automatic",
+      "lockedRef": "v3.2.0",
       "name": "review-mintlify-docs",
       "path": ".agents/skills/review-mintlify-docs/SKILL.md",
       "runtimes": [
@@ -111,11 +121,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "14f3bbe3514a90a5695ada99db604493b73d21abcd0b6405a5b7baa6ef0e6ac0",
       "description": "Generate source-backed reference docs",
       "displayName": "Generate Mintlify Reference",
       "featured": 6,
       "id": "skill:generate-mintlify-reference",
       "invocation": "Automatic",
+      "lockedRef": "v3.2.0",
       "name": "generate-mintlify-reference",
       "path": ".agents/skills/generate-mintlify-reference/SKILL.md",
       "runtimes": [
@@ -131,11 +143,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "565d7fdb61fbeb62ae22cec88e348de7ad250eb83d63bcb4ac40217883d62ac7",
       "description": "Write reader-facing Mintlify updates",
       "displayName": "Write Mintlify Changelog",
       "featured": 7,
       "id": "skill:write-mintlify-changelog",
       "invocation": "Automatic",
+      "lockedRef": "v3.2.0",
       "name": "write-mintlify-changelog",
       "path": ".agents/skills/write-mintlify-changelog/SKILL.md",
       "runtimes": [
@@ -151,11 +165,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "cb153f421215de51d3b2fb0a1b6ebbd5c97f2268eba2e1eb70cfd623cc3a2ccb",
       "description": "Official skill for XcodeBuildMCP. Use when doing iOS/macOS/watchOS/tvOS/visionOS work (build, test, run, debug, log, UI automation).",
       "displayName": "XcodeBuildMCP",
       "featured": 8,
       "id": "skill:xcodebuildmcp",
       "invocation": "Automatic",
+      "lockedRef": "v2.7.0",
       "name": "xcodebuildmcp",
       "path": ".agents/skills/xcodebuildmcp/SKILL.md",
       "runtimes": [
@@ -171,11 +187,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "f0599e491c841106eba286b61e6a9f4a788898c7a61a5f1b8b3e6fe48563ef04",
       "description": "Diagnose and smooth a mobile interaction",
       "displayName": "Tune Mobile Client Performance",
       "featured": 9,
       "id": "skill:tune-mobile-client-performance",
       "invocation": "Automatic",
+      "lockedRef": "v3.2.0",
       "name": "tune-mobile-client-performance",
       "path": ".agents/skills/tune-mobile-client-performance/SKILL.md",
       "runtimes": [
@@ -191,11 +209,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "130e6d7aa2cee2357aaa5dadf11a45bd815a952edb881b1a7325bd1ddc1512d1",
       "description": "Build reliable Apple system integrations",
       "displayName": "Integrate App Intents",
       "featured": 10,
       "id": "skill:integrate-app-intents",
       "invocation": "Automatic",
+      "lockedRef": "v3.2.0",
       "name": "integrate-app-intents",
       "path": ".agents/skills/integrate-app-intents/SKILL.md",
       "runtimes": [
@@ -211,11 +231,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "07033426e384295a4b49cf0b2ffdefd4098cae4af53fef16bc1f2d9281118c41",
       "description": "Reviews SwiftUI code for modern best practices.",
       "displayName": "SwiftUI Pro",
       "featured": 11,
       "id": "skill:swiftui-pro",
       "invocation": "Automatic",
+      "lockedRef": "main",
       "name": "swiftui-pro",
       "path": ".agents/skills/swiftui-pro/SKILL.md",
       "runtimes": [
@@ -231,11 +253,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "8b94db67cb9edaad5f1501010804caa610131f1d2dfda0a27664b2e858deade3",
       "description": "Apple's approach to interface design and fluid, physical motion, translated for the web. Use when building or reviewing gesture-driven UI, spring animations, drag/swipe/sheet interactions, momentum and interruptible transitions, translucent materials and depth, typography (optical sizing, tracking, leading), reduced-motion, or the design foundations (feedback, spatial consistency, restraint) behind Apple-style interfaces.",
       "displayName": "Apple Design",
       "featured": 12,
       "id": "skill:apple-design",
       "invocation": "Automatic",
+      "lockedRef": null,
       "name": "apple-design",
       "path": ".agents/skills/apple-design/SKILL.md",
       "runtimes": [
@@ -251,11 +275,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "b9f669af5ae280c19a592a94611520335a81de25c88f225bf60ae4b2d66c8c7c",
       "description": "Reviews animation and motion code against a high craft bar derived from Emil Kowalski's design engineering philosophy. Default to flagging; approval is earned.",
       "displayName": "Review Animations",
       "featured": 13,
       "id": "skill:review-animations",
       "invocation": "Explicit",
+      "lockedRef": null,
       "name": "review-animations",
       "path": ".agents/skills/review-animations/SKILL.md",
       "runtimes": [
@@ -271,11 +297,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "8fb8492eb8fbed1313cb430b5831d925d9b8964ca24f3c41a6244cbd1fd98732",
       "description": "Search a codebase or UI for places that don't animate but should, and reject everything that shouldn't. Read-only; it proposes motion with exact values, it does not implement it. Use when the user asks \"what could be animated here?\" or wants to \"make this feel more alive\". For fixing existing animations, use improve-animations or review-animations instead.",
       "displayName": "Find Animation Opportunities",
       "featured": 14,
       "id": "skill:find-animation-opportunities",
       "invocation": "Automatic",
+      "lockedRef": null,
       "name": "find-animation-opportunities",
       "path": ".agents/skills/find-animation-opportunities/SKILL.md",
       "runtimes": [
@@ -291,11 +319,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "39319fc9a33c15be08666b3685f58666f042ff36bb902b7814c0834a5ba99df4",
       "description": "Reverse-lookup glossary that turns a vague description of a web animation or motion effect into its exact term (\"the bouncy thing when a popover opens\" \u2192 Pop in; \"the iOS rubber-band scroll\" \u2192 Rubber-banding). Use when the user asks \"what's it called when\u2026\", or describes a motion effect without knowing its name and wants the right word to prompt an AI or designer with. For naming an effect, not designing or building one.",
       "displayName": "Animation Vocabulary",
       "featured": 15,
       "id": "skill:animation-vocabulary",
       "invocation": "Automatic",
+      "lockedRef": null,
       "name": "animation-vocabulary",
       "path": ".agents/skills/animation-vocabulary/SKILL.md",
       "runtimes": [
@@ -311,11 +341,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "41b0a4dc1a27164fe297845a6c6850a39e9242c42c9be999967fcee9df2c5974",
       "description": "This skill encodes Emil Kowalski's philosophy on UI polish, component design, animation decisions, and the invisible details that make software feel great.",
       "displayName": "Emil Design ENG",
       "featured": 16,
       "id": "skill:emil-design-eng",
       "invocation": "Automatic",
+      "lockedRef": null,
       "name": "emil-design-eng",
       "path": ".agents/skills/emil-design-eng/SKILL.md",
       "runtimes": [
@@ -331,11 +363,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "f8d4d2cf4677bf54b14f35f62a741add93541bfcb67863315a40164365161b49",
       "description": "Pick the right library for a given frontend task from a curated, opinionated list \u2014 numbers, OTP inputs, charts, command menus, virtualization, drag and drop, toasts, state, styling, and more. Only runs when explicitly invoked; it does not trigger on its own.",
       "displayName": "Pick UI Library",
       "featured": 17,
       "id": "skill:pick-ui-library",
       "invocation": "Explicit",
+      "lockedRef": null,
       "name": "pick-ui-library",
       "path": ".agents/skills/pick-ui-library/SKILL.md",
       "runtimes": [
@@ -351,11 +385,35 @@
     },
     {
       "availability": "Global",
+      "contentHash": "612f913bcb03f0787b103c848cd7664b676a9aaf31f25d3270cc69cf5caaab95",
+      "description": "Audit and improve web accessibility following WCAG 2.2 guidelines. Use when asked to \"improve accessibility\", \"a11y audit\", \"WCAG compliance\", \"screen reader support\", \"keyboard navigation\", or \"make accessible\".",
+      "displayName": "Accessibility",
+      "featured": 50,
+      "id": "skill:accessibility",
+      "invocation": "Automatic",
+      "lockedRef": null,
+      "name": "accessibility",
+      "path": ".agents/skills/accessibility/SKILL.md",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "third-party",
+      "sourceLabel": "Addy Osmani",
+      "sourceUrl": "https://github.com/addyosmani/web-quality-skills/blob/main/skills/accessibility/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "2.0"
+    },
+    {
+      "availability": "Global",
+      "contentHash": "134c75915f2b76b62f0d860a0e9e5e87e958b307b1ebba7db527a059b7b49f02",
       "description": "Review one UI against its design system",
       "displayName": "Align UI to Design System",
       "featured": 50,
       "id": "skill:align-ui-to-design-system",
       "invocation": "Automatic",
+      "lockedRef": "v3.2.0",
       "name": "align-ui-to-design-system",
       "path": ".agents/skills/align-ui-to-design-system/SKILL.md",
       "runtimes": [
@@ -371,11 +429,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "06d3e758308ffff106fee61ddeac0f1681c772caf3ad6f77c096b34d52c0294b",
       "description": "Dissect UI recordings against real code",
       "displayName": "Analyze UI Video",
       "featured": 50,
       "id": "skill:analyze-ui-video",
       "invocation": "Automatic",
+      "lockedRef": "v3.2.0",
       "name": "analyze-ui-video",
       "path": ".agents/skills/analyze-ui-video/SKILL.md",
       "runtimes": [
@@ -391,11 +451,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "8b360e17ee4b1852518976e481e25a2cfd8a610abc564258e6bc35f2092c281e",
       "description": "Find design drift and consolidation opportunities",
       "displayName": "Audit Design-System Health",
       "featured": 50,
       "id": "skill:audit-design-system-health",
       "invocation": "Automatic",
+      "lockedRef": "v3.2.0",
       "name": "audit-design-system-health",
       "path": ".agents/skills/audit-design-system-health/SKILL.md",
       "runtimes": [
@@ -411,11 +473,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "3ff77336193f099f33f927ca2c136e50a610235e890d1b8dc69fa0f257ab81c5",
       "description": "Test feature value or feasibility before investing",
       "displayName": "Feature Spike",
       "featured": 50,
       "id": "skill:feature-spike",
       "invocation": "Automatic",
+      "lockedRef": "v3.2.0",
       "name": "feature-spike",
       "path": ".agents/skills/feature-spike/SKILL.md",
       "runtimes": [
@@ -431,11 +495,13 @@
     },
     {
       "availability": "Global",
+      "contentHash": "b146008599c31057cef1c145774cea5d5afb30e8f43fa802e47a4b461419aaaf",
       "description": "Helps users discover and install agent skills when they ask questions like \"how do I do X\", \"find a skill for X\", \"is there a skill that can...\", or express interest in extending capabilities. This skill should be used when the user is looking for functionality that might exist as an installable skill.",
       "displayName": "Find Skills",
       "featured": 50,
       "id": "skill:find-skills",
       "invocation": "Automatic",
+      "lockedRef": "d6b37f62ae23c3825b0ed16c73e123eee0a41fdc",
       "name": "find-skills",
       "path": ".agents/skills/find-skills/SKILL.md",
       "runtimes": [
@@ -444,10 +510,76 @@
       ],
       "source": "third-party",
       "sourceLabel": "Vercel Labs",
-      "sourceUrl": "https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md",
+      "sourceUrl": "https://github.com/vercel-labs/skills/blob/d6b37f62ae23c3825b0ed16c73e123eee0a41fdc/skills/find-skills/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
+    },
+    {
+      "availability": "Global",
+      "contentHash": "7eb144f734450fee649dc1d209114775ddda07cbf45be84fe969d3d4f3971dce",
+      "description": "Use when writing Playwright tests, fixing flaky tests, debugging failures, implementing Page Object Model, configuring CI/CD, optimizing performance, mocking APIs, handling authentication or OAuth, testing accessibility (axe-core), file uploads/downloads, date/time mocking, WebSockets, geolocation, permissions, multi-tab/popup flows, mobile/responsive layouts, touch gestures, GraphQL, error handling, offline mode, multi-user collaboration, third-party services (payments, email verification), console error monitoring, global setup/teardown, test annotations (skip, fixme, slow), test tags (@smoke, @fast, @critical, filtering with --grep), project dependencies, security testing (XSS, CSRF, auth), performance budgets (Web Vitals, Lighthouse), iframes, component testing, canvas/WebGL, service workers/PWA, test coverage, i18n/localization, Electron apps, or browser extension testing. Covers E2E, component, API, visual, accessibility, security, Electron, and extension testing.",
+      "displayName": "Playwright Best Practices",
+      "featured": 50,
+      "id": "skill:playwright-best-practices",
+      "invocation": "Automatic",
+      "lockedRef": null,
+      "name": "playwright-best-practices",
+      "path": ".agents/skills/playwright-best-practices/SKILL.md",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "third-party",
+      "sourceLabel": "Currents",
+      "sourceUrl": "https://github.com/currents-dev/playwright-best-practices-skill/blob/main/playwright-best-practices/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "1.2"
+    },
+    {
+      "availability": "Global",
+      "contentHash": "f615de216e085a84e31593ad0fa9062232adc40cd87b7c7ab2b8e49abf6500be",
+      "description": "Manages shadcn components and projects \u2014 adding, searching, fixing, debugging, styling, and composing UI, including chat interfaces. Provides project context, component docs, and usage examples. Applies when working with shadcn/ui, component registries, presets, --preset codes, or any project with a components.json file. Also triggers for \"shadcn init\", \"create an app with --preset\", or \"switch to --preset\".",
+      "displayName": "Shadcn",
+      "featured": 50,
+      "id": "skill:shadcn",
+      "invocation": "Automatic",
+      "lockedRef": "7c9eaba1c0a6404c990c144a654792e3313c650d",
+      "name": "shadcn",
+      "path": ".agents/skills/shadcn/SKILL.md",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "third-party",
+      "sourceLabel": "shadcn/ui",
+      "sourceUrl": "https://github.com/shadcn-ui/ui/blob/7c9eaba1c0a6404c990c144a654792e3313c650d/skills/shadcn/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "Git"
+    },
+    {
+      "availability": "Global",
+      "contentHash": "575757e3e25761c8c562d6e395d29f0b76c98b1273c0bd72d88e6ab1bc9c7d42",
+      "description": "",
+      "displayName": "Vercel Composition Patterns",
+      "featured": 50,
+      "id": "skill:vercel-composition-patterns",
+      "invocation": "Automatic",
+      "lockedRef": "063bee94c3f4df8453406c830b0a7df0f2860278",
+      "name": "vercel-composition-patterns",
+      "path": ".agents/skills/vercel-composition-patterns/SKILL.md",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "source": "third-party",
+      "sourceLabel": "Vercel Labs",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills/blob/063bee94c3f4df8453406c830b0a7df0f2860278/skills/composition-patterns/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "1.0.0"
     },
     {
       "availability": "Global",

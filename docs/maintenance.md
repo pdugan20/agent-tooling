@@ -219,3 +219,74 @@ To update safely:
 
 Because plugin cache paths can include versions, rerun `npm run bootstrap` after a Codex or Product Design update,
 then start a new task so the configured skill overrides point at the current installation.
+
+## Read-only skill freshness and usage
+
+Run `npm run skills:check` before deciding what to update. It compares installed
+skill files with their declared Git source in disposable temporary checkouts,
+without changing snapshots, locks or runtime links. The machine-local report is
+`catalog/skill-freshness.local.json` and records the check time, resolved commit,
+comparison hashes, source/ref and status for every selected standalone skill.
+
+- `current` means the files match the checked default branch.
+- `pinned-ref-verified` means they match the selected tag/commit; it does not mean
+  there is no newer release. Review upstream releases before advancing a pin.
+- `source-differs` means the source and installation differ; inspect both before
+  deciding whether this is an update, a local change or an installer discrepancy.
+- `unknown` means verification failed. Never display it as current.
+
+Comparison hashes normalize the installer's excluded `metadata.json` and Python
+cache directories, and follow in-skill symlinks to match the installer’s materialized copies. Escaping or cyclic links fail verification. They are separate from the CLI's opaque `computedHash`:
+registry downloads and Git installations can produce different lock hashes.
+The official lock remains the install provenance; comparison hashes do not
+replace it. Upstream retrieval errors fail the command and preserve an explicit
+unknown result, rather than assuming a skill was deleted.
+
+Skills CLI 1.5.21 aliases `skills check` to its updating operation. Do not use that
+command for read-only monitoring. Continue to use the official CLI for deliberate
+installations and updates; inspect instruction changes and rerun repository tests
+before bootstrapping. The catalog displays the declared ref and CLI content hash
+for selected skills. A moving-branch source link is a source reference, not proof
+of an immutable revision.
+
+After an approved skill change, run `npm run catalog:generate`, `npm run bootstrap`,
+`npm run catalog:snapshot` and `npm run setup:check`; start a new agent task. The
+local runtime snapshot lists machine-installed capabilities separately from the
+portable selected inventory. Refresh plugin packages through their existing
+runtime-specific commands, not through the standalone skills updater. Account
+managed Codex plugins remain subject to the app's inventory limitations.
+
+Review freshness monthly and after a framework or plugin upgrade. This is a
+maintenance cadence, not an installed background scheduler. Do not auto-merge
+instruction changes or automatically enable newly introduced skills.
+
+For each substantial task, record the skills actually invoked with its evidence
+in the task or issue. The installed catalog is not a usage log. Project-specific
+profiles should link to this inventory, explain routing and exclusions, and avoid
+copying SKILL.md contents or manually maintaining installed versions. Playground's
+profile is `rune-playground/docs/agent-skills.md`.
+
+## Official shadcn skill
+
+The official `shadcn` skill is selected in `skills-lock.json` from `shadcn-ui/ui`,
+at commit `7c9eaba1c0a6404c990c144a654792e3313c650d`. It was originally installed
+with the Codex skill installer and is now managed as a shared Skills CLI snapshot.
+This migration preserves the existing instructions; it is not an upstream upgrade.
+
+Use Skills CLI 1.5.24 or newer for this commit URL: 1.5.21 attempts to clone it as
+a branch and fails. The reviewed 1.5.24 installer supports fetching a commit SHA.
+
+```bash
+npx skills@1.5.24 add https://github.com/shadcn-ui/ui/tree/7c9eaba1c0a6404c990c144a654792e3313c650d/skills/shadcn --agent codex claude-code --skill shadcn -y
+```
+
+Bootstrap exposes the canonical snapshot through `~/.agents/skills/shadcn` for
+Codex and `~/.claude/skills/shadcn` for Claude. On machines with an older standalone
+`~/.codex/skills/shadcn`, compare every file before moving that copy outside skill
+discovery; retain a local backup until the shared links and new-task discovery are
+verified. Never replace a divergent local copy automatically.
+
+Prefer this official skill for Playground Base UI composition. Vercel's bundled
+shadcn capability remains plugin-managed; its presence does not make it the
+preferred route or justify copying it into the standalone inventory. Playground's
+exploration/graduation policy overrides blanket appearance rules.

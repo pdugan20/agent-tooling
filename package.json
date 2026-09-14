@@ -21,8 +21,9 @@
     "setup:check": "bash scripts/verify-setup.sh",
     "skills:update": "npx skills update -p -y",
     "superpowers:check": "python3 scripts/check_superpowers_update.py --check",
-    "test": "python3 -m unittest discover -s scripts -p 'test_*.py' -v",
-    "verify": "bash scripts/verify-repo.sh"
+    "test": "python3 -m unittest discover -s scripts -p 'test_*.py' -v && node --test scripts/test_skill_freshness.mjs",
+    "verify": "bash scripts/verify-repo.sh",
+    "skills:check": "node scripts/check_skill_freshness.mjs"
   },
   "devDependencies": {
     "claude-code-lint": "0.7.1",

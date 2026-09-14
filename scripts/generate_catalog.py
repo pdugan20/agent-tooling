@@ -23,6 +23,10 @@ AGENT_TOOLING_REPOSITORY = "https://github.com/pdugan20/agent-tooling"
 PATRICK_SKILLS_SOURCE = "pdugan20/skills"
 
 UPSTREAM_SOURCE_LABELS = {
+    "shadcn-ui/ui": "shadcn/ui",
+    "addyosmani/web-quality-skills": "Addy Osmani",
+    "vercel-labs/agent-skills": "Vercel Labs",
+    "currents-dev/playwright-best-practices-skill": "Currents",
     "emilkowalski/skills": "Emil Kowalski",
     "getsentry/XcodeBuildMCP": "Sentry",
     PATRICK_SKILLS_SOURCE: "Pat Dugan",
@@ -376,6 +380,9 @@ def build_catalog() -> dict[str, Any]:
                 ),
             )
         )
+
+        skill_items[-1]["lockedRef"] = lock_entry.get("ref")
+        skill_items[-1]["contentHash"] = lock_entry["computedHash"]
 
     plugin_groups: dict[str, list[dict[str, Any]]] = {}
     for runtime in ("codex", "claude"):

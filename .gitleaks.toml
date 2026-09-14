@@ -1,0 +1,9 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Literal mock verification token in the locked upstream Playwright guide"
+condition = "AND"
+paths = ['''^\.agents/skills/playwright-best-practices/advanced/authentication-flows\.md$''']
+regexTarget = "secret"
+regexes = ['''^test-verification-abc123$''']

@@ -125,6 +125,16 @@ CUSTOM_SKILLS = {
     "write-mintlify-changelog": True,
 }
 UPSTREAM_SKILLS = {
+    "shadcn": ("shadcn-ui/ui", "skills/shadcn/SKILL.md"),
+    "accessibility": ("addyosmani/web-quality-skills", "skills/accessibility/SKILL.md"),
+    "vercel-composition-patterns": (
+        "vercel-labs/agent-skills",
+        "skills/composition-patterns/SKILL.md",
+    ),
+    "playwright-best-practices": (
+        "currents-dev/playwright-best-practices-skill",
+        "playwright-best-practices/SKILL.md",
+    ),
     "align-ui-to-design-system": (
         "pdugan20/skills",
         "skills/align-ui-to-design-system/SKILL.md",

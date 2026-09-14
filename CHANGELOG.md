@@ -8,6 +8,12 @@ version when compatibility requires it.
 
 ### Added
 
+- Adopted the official shadcn skill into the shared inventory at its existing verified commit, with runtime links and freshness tracking.
+
+- Added locked accessibility, React composition and Playwright best-practice skills for shared frontend work.
+- Added read-only skill source comparisons, machine-local freshness reports and catalog provenance details,
+  including declared refs, CLI content hashes and last source-check status.
+
 - Added a Codex-first XcodeBuildMCP v2.7.0 pilot with its official upstream skill, exact managed MCP configuration,
   setup drift checks, and runtime-auth inventory coverage.
 - Added `tune-mobile-client-performance` from Patrick Skills v3.2.0 as a shared exact-tag snapshot for causal

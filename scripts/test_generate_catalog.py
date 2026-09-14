@@ -12,7 +12,7 @@ class CatalogGenerationTests(unittest.TestCase):
         catalog = generate_catalog.build_catalog()
         items = catalog["items"]
 
-        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 22)
+        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 26)
         self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 24)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
@@ -70,6 +70,26 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertEqual(
             upstream,
             {
+                "shadcn": (
+                    "shadcn/ui",
+                    ".agents/skills/shadcn/SKILL.md",
+                    "https://github.com/shadcn-ui/ui/blob/7c9eaba1c0a6404c990c144a654792e3313c650d/skills/shadcn/SKILL.md",
+                ),
+                "accessibility": (
+                    "Addy Osmani",
+                    ".agents/skills/accessibility/SKILL.md",
+                    "https://github.com/addyosmani/web-quality-skills/blob/main/skills/accessibility/SKILL.md",
+                ),
+                "vercel-composition-patterns": (
+                    "Vercel Labs",
+                    ".agents/skills/vercel-composition-patterns/SKILL.md",
+                    "https://github.com/vercel-labs/agent-skills/blob/063bee94c3f4df8453406c830b0a7df0f2860278/skills/composition-patterns/SKILL.md",
+                ),
+                "playwright-best-practices": (
+                    "Currents",
+                    ".agents/skills/playwright-best-practices/SKILL.md",
+                    "https://github.com/currents-dev/playwright-best-practices-skill/blob/main/playwright-best-practices/SKILL.md",
+                ),
                 "animation-vocabulary": (
                     "Emil Kowalski",
                     ".agents/skills/animation-vocabulary/SKILL.md",
@@ -103,7 +123,7 @@ class CatalogGenerationTests(unittest.TestCase):
                 "find-skills": (
                     "Vercel Labs",
                     ".agents/skills/find-skills/SKILL.md",
-                    "https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md",
+                    "https://github.com/vercel-labs/skills/blob/d6b37f62ae23c3825b0ed16c73e123eee0a41fdc/skills/find-skills/SKILL.md",
                 ),
                 "swiftui-pro": (
                     "Paul Hudson",
