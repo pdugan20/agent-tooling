@@ -58,6 +58,18 @@ skill directory. The snapshot remains unmodified so `skills-lock.json` can track
 Codex's supported per-skill configuration override to disable only that nested duplicate. Rerun bootstrap after an
 upstream update so the override follows the current checkout location.
 
+Claude has no equivalent fix, so it lists both `swiftui-pro` and `swiftui-pro:swiftui-pro`. Claude loads the
+directory as the plugin `swiftui-pro@skills-dir`, because it contains `.claude-plugin/plugin.json`. The nested copy
+is older than the top-level skill. Measured on 2026-09-17 from the `skills` list in a headless `stream-json` init
+event:
+
+- `skillOverrides` with the key `swiftui-pro:swiftui-pro` changes nothing.
+- `skillOverrides` with the key `swiftui-pro` hides the newer top-level copy and keeps the stale one.
+- `enabledPlugins` with `swiftui-pro@skills-dir` set to `false` hides both copies.
+
+Leave the duplicate in place. Do not edit the snapshot to remove it. The same package shape affects
+`swift-testing-pro` in repositories that lock it.
+
 ## Verify repository changes
 
 Install the repository development dependencies once as documented in `README.md`, then run:

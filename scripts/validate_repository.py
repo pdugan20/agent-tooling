@@ -207,6 +207,10 @@ UPSTREAM_SKILLS = {
     "pick-ui-library": ("emilkowalski/skills", "skills/pick-ui-library/SKILL.md"),
     "review-animations": ("emilkowalski/skills", "skills/review-animations/SKILL.md"),
     "swiftui-pro": ("twostraws/swiftui-agent-skill", "swiftui-pro/SKILL.md"),
+    "ios-accessibility": (
+        "dadederk/ios-accessibility-agent-skill",
+        "ios-accessibility/SKILL.md",
+    ),
     "xcodebuildmcp": (
         "getsentry/XcodeBuildMCP",
         "skills/xcodebuildmcp/SKILL.md",

@@ -113,6 +113,12 @@
       "skillPath": "skills/integrate-app-intents/SKILL.md",
       "computedHash": "130e6d7aa2cee2357aaa5dadf11a45bd815a952edb881b1a7325bd1ddc1512d1"
     },
+    "ios-accessibility": {
+      "source": "dadederk/ios-accessibility-agent-skill",
+      "sourceType": "github",
+      "skillPath": "ios-accessibility/SKILL.md",
+      "computedHash": "d945096b4cf7e46d28b4cdadb6d6b96c6ebf36311212977519d48d3e98e99b35"
+    },
     "pick-ui-library": {
       "source": "emilkowalski/skills",
       "sourceType": "github",

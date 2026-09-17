@@ -8,6 +8,13 @@ version when compatibility requires it.
 
 ### Added
 
+- Adopted Daniel Devesa Derksen-Staats's `ios-accessibility` as a shared snapshot. It covers VoiceOver, Dynamic Type,
+  Voice Control, Switch Control, Full Keyboard Access, and accessibility testing for SwiftUI and UIKit. The existing
+  `accessibility` skill covers web content only.
+- Documented where Apple platform skills belong: global when most Swift apps benefit, locked in an app repository when
+  only that app uses the framework or an app ADR overrides the skill's defaults.
+- Recorded why Claude still lists a duplicate `swiftui-pro:swiftui-pro` entry, with the measured settings that do not
+  remove it.
 - Added a Claude `SessionStart` hook that supplies a repository's `AGENTS.md` when no `CLAUDE.md` loads it, from the
   repository root down to the working directory. Bootstrap installs it, and repositories no longer need `CLAUDE.md`
   or hidden `CLAUDE.local.md` shims. The hook skips nested files below the working directory and never fails a session.

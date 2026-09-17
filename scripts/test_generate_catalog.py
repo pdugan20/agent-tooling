@@ -12,7 +12,7 @@ class CatalogGenerationTests(unittest.TestCase):
         catalog = generate_catalog.build_catalog()
         items = catalog["items"]
 
-        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 29)
+        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 30)
         self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 24)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
@@ -175,6 +175,11 @@ class CatalogGenerationTests(unittest.TestCase):
                     "Paul Hudson",
                     ".agents/skills/swiftui-pro/SKILL.md",
                     "https://github.com/twostraws/swiftui-agent-skill/blob/main/swiftui-pro/SKILL.md",
+                ),
+                "ios-accessibility": (
+                    "Daniel Devesa Derksen-Staats",
+                    ".agents/skills/ios-accessibility/SKILL.md",
+                    "https://github.com/dadederk/ios-accessibility-agent-skill/blob/main/ios-accessibility/SKILL.md",
                 ),
                 "xcodebuildmcp": (
                     "Sentry",
