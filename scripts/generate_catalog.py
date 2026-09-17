@@ -17,6 +17,8 @@ ROOT = Path(__file__).resolve().parent.parent
 CATALOG_ROOT = ROOT / "catalog"
 CATALOG_DATA = CATALOG_ROOT / "data.json"
 RUNTIME_DATA = CATALOG_ROOT / "runtime-data.local.json"
+CODEX_RUNTIME_MARKETPLACES = {"openai-bundled", "openai-primary-runtime"}
+HIDDEN_RUNTIME_PLUGIN_IDS = {"codex-app-tools@openai-bundled"}
 PLUGIN_METADATA = CATALOG_ROOT / "plugin-metadata.json"
 SKILLS_LOCK = ROOT / "skills-lock.json"
 AGENT_TOOLING_REPOSITORY = "https://github.com/pdugan20/agent-tooling"
@@ -49,11 +51,12 @@ SKILL_PRIORITY = {
     "integrate-app-intents": 10,
     "swiftui-pro": 11,
     "apple-design": 12,
-    "review-animations": 13,
-    "find-animation-opportunities": 14,
-    "animation-vocabulary": 15,
-    "emil-design-eng": 16,
-    "pick-ui-library": 17,
+    "animate-expo": 13,
+    "review-animations": 14,
+    "find-animation-opportunities": 15,
+    "animation-vocabulary": 16,
+    "emil-design-eng": 17,
+    "pick-ui-library": 18,
 }
 
 
@@ -94,6 +97,45 @@ def github_repository_url(repository: Path) -> str | None:
     if not remote.startswith("https://github.com/"):
         return None
     return remote.removesuffix(".git")
+
+
+def github_repository_from_url(url: str | None) -> str | None:
+    """Return the canonical repository root for a GitHub URL."""
+    if not url:
+        return None
+    match = re.match(r"^https://github\.com/([^/]+)/([^/#?]+)", url)
+    if not match:
+        return None
+    owner, repository = match.groups()
+    return f"https://github.com/{owner}/{repository.removesuffix('.git')}"
+
+
+def provenance_fields(
+    *,
+    source: str,
+    source_url: str | None = None,
+    repository_url: str | None = None,
+    skill_name: str | None = None,
+) -> dict[str, str | None]:
+    """Build stable repository, directory, and source-identity metadata."""
+    repository_url = repository_url or github_repository_from_url(source_url)
+    owner = (
+        repository_url.removeprefix("https://github.com/").split("/", 1)[0]
+        if repository_url
+        else None
+    )
+    repository_slug = repository_url.removeprefix("https://github.com/") if repository_url else None
+    brand = "openai" if source == "openai" else "claudecode" if source == "anthropic" else None
+    return {
+        "brand": brand,
+        "ownerAvatarUrl": f"https://github.com/{owner}.png?size=96" if owner else None,
+        "repositoryUrl": repository_url,
+        "skillsShUrl": (
+            f"https://skills.sh/{repository_slug}/{skill_name}"
+            if repository_slug and skill_name
+            else None
+        ),
+    }
 
 
 def read_frontmatter(path: Path) -> dict[str, str]:
@@ -197,6 +239,10 @@ def skill_item(
         raise CatalogError(f"{display_path(skill_path)} name must match its directory")
 
     display_name, short_description, invocation = read_skill_interface(skill_root, frontmatter)
+    resolved_source_url = source_url or github_file_url(
+        AGENT_TOOLING_REPOSITORY,
+        skill_path.relative_to(ROOT).as_posix(),
+    )
     return {
         "availability": "Global",
         "description": short_description or frontmatter.get("description", ""),
@@ -209,14 +255,15 @@ def skill_item(
         "runtimes": ["codex", "claude"],
         "source": source,
         "sourceLabel": source_label,
-        "sourceUrl": source_url
-        or github_file_url(
-            AGENT_TOOLING_REPOSITORY,
-            skill_path.relative_to(ROOT).as_posix(),
-        ),
+        "sourceUrl": resolved_source_url,
         "state": "Configured",
         "type": "skill",
         "version": read_skill_version(skill_path),
+        **provenance_fields(
+            source=source,
+            source_url=resolved_source_url,
+            skill_name=name,
+        ),
     }
 
 
@@ -300,6 +347,12 @@ def project_skill_items(repos_root: Path) -> list[dict[str, Any]]:
                     "state": "Installed",
                     "type": "skill",
                     "version": read_skill_version(skill_path),
+                    **provenance_fields(
+                        source=source,
+                        source_url=source_url,
+                        repository_url=repository_url if not upstream_source else None,
+                        skill_name=name if upstream_source else None,
+                    ),
                 }
             )
     return items
@@ -325,6 +378,7 @@ def plugin_item(
         if all(item["delivery"] == "managed" for item in installations)
         else "Configured"
     )
+    source_url = metadata.get("sourceUrl")
     return {
         "availability": "Global",
         "description": metadata["description"],
@@ -339,10 +393,11 @@ def plugin_item(
         "runtimes": runtimes,
         "source": metadata["source"],
         "sourceLabel": metadata["sourceLabel"],
-        "sourceUrl": metadata.get("sourceUrl"),
+        "sourceUrl": source_url,
         "state": state,
         "type": "plugin",
         "version": metadata.get("version", "Managed"),
+        **provenance_fields(source=metadata["source"], source_url=source_url),
     }
 
 
@@ -446,7 +501,7 @@ def build_catalog() -> dict[str, Any]:
             "catalog/plugin-metadata.json",
         ],
         "items": items,
-        "schemaVersion": 4,
+        "schemaVersion": 5,
     }
 
 
@@ -456,6 +511,8 @@ def source_details(plugin_id: str, metadata: dict[str, Any]) -> tuple[str, str]:
         return item["source"], item["sourceLabel"]
 
     marketplace = plugin_id.rsplit("@", 1)[-1]
+    if marketplace in CODEX_RUNTIME_MARKETPLACES:
+        return "openai", "Built into Codex"
     if marketplace.startswith("openai-"):
         return "openai", marketplace.replace("-", " ").title()
     if marketplace == "claude-plugins-official":
@@ -463,6 +520,33 @@ def source_details(plugin_id: str, metadata: dict[str, Any]) -> tuple[str, str]:
     if marketplace == "personal":
         return "personal", "Personal"
     return "third-party", marketplace.replace("-", " ").title()
+
+
+def runtime_provenance_fields(
+    desired: dict[str, Any] | None,
+    *,
+    source: str,
+    source_url: str | None,
+) -> dict[str, str | None]:
+    if desired:
+        return {
+            key: desired.get(key)
+            for key in ("brand", "ownerAvatarUrl", "repositoryUrl", "skillsShUrl")
+        }
+    return provenance_fields(source=source, source_url=source_url)
+
+
+def include_runtime_plugin(
+    plugin_id: str,
+    *,
+    enabled: bool,
+    desired: dict[str, Any] | None,
+) -> bool:
+    """Keep active plugins and configured drift while hiding runtime plumbing and tombstones."""
+    marketplace = plugin_id.rsplit("@", 1)[-1]
+    if plugin_id in HIDDEN_RUNTIME_PLUGIN_IDS or marketplace in CODEX_RUNTIME_MARKETPLACES:
+        return False
+    return enabled or desired is not None
 
 
 def run_json_command(command: list[str]) -> Any:
@@ -497,8 +581,16 @@ def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
 
     for index, plugin in enumerate(codex_data.get("installed", [])):
         plugin_id = plugin["pluginId"]
-        source, source_label = source_details(plugin_id, plugin_metadata)
         desired = desired_ids.get((plugin_id, "codex"))
+        if not include_runtime_plugin(
+            plugin_id,
+            enabled=bool(plugin.get("enabled")),
+            desired=desired,
+        ):
+            continue
+        source, source_label = source_details(plugin_id, plugin_metadata)
+        metadata_source_url = plugin_metadata.get(plugin_id, {}).get("sourceUrl")
+        source_url = desired.get("sourceUrl") if desired else metadata_source_url
         capability_id = (
             desired["id"].removeprefix("plugin:")
             if desired
@@ -520,8 +612,7 @@ def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
                     {
                         "delivery": (
                             "runtime"
-                            if plugin_id.rsplit("@", 1)[-1]
-                            in {"openai-bundled", "openai-primary-runtime"}
+                            if plugin_id.rsplit("@", 1)[-1] in CODEX_RUNTIME_MARKETPLACES
                             else "marketplace"
                         ),
                         "pluginId": plugin_id,
@@ -537,10 +628,15 @@ def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
                 "runtimes": ["codex"],
                 "source": source,
                 "sourceLabel": source_label,
-                "sourceUrl": desired.get("sourceUrl") if desired else None,
+                "sourceUrl": source_url,
                 "state": "Enabled" if plugin.get("enabled") else "Disabled",
                 "type": "plugin",
                 "version": plugin.get("version") or "Unknown",
+                **runtime_provenance_fields(
+                    desired,
+                    source=source,
+                    source_url=source_url,
+                ),
             }
         )
 
@@ -550,8 +646,16 @@ def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
         plugin_id = plugin["id"]
         if plugin_id.endswith("@skills-dir"):
             continue
-        source, source_label = source_details(plugin_id, plugin_metadata)
         desired = desired_ids.get((plugin_id, "claude"))
+        if not include_runtime_plugin(
+            plugin_id,
+            enabled=bool(plugin.get("enabled")),
+            desired=desired,
+        ):
+            continue
+        source, source_label = source_details(plugin_id, plugin_metadata)
+        metadata_source_url = plugin_metadata.get(plugin_id, {}).get("sourceUrl")
+        source_url = desired.get("sourceUrl") if desired else metadata_source_url
         capability_id = (
             desired["id"].removeprefix("plugin:")
             if desired
@@ -587,9 +691,15 @@ def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
                 "runtimes": ["claude"],
                 "source": source,
                 "sourceLabel": source_label,
+                "sourceUrl": source_url,
                 "state": "Enabled" if plugin.get("enabled") else "Disabled",
                 "type": "plugin",
                 "version": plugin.get("version") or "Unknown",
+                **runtime_provenance_fields(
+                    desired,
+                    source=source,
+                    source_url=source_url,
+                ),
             }
         )
 
@@ -607,7 +717,7 @@ def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
             if repos_root is not None
             else "What Codex and Claude currently report as installed on this computer."
         ),
-        "schemaVersion": 4,
+        "schemaVersion": 5,
     }
 
 

@@ -20,6 +20,11 @@ desired plugin state, and configured Superpowers baseline. Patrick-owned skills 
 4. Review `.agents/skills/`, `.claude/skills/`, and `skills-lock.json`.
 5. Regenerate the catalog, run `npm run bootstrap`, and start new tasks.
 
+Before updating this consumer, complete the release from the `pdugan20/skills` repository, including its
+`npm run refresh:skills-sh` and `npm run check:skills-sh` publication checks. The GitHub tag is the exact installed
+source; skills.sh is a separately indexed discovery page and can remain stale after GitHub changes until its refresh
+finishes.
+
 Use the tag URL form; `owner/repository@tag` is parsed as a skill selector by current Skills CLI releases:
 
 ```bash
@@ -28,7 +33,7 @@ npx skills add https://github.com/pdugan20/skills/tree/vX.Y.Z --agent codex clau
 
 ## Update upstream skills
 
-The eight third-party skills in `.agents/skills/` are project-scoped installations managed by the official
+The third-party skills in `.agents/skills/` are project-scoped installations managed by the official
 [`skills` CLI](https://github.com/vercel-labs/skills). Their exact GitHub sources and content hashes live in
 `skills-lock.json`; the repository does not maintain hand-copied versions under `skills/`.
 
@@ -128,6 +133,10 @@ Docs remain distinct.
 For a machine-local runtime comparison, run `npm run catalog:snapshot`. The resulting
 `catalog/runtime-data.local.json` contains only capability identifiers, versions, runtime state, and repository
 metadata—not installation paths, credentials, or plugin configuration—and is ignored by Git.
+
+The local snapshot excludes Codex-owned bundled and primary-runtime packages. Those packages are supplied with the
+active Codex runtime rather than selected or maintained by this repository, so listing them as ordinary catalog
+capabilities adds noise without describing Patrick's tooling choices.
 
 ## Refresh installed Codex plugins
 

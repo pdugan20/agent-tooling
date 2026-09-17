@@ -14,6 +14,8 @@ version when compatibility requires it.
 - Added read-only skill source comparisons, machine-local freshness reports and catalog provenance details,
   including declared refs, CLI content hashes and last source-check status.
 
+- Added Emil Kowalski's `animate-expo` as a shared Skills CLI snapshot for Expo and React Native motion,
+  gestures, haptics, transitions, reduced motion, and UI-thread performance guidance.
 - Added a Codex-first XcodeBuildMCP v2.7.0 pilot with its official upstream skill, exact managed MCP configuration,
   setup drift checks, and runtime-auth inventory coverage.
 - Added `tune-mobile-client-performance` from Patrick Skills v3.2.0 as a shared exact-tag snapshot for causal
@@ -25,8 +27,7 @@ version when compatibility requires it.
 
 - Documented the combined Apple workflow: XcodeBuildMCP for structured builds, Simulator actions, logs, and LLDB;
   computer use for visual and perceptual inspection; and Instruments or `xctrace` for performance attribution.
-- Updated all thirteen Patrick-owned skill provenance locks to `pdugan20/skills` v3.2.0 and refreshed the
-  twenty-one-skill catalog.
+- Updated all thirteen Patrick-owned skill provenance locks to `pdugan20/skills` v3.2.0 and refreshed the catalog.
 
 ## [0.8.0] - 2026-07-31
 

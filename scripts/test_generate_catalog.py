@@ -12,11 +12,11 @@ class CatalogGenerationTests(unittest.TestCase):
         catalog = generate_catalog.build_catalog()
         items = catalog["items"]
 
-        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 26)
+        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 27)
         self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 24)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
-        self.assertEqual(catalog["schemaVersion"], 4)
+        self.assertEqual(catalog["schemaVersion"], 5)
         self.assertEqual(
             next(item for item in items if item["name"] == "xcodebuildmcp")["displayName"],
             "XcodeBuildMCP",
@@ -59,6 +59,37 @@ class CatalogGenerationTests(unittest.TestCase):
             )
         )
 
+    def test_skills_expose_repository_directory_and_owner_identity(self) -> None:
+        items = generate_catalog.build_catalog()["items"]
+        feature_delivery = next(item for item in items if item["id"] == "skill:feature-delivery")
+
+        self.assertEqual(
+            feature_delivery["repositoryUrl"],
+            "https://github.com/pdugan20/skills",
+        )
+        self.assertEqual(
+            feature_delivery["skillsShUrl"],
+            "https://skills.sh/pdugan20/skills/feature-delivery",
+        )
+        self.assertEqual(
+            feature_delivery["ownerAvatarUrl"],
+            "https://github.com/pdugan20.png?size=96",
+        )
+        self.assertIsNone(feature_delivery["brand"])
+
+    def test_official_plugins_use_product_identity(self) -> None:
+        items = generate_catalog.build_catalog()["items"]
+        anthropic = next(item for item in items if item["name"] == "claude-code-setup")
+        openai = next(item for item in items if item["name"] == "data-analytics")
+
+        self.assertEqual(anthropic["brand"], "claudecode")
+        self.assertEqual(
+            anthropic["repositoryUrl"],
+            "https://github.com/anthropics/claude-plugins-official",
+        )
+        self.assertEqual(openai["brand"], "openai")
+        self.assertIsNone(openai["repositoryUrl"])
+
     def test_upstream_skills_keep_their_provenance(self) -> None:
         items = generate_catalog.build_catalog()["items"]
         upstream = {
@@ -89,6 +120,11 @@ class CatalogGenerationTests(unittest.TestCase):
                     "Currents",
                     ".agents/skills/playwright-best-practices/SKILL.md",
                     "https://github.com/currents-dev/playwright-best-practices-skill/blob/main/playwright-best-practices/SKILL.md",
+                ),
+                "animate-expo": (
+                    "Emil Kowalski",
+                    ".agents/skills/animate-expo/SKILL.md",
+                    "https://github.com/emilkowalski/skills/blob/main/skills/animate-expo/SKILL.md",
                 ),
                 "animation-vocabulary": (
                     "Emil Kowalski",
@@ -181,6 +217,71 @@ class CatalogGenerationTests(unittest.TestCase):
             <= personal_skills
         )
         self.assertIn("mintlify@mintlify-marketplace", plugin_ids)
+        mintlify_plugin = next(
+            item for item in items if "mintlify@mintlify-marketplace" in item.get("pluginIds", [])
+        )
+        self.assertEqual(mintlify_plugin["displayName"], "Mintlify Official Plugin")
+        self.assertEqual(mintlify_plugin["sourceLabel"], "Mintlify")
+
+    def test_runtime_owned_plugins_have_a_human_source_label(self) -> None:
+        metadata: dict[str, object] = {}
+
+        self.assertEqual(
+            generate_catalog.source_details("browser@openai-bundled", metadata),
+            ("openai", "Built into Codex"),
+        )
+        self.assertEqual(
+            generate_catalog.source_details("pdf@openai-primary-runtime", metadata),
+            ("openai", "Built into Codex"),
+        )
+        self.assertIn(
+            "codex-app-tools@openai-bundled",
+            generate_catalog.HIDDEN_RUNTIME_PLUGIN_IDS,
+        )
+
+    def test_runtime_snapshot_hides_plumbing_and_disabled_tombstones(self) -> None:
+        self.assertFalse(
+            generate_catalog.include_runtime_plugin(
+                "codex-app-tools@openai-bundled",
+                enabled=True,
+                desired=None,
+            )
+        )
+        self.assertFalse(
+            generate_catalog.include_runtime_plugin(
+                "mintlify@claude-plugins-official",
+                enabled=False,
+                desired=None,
+            )
+        )
+        self.assertFalse(
+            generate_catalog.include_runtime_plugin(
+                "browser@openai-bundled",
+                enabled=True,
+                desired=None,
+            )
+        )
+        self.assertFalse(
+            generate_catalog.include_runtime_plugin(
+                "documents@openai-primary-runtime",
+                enabled=True,
+                desired=None,
+            )
+        )
+        self.assertTrue(
+            generate_catalog.include_runtime_plugin(
+                "expected@example",
+                enabled=False,
+                desired={"id": "plugin:expected"},
+            )
+        )
+        self.assertTrue(
+            generate_catalog.include_runtime_plugin(
+                "unexpected@example",
+                enabled=True,
+                desired=None,
+            )
+        )
 
     def test_codex_managed_plugins_are_separate_from_cli_plugins(self) -> None:
         items = generate_catalog.build_catalog()["items"]
@@ -266,6 +367,8 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertEqual(items[0]["source"], "repository")
         self.assertIsNone(items[0]["pathHref"])
         self.assertIsNone(items[0]["sourceUrl"])
+        self.assertIsNone(items[0]["repositoryUrl"])
+        self.assertIsNone(items[0]["skillsShUrl"])
 
     def test_humanizes_use_railway_without_an_acronym(self) -> None:
         self.assertEqual(generate_catalog.humanize_name("use-railway"), "Use Railway")
@@ -294,6 +397,14 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertEqual(
             items[0]["sourceUrl"],
             "https://github.com/emilkowalski/skills/blob/main/skills/apple-design/SKILL.md",
+        )
+        self.assertEqual(
+            items[0]["repositoryUrl"],
+            "https://github.com/emilkowalski/skills",
+        )
+        self.assertEqual(
+            items[0]["skillsShUrl"],
+            "https://skills.sh/emilkowalski/skills/apple-design",
         )
 
 

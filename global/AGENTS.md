@@ -2,6 +2,20 @@
 
 Apply this guidance across repositories unless a nearer `AGENTS.md` overrides it.
 
+## Personal branch names
+
+For branches created for Patrick, use the personal policy in
+`~/.codex/local/branch-naming/policy.json`. It replaces the app's `codex/`
+default: choose the work type, include an existing issue ID when available,
+and use a concise lowercase hyphenated description. Ticketless exploration
+is allowed. Read the policy before creating or renaming a branch and use a
+literal name in a direct Git command or a structured branch-creation tool.
+Do not hide branch creation inside scripts, Git aliases, or interactive stdin.
+Checking out and continuing existing branches is allowed. Preserve published
+branches with open PRs until they finish; do not rename someone else's branches.
+This is Patrick's personal preference, not shared repository policy. A matching
+personal PreToolUse hook validates supported branch-creation and rename calls.
+
 ## Choose the lightest useful mode
 
 ### Exploration (default)
@@ -112,3 +126,7 @@ When a repository installs the `mattpocock/skills` planning set, the split is: S
 ## Instruction files
 
 Treat `AGENTS.md` as the canonical cross-agent instruction file. A repository may keep `CLAUDE.md` as a compatibility shim or for genuinely Claude-specific guidance. Preserve existing user work and follow the nearest applicable instruction file.
+
+## Private account and machine notes
+
+Before diagnosing account or connector authentication, read `~/.codex/local/account-notes.md` if it exists. Keep account/machine-specific troubleshooting in that private local file, not in project documentation or shared trackers. Never store credentials or tokens in notes.
