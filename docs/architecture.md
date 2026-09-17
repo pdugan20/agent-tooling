@@ -46,6 +46,18 @@ Global does not mean always active. Invocation policy is separate: a global skil
 project skill can trigger automatically when a request clearly matches it. Repository instructions should govern
 local behavior without copying globally installed plugin files.
 
+### Apple platform skills
+
+The table above also decides where Apple platform skills go:
+
+- Keep a skill global when most Swift apps benefit from it, for example `swiftui-pro` and `ios-accessibility`. An
+  app can still override its defaults in a repository ADR.
+- Lock a skill in the app repository when only that app uses the framework, or when the app pins the skill next to an
+  ADR that overrides its defaults. NextUp locks `swiftdata-pro` this way.
+- Lock individual `Prisma-Labs-Dev/apple-skills` references per app. Do not install the full Apple Skills plugin.
+- Check the license before adoption. Git redistributes every locked snapshot, so a source-available license, such as
+  PolyForm Perimeter, needs an explicit owner decision.
+
 ## Skills
 
 The public [Skills](https://github.com/pdugan20/skills) repository is canonical for Patrick's design, UI-analysis,

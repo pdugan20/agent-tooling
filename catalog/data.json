@@ -662,6 +662,32 @@
     {
       "availability": "Global",
       "brand": null,
+      "contentHash": "d945096b4cf7e46d28b4cdadb6d6b96c6ebf36311212977519d48d3e98e99b35",
+      "description": "iOS accessibility guidance for UIKit and SwiftUI apps",
+      "displayName": "iOS Accessibility",
+      "featured": 50,
+      "id": "skill:ios-accessibility",
+      "invocation": "Automatic",
+      "lockedRef": null,
+      "name": "ios-accessibility",
+      "ownerAvatarUrl": "https://github.com/dadederk.png?size=96",
+      "path": ".agents/skills/ios-accessibility/SKILL.md",
+      "repositoryUrl": "https://github.com/dadederk/ios-accessibility-agent-skill",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "skillsShUrl": "https://skills.sh/dadederk/ios-accessibility-agent-skill/ios-accessibility",
+      "source": "third-party",
+      "sourceLabel": "Daniel Devesa Derksen-Staats",
+      "sourceUrl": "https://github.com/dadederk/ios-accessibility-agent-skill/blob/main/ios-accessibility/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "Git"
+    },
+    {
+      "availability": "Global",
+      "brand": null,
       "contentHash": "7eb144f734450fee649dc1d209114775ddda07cbf45be84fe969d3d4f3971dce",
       "description": "Use when writing Playwright tests, fixing flaky tests, debugging failures, implementing Page Object Model, configuring CI/CD, optimizing performance, mocking APIs, handling authentication or OAuth, testing accessibility (axe-core), file uploads/downloads, date/time mocking, WebSockets, geolocation, permissions, multi-tab/popup flows, mobile/responsive layouts, touch gestures, GraphQL, error handling, offline mode, multi-user collaboration, third-party services (payments, email verification), console error monitoring, global setup/teardown, test annotations (skip, fixme, slow), test tags (@smoke, @fast, @critical, filtering with --grep), project dependencies, security testing (XSS, CSRF, auth), performance budgets (Web Vitals, Lighthouse), iframes, component testing, canvas/WebGL, service workers/PWA, test coverage, i18n/localization, Electron apps, or browser extension testing. Covers E2E, component, API, visual, accessibility, security, Electron, and extension testing.",
       "displayName": "Playwright Best Practices",

@@ -29,6 +29,7 @@ UPSTREAM_SOURCE_LABELS = {
     "addyosmani/web-quality-skills": "Addy Osmani",
     "vercel-labs/agent-skills": "Vercel Labs",
     "currents-dev/playwright-best-practices-skill": "Currents",
+    "dadederk/ios-accessibility-agent-skill": "Daniel Devesa Derksen-Staats",
     "emilkowalski/skills": "Emil Kowalski",
     "getsentry/XcodeBuildMCP": "Sentry",
     PATRICK_SKILLS_SOURCE: "Pat Dugan",
