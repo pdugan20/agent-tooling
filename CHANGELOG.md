@@ -34,7 +34,9 @@ version when compatibility requires it.
 
 - Documented the combined Apple workflow: XcodeBuildMCP for structured builds, Simulator actions, logs, and LLDB;
   computer use for visual and perceptual inspection; and Instruments or `xctrace` for performance attribution.
-- Updated all thirteen Patrick-owned skill provenance locks to `pdugan20/skills` v3.2.0 and refreshed the catalog.
+- Updated all thirteen Patrick-owned skill provenance locks to `pdugan20/skills` v3.3.0 and refreshed the catalog.
+  v3.3.0 makes `feature-delivery` confirm requested capabilities before it selects an execution mode and adds
+  trust boundaries to `feature-spike`, `bootstrap-repository`, and `review-mintlify-docs`.
 
 ## [0.8.0] - 2026-07-31
 

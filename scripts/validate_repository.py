@@ -212,7 +212,7 @@ UPSTREAM_SKILLS = {
         "skills/xcodebuildmcp/SKILL.md",
     ),
 }
-PATRICK_SKILLS_REF = "v3.2.0"
+PATRICK_SKILLS_REF = "v3.3.0"
 XCODEBUILDMCP_REF = "v2.7.0"
 EXPECTED_EXPLICIT_SUPERPOWERS = {
     "brainstorming",
