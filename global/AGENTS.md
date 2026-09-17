@@ -127,6 +127,8 @@ When a repository installs the `mattpocock/skills` planning set, the split is: S
 
 Treat `AGENTS.md` as the canonical cross-agent instruction file. A repository may keep `CLAUDE.md` as a compatibility shim or for genuinely Claude-specific guidance. Preserve existing user work and follow the nearest applicable instruction file.
 
+Claude Code does not read `AGENTS.md` itself. The shared `SessionStart` hook from `agent-tooling` supplies the repository's `AGENTS.md` instead. Do not add `CLAUDE.md` or hidden, git-excluded `CLAUDE.local.md` shims to a repository only to load `AGENTS.md`. If a session shows no repository instructions, check the hook before adding a file. The hook does not load nested `AGENTS.md` files below the working directory, so read those before editing in their directories.
+
 ## Private account and machine notes
 
 Before diagnosing account or connector authentication, read `~/.codex/local/account-notes.md` if it exists. Keep account/machine-specific troubleshooting in that private local file, not in project documentation or shared trackers. Never store credentials or tokens in notes.

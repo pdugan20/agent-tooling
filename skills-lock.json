@@ -21,6 +21,12 @@
       "skillPath": "skills/analyze-ui-video/SKILL.md",
       "computedHash": "06d3e758308ffff106fee61ddeac0f1681c772caf3ad6f77c096b34d52c0294b"
     },
+    "animate": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "skillPath": "skills/animate/SKILL.md",
+      "computedHash": "7598d33e7f60dd5c24531eaaa897621cc3bdb48e8050324211627973bc59c4ce"
+    },
     "animate-expo": {
       "source": "emilkowalski/skills",
       "sourceType": "github",
@@ -166,6 +172,13 @@
       "sourceType": "github",
       "skillPath": "skills/composition-patterns/SKILL.md",
       "computedHash": "575757e3e25761c8c562d6e395d29f0b76c98b1273c0bd72d88e6ab1bc9c7d42"
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "ref": "063bee94c3f4df8453406c830b0a7df0f2860278",
+      "sourceType": "github",
+      "skillPath": "skills/react-best-practices/SKILL.md",
+      "computedHash": "3219a1944e404ffc14d1d9d6aef6dd2e3855b81387ee0a044ccbfe14d34c2357"
     },
     "write-mintlify-changelog": {
       "source": "pdugan20/skills",
