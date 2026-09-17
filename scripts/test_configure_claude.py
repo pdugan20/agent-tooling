@@ -41,6 +41,39 @@ class ConfigureClaudeTests(unittest.TestCase):
 
         self.assertEqual(configure_claude.update_settings(data)["outputStyle"], "simple-english")
 
+    def test_agents_md_hook_is_installed_once_and_preserves_other_hooks(self) -> None:
+        hook = Path("/checkout/global/hooks/agents_md_context.py")
+        stale = "python3 /old/checkout/global/hooks/agents_md_context.py"
+        data = {
+            "hooks": {
+                "Stop": [{"hooks": [{"type": "command", "command": "python3 /x/stop_check.py"}]}],
+                "SessionStart": [
+                    {"hooks": [{"type": "command", "command": "echo unrelated"}]},
+                    {"hooks": [{"type": "command", "command": stale}]},
+                ],
+            }
+        }
+
+        configure_claude.update_settings(data, hook)
+        updated = configure_claude.update_settings(data, hook)
+
+        session_start = updated["hooks"]["SessionStart"]
+        commands = [entry["command"] for group in session_start for entry in group["hooks"]]
+        self.assertEqual(commands, ["echo unrelated", f"python3 {hook}"])
+        self.assertEqual(session_start[-1]["matcher"], "startup|clear|compact")
+        self.assertIn("Stop", updated["hooks"])
+
+    def test_agents_md_hook_command_quotes_paths_with_spaces(self) -> None:
+        hook = Path("/Users/me/Mobile Documents/agent-tooling/global/hooks/agents_md_context.py")
+
+        updated = configure_claude.update_settings({}, hook)
+
+        command = updated["hooks"]["SessionStart"][0]["hooks"][0]["command"]
+        self.assertEqual(command, f"python3 '{hook}'")
+
+    def test_default_agents_md_hook_points_at_this_checkout(self) -> None:
+        self.assertTrue(configure_claude.AGENTS_MD_HOOK.is_file())
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -12,7 +12,7 @@ class CatalogGenerationTests(unittest.TestCase):
         catalog = generate_catalog.build_catalog()
         items = catalog["items"]
 
-        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 27)
+        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 29)
         self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 24)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
@@ -120,6 +120,16 @@ class CatalogGenerationTests(unittest.TestCase):
                     "Currents",
                     ".agents/skills/playwright-best-practices/SKILL.md",
                     "https://github.com/currents-dev/playwright-best-practices-skill/blob/main/playwright-best-practices/SKILL.md",
+                ),
+                "vercel-react-best-practices": (
+                    "Vercel Labs",
+                    ".agents/skills/vercel-react-best-practices/SKILL.md",
+                    "https://github.com/vercel-labs/agent-skills/blob/063bee94c3f4df8453406c830b0a7df0f2860278/skills/react-best-practices/SKILL.md",
+                ),
+                "animate": (
+                    "Emil Kowalski",
+                    ".agents/skills/animate/SKILL.md",
+                    "https://github.com/emilkowalski/skills/blob/main/skills/animate/SKILL.md",
                 ),
                 "animate-expo": (
                     "Emil Kowalski",

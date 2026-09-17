@@ -17,6 +17,7 @@ settings are generated machine state; edit this repository rather than patching 
 | Configured Superpowers policy | `config/superpowers.json` | The maintained fork and both plugin caches |
 | Machine policy | `scripts/configure-codex.py` and `scripts/configure-claude.py` | Product settings files |
 | Repository-specific behavior | The nearest repository `AGENTS.md` | Travels with that repository |
+| Repository `AGENTS.md` in Claude | `global/hooks/agents_md_context.py` | Claude `SessionStart` hook set by `scripts/configure-claude.py` |
 | Browsable inventory | Generated `catalog/data.json` | Local catalog and optional machine snapshot |
 
 Text documentation explains the model but does not duplicate exact plugin or skill inventories. The config files,

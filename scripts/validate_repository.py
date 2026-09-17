@@ -131,6 +131,10 @@ UPSTREAM_SKILLS = {
         "vercel-labs/agent-skills",
         "skills/composition-patterns/SKILL.md",
     ),
+    "vercel-react-best-practices": (
+        "vercel-labs/agent-skills",
+        "skills/react-best-practices/SKILL.md",
+    ),
     "playwright-best-practices": (
         "currents-dev/playwright-best-practices-skill",
         "playwright-best-practices/SKILL.md",
@@ -191,6 +195,7 @@ UPSTREAM_SKILLS = {
         "pdugan20/skills",
         "skills/write-mintlify-changelog/SKILL.md",
     ),
+    "animate": ("emilkowalski/skills", "skills/animate/SKILL.md"),
     "animate-expo": ("emilkowalski/skills", "skills/animate-expo/SKILL.md"),
     "animation-vocabulary": ("emilkowalski/skills", "skills/animation-vocabulary/SKILL.md"),
     "apple-design": ("emilkowalski/skills", "skills/apple-design/SKILL.md"),

@@ -8,6 +8,13 @@ version when compatibility requires it.
 
 ### Added
 
+- Added a Claude `SessionStart` hook that supplies a repository's `AGENTS.md` when no `CLAUDE.md` loads it, from the
+  repository root down to the working directory. Bootstrap installs it, and repositories no longer need `CLAUDE.md`
+  or hidden `CLAUDE.local.md` shims. The hook skips nested files below the working directory and never fails a session.
+- Adopted Emil Kowalski's `animate` and Vercel's `vercel-react-best-practices` as shared snapshots, so web motion
+  implementation and React performance guidance come from this inventory rather than a product plugin or another
+  repository's install.
+
 - Adopted the official shadcn skill into the shared inventory at its existing verified commit, with runtime links and freshness tracking.
 
 - Added locked accessibility, React composition and Playwright best-practice skills for shared frontend work.
