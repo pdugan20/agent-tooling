@@ -47,9 +47,9 @@ local behavior without copying globally installed plugin files.
 
 ## Skills
 
-The public [Skills](https://github.com/pdugan20/skills) repository is canonical for Patrick's
-twelve design, UI-analysis, delivery, mobile-performance, and documentation skills. This repository consumes its
-tagged releases alongside eight third-party skills. All twenty exact snapshots are installed by the
+The public [Skills](https://github.com/pdugan20/skills) repository is canonical for Patrick's design, UI-analysis,
+delivery, mobile-performance, and documentation skills. This repository consumes its tagged releases alongside
+third-party skills. Every exact snapshot is installed by the
 [`skills` CLI](https://github.com/vercel-labs/skills), stored under
 `.agents/skills/`, and tracked by `skills-lock.json`. The `.claude/skills/` entries are compatibility links, not
 separate copies.

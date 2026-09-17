@@ -191,6 +191,7 @@ UPSTREAM_SKILLS = {
         "pdugan20/skills",
         "skills/write-mintlify-changelog/SKILL.md",
     ),
+    "animate-expo": ("emilkowalski/skills", "skills/animate-expo/SKILL.md"),
     "animation-vocabulary": ("emilkowalski/skills", "skills/animation-vocabulary/SKILL.md"),
     "apple-design": ("emilkowalski/skills", "skills/apple-design/SKILL.md"),
     "emil-design-eng": ("emilkowalski/skills", "skills/emil-design-eng/SKILL.md"),

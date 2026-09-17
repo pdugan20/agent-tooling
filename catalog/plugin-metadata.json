@@ -23,9 +23,10 @@
     "sourceUrl": "https://github.com/cloudflare/skills"
   },
   "mintlify@mintlify-marketplace": {
-    "description": "Build and maintain Mintlify documentation sites.",
+    "description": "Official Mintlify product guidance for building and maintaining documentation sites.",
+    "displayName": "Mintlify Official Plugin",
     "source": "third-party",
-    "sourceLabel": "Mintlify direct",
+    "sourceLabel": "Mintlify",
     "sourceUrl": "https://github.com/mintlify/mintlify-claude-plugin"
   },
   "data-analytics@openai-curated-remote": {

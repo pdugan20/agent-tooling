@@ -12,5 +12,6 @@ node_modules/
 credentials/
 secrets/
 catalog/runtime-data.local.json
+catalog/dist/
 
 catalog/skill-freshness.local.json
