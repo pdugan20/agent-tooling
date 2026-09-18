@@ -8,6 +8,7 @@ version when compatibility requires it.
 
 ### Added
 
+- Adopted AWS's official `aws-containers` skill as a shared snapshot for ECR, EKS, ECS, and container-delivery work.
 - Adopted Daniel Devesa Derksen-Staats's `ios-accessibility` as a shared snapshot. It covers VoiceOver, Dynamic Type,
   Voice Control, Switch Control, Full Keyboard Access, and accessibility testing for SwiftUI and UIKit. The existing
   `accessibility` skill covers web content only.

@@ -125,6 +125,10 @@ CUSTOM_SKILLS = {
     "write-mintlify-changelog": True,
 }
 UPSTREAM_SKILLS = {
+    "aws-containers": (
+        "aws/agent-toolkit-for-aws",
+        "skills/core-skills/aws-containers/SKILL.md",
+    ),
     "shadcn": ("shadcn-ui/ui", "skills/shadcn/SKILL.md"),
     "accessibility": ("addyosmani/web-quality-skills", "skills/accessibility/SKILL.md"),
     "vercel-composition-patterns": (

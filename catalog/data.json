@@ -610,6 +610,32 @@
     {
       "availability": "Global",
       "brand": null,
+      "contentHash": "22a524281c3b86255696f5c5ee2c83d4abbc98fe2b48734f782aee0a77613fdb",
+      "description": "Builds and deploys containerized workloads on Elastic Kubernetes Service (EKS), Elastic Container Service (ECS), Fargate, and ECR (Elastic Container Registry). Covers general EKS knowledge, Karpenter, AWS Load Balancer Controller and leveraging various open source Kubernetes projects with EKS. Covers general ECS knowledge, task definitions, Fargate services, ECS Exec, ECS Express Mode and ECS Managed Instances. Covers general Elastic Beanstalk knowledge, Elastic Beanstalk configuration and platforms supported by Elastic Beanstalk. Covers general ECR knowledge, ECR repository setup and lifecycle policies. Includes recommending, enabling, and reading Amazon ECS Action Logs to troubleshoot control-plane failures (deployment rollback/circuit-breaker, task placement, scaling, task replacement). Applies when deploying, debugging, or optimizing containers on AWS. Should be used instead of relying on internal knowledge for these services.",
+      "displayName": "AWS Containers",
+      "featured": 50,
+      "id": "skill:aws-containers",
+      "invocation": "Automatic",
+      "lockedRef": null,
+      "name": "aws-containers",
+      "ownerAvatarUrl": "https://github.com/aws.png?size=96",
+      "path": ".agents/skills/aws-containers/SKILL.md",
+      "repositoryUrl": "https://github.com/aws/agent-toolkit-for-aws",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "skillsShUrl": "https://skills.sh/aws/agent-toolkit-for-aws/aws-containers",
+      "source": "third-party",
+      "sourceLabel": "AWS",
+      "sourceUrl": "https://github.com/aws/agent-toolkit-for-aws/blob/main/skills/core-skills/aws-containers/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "2"
+    },
+    {
+      "availability": "Global",
+      "brand": null,
       "contentHash": "af2ab4b971ffa8d6a8bda7c1fbc7f02c3dcc1cb1801f69c5c2fab724c87a4fc1",
       "description": "Test feature value or feasibility before investing",
       "displayName": "Feature Spike",

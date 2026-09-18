@@ -55,6 +55,10 @@ read `skills-lock.json`. Bootstrap links every canonical snapshot into each agen
 location, so their **runtime availability** is global across repositories. Do not edit snapshots by hand. Use
 `npm run skills:update` for upstream updates, or install a new Skills tag explicitly, and review the diff.
 
+The shared `aws-containers` snapshot comes from AWS's official `agent-toolkit-for-aws` repository. It is the primary
+reference for ECR, EKS, ECS, and container-delivery work; service details that affect production must still be checked
+against current AWS documentation.
+
 The Codex pilot pins XcodeBuildMCP and its official upstream skill to v2.7.0. Bootstrap enables only Simulator,
 semantic UI automation, and debugging workflows, disables the tool's own Sentry telemetry, and leaves visual
 inspection to computer use. Start a new Codex task after setup so the MCP tool inventory reloads.

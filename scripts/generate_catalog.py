@@ -25,6 +25,7 @@ AGENT_TOOLING_REPOSITORY = "https://github.com/pdugan20/agent-tooling"
 PATRICK_SKILLS_SOURCE = "pdugan20/skills"
 
 UPSTREAM_SOURCE_LABELS = {
+    "aws/agent-toolkit-for-aws": "AWS",
     "shadcn-ui/ui": "shadcn/ui",
     "addyosmani/web-quality-skills": "Addy Osmani",
     "vercel-labs/agent-skills": "Vercel Labs",

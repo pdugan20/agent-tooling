@@ -12,7 +12,7 @@ class CatalogGenerationTests(unittest.TestCase):
         catalog = generate_catalog.build_catalog()
         items = catalog["items"]
 
-        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 30)
+        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 31)
         self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 24)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
@@ -101,6 +101,11 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertEqual(
             upstream,
             {
+                "aws-containers": (
+                    "AWS",
+                    ".agents/skills/aws-containers/SKILL.md",
+                    "https://github.com/aws/agent-toolkit-for-aws/blob/main/skills/core-skills/aws-containers/SKILL.md",
+                ),
                 "shadcn": (
                     "shadcn/ui",
                     ".agents/skills/shadcn/SKILL.md",

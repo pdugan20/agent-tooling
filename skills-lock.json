@@ -52,6 +52,12 @@
       "skillPath": "skills/audit-design-system-health/SKILL.md",
       "computedHash": "8b360e17ee4b1852518976e481e25a2cfd8a610abc564258e6bc35f2092c281e"
     },
+    "aws-containers": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "skills/core-skills/aws-containers/SKILL.md",
+      "computedHash": "22a524281c3b86255696f5c5ee2c83d4abbc98fe2b48734f782aee0a77613fdb"
+    },
     "bootstrap-repository": {
       "source": "pdugan20/skills",
       "ref": "v3.3.0",
