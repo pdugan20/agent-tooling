@@ -59,13 +59,17 @@ The Codex pilot pins XcodeBuildMCP and its official upstream skill to v2.7.0. Bo
 semantic UI automation, and debugging workflows, disables the tool's own Sentry telemetry, and leaves visual
 inspection to computer use. Start a new Codex task after setup so the MCP tool inventory reloads.
 
-The first-party `tune-mobile-client-performance` skill is pinned from Patrick Skills v3.3.0. It routes a concrete
+The first-party `tune-mobile-client-performance` skill is pinned from Patrick Skills v3.4.0. It routes a concrete
 SwiftUI, Swift, React Native, or Expo runtime symptom through evidence collection and causal tuning; it does not
 replace Instruments, device evidence, or the structured Xcode and Simulator pilot.
 
-The first-party `integrate-app-intents` skill is also pinned from v3.3.0. It guides Siri, Shortcuts, Spotlight,
+The first-party `integrate-app-intents` skill is also pinned from v3.4.0. It guides Siri, Shortcuts, Spotlight,
 widgets, controls, App Schemas, and AppIntentsTesting work while preserving each app's existing data, routing,
 privacy, availability, and verification boundaries.
+
+The first-party `run-remote-dev-server` skill is pinned from v3.4.0. It runs development servers persistently on an
+SSH-accessible host, keeps the application bound to localhost, and exposes previews privately through Tailscale
+Serve without enabling Funnel or guessing destructive route-removal syntax.
 
 ## Catalog
 

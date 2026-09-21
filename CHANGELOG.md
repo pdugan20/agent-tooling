@@ -36,6 +36,8 @@ version when compatibility requires it.
   SwiftUI, Swift, React Native, and Expo performance diagnosis and tuning.
 - Added `integrate-app-intents` from Patrick Skills v3.2.0 as a shared exact-tag snapshot for architecture-preserving
   Siri, Shortcuts, Spotlight, widget, control, App Schema, and AppIntentsTesting integration.
+- Added `run-remote-dev-server` from Patrick Skills v3.4.0 as a shared exact-tag snapshot for persistent,
+  localhost-bound development servers exposed privately through Tailscale Serve.
 
 ### Changed
 
@@ -44,6 +46,7 @@ version when compatibility requires it.
 - Updated all thirteen Patrick-owned skill provenance locks to `pdugan20/skills` v3.3.0 and refreshed the catalog.
   v3.3.0 makes `feature-delivery` confirm requested capabilities before it selects an execution mode and adds
   trust boundaries to `feature-spike`, `bootstrap-repository`, and `review-mintlify-docs`.
+- Updated all fourteen Patrick-owned skill provenance locks to `pdugan20/skills` v3.4.0 and refreshed the catalog.
 
 ## [0.8.0] - 2026-07-31
 

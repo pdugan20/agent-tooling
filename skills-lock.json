@@ -9,14 +9,14 @@
     },
     "align-ui-to-design-system": {
       "source": "pdugan20/skills",
-      "ref": "v3.3.0",
+      "ref": "v3.4.0",
       "sourceType": "github",
       "skillPath": "skills/align-ui-to-design-system/SKILL.md",
       "computedHash": "134c75915f2b76b62f0d860a0e9e5e87e958b307b1ebba7db527a059b7b49f02"
     },
     "analyze-ui-video": {
       "source": "pdugan20/skills",
-      "ref": "v3.3.0",
+      "ref": "v3.4.0",
       "sourceType": "github",
       "skillPath": "skills/analyze-ui-video/SKILL.md",
       "computedHash": "06d3e758308ffff106fee61ddeac0f1681c772caf3ad6f77c096b34d52c0294b"
@@ -47,21 +47,21 @@
     },
     "audit-design-system-health": {
       "source": "pdugan20/skills",
-      "ref": "v3.3.0",
+      "ref": "v3.4.0",
       "sourceType": "github",
       "skillPath": "skills/audit-design-system-health/SKILL.md",
       "computedHash": "8b360e17ee4b1852518976e481e25a2cfd8a610abc564258e6bc35f2092c281e"
     },
     "bootstrap-repository": {
       "source": "pdugan20/skills",
-      "ref": "v3.3.0",
+      "ref": "v3.4.0",
       "sourceType": "github",
       "skillPath": "skills/bootstrap-repository/SKILL.md",
       "computedHash": "58d298102b755aca8fcf39d92920d1e5abd087dbdfd771d49921d9691ab70dbe"
     },
     "code-native-ui-ideation": {
       "source": "pdugan20/skills",
-      "ref": "v3.3.0",
+      "ref": "v3.4.0",
       "sourceType": "github",
       "skillPath": "skills/code-native-ui-ideation/SKILL.md",
       "computedHash": "6c64ec7cb732d6b6099776ce6e5f96a64aecb61ae03e58c0a519a19401fe6f24"
@@ -74,14 +74,14 @@
     },
     "feature-delivery": {
       "source": "pdugan20/skills",
-      "ref": "v3.3.0",
+      "ref": "v3.4.0",
       "sourceType": "github",
       "skillPath": "skills/feature-delivery/SKILL.md",
       "computedHash": "84de79e100d50b5904d3269d4cc2cf057efd2027d300edbdde99827306427ddd"
     },
     "feature-spike": {
       "source": "pdugan20/skills",
-      "ref": "v3.3.0",
+      "ref": "v3.4.0",
       "sourceType": "github",
       "skillPath": "skills/feature-spike/SKILL.md",
       "computedHash": "af2ab4b971ffa8d6a8bda7c1fbc7f02c3dcc1cb1801f69c5c2fab724c87a4fc1"
@@ -101,14 +101,14 @@
     },
     "generate-mintlify-reference": {
       "source": "pdugan20/skills",
-      "ref": "v3.3.0",
+      "ref": "v3.4.0",
       "sourceType": "github",
       "skillPath": "skills/generate-mintlify-reference/SKILL.md",
       "computedHash": "14f3bbe3514a90a5695ada99db604493b73d21abcd0b6405a5b7baa6ef0e6ac0"
     },
     "integrate-app-intents": {
       "source": "pdugan20/skills",
-      "ref": "v3.3.0",
+      "ref": "v3.4.0",
       "sourceType": "github",
       "skillPath": "skills/integrate-app-intents/SKILL.md",
       "computedHash": "130e6d7aa2cee2357aaa5dadf11a45bd815a952edb881b1a7325bd1ddc1512d1"
@@ -139,14 +139,21 @@
     },
     "review-mintlify-docs": {
       "source": "pdugan20/skills",
-      "ref": "v3.3.0",
+      "ref": "v3.4.0",
       "sourceType": "github",
       "skillPath": "skills/review-mintlify-docs/SKILL.md",
       "computedHash": "39b8005a25d1cebe51734f6cc1fd03374ddb31efa8cd1be9c05d311bd57d29df"
     },
+    "run-remote-dev-server": {
+      "source": "pdugan20/skills",
+      "ref": "v3.4.0",
+      "sourceType": "github",
+      "skillPath": "skills/run-remote-dev-server/SKILL.md",
+      "computedHash": "4597cd23ff5e253d1a71753c84411303de0b0df51671854e4d4d13082f78fda7"
+    },
     "scaffold-mintlify-site": {
       "source": "pdugan20/skills",
-      "ref": "v3.3.0",
+      "ref": "v3.4.0",
       "sourceType": "github",
       "skillPath": "skills/scaffold-mintlify-site/SKILL.md",
       "computedHash": "4e0fe665444cfd3df8e9422e80839212b6efcc768b800099003cab3c854ed720"
@@ -167,7 +174,7 @@
     },
     "tune-mobile-client-performance": {
       "source": "pdugan20/skills",
-      "ref": "v3.3.0",
+      "ref": "v3.4.0",
       "sourceType": "github",
       "skillPath": "skills/tune-mobile-client-performance/SKILL.md",
       "computedHash": "f0599e491c841106eba286b61e6a9f4a788898c7a61a5f1b8b3e6fe48563ef04"
@@ -188,7 +195,7 @@
     },
     "write-mintlify-changelog": {
       "source": "pdugan20/skills",
-      "ref": "v3.3.0",
+      "ref": "v3.4.0",
       "sourceType": "github",
       "skillPath": "skills/write-mintlify-changelog/SKILL.md",
       "computedHash": "565d7fdb61fbeb62ae22cec88e348de7ad250eb83d63bcb4ac40217883d62ac7"
