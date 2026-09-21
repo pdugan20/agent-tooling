@@ -50,14 +50,15 @@ SKILL_PRIORITY = {
     "xcodebuildmcp": 8,
     "tune-mobile-client-performance": 9,
     "integrate-app-intents": 10,
-    "swiftui-pro": 11,
-    "apple-design": 12,
-    "animate-expo": 13,
-    "review-animations": 14,
-    "find-animation-opportunities": 15,
-    "animation-vocabulary": 16,
-    "emil-design-eng": 17,
-    "pick-ui-library": 18,
+    "run-remote-dev-server": 11,
+    "swiftui-pro": 12,
+    "apple-design": 13,
+    "animate-expo": 14,
+    "review-animations": 15,
+    "find-animation-opportunities": 16,
+    "animation-vocabulary": 17,
+    "emil-design-eng": 18,
+    "pick-ui-library": 19,
 }
 
 

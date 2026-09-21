@@ -120,6 +120,7 @@ CUSTOM_SKILLS = {
     "generate-mintlify-reference": True,
     "integrate-app-intents": True,
     "review-mintlify-docs": True,
+    "run-remote-dev-server": True,
     "scaffold-mintlify-site": True,
     "tune-mobile-client-performance": True,
     "write-mintlify-changelog": True,
@@ -183,6 +184,10 @@ UPSTREAM_SKILLS = {
         "pdugan20/skills",
         "skills/review-mintlify-docs/SKILL.md",
     ),
+    "run-remote-dev-server": (
+        "pdugan20/skills",
+        "skills/run-remote-dev-server/SKILL.md",
+    ),
     "scaffold-mintlify-site": (
         "pdugan20/skills",
         "skills/scaffold-mintlify-site/SKILL.md",
@@ -216,7 +221,7 @@ UPSTREAM_SKILLS = {
         "skills/xcodebuildmcp/SKILL.md",
     ),
 }
-PATRICK_SKILLS_REF = "v3.3.0"
+PATRICK_SKILLS_REF = "v3.4.0"
 XCODEBUILDMCP_REF = "v2.7.0"
 EXPECTED_EXPLICIT_SUPERPOWERS = {
     "brainstorming",
