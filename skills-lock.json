@@ -167,10 +167,10 @@
     },
     "swiftui-pro": {
       "source": "twostraws/swiftui-agent-skill",
-      "ref": "main",
+      "ref": "f9800713b24580bc444931949aad4519128605e8",
       "sourceType": "github",
       "skillPath": "swiftui-pro/SKILL.md",
-      "computedHash": "07033426e384295a4b49cf0b2ffdefd4098cae4af53fef16bc1f2d9281118c41"
+      "computedHash": "e0edf9a937bbb8c86c170b130ff825f158cc286f07ec477b67835e9c1b20267e"
     },
     "tune-mobile-client-performance": {
       "source": "pdugan20/skills",

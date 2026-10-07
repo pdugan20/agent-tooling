@@ -58,10 +58,27 @@ skill directory. The snapshot remains unmodified so `skills-lock.json` can track
 Codex's supported per-skill configuration override to disable only that nested duplicate. Rerun bootstrap after an
 upstream update so the override follows the current checkout location.
 
+On 2026-10-07, SwiftUI Pro 2.0.0 was installed from the exact upstream commit
+`f9800713b24580bc444931949aad4519128605e8` using Skills CLI 1.5.24:
+
+```bash
+npx skills@1.5.24 add https://github.com/twostraws/swiftui-agent-skill/tree/f9800713b24580bc444931949aad4519128605e8/swiftui-pro --agent codex claude-code --skill swiftui-pro -y
+```
+
+The installer materializes the nested reference symlink as matching files. Both entrypoints and the plugin manifest
+declare 2.0.0, and both reference trees contain twelve documents. Keep this installer output intact. The upstream
+MIT copyright and license notice is retained in [licenses/swiftui-pro.txt](licenses/swiftui-pro.txt), outside the
+hash-tracked skill snapshot because upstream keeps its `LICENSE` at the repository root.
+
+The update adds localization, resizable-layout guidance, and an opt-in deeper performance reference. During review,
+preserve its existing-target and toolchain checks, bounded feature/fix scope, and binding-setter behavior caveats.
+Deep performance restructuring requires a requested deep review or an established performance problem. This is a
+skill-content update; source and packaging verification does not establish iOS or device runtime behavior.
+
 Claude has no equivalent fix, so it lists both `swiftui-pro` and `swiftui-pro:swiftui-pro`. Claude loads the
-directory as the plugin `swiftui-pro@skills-dir`, because it contains `.claude-plugin/plugin.json`. The nested copy
-is older than the top-level skill. Measured on 2026-09-17 from the `skills` list in a headless `stream-json` init
-event:
+directory as the plugin `swiftui-pro@skills-dir`, because it contains `.claude-plugin/plugin.json`. Before the
+2.0.0 update, the nested copy was older than the top-level skill. Measured on 2026-09-17 from the `skills` list in a
+headless `stream-json` init event:
 
 - `skillOverrides` with the key `swiftui-pro:swiftui-pro` changes nothing.
 - `skillOverrides` with the key `swiftui-pro` hides the newer top-level copy and keeps the stale one.

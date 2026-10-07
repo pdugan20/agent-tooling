@@ -298,13 +298,13 @@
     {
       "availability": "Global",
       "brand": null,
-      "contentHash": "07033426e384295a4b49cf0b2ffdefd4098cae4af53fef16bc1f2d9281118c41",
+      "contentHash": "e0edf9a937bbb8c86c170b130ff825f158cc286f07ec477b67835e9c1b20267e",
       "description": "Reviews SwiftUI code for modern best practices.",
       "displayName": "SwiftUI Pro",
       "featured": 12,
       "id": "skill:swiftui-pro",
       "invocation": "Automatic",
-      "lockedRef": "main",
+      "lockedRef": "f9800713b24580bc444931949aad4519128605e8",
       "name": "swiftui-pro",
       "ownerAvatarUrl": "https://github.com/twostraws.png?size=96",
       "path": ".agents/skills/swiftui-pro/SKILL.md",
@@ -316,10 +316,10 @@
       "skillsShUrl": "https://skills.sh/twostraws/swiftui-agent-skill/swiftui-pro",
       "source": "third-party",
       "sourceLabel": "Paul Hudson",
-      "sourceUrl": "https://github.com/twostraws/swiftui-agent-skill/blob/main/swiftui-pro/SKILL.md",
+      "sourceUrl": "https://github.com/twostraws/swiftui-agent-skill/blob/f9800713b24580bc444931949aad4519128605e8/swiftui-pro/SKILL.md",
       "state": "Configured",
       "type": "skill",
-      "version": "1.1"
+      "version": "2.0.0"
     },
     {
       "availability": "Global",
