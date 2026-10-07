@@ -41,6 +41,10 @@ version when compatibility requires it.
 
 ### Changed
 
+- Updated SwiftUI Pro to Paul Hudson's 2.0.0 at upstream commit
+  `f9800713b24580bc444931949aad4519128605e8`, preserving the official Skills CLI snapshot and Claude wrapper.
+  Adds localization, adaptive layouts, and opt-in deep performance guidance; preserves existing deployment targets,
+  requested scope, and binding behavior. Retained the upstream MIT notice and refreshed the catalog provenance.
 - Documented the combined Apple workflow: XcodeBuildMCP for structured builds, Simulator actions, logs, and LLDB;
   computer use for visual and perceptual inspection; and Instruments or `xctrace` for performance attribution.
 - Updated all thirteen Patrick-owned skill provenance locks to `pdugan20/skills` v3.3.0 and refreshed the catalog.

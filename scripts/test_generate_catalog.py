@@ -175,7 +175,8 @@ class CatalogGenerationTests(unittest.TestCase):
                 "swiftui-pro": (
                     "Paul Hudson",
                     ".agents/skills/swiftui-pro/SKILL.md",
-                    "https://github.com/twostraws/swiftui-agent-skill/blob/main/swiftui-pro/SKILL.md",
+                    "https://github.com/twostraws/swiftui-agent-skill/blob/"
+                    "f9800713b24580bc444931949aad4519128605e8/swiftui-pro/SKILL.md",
                 ),
                 "ios-accessibility": (
                     "Daniel Devesa Derksen-Staats",
