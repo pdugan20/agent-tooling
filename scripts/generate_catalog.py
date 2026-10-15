@@ -32,6 +32,7 @@ UPSTREAM_SOURCE_LABELS = {
     "dadederk/ios-accessibility-agent-skill": "Daniel Devesa Derksen-Staats",
     "emilkowalski/skills": "Emil Kowalski",
     "getsentry/XcodeBuildMCP": "Sentry",
+    "maplibre/maplibre-agent-skills": "MapLibre",
     PATRICK_SKILLS_SOURCE: "Pat Dugan",
     "Prisma-Labs-Dev/apple-skills": "Prisma Labs",
     "railwayapp/railway-skills": "Railway",
@@ -59,6 +60,8 @@ SKILL_PRIORITY = {
     "animation-vocabulary": 17,
     "emil-design-eng": 18,
     "pick-ui-library": 19,
+    "improve-animations": 20,
+    "animation-performance": 21,
 }
 
 
