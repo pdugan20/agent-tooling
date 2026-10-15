@@ -16,6 +16,18 @@ branches with open PRs until they finish; do not rename someone else's branches.
 This is Patrick's personal preference, not shared repository policy. A matching
 personal PreToolUse hook validates supported branch-creation and rename calls.
 
+## Chat titles
+
+Name every new chat or session with a short lowercase slug of one to three
+hyphenated words: the project or surface first, then the task when it adds
+meaning. Examples: `sony-tv-polish`, `listening-page-polish`, `inflight-eval`,
+`opencodex-setup`, `rune-401k`. Avoid sentences, title case, articles,
+dates, ticket noise, and prefixes such as `codex/`. In the Codex app, set the
+title with `set_thread_title` once the task is clear in the first turn, and
+retitle only when the task changes substantially. In other runtimes, use the
+equivalent rename command when one is available. Keep a title Patrick set
+himself unless he asks for a new one.
+
 ## Choose the lightest useful mode
 
 ### Local preview controls

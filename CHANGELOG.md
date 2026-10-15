@@ -14,6 +14,7 @@ version when compatibility requires it.
   as locked upstream snapshots.
 - Shared instructions now require a LAN preview URL, keep TanStack Query Devtools off in local previews, define the
   temporary checkout lifecycle, and present UI variants through an in-place toggle.
+- Shared instructions now name new chats and sessions with short lowercase hyphenated slugs such as `sony-tv-polish`.
 
 - Adopted Daniel Devesa Derksen-Staats's `ios-accessibility` as a shared snapshot. It covers VoiceOver, Dynamic Type,
   Voice Control, Switch Control, Full Keyboard Access, and accessibility testing for SwiftUI and UIKit. The existing
