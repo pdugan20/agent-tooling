@@ -1,7 +1,16 @@
 # Skill visibility and invocation
 
-Two independent gates decide whether an agent can start a skill. Confusing them costs
-real time, because the symptom is identical: the agent does not use the skill.
+Claude and Codex use different invocation controls. Confusing them costs real time,
+because the symptom is identical: the agent does not use the skill.
+
+For Codex, the available-skills catalog in the current session is authoritative. A
+listed skill is available under Codex's trigger rules, including when the user names it
+in plain text or with `$skill-name`. Do not treat Claude-specific frontmatter such as
+`disable-model-invocation` as a Codex refusal when Codex has already listed the skill.
+Use `agents/openai.yaml` when a Patrick-owned skill needs Codex-specific invocation
+policy.
+
+The two gates below describe Claude.
 
 ## Gate 1: `skillOverrides` in Claude settings
 
@@ -21,7 +30,7 @@ does not know the skill exists.
 Measured 2026-08-17: a repository held 23 skills on disk with exactly one set to
 `user-invocable-only`. That skill was the only one absent from the agent's listing.
 
-## Gate 2: `disable-model-invocation` in the skill's own frontmatter
+## Claude gate 2: `disable-model-invocation` in skill frontmatter
 
 A skill author can set `disable-model-invocation: true` in `SKILL.md`. This reserves the
 skill for explicit user invocation.

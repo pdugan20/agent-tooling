@@ -8,6 +8,13 @@ version when compatibility requires it.
 
 ### Added
 
+- Adopted Emil Kowalski's `animation-performance` (frame budget, composite-only properties, diagnosing dropped
+  frames) and `improve-animations` (codebase-wide motion audit and implementation plans) as shared snapshots.
+- Adopted the MapLibre `maplibre-cartography`, `maplibre-source-wiring` and `maplibre-terrain-rendering` skills
+  as locked upstream snapshots.
+- Shared instructions now require a LAN preview URL, keep TanStack Query Devtools off in local previews, define the
+  temporary checkout lifecycle, and present UI variants through an in-place toggle.
+
 - Adopted Daniel Devesa Derksen-Staats's `ios-accessibility` as a shared snapshot. It covers VoiceOver, Dynamic Type,
   Voice Control, Switch Control, Full Keyboard Access, and accessibility testing for SwiftUI and UIKit. The existing
   `accessibility` skill covers web content only.
@@ -41,6 +48,10 @@ version when compatibility requires it.
 
 ### Changed
 
+- Updated Emil Kowalski's `animate-expo`, `animation-vocabulary`, `apple-design`, `emil-design-eng`,
+  `find-animation-opportunities`, `pick-ui-library` and `review-animations` snapshots to the current upstream.
+- Documented that Codex treats its session skill catalog as authoritative, so Claude's
+  `disable-model-invocation` frontmatter is not a Codex block.
 - Updated SwiftUI Pro to Paul Hudson's 2.0.0 at upstream commit
   `f9800713b24580bc444931949aad4519128605e8`, preserving the official Skills CLI snapshot and Claude wrapper.
   Adds localization, adaptive layouts, and opt-in deep performance guidance; preserves existing deployment targets,

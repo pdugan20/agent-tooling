@@ -148,6 +148,18 @@ UPSTREAM_SKILLS = {
         "vercel-labs/skills",
         "skills/find-skills/SKILL.md",
     ),
+    "maplibre-cartography": (
+        "maplibre/maplibre-agent-skills",
+        "skills/maplibre-cartography/SKILL.md",
+    ),
+    "maplibre-source-wiring": (
+        "maplibre/maplibre-agent-skills",
+        "skills/maplibre-source-wiring/SKILL.md",
+    ),
+    "maplibre-terrain-rendering": (
+        "maplibre/maplibre-agent-skills",
+        "skills/maplibre-terrain-rendering/SKILL.md",
+    ),
     "analyze-ui-video": (
         "pdugan20/skills",
         "skills/analyze-ui-video/SKILL.md",
@@ -203,12 +215,17 @@ UPSTREAM_SKILLS = {
     "animate": ("emilkowalski/skills", "skills/animate/SKILL.md"),
     "animate-expo": ("emilkowalski/skills", "skills/animate-expo/SKILL.md"),
     "animation-vocabulary": ("emilkowalski/skills", "skills/animation-vocabulary/SKILL.md"),
+    "animation-performance": (
+        "emilkowalski/skills",
+        "skills/animation-performance/SKILL.md",
+    ),
     "apple-design": ("emilkowalski/skills", "skills/apple-design/SKILL.md"),
     "emil-design-eng": ("emilkowalski/skills", "skills/emil-design-eng/SKILL.md"),
     "find-animation-opportunities": (
         "emilkowalski/skills",
         "skills/find-animation-opportunities/SKILL.md",
     ),
+    "improve-animations": ("emilkowalski/skills", "skills/improve-animations/SKILL.md"),
     "pick-ui-library": ("emilkowalski/skills", "skills/pick-ui-library/SKILL.md"),
     "review-animations": ("emilkowalski/skills", "skills/review-animations/SKILL.md"),
     "swiftui-pro": ("twostraws/swiftui-agent-skill", "swiftui-pro/SKILL.md"),

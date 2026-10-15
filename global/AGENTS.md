@@ -18,6 +18,18 @@ personal PreToolUse hook validates supported branch-creation and rename calls.
 
 ## Choose the lightest useful mode
 
+### Local preview controls
+
+- Always include the current local-network (LAN) URL when sharing a local development preview, with the port and relevant route. Do not provide only localhost. Detect the active LAN IP each time and verify the preview responds through it; do not reuse a stale address.
+- Keep TanStack Query Devtools and its floating launcher disabled in Patrick's local previews across sessions. For Rune, preserve `VITE_SHOW_IN_APP_QUERY_DEV_TOOLS=false` when starting or restarting Vite, including in new worktrees, detached sessions, and sanitized environments. Do not enable it unless Patrick explicitly asks.
+
+### Temporary checkout lifecycle
+
+- Keep permanent repositories in `Documents/Github`. Do not create sibling task-specific clones or worktrees there; reuse the current checkout for ordinary exploration.
+- When an isolated checkout is justified and allowed, prefer an existing suitable checkout or an app-managed worktree outside `Github`. This does not make worktrees or strict workflows mandatory. Record its purpose, owner chat, branch, shared-object dependencies, and retirement condition.
+- At batch closeout, report which temporary checkouts are still needed and which can be archived or removed. Preserve unfinished work, recoverable Git history, needed ignored configuration, and useful evidence before cleanup; check running processes and dependent checkouts first.
+- Use the app's archive action for app-managed worktrees and Git worktree removal for manually managed worktrees. Preserve needed ignored files separately. Local deletion, branch deletion, pushes, and PR changes retain their existing authorization boundaries; do not treat a closed PR or archived chat as permission to discard local work.
+
 ### Exploration (default)
 
 Use for visual design, UI variants, motion tuning, prototypes, copy changes, and quick experiments.
@@ -33,6 +45,7 @@ Use for visual design, UI variants, motion tuning, prototypes, copy changes, and
 - Never invoke `product-design:index`, `product-design:ideate`, or use ImageGen unless Patrick explicitly requests image generation or image mockups.
 - When Patrick asks to brainstorm, explore, revise, or compare UI directions, use the `code-native-ui-ideation` skill and ideate directly in working code.
 - Build runnable variants in the existing project or a lightweight project-native workbench so they can be compared in the browser or relevant simulator.
+- Present UI variants through an in-place toggle or keyboard shortcut on the same preview surface; do not send separate demo URLs for each option.
 - Do not replace live code variants with generated images, static mockups, or a separate browser-based option picker.
 - Treat image generation as opt-in, never inferred from phrases such as “visual revs,” “standalone versions,” “brainstorm,” or “compare directions.”
 
@@ -111,10 +124,15 @@ When a repository installs the `mattpocock/skills` planning set, the split is: S
 
 ## Skills you cannot invoke
 
-- Two independent gates control skill invocation: Claude `skillOverrides`, and the skill's
-  own `disable-model-invocation` frontmatter. `skillOverrides` cannot override the
-  frontmatter, and `user-invocable-only` makes a skill invisible rather than
-  approval-gated. See the consuming repository's `docs/skill-invocation.md`.
+- In Claude, two independent gates control skill invocation: `skillOverrides`, and the
+  skill's own `disable-model-invocation` frontmatter. `skillOverrides` cannot override
+  the frontmatter, and `user-invocable-only` makes a skill invisible rather than
+  approval-gated.
+- In Codex, treat the current session's available-skills catalog as authoritative. If a
+  skill appears there and the user names it, follow Codex's trigger rules even when the
+  portable `SKILL.md` contains Claude's `disable-model-invocation` field. Do not
+  reinterpret that Claude-specific field as a Codex block. See the consuming
+  repository's `docs/skill-invocation.md`.
 - **If a ticket, plan, or doc requires an action from a skill you cannot invoke: stop and
   ask the owner to run it.** Do not substitute a hand-rolled equivalent, and do not
   quietly proceed without it. A historical mention or already-decided implementation

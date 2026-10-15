@@ -12,7 +12,7 @@ class CatalogGenerationTests(unittest.TestCase):
         catalog = generate_catalog.build_catalog()
         items = catalog["items"]
 
-        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 31)
+        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 36)
         self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 24)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
@@ -142,6 +142,11 @@ class CatalogGenerationTests(unittest.TestCase):
                     ".agents/skills/animation-vocabulary/SKILL.md",
                     "https://github.com/emilkowalski/skills/blob/main/skills/animation-vocabulary/SKILL.md",
                 ),
+                "animation-performance": (
+                    "Emil Kowalski",
+                    ".agents/skills/animation-performance/SKILL.md",
+                    "https://github.com/emilkowalski/skills/blob/main/skills/animation-performance/SKILL.md",
+                ),
                 "apple-design": (
                     "Emil Kowalski",
                     ".agents/skills/apple-design/SKILL.md",
@@ -157,6 +162,11 @@ class CatalogGenerationTests(unittest.TestCase):
                     ".agents/skills/find-animation-opportunities/SKILL.md",
                     "https://github.com/emilkowalski/skills/blob/main/skills/find-animation-opportunities/SKILL.md",
                 ),
+                "improve-animations": (
+                    "Emil Kowalski",
+                    ".agents/skills/improve-animations/SKILL.md",
+                    "https://github.com/emilkowalski/skills/blob/main/skills/improve-animations/SKILL.md",
+                ),
                 "pick-ui-library": (
                     "Emil Kowalski",
                     ".agents/skills/pick-ui-library/SKILL.md",
@@ -171,6 +181,21 @@ class CatalogGenerationTests(unittest.TestCase):
                     "Vercel Labs",
                     ".agents/skills/find-skills/SKILL.md",
                     "https://github.com/vercel-labs/skills/blob/d6b37f62ae23c3825b0ed16c73e123eee0a41fdc/skills/find-skills/SKILL.md",
+                ),
+                "maplibre-cartography": (
+                    "MapLibre",
+                    ".agents/skills/maplibre-cartography/SKILL.md",
+                    "https://github.com/maplibre/maplibre-agent-skills/blob/main/skills/maplibre-cartography/SKILL.md",
+                ),
+                "maplibre-source-wiring": (
+                    "MapLibre",
+                    ".agents/skills/maplibre-source-wiring/SKILL.md",
+                    "https://github.com/maplibre/maplibre-agent-skills/blob/main/skills/maplibre-source-wiring/SKILL.md",
+                ),
+                "maplibre-terrain-rendering": (
+                    "MapLibre",
+                    ".agents/skills/maplibre-terrain-rendering/SKILL.md",
+                    "https://github.com/maplibre/maplibre-agent-skills/blob/main/skills/maplibre-terrain-rendering/SKILL.md",
                 ),
                 "swiftui-pro": (
                     "Paul Hudson",
