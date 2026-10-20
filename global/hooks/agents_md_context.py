@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 """SessionStart hook that gives Claude the repository's AGENTS.md instructions.
 
-Claude Code loads CLAUDE.md files but not AGENTS.md. Codex, Cursor, and other
-agents read AGENTS.md, so a repository that keeps AGENTS.md as its only
-instruction file is invisible to Claude unless it adds a CLAUDE.md shim. This
-hook removes the need for that shim, including hidden, git-excluded ones.
+Claude Code 2.1.277 and later reads a repository's AGENTS.md natively when no
+CLAUDE.md, .claude/CLAUDE.md, or CLAUDE.local.md exists in the working directory
+or any directory above it. Older versions, and sessions where such a file exists,
+do not read AGENTS.md at all. Codex, Cursor, and other agents read AGENTS.md, so
+a repository that keeps AGENTS.md as its only instruction file would be
+invisible to those Claude sessions unless it added a CLAUDE.md shim. This hook
+removes the need for that shim, including hidden, git-excluded ones, and stays
+silent when Claude already loads AGENTS.md natively so the file is not injected
+twice.
 
 For each directory from the repository root down to the session's working
 directory, the hook returns AGENTS.md when Claude would not already load it.
@@ -23,6 +28,8 @@ from __future__ import annotations
 
 import json
 import os
+import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -58,6 +65,47 @@ def claude_already_loads_agents(directory: Path) -> bool:
     return False
 
 
+NATIVE_AGENTS_VERSION = (2, 1, 277)
+
+
+def claude_version() -> tuple[int, ...] | None:
+    override = os.environ.get("AGENTS_MD_HOOK_CLAUDE_VERSION")
+    try:
+        output = (
+            override
+            or subprocess.run(
+                ["claude", "--version"], capture_output=True, text=True, timeout=3, check=False
+            ).stdout
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    match = re.search(r"(\d+)\.(\d+)\.(\d+)", output or "")
+    return tuple(int(part) for part in match.groups()) if match else None
+
+
+def project_claude_file_exists(chain: list[Path]) -> bool:
+    return any(
+        (directory / "CLAUDE.md").exists()
+        or (directory / ".claude" / "CLAUDE.md").exists()
+        or (directory / "CLAUDE.local.md").exists()
+        for directory in chain
+    )
+
+
+def claude_reads_agents_natively(chain: list[Path]) -> bool:
+    """True when this Claude session loads AGENTS.md on its own.
+
+    Claude reads AGENTS.md only when no project CLAUDE.md, .claude/CLAUDE.md, or
+    CLAUDE.local.md exists in the working directory or above it; ~/.claude/CLAUDE.md
+    does not count. An unknown version is treated as not native so the hook keeps
+    its older behavior rather than silently dropping instructions.
+    """
+    version = claude_version()
+    if version is None or version < NATIVE_AGENTS_VERSION:
+        return False
+    return not project_claude_file_exists(chain)
+
+
 def render(path: Path) -> str | None:
     try:
         raw = path.read_bytes()
@@ -70,16 +118,20 @@ def render(path: Path) -> str | None:
     if len(raw) > MAX_BYTES_PER_FILE:
         note = f"\n\n[Truncated at {MAX_BYTES_PER_FILE} bytes. Read {path} for the rest.]"
     header = (
-        f"Repository instructions from {path}. Claude Code does not load AGENTS.md "
-        "by itself, so a SessionStart hook supplied this file. Follow it as you "
-        "would a CLAUDE.md in the same directory."
+        f"Repository instructions from {path}. This Claude Code session does not "
+        "load AGENTS.md natively (a project CLAUDE.md exists above the working "
+        "directory, or the version predates 2.1.277), so a SessionStart hook "
+        "supplied this file. Follow it as you would a CLAUDE.md in the same directory."
     )
     return f"{header}\n\n{text}{note}"
 
 
 def build_context(cwd: Path) -> str:
+    chain = directory_chain(cwd)
+    if claude_reads_agents_natively(chain):
+        return ""
     sections = []
-    for directory in directory_chain(cwd):
+    for directory in chain:
         agents = directory / "AGENTS.md"
         if not agents.is_file() or claude_already_loads_agents(directory):
             continue

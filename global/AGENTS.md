@@ -157,7 +157,7 @@ When a repository installs the `mattpocock/skills` planning set, the split is: S
 
 Treat `AGENTS.md` as the canonical cross-agent instruction file. A repository may keep `CLAUDE.md` as a compatibility shim or for genuinely Claude-specific guidance. Preserve existing user work and follow the nearest applicable instruction file.
 
-Claude Code does not read `AGENTS.md` itself. The shared `SessionStart` hook from `agent-tooling` supplies the repository's `AGENTS.md` instead. Do not add `CLAUDE.md` or hidden, git-excluded `CLAUDE.local.md` shims to a repository only to load `AGENTS.md`. If a session shows no repository instructions, check the hook before adding a file. The hook does not load nested `AGENTS.md` files below the working directory, so read those before editing in their directories.
+Claude Code 2.1.277 and later reads a repository's `AGENTS.md` natively when no `CLAUDE.md`, `.claude/CLAUDE.md`, or `CLAUDE.local.md` exists in the working directory or above it; `~/.claude/CLAUDE.md` does not count. The shared `SessionStart` hook from `agent-tooling` supplies `AGENTS.md` only when that native loading does not apply (older version, or a project Claude file present), so the file is never injected twice. Do not add `CLAUDE.md` or hidden, git-excluded `CLAUDE.local.md` shims to a repository only to load `AGENTS.md`. If a session shows no repository instructions, check the installed version and the hook before adding a file. Neither path loads nested `AGENTS.md` files below the working directory, so read those before editing in their directories.
 
 ## Private account and machine notes
 
