@@ -1,101 +1,61 @@
 # Skill visibility and invocation
 
-Claude and Codex use different invocation controls. Confusing them costs real time,
-because the symptom is identical: the agent does not use the skill.
+Codex is the primary harness. Use its invocation controls even when the selected model is Claude.
+Installation, visibility, invocation policy, and authorization to perform an action are separate concerns.
 
-For Codex, the available-skills catalog in the current session is authoritative. A
-listed skill is available under Codex's trigger rules, including when the user names it
-in plain text or with `$skill-name`. Do not treat Claude-specific frontmatter such as
-`disable-model-invocation` as a Codex refusal when Codex has already listed the skill.
-Use `agents/openai.yaml` when a Patrick-owned skill needs Codex-specific invocation
-policy.
+## Codex invocation policy
 
-The two gates below describe Claude.
+Codex can select a skill from its description or use one explicitly named by the user. Its initial skill list has a
+context budget: descriptions can be shortened, and a sufficiently large collection can omit entries with a warning.
+Front-load trigger conditions and boundaries. An on-disk file alone does not prove that the active chat can use it.
+[Official skill guidance](https://learn.chatgpt.com/docs/build-skills)
 
-## Gate 1: `skillOverrides` in Claude settings
+Use `agents/openai.yaml` in the canonical skill source for Codex-specific policy:
 
-Four values, set per skill:
-
-| Value | Agent sees it | Agent can start it | User can start it |
-| --- | --- | --- | --- |
-| `on` | yes | yes | yes |
-| `name-only` | name only | yes | yes |
-| `user-invocable-only` | **no** | no | yes |
-| `off` | no | no | no |
-
-The important row is `user-invocable-only`. It does not mean "ask the user first". It
-means the skill is **invisible to the agent**. The agent cannot propose it, because it
-does not know the skill exists.
-
-Measured 2026-08-17: a repository held 23 skills on disk with exactly one set to
-`user-invocable-only`. That skill was the only one absent from the agent's listing.
-
-## Claude gate 2: `disable-model-invocation` in skill frontmatter
-
-A skill author can set `disable-model-invocation: true` in `SKILL.md`. This reserves the
-skill for explicit user invocation.
-
-**`skillOverrides` cannot override it.** Measured 2026-08-17: twelve skills were set to
-`on`. The eight without the frontmatter flag appeared. The four with it did not:
-`grill-with-docs`, `to-tickets`, `wayfinder`, and `setup-matt-pocock-skills`, all from
-`mattpocock/skills`.
-
-Calling such a skill returns an explicit refusal:
-
-```
-Skill to-tickets cannot be used with Skill tool due to disable-model-invocation.
-Ask the user to run /to-tickets themselves.
+```yaml
+policy:
+  allow_implicit_invocation: false
 ```
 
-The block sits below the permission layer. There is no prompt to approve, so an approval
-hook cannot reach it.
+This disables implicit selection while retaining explicit invocation. It is different from disabling the skill
+through `[[skills.config]]` with `enabled = false`, which this repo uses for unwanted or duplicate entrypoints.
+Codex detects local skill changes automatically; restart if discovery is stale. Restart after changing skill
+configuration in `config.toml`. [Official metadata and overrides](https://learn.chatgpt.com/docs/build-skills#optional-metadata)
 
-## What this means in practice
+For this setup, the current session's available-skills catalog is authoritative. Follow Codex's trigger rules for
+listed skills. Do not reinterpret Claude's `disable-model-invocation` frontmatter as a Codex refusal.
+Do not modify locked snapshots to change policy; update their canonical source or use a supported runtime override.
 
-Making a frontmatter-gated skill agent-invocable requires editing the upstream author's
-`SKILL.md`. Those files are hash-locked in `skills-lock.json`, so editing one means
-carrying a fork patch and fighting `npx skills update` from then on. For a skill that
-publishes issues to a real tracker, "a human types the command" is a defensible bar.
-Prefer leaving it.
+## Personal workflow boundaries
 
-The cost of the gate is not that the work cannot happen. It is that an **invisible skill
-gets silently substituted** rather than skipped: an agent that cannot see the tool
-hand-rolls an equivalent and does not mention it. That happened on 2026-08-17, when a
-ticket named `xcode-build-benchmark`, the agent could not start it, and it benchmarked by
-hand without saying so.
+`global/AGENTS.md` defines which workflows need an explicit request. `config/superpowers.json` records the fork's
+explicit-only and automatic groups. Preserve those boundaries when changing metadata or packaging.
+An explicit skill invocation does not independently authorize publishing, deployment, or live-data mutation.
 
-The fix is the rule in `global/AGENTS.md`: when a ticket, plan, or doc requires an action
-from a skill the agent cannot invoke, it must stop and ask, and must not substitute a
-hand-rolled equivalent.
+When a required named skill is unavailable, stop and ask the owner to run or restore it. Do not silently substitute
+a hand-written workflow. Check installation, profile, disabled paths, collisions, and discovery before claiming a
+capability is absent from the machine.
 
-That rule applies when the named skill still has work to do. It does not make every
-downstream implementation step another invocation of the planning skill. Keep these
-surfaces distinct:
+A historical skill mention does not require reinvocation for every downstream step. Once a decision map or ticket
+establishes an approved finite batch, ordinary implementation can continue within that authorization.
+Invoke the planning or tracker skill again when it must change the artifact it owns. See the shared agreement.
 
-- `wayfinder` owns creating and resolving a decision map;
-- `to-tickets` owns publishing tracer-bullet tickets and their blocking edges; and
-- the repository's ordinary delivery cycle owns implementing already-decided work.
+## Optional Claude Code compatibility
 
-If a map or ticket has already established a finite implementation batch, one explicit
-owner approval can authorize the agent to work through that batch without asking for the
-planning skill again after every item. The agent must keep the batch in the same active
-work session where the skill's own instructions require that, and must not claim the
-skill ran during ordinary implementation. A new invocation is needed only when the next
-step actually changes the map, publishes tracker state, or otherwise requires the gated
-skill to act.
+The following observations were measured in Claude on 2026-08-17. They explain retained configuration; recheck them
+against the active Claude version before changing compatibility policy. They are not Codex controls.
 
-## Open decision: the explicit-only sets
+| Claude `skillOverrides` value | Observed visibility and invocation |
+| --- | --- |
+| `on` | Visible and agent-invocable, subject to frontmatter |
+| `name-only` | Name visible and agent-invocable, subject to frontmatter |
+| `user-invocable-only` | Hidden from the agent; user invocation available |
+| `off` | Hidden and disabled |
 
-Two lists in this repository make skills invisible rather than owner-approved:
+In that measurement, `disable-model-invocation: true` in `SKILL.md` prevented agent invocation even with the setting
+`on`. A runtime refusal at that gate was not an approval prompt. Preserve the upstream snapshot rather than patching
+it locally to bypass the restriction.
 
-- `config/superpowers.json` -> `explicitOnlySkills`
-- `EXPLICIT_PERSONAL_SKILLS` in `scripts/configure-claude.py` (`review-animations`)
-
-Both use the fork patch or `user-invocable-only`, so the agent cannot see or propose
-them. That is why the owner has to remember to run `/superpowers:writing-plans` at the
-right moment, instead of the agent proposing a plan document when one is due.
-
-The alternative is visibility plus an approval prompt: the agent proposes, the user
-approves each run. A consuming repository has already shipped that pattern with a
-`PreToolUse` hook and a checked-in list of owner-approved skills. Whether to adopt it
-here is an open decision, not an oversight.
+This repo sets Claude's `review-animations` override to `user-invocable-only`. The configured Superpowers fork also
+contains Claude-specific invocation controls. Their visibility effects must be evaluated in Claude separately from
+Codex's `allow_implicit_invocation`. This documentation update does not introduce a new approval-hook workflow.

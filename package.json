@@ -26,7 +26,10 @@
     "superpowers:check": "python3 scripts/check_superpowers_update.py --check",
     "test": "python3 -m unittest discover -s scripts -p 'test_*.py' -v && node --test scripts/test_skill_freshness.mjs",
     "verify": "bash scripts/verify-repo.sh",
-    "skills:check": "node scripts/check_skill_freshness.mjs"
+    "skills:check": "node scripts/check_skill_freshness.mjs",
+    "bootstrap:claude": "bash scripts/bootstrap.sh --claude",
+    "setup:claude": "bash scripts/setup-new-machine.sh --claude",
+    "setup:check:claude": "bash scripts/verify-setup.sh --claude"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",

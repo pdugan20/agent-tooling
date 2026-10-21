@@ -1,24 +1,34 @@
 # Maintenance
 
 `agent-tooling` is the canonical consumer configuration for Patrick's shared instructions, locked skill set,
-desired plugin state, and configured Superpowers baseline. Patrick-owned skills are released from
-`pdugan20/skills`; Claude and Codex consume the installed snapshots through runtime-specific symlinks.
+desired plugin state, and configured Superpowers baseline. Codex is the primary harness; Claude Code support is
+optional. Patrick-owned skills are released from `pdugan20/skills`. Default bootstrap and setup checks target Codex; use the explicit Claude commands for its optional harness.
+See [setup boundaries](setup.md#current-command-boundary).
+
+## Tasks
+
+- [Shared instructions](#update-shared-instructions) and [Patrick skills](#update-patrick-skills)
+- [Upstream skills](#update-upstream-skills) and [freshness checks](#read-only-skill-freshness-and-usage)
+- [Repository verification](#verify-repository-changes) and [releases](#release-agent-tooling)
+- [Catalog](#maintain-the-catalog) and [machine audits](#audit-a-machine)
+- [Codex plugins](#refresh-installed-codex-plugins) and [optional Claude plugins](#refresh-optional-claude-plugins)
+- [Configured Superpowers fork](#update-the-configured-superpowers-fork)
 
 ## Update shared instructions
 
 1. Edit the canonical file in this repository.
-2. Validate affected skills with `quick_validate.py` and run the repository's configuration tests.
+2. Run Markdown and repository policy checks; include configuration tests when changing setup contracts.
 3. Regenerate the catalog when skill metadata or plugin state changes.
 4. Commit and push this repository.
-5. On another machine, pull, run `npm run bootstrap`, and start a new Claude or Codex task.
+5. On another machine, pull, run `npm run bootstrap`, and start a new Codex task; use `npm run bootstrap:claude` for Claude.
 
 ## Update Patrick skills
 
 1. Edit and validate the canonical skill in `pdugan20/skills`.
 2. Release a new semantic version there.
-3. Install that exact tag in this repository with the Skills CLI for Codex and Claude Code.
+3. Install that exact tag here with Skills CLI. The current consumer retains Codex and Claude compatibility links.
 4. Review `.agents/skills/`, `.claude/skills/`, and `skills-lock.json`.
-5. Regenerate the catalog, run `npm run bootstrap`, and start new tasks.
+5. Regenerate the catalog, run `npm run bootstrap`, and start new Codex tasks. Run `npm run bootstrap:claude` when updating Claude links.
 
 Before updating this consumer, complete the release from the `pdugan20/skills` repository, including its
 `npm run refresh:skills-sh` and `npm run check:skills-sh` publication checks. The GitHub tag is the exact installed
@@ -48,10 +58,8 @@ affected workflow before committing. Do not patch the generated snapshot, run a 
 or auto-merge instruction updates. If a personal customization is genuinely needed, create a clearly named skill in
 Skills instead of silently diverging the upstream copy.
 
-Updates remain intentionally manual for now. The CLI provides the canonical install, lock, and update operation but
-does not provide a first-party scheduled pull-request workflow. Adding custom branch and pull-request automation
-would recreate tooling around the official updater, so revisit this only if the CLI ships a supported automation
-path. The current maintenance command is short, reviewable, and safe to run alongside other dependency updates.
+Skill updates remain deliberately reviewed. Use the existing CLI install and update path, inspect instruction
+changes, and preserve provenance. No scheduled skill-update or auto-merge workflow is configured here.
 
 The upstream `swiftui-pro` package includes a nested Claude compatibility copy inside its canonical Codex-ready
 skill directory. The snapshot remains unmodified so `skills-lock.json` can track it exactly; `bootstrap.sh` uses
@@ -75,7 +83,7 @@ preserve its existing-target and toolchain checks, bounded feature/fix scope, an
 Deep performance restructuring requires a requested deep review or an established performance problem. This is a
 skill-content update; source and packaging verification does not establish iOS or device runtime behavior.
 
-Claude has no equivalent fix, so it lists both `swiftui-pro` and `swiftui-pro:swiftui-pro`. Claude loads the
+The retained Claude compatibility behavior lists both `swiftui-pro` and `swiftui-pro:swiftui-pro`. Claude loads the
 directory as the plugin `swiftui-pro@skills-dir`, because it contains `.claude-plugin/plugin.json`. Before the
 2.0.0 update, the nested copy was older than the top-level skill. Measured on 2026-09-17 from the `skills` list in a
 headless `stream-json` init event:
@@ -89,7 +97,7 @@ Leave the duplicate in place. Do not edit the snapshot to remove it. The same pa
 
 ## Verify repository changes
 
-Install the repository development dependencies once as documented in `README.md`, then run:
+Install the [verification prerequisites](setup.md#develop-this-repository), then run:
 
 ```bash
 npm run verify
@@ -99,10 +107,10 @@ This is the exact `ci` status check used by GitHub Actions. It validates the can
 without inspecting authenticated runtime state. Continue to use `npm run setup:check` separately after applying the
 setup on a real machine.
 
-ClaudeLint is intentionally strict for workflows maintained in this repository. Locked upstream snapshots are
-excluded from local style rewrites and lint policy; their integrity and provenance are enforced through
-`skills-lock.json`. `scripts/validate_repository.py` separately validates that split, the configured Superpowers
-baseline, and desired plugin state.
+ClaudeLint remains in the repository gate. `lint:claude` explicitly validates `.agents/skills` with strict settings,
+even though pre-commit excludes snapshots from blanket file matching. Preserve upstream snapshots on compatibility
+failures; do not reformat or patch them locally. Repository policy separately checks lock provenance, compatibility
+links, the configured Superpowers baseline, and desired plugin state.
 
 ### Secret scanning
 
@@ -190,35 +198,41 @@ This command does not install or refresh `config/codex-managed-plugins.txt`. Cod
 use the Plugins tab to install missing entries and inspect their current versions. Do not add CLI copies of those
 plugins to compensate for a missing or delayed UI installation.
 
-The script refreshes Git marketplace snapshots, re-adds every configured plugin in place, reapplies the Product Design skill overrides, and reminds you to start a new task. Re-adding an installed plugin refreshes its recorded version without an uninstall. OpenAI-curated and bundled local marketplaces are refreshed by Codex application or CLI updates; the add uses whichever snapshot that installation currently exposes.
+The script upgrades only marketplaces named by the selected CLI plugin manifest, re-adds each selected plugin, and
+reapplies Codex configuration fixes. It honors `CODEX_HOME` and preserves unselected plugins and marketplaces. Re-adding an installed plugin refreshes its recorded version without an uninstall. Start a fresh chat to
+check the result. This command does not update the Codex application or guarantee an account-managed plugin refresh.
 
-The installer also removes retired and superseded CLI plugin state through `codex plugin remove`, including orphaned
-caches from personal or removed marketplaces. Shared marketplaces may retain inert downloaded package caches after
-removal; `codex plugin list --json` and the Plugins tab determine active installed state. `npm run setup:check`
-fails if a retired plugin, an unconfigured Superpowers copy, or a duplicate managed plugin remains installed.
+Setup installation preserves existing plugins and caches, including retired IDs. It only adds selected plugins that
+are missing. `npm run setup:check` checks the selected enabled set and configured Superpowers baseline; conflicting
+Superpowers installations fail the check and remain intact for explicit review. Claude configuration also stops
+when its settings explicitly enable official Superpowers; it preserves the settings file instead of disabling that plugin. Legacy cleanup is a separate decision.
 Account-managed plugins listed in
 `config/codex-managed-plugins.txt` must be checked in the Codex Plugins tab because the CLI does not authoritatively
 report that separate layer.
 
-The current Codex CLI has no `plugin update` command. Its relevant refresh primitives are `codex plugin marketplace upgrade` and `codex plugin add`.
+The scripts use `codex plugin marketplace upgrade <name>` and `codex plugin add`. Check the installed CLI help before
+changing those primitives. Inspect CLI and desktop versions separately; they can use different binaries.
 
 Patrick's Mintlify skills are installed from the same tagged `pdugan20/skills`
 release as the design and delivery skills. The separate `mintlify-docs` plugin is
-retired and removed by the install and refresh scripts. Mintlify's official
+retired; setup and refresh preserve an existing installation until its owner approves retirement. Mintlify's official
 plugin remains installed for current product mechanics.
 
-Refresh the desired Claude plugin set with:
+## Refresh optional Claude plugins
+
+Refresh Claude Code plugins when maintaining its native harness:
 
 ```bash
 npm run plugins:refresh:claude
 ```
 
-Underneath, this runs `claude plugin marketplace update` and `claude plugin update` for the entries in `config/claude-plugins.txt`. Claude requires a restart after a plugin update.
+Underneath, this runs `claude plugin marketplace update <name>` and `claude plugin update` for the entries in
+`config/claude-plugins.txt`. Restart Claude afterward. Selecting a Claude model in Codex does not require this step.
 
-`npm run setup:check` requires the enabled user-scoped Claude set to match that manifest exactly, ignoring only
-skill-directory compatibility records. Installation and refresh use Claude's official `plugin disable` command to
-turn off undeclared user-scoped plugins without uninstalling them. Add a capability deliberately to the manifest
-before refreshing when it should remain part of the shared setup.
+`npm run setup:check:claude` requires the selected plugins and configured Superpowers baseline. Setup preserves
+undeclared user plugins and their enablement; refresh does too. Marketplace updates are limited to selected names.
+The retained `scripts/reconcile_claude_plugins.py` helper can report undeclared IDs from supplied JSON, but setup and
+refresh do not use that report to disable or remove anything. Review ownership separately before retirement.
 
 Capabilities needed by only one repository belong with that repository instead of this global manifest. For
 example, `rss-feed-generator` pins Railway's canonical `use-railway` Agent Skill once under `.agents/skills` and
@@ -250,8 +264,8 @@ To update safely:
    `claude plugin validate .`.
 5. Push the fork, then update `upstreamVersion`, `upstreamCommit`, and `forkVersion` in
    `config/superpowers.json`. Regenerate the catalog and run `npm run verify` here.
-6. Run `npm run plugins:refresh:codex` and `npm run plugins:refresh:claude`, restart both products, and run
-   `npm run setup:check`.
+6. Refresh Codex plugins; refresh Claude plugins when validating its compatibility support. Restart the affected
+   products. Use `npm run setup:check` for Codex and `npm run setup:check:claude` for Claude.
 7. Start new tasks and smoke-test one automatic workflow (for example debugging) plus negative prompts for TDD,
    brainstorming, worktrees, and the browser option picker.
 
@@ -301,8 +315,7 @@ instruction changes or automatically enable newly introduced skills.
 For each substantial task, record the skills actually invoked with its evidence
 in the task or issue. The installed catalog is not a usage log. Project-specific
 profiles should link to this inventory, explain routing and exclusions, and avoid
-copying SKILL.md contents or manually maintaining installed versions. Playground's
-profile is `rune-playground/docs/agent-skills.md`.
+copying SKILL.md contents or manually maintaining installed versions.
 
 ## Official shadcn skill
 
@@ -318,8 +331,8 @@ a branch and fails. The reviewed 1.5.24 installer supports fetching a commit SHA
 npx skills@1.5.24 add https://github.com/shadcn-ui/ui/tree/7c9eaba1c0a6404c990c144a654792e3313c650d/skills/shadcn --agent codex claude-code --skill shadcn -y
 ```
 
-Bootstrap exposes the canonical snapshot through `~/.agents/skills/shadcn` for
-Codex and `~/.claude/skills/shadcn` for Claude. On machines with an older standalone
+Default bootstrap exposes the canonical snapshot through `~/.agents/skills/shadcn` for
+Codex; `bootstrap:claude` adds `shadcn` to the active Claude profile. On machines with an older standalone
 `~/.codex/skills/shadcn`, compare every file before moving that copy outside skill
 discovery; retain a local backup until the shared links and new-task discovery are
 verified. Never replace a divergent local copy automatically.
@@ -328,3 +341,34 @@ Prefer this official skill for Playground Base UI composition. Vercel's bundled
 shadcn capability remains plugin-managed; its presence does not make it the
 preferred route or justify copying it into the standalone inventory. Playground's
 exploration/graduation policy overrides blanket appearance rules.
+
+## Audit a machine
+
+Use this checklist when reconciling the portable setup with a working machine.
+The [ownership guide](capability-ownership.md) distinguishes source decisions, product scope, and private bindings. Keep the report private and dated;
+record source, resolved path, version or hash, owner, and evidence of effective availability separately.
+
+1. Identify the shell CLI, desktop runtime, active configuration directories, and any provider or proxy layer.
+   Read the shared agreement's private-note routing before account or proxy diagnosis.
+2. Inventory instruction and configuration layers, including overrides, project trust, local hooks, execution rules,
+   and notification handlers. Record what installs each customization.
+3. Inspect user `.agents/skills`, legacy `.codex/skills`, optional Claude skills, and plugin-bundled skills.
+   Classify links to this repo, links to other checkouts, standalone copies, runtime bundles, and broken links.
+   A global Skills CLI lock is a separate provenance record from this repo's `skills-lock.json`.
+4. Compare selected plugin manifests with CLI-visible installations and the desktop account or workspace view.
+   Inspect project-local enablement separately. Cached packages do not prove active installation.
+5. Compare the standalone MCP manifest with local and plugin-provided server metadata. Record ownership and
+   authentication status without printing credentials, environment values, or raw configurations.
+6. Inventory project instruction, skill, hook, and config surfaces within an explicitly bounded repository set.
+   Include other clients only where they add relevant local or organization-managed tooling.
+7. Report duplicate names, divergent contents, unknown provenance, broken links, and coverage limits. Recommend
+   ownership or retirement decisions before any deletion, relinking, installation, or runtime change.
+
+`npm run catalog:snapshot` is useful evidence, but it checks selected skills rather than discovering arbitrary
+standalone copies. Its project scan reads immediate child primary repositories and skips linked worktrees.
+The current catalog also infers invocation labels from metadata; use [runtime-specific controls](skill-invocation.md)
+and the active chat to verify them.
+
+A machine inventory is not a behavioral or security audit of every skill and tool. Avoid reading credential stores,
+conversation history, or raw service logs for an ownership inventory. Preserve local work and approval boundaries
+when deciding what to adopt, keep private, or retire.

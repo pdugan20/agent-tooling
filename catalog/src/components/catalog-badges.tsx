@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import type { CatalogItem, Runtime } from "@/catalog";
-import { runtimeLabel } from "@/catalog";
+import { invocationLabel, runtimeLabel } from "@/catalog";
 import { brandIcons } from "@/components/source-identity";
 
 const runtimeIcons: Record<Runtime, string> = {
@@ -39,7 +39,7 @@ export function RuntimeBadges({ runtimes }: { runtimes: Runtime[] }) {
   return (
     <div
       className="flex -space-x-1"
-      aria-label={`Works in ${runtimes.map(runtimeLabel).join(" and ")}`}
+      aria-label={`Listed for ${runtimes.map(runtimeLabel).join(" and ")}`}
     >
       {runtimes.map((runtime) => (
         <RuntimeIdentity key={runtime} runtime={runtime} />
@@ -67,11 +67,11 @@ export function ItemBadges({
             : item.repository || "Project"}
         </Badge>
       )}
-      {item.invocation && (
+      {item.type === "skill" && (
         <Badge
           variant={item.invocation === "Explicit" ? "outline" : "secondary"}
         >
-          {item.invocation === "Automatic" ? "Auto-starts" : "Only when asked"}
+          {invocationLabel(item)}
         </Badge>
       )}
     </div>

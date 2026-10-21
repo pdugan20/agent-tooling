@@ -25,11 +25,17 @@ class ConfigureClaudeTests(unittest.TestCase):
         updated = configure_claude.update_settings(data)
 
         self.assertIs(updated["enabledPlugins"]["unrelated@example"], True)
-        self.assertIs(updated["enabledPlugins"]["superpowers@claude-plugins-official"], False)
+        self.assertNotIn("superpowers@claude-plugins-official", updated["enabledPlugins"])
         self.assertIs(updated["enabledPlugins"]["superpowers@superpowers-configured"], True)
         self.assertNotIn("strict-tdd", updated["skillOverrides"])
         self.assertNotIn("production-hardening", updated["skillOverrides"])
         self.assertEqual(updated["skillOverrides"]["unrelated-skill"], "name-only")
+
+    def test_conflicting_official_plugin_is_preserved_without_mutation(self):
+        data = {"enabledPlugins": {"superpowers@claude-plugins-official": True}}
+        with self.assertRaisesRegex(ValueError, "Existing settings were preserved"):
+            configure_claude.update_settings(data)
+        self.assertEqual(data, {"enabledPlugins": {"superpowers@claude-plugins-official": True}})
 
     def test_output_style_is_selected(self) -> None:
         self.assertEqual(configure_claude.update_settings({})["outputStyle"], "simple-english")

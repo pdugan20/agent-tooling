@@ -3,7 +3,18 @@
 set -euo pipefail
 
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+runtime=codex
+if (($#)); then
+  if [[ $# == 1 && $1 == --claude ]]; then
+    runtime=claude
+  else
+    echo "Usage: $0 [--claude]" >&2
+    exit 2
+  fi
+fi
+
 claude_config_dir=${CLAUDE_CONFIG_DIR:-"$HOME/.claude"}
+codex_home=${CODEX_HOME:-"$HOME/.codex"}
 
 link_path() {
   local source=$1
@@ -15,88 +26,37 @@ link_path() {
   fi
   if [[ -e $target || -L $target ]]; then
     echo "Refusing to replace existing path: $target" >&2
-    echo "Move it aside, then rerun bootstrap." >&2
+    echo "Compare and preserve it before changing its owner; no path was removed." >&2
     exit 1
   fi
   ln -s "$source" "$target"
 }
 
-remove_legacy_link() {
-  local target=$1
-  local expected_prefix=$2
-
-  if [[ -L $target && $(readlink "$target") == "$expected_prefix"* ]]; then
-    unlink "$target"
-  fi
-}
-
-link_path "$ROOT/global/AGENTS.md" "$HOME/.codex/AGENTS.md"
-link_path "$ROOT/global/AGENTS.md" "$claude_config_dir/CLAUDE.md"
-
-# Output styles shape every response the main agent writes, in every session,
-# without being invoked. A skill cannot do that: it applies only when called.
-for style in "$ROOT"/global/output-styles/*.md; do
-  [[ -f $style ]] || continue
-  link_path "$style" "$claude_config_dir/output-styles/${style##*/}"
-done
-
-for legacy_skill in execute-plan feature-delivery formal-spec production-hardening strict-tdd write-plan; do
-  remove_legacy_link \
-    "$claude_config_dir/skills/$legacy_skill" \
-    "$ROOT/plugins/patrick-delivery/skills/$legacy_skill"
-done
-remove_legacy_link "$HOME/plugins/patrick-delivery" "$ROOT/plugins/patrick-delivery"
-remove_legacy_link "$HOME/.agents/plugins/marketplace.json" "$ROOT/.agents/plugins/marketplace.json"
-
-for managed_skill in \
-  animation-vocabulary \
-  apple-design \
-  code-native-ui-ideation \
-  emil-design-eng \
-  feature-delivery \
-  find-animation-opportunities \
-  generate-mintlify-reference \
-  pick-ui-library \
-  production-hardening \
-  review-mintlify-docs \
-  review-animations \
-  scaffold-mintlify-site \
-  write-mintlify-changelog \
-  swiftui-pro; do
-  remove_legacy_link "$HOME/.agents/skills/$managed_skill" "$ROOT/skills/$managed_skill"
-  remove_legacy_link "$claude_config_dir/skills/$managed_skill" "$ROOT/skills/$managed_skill"
-done
-
-remove_legacy_link \
-  "$HOME/.agents/skills/production-hardening" \
-  "$ROOT/.agents/skills/production-hardening"
-remove_legacy_link \
-  "$claude_config_dir/skills/production-hardening" \
-  "$ROOT/.agents/skills/production-hardening"
-
-link_skill_collection() {
-  local collection=$1
-  local skill_dir
-  local skill_name
-
-  for skill_dir in "$collection"/*; do
-    [[ -f $skill_dir/SKILL.md ]] || continue
-    skill_name=${skill_dir##*/}
-    link_path "$skill_dir" "$HOME/.agents/skills/$skill_name"
-    link_path "$skill_dir" "$claude_config_dir/skills/$skill_name"
+if [[ $runtime == claude ]]; then
+  link_path "$ROOT/global/AGENTS.md" "$claude_config_dir/CLAUDE.md"
+  for style in "$ROOT"/global/output-styles/*.md; do
+    [[ -f $style ]] || continue
+    link_path "$style" "$claude_config_dir/output-styles/${style##*/}"
   done
-}
+  skills_target="$claude_config_dir/skills"
+else
+  link_path "$ROOT/global/AGENTS.md" "$codex_home/AGENTS.md"
+  skills_target="$HOME/.agents/skills"
+fi
 
-link_skill_collection "$ROOT/.agents/skills"
+for skill_dir in "$ROOT"/.agents/skills/*; do
+  [[ -f $skill_dir/SKILL.md ]] || continue
+  link_path "$skill_dir" "$skills_target/${skill_dir##*/}"
+done
 
-python3 "$ROOT/scripts/configure-claude.py" --settings "$claude_config_dir/settings.json"
+if [[ $runtime == claude ]]; then
+  python3 "$ROOT/scripts/configure-claude.py" --settings "$claude_config_dir/settings.json"
+else
+  python3 "$ROOT/scripts/configure-codex.py" \
+    --config "$codex_home/config.toml" \
+    --codex-home "$codex_home" \
+    --mcp-servers "$ROOT/config/codex-mcp-servers.json" \
+    --disable-skill "$ROOT/.agents/skills/swiftui-pro/skills/swiftui-pro/SKILL.md"
+fi
 
-codex_config="$HOME/.codex/config.toml"
-mkdir -p "$(dirname "$codex_config")"
-touch "$codex_config"
-python3 "$ROOT/scripts/configure-codex.py" \
-  --config "$codex_config" \
-  --mcp-servers "$ROOT/config/codex-mcp-servers.json" \
-  --disable-skill "$ROOT/.agents/skills/swiftui-pro/skills/swiftui-pro/SKILL.md"
-
-echo "Agent tooling links and routing settings are configured."
+echo "$runtime links and routing settings are configured."

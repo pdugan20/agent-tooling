@@ -1,72 +1,63 @@
 # Skill and plugin authoring
 
-Use the narrowest validator for the artifact, then run the repository's complete verification command before
-publishing. Static checks prove structure and policy compliance; they do not prove that a skill triggers correctly or
-produces a useful result.
+For maintainers changing reusable instructions or packaging. Author Patrick-owned skills in
+[Skills](https://github.com/pdugan20/skills); this repository consumes reviewed snapshots.
+Use the narrowest checks first, then the owning repository's full verification before publishing.
 
-## Tool matrix
+## Choose the artifact
 
-| Artifact | Primary checks | Formatting and supporting checks | Where used |
-| --- | --- | --- | --- |
-| Patrick-owned skill | Codex `$skill-creator` quick validation; Claude's official strict plugin validation; `agent-ecosystem/skill-validator` strict validation; Skills CLI discovery | Repository policy; Markdownlint; ShellCheck and shfmt for shell resources; Ruff for Python resources | `skills` |
-| Locked skill snapshot | Official Skills CLI lock and update review | No local rewriting; repository policy checks provenance, source path, release ref, compatibility links, and known duplicate overrides | `agent-tooling/.agents/skills` |
-| Claude plugin | `claude plugin validate . --strict`; repository policy validation | Markdownlint, JSON/YAML formatting, package and install smoke tests | `plugins` |
-| Codex plugin | Codex `$plugin-creator` validation | JSON formatting plus a marketplace install/reinstall smoke test | `plugins` |
-| Claude marketplace | `claude plugin validate . --strict`; repository policy validation | JSON formatting and dependency-install smoke test | `plugins` CI |
-| Codex marketplace | Codex `$plugin-creator` generation/validation and live install smoke test | JSON syntax validation; source tag and policy review | `plugins` CI and release review |
-| GitHub Actions | actionlint and zizmor | Prettier for YAML; full commit pins | Maintained repositories |
-| Repository scripts | ShellCheck and shfmt for shell; Ruff for Python; Prettier for JavaScript/JSON/YAML | Unit tests for behavior | `agent-tooling` verification |
-| Secrets and credentials | Gitleaks staged and full-history scans | Manual review of generated archives and runtime snapshots | `agent-tooling` pre-commit, pre-push, and CI |
+| Artifact | Checks and ownership |
+| --- | --- |
+| Patrick-owned skill | Author in Skills; use `$skill-creator`, source-repository policy, portable validation, and representative runtime prompts |
+| Locked skill snapshot | Install through Skills CLI; review source, ref, content, and lock diff; do not rewrite it here |
+| Codex plugin or marketplace | Validate supported manifests and metadata, then test installation and discovery in the intended client |
+| Optional Claude plugin or marketplace | Run Claude's validator and install checks in its owning repository |
+| Repository scripts | Unit tests plus Ruff, ShellCheck, shfmt, or JavaScript checks appropriate to the language |
+| GitHub Actions | actionlint, zizmor, pinned actions, and repository policy |
+| Credentials | Keep out of artifacts; Gitleaks checks staged changes and full history |
 
-## Commands already incorporated
+## Author for current Codex
 
-For shared agent tooling:
+Use portable `SKILL.md` content for the workflow. Put Codex interface metadata, dependencies, and invocation policy
+in `agents/openai.yaml`. Make trigger descriptions concise and put the main use case first: Codex can shorten the
+initial skill list when many capabilities are installed. [Official skills guide](https://learn.chatgpt.com/docs/build-skills)
+
+Use `$skill-creator` when creating or substantially revising a skill. Run its available validator, without hardcoding
+its machine-specific path into repository scripts. If the required creator is unavailable, follow the shared
+agreement's missing-skill rule instead of claiming an equivalent workflow ran.
+
+Current plugin guidance prefers portable root `plugin.json` and `mcp.json`, with OpenAI-specific settings under
+`extensions.com.openai`. Existing `.codex-plugin/plugin.json` packages remain supported. The built-in plugin creator
+may scaffold that compatibility layout; review its output against the current target surface.
+[Official packaging guidance](https://developers.openai.com/plugins/build/plugins)
+
+Use `$plugin-creator` when available for Codex-specific scaffolding and validation. A successful schema check does not
+prove installation, authentication, tool availability, or invocation. Test the published package's actual install path.
+Lifecycle hooks need separate compatibility, trust, and event checks; manually installed desktop plugins and public
+directory submissions have different constraints. [Official hooks guidance](https://learn.chatgpt.com/docs/hooks)
+
+Claude-specific frontmatter and plugin components need a separate compatibility review. Do not alter locked
+snapshots to satisfy a different harness's schema. Apply supported runtime policy or fix the canonical source.
+See [invocation controls](skill-invocation.md) and [plugin migration](https://developers.openai.com/plugins/guides/submit-claude-plugin).
+
+## Verify changes here
 
 ```bash
-npm run lint:claude
 npm run lint:markdown
-npm run format:check
 npm run verify
 ```
 
-`npm run verify` is the complete local and GitHub Actions gate. It runs unit tests, catalog drift detection,
-pre-commit validators, repository policy checks, and secret scanning. ClaudeLint validates the managed skill tree
-while repository policy applies first-party invocation rules. All snapshots remain immutable in this consumer.
+The full gate runs tests, catalog drift checks, pre-commit validators, repository policy, and secret scanning.
+The retained `lint:claude` command also runs strict validation over `.agents/skills`; the pre-commit file exclusion
+does not suppress that explicit whole-tree command. Inspect compatibility failures without editing upstream snapshots.
+See [setup](setup.md#develop-this-repository) for prerequisites and [quality tooling](quality-tooling.md) for scope.
 
-The Agent Skills specification permits only its portable frontmatter fields. Some upstream packages intentionally
-include agent-specific fields such as Claude's `context: fork` or `disable-model-invocation`; the official `skills`
-CLI does not transform those fields for Codex. Keep locked upstream snapshots unmodified and treat that validator
-output as a compatibility warning to review, not a reason to fork the skill. Apply runtime policy through
-`agents/openai.yaml`, Claude `skillOverrides`, or repository instructions when the source already supports that
-separation. `skillOverrides` cannot override a skill's own `disable-model-invocation`, and
-`user-invocable-only` hides a skill from the agent rather than gating it behind approval. See
-[Skill visibility and invocation](skill-invocation.md) before choosing a value.
+## Check behavior in the runtime
 
-For the marketplace repository, CI validates both catalogs and installs every published plugin in its supported
-runtimes. A successful install is the final packaging check because it exercises the same catalog and cache path
-users receive.
+For an affected skill, start a fresh chat and try a matching prompt, an explicit invocation, and a negative prompt
+that should not trigger it. Preserve explicit-only planning, TDD, worktrees, orchestration, and image-generation
+boundaries. Check that publication and live-data actions still require the existing authorization.
 
-## Built-in authoring workflows
-
-Use `$skill-creator` when creating or substantially revising a skill. It provides the supported scaffold,
-`agents/openai.yaml` generation, frontmatter/name validation, and forward-testing guidance. Ask it to run its bundled
-`quick_validate.py`; do not hardcode the system skill's machine-specific filesystem path in repository scripts.
-If the bundled Python validator reports that `yaml` is unavailable, run it through an ephemeral environment such as
-`uv run --no-project --with pyyaml python <validator-script> <artifact-path>` rather than modifying system Python.
-
-Use `$plugin-creator` for a Codex plugin or marketplace entry. It provides the supported manifest shape, marketplace
-policy fields, schema validator, and cache-buster/reinstall flow. The Codex validator currently ships with that
-built-in workflow rather than as a stable standalone CI command, so run it before publishing and retain the live
-install smoke test in CI.
-
-## What static tooling cannot prove
-
-- whether a description triggers on the prompts you actually use;
-- whether an automatic skill stays out of lightweight exploration when it should;
-- whether an explicit-only skill remains discoverable when named;
-- whether instructions produce a good result in SwiftUI, React Native, React, a browser, or a simulator; and
-- whether a plugin update behaves correctly after runtime caching and restart.
-
-For those, forward-test representative implicit and explicit prompts in a new task. For design workflows, inspect the
-result in the actual browser or simulator. For a plugin release, reinstall from the published marketplace, restart the
-runtime, and smoke-test at least one automatic and one explicit invocation.
+For a plugin, check the installed source, enabled state, skill discovery, MCP availability, and any hook trust review.
+For UI work, inspect the browser or simulator result. A catalog entry or static validator does not establish useful
+behavior, effective availability, or performance.

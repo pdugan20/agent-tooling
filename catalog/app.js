@@ -199,7 +199,7 @@ const render = () => {
     const invocation = fragment.querySelector(".invocation");
     if (item.invocation) {
       invocation.textContent =
-        item.invocation === "Automatic" ? "Auto-starts" : "Only when asked";
+        item.invocation === "Automatic" ? "Auto eligible" : "Explicit";
       invocation.classList.add(item.invocation.toLowerCase());
     } else {
       invocation.remove();

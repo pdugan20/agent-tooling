@@ -3,7 +3,18 @@
 set -euo pipefail
 
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+runtime=codex
+if (($#)); then
+  if [[ $# == 1 && $1 == --claude ]]; then
+    runtime=claude
+  else
+    echo "Usage: $0 [--claude]" >&2
+    exit 2
+  fi
+fi
+
 claude_config_dir=${CLAUDE_CONFIG_DIR:-"$HOME/.claude"}
+codex_home=${CODEX_HOME:-"$HOME/.codex"}
 failures=0
 superpowers_plugin_id=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["pluginId"])' "$ROOT/config/superpowers.json")
 superpowers_version=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["forkVersion"])' "$ROOT/config/superpowers.json")
@@ -37,28 +48,28 @@ check_link() {
   fi
 }
 
-check_link "$ROOT/global/AGENTS.md" "$HOME/.codex/AGENTS.md"
-check_link "$ROOT/global/AGENTS.md" "$claude_config_dir/CLAUDE.md"
+if [[ $runtime == claude ]]; then
+  check_link "$ROOT/global/AGENTS.md" "$claude_config_dir/CLAUDE.md"
+  check_command sourcekit-lsp "install Xcode or the Swift toolchain"
+  check_command typescript-language-server "run npm install --global typescript typescript-language-server"
+  skills_target="$claude_config_dir/skills"
+else
+  check_link "$ROOT/global/AGENTS.md" "$codex_home/AGENTS.md"
+  skills_target="$HOME/.agents/skills"
+fi
 
-check_command sourcekit-lsp "install Xcode or the Swift toolchain"
-check_command typescript-language-server "run npm install --global typescript typescript-language-server"
+for skill_dir in "$ROOT"/.agents/skills/*; do
+  [[ -f $skill_dir/SKILL.md ]] || continue
+  check_link "$skill_dir" "$skills_target/${skill_dir##*/}"
+done
 
-check_skill_collection() {
-  local collection=$1
-  local skill_dir
-  local skill_name
+if ! command -v "$runtime" >/dev/null 2>&1; then
+  fail "$runtime CLI is not installed"
+  exit 1
+fi
 
-  for skill_dir in "$collection"/*; do
-    [[ -f $skill_dir/SKILL.md ]] || continue
-    skill_name=${skill_dir##*/}
-    check_link "$skill_dir" "$HOME/.agents/skills/$skill_name"
-    check_link "$skill_dir" "$claude_config_dir/skills/$skill_name"
-  done
-}
-
-check_skill_collection "$ROOT/.agents/skills"
-
-if python3 - "$HOME/.codex/config.toml" "$ROOT/config/codex-mcp-servers.json" <<'PY'; then
+if [[ $runtime == codex ]]; then
+  if python3 - "$codex_home/config.toml" "$ROOT/config/codex-mcp-servers.json" <<'PY'; then
 import json
 import sys
 import tomllib
@@ -69,70 +80,33 @@ expected = json.loads(Path(sys.argv[2]).read_text())
 actual = config.get("mcp_servers", {})
 raise SystemExit(0 if all(actual.get(name) == spec for name, spec in expected.items()) else 1)
 PY
-  pass "Managed Codex MCP servers match the pinned manifest"
-else
-  fail "Managed Codex MCP servers drifted; rerun bootstrap"
-fi
+    pass "Managed Codex MCP servers match the pinned manifest"
+  else
+    fail "Managed Codex MCP servers drifted; rerun bootstrap"
+  fi
 
-codex_plugins=$(codex plugin list --json)
-codex_cache_root=${CODEX_HOME:-"$HOME/.codex"}/plugins/cache
-while IFS= read -r plugin; do
-  [[ -n $plugin ]] || continue
-  if PLUGIN_ID="$plugin" python3 -c '
+  codex_plugins=$(codex plugin list --json)
+  while IFS= read -r plugin; do
+    [[ -n $plugin ]] || continue
+    if PLUGIN_ID="$plugin" python3 -c '
 import json, os, sys
 data = json.load(sys.stdin)
 target = os.environ["PLUGIN_ID"]
 raise SystemExit(0 if any(item.get("pluginId") == target and item.get("enabled") for item in data.get("installed", [])) else 1)
 ' <<<"$codex_plugins"; then
-    pass "Codex plugin $plugin"
-  else
-    fail "Codex plugin $plugin is not installed and enabled"
-  fi
-done <"$ROOT/config/codex-plugins.txt"
+      pass "Codex plugin $plugin"
+    else
+      fail "Codex plugin $plugin is not installed and enabled"
+    fi
+  done <"$ROOT/config/codex-plugins.txt"
 
-retired_codex_plugins=(
-  patrick-delivery@personal
-  mintlify-docs@patrick-plugins
-  mintlify-docs@pdugan20-plugins
-  mintlify-docs@patrick-tools
-  patrick-workflows@pdugan20-plugins
-  patrick-workflows@patrick-tools
-  superpowers@claude-plugins-official
-  superpowers@openai-curated
-  expo@openai-curated
-  sentry@openai-curated
-  mintlify@claude-plugins-official
-  figma@openai-curated
-  github@openai-curated
-  vercel@openai-curated
-)
-retired_codex_state_clean=true
-for retired_plugin in "${retired_codex_plugins[@]}"; do
-  plugin_name=${retired_plugin%@*}
-  marketplace_name=${retired_plugin#*@}
-  if [[ $marketplace_name != openai-curated && $marketplace_name != claude-plugins-official && -e $codex_cache_root/$marketplace_name/$plugin_name ]]; then
-    retired_codex_state_clean=false
-  fi
-done
-if RETIRED_PLUGIN_IDS="${retired_codex_plugins[*]}" python3 -c '
-import json, os, sys
-data = json.load(sys.stdin)
-retired = set(os.environ["RETIRED_PLUGIN_IDS"].split())
-installed = {item.get("pluginId") for item in data.get("installed", [])}
-raise SystemExit(0 if retired.isdisjoint(installed) else 1)
-' <<<"$codex_plugins" && [[ $retired_codex_state_clean == true ]]; then
-  pass "Retired Codex plugins are absent from installed state"
-else
-  fail "Retired Codex plugins remain installed; rerun the Codex plugin installer"
-fi
+  echo "INFO Codex-managed plugin installation is verified in the Plugins tab, not by the CLI:"
+  while IFS= read -r plugin; do
+    [[ -n $plugin && $plugin != \#* ]] || continue
+    echo "INFO   $plugin"
+  done <"$ROOT/config/codex-managed-plugins.txt"
 
-echo "INFO Codex-managed plugin installation is verified in the Plugins tab, not by the CLI:"
-while IFS= read -r plugin; do
-  [[ -n $plugin && $plugin != \#* ]] || continue
-  echo "INFO   $plugin"
-done <"$ROOT/config/codex-managed-plugins.txt"
-
-if PLUGIN_ID="$superpowers_plugin_id" PLUGIN_VERSION="$superpowers_version" python3 -c '
+  if PLUGIN_ID="$superpowers_plugin_id" PLUGIN_VERSION="$superpowers_version" python3 -c '
 import json, os, sys
 data = json.load(sys.stdin)
 matches = [item for item in data.get("installed", []) if item.get("pluginId", "").startswith("superpowers@")]
@@ -140,56 +114,30 @@ expected = os.environ["PLUGIN_ID"]
 version = os.environ["PLUGIN_VERSION"]
 raise SystemExit(0 if len(matches) == 1 and matches[0].get("pluginId") == expected and matches[0].get("version") == version and matches[0].get("enabled") else 1)
 ' <<<"$codex_plugins"; then
-  pass "Configured Superpowers $superpowers_version is the only Codex Superpowers plugin"
-else
-  fail "Codex must enable only $superpowers_plugin_id at $superpowers_version"
+    pass "Configured Superpowers $superpowers_version is the only Codex Superpowers plugin"
+  else
+    fail "Codex must enable only $superpowers_plugin_id at $superpowers_version"
+  fi
+
 fi
 
-claude_plugins=$(claude plugin list --json)
-while IFS= read -r plugin; do
-  [[ -n $plugin ]] || continue
-  if PLUGIN_ID="$plugin" python3 -c '
+if [[ $runtime == claude ]]; then
+  claude_plugins=$(claude plugin list --json)
+  while IFS= read -r plugin; do
+    [[ -n $plugin ]] || continue
+    if PLUGIN_ID="$plugin" python3 -c '
 import json, os, sys
 data = json.load(sys.stdin)
 target = os.environ["PLUGIN_ID"]
 raise SystemExit(0 if any(item.get("id") == target and item.get("scope") == "user" and item.get("enabled") for item in data) else 1)
 ' <<<"$claude_plugins"; then
-    pass "Claude plugin $plugin"
-  else
-    fail "Claude plugin $plugin is not installed and enabled at user scope"
-  fi
-done <"$ROOT/config/claude-plugins.txt"
+      pass "Claude plugin $plugin"
+    else
+      fail "Claude plugin $plugin is not installed and enabled at user scope"
+    fi
+  done <"$ROOT/config/claude-plugins.txt"
 
-if CLAUDE_PLUGIN_MANIFEST="$ROOT/config/claude-plugins.txt" python3 -c '
-import json, os, sys
-from pathlib import Path
-
-desired = {
-    line.strip()
-    for line in Path(os.environ["CLAUDE_PLUGIN_MANIFEST"]).read_text().splitlines()
-    if line.strip() and not line.lstrip().startswith("#")
-}
-actual = {
-    item.get("id")
-    for item in json.load(sys.stdin)
-    if item.get("scope") == "user"
-    and item.get("enabled")
-    and not item.get("id", "").endswith("@skills-dir")
-}
-missing = sorted(desired - actual)
-extra = sorted(actual - desired)
-if missing:
-    print("Missing desired Claude plugins: " + ", ".join(missing), file=sys.stderr)
-if extra:
-    print("Undeclared enabled Claude plugins: " + ", ".join(extra), file=sys.stderr)
-raise SystemExit(1 if missing or extra else 0)
-' <<<"$claude_plugins"; then
-  pass "Enabled user-scoped Claude plugins exactly match the manifest"
-else
-  fail "Claude plugin drift detected; reconcile the IDs reported above"
-fi
-
-if PLUGIN_ID="$superpowers_plugin_id" PLUGIN_VERSION="$superpowers_version" python3 -c '
+  if PLUGIN_ID="$superpowers_plugin_id" PLUGIN_VERSION="$superpowers_version" python3 -c '
 import json, os, sys
 data = json.load(sys.stdin)
 matches = [item for item in data if item.get("id", "").startswith("superpowers@") and item.get("scope") == "user" and item.get("enabled")]
@@ -197,36 +145,39 @@ expected = os.environ["PLUGIN_ID"]
 version = os.environ["PLUGIN_VERSION"]
 raise SystemExit(0 if len(matches) == 1 and matches[0].get("id") == expected and matches[0].get("version") == version else 1)
 ' <<<"$claude_plugins"; then
-  pass "Configured Superpowers $superpowers_version is the only enabled Claude Superpowers plugin"
-else
-  fail "Claude must enable only $superpowers_plugin_id at $superpowers_version"
-fi
+    pass "Configured Superpowers $superpowers_version is the only enabled Claude Superpowers plugin"
+  else
+    fail "Claude must enable only $superpowers_plugin_id at $superpowers_version"
+  fi
 
-if PLUGIN_ID="$superpowers_plugin_id" python3 -c '
+  if PLUGIN_ID="$superpowers_plugin_id" python3 -c '
 import json, os, sys
 data = json.load(sys.stdin)
 enabled = data.get("enabledPlugins", {})
-raise SystemExit(0 if enabled.get("superpowers@claude-plugins-official") is False and enabled.get(os.environ["PLUGIN_ID"]) is True else 1)
+raise SystemExit(0 if enabled.get("superpowers@claude-plugins-official") is not True and enabled.get(os.environ["PLUGIN_ID"]) is True else 1)
 ' <"$claude_config_dir/settings.json"; then
-  pass "Claude routes Superpowers to the configured fork"
-else
-  fail "Claude must disable official Superpowers and enable $superpowers_plugin_id"
+    pass "Claude routes Superpowers to the configured fork"
+  else
+    fail "Claude must disable official Superpowers and enable $superpowers_plugin_id"
+  fi
+
 fi
 
-if python3 - "$HOME" "$ROOT" <<'PY'; then
+if [[ $runtime == codex ]]; then
+  if python3 - "$codex_home" "$ROOT" <<'PY'; then
 import sys
 import tomllib
 from pathlib import Path
 
-home = Path(sys.argv[1])
+codex_home = Path(sys.argv[1])
 repository = Path(sys.argv[2])
-config = tomllib.loads((home / ".codex/config.toml").read_text())
+config = tomllib.loads((codex_home / "config.toml").read_text())
 disabled = {
     Path(item["path"]).resolve()
     for item in config.get("skills", {}).get("config", [])
     if item.get("enabled") is False
 }
-root = home / ".codex/plugins/cache/openai-curated-remote/product-design"
+root = codex_home / "plugins/cache/openai-curated-remote/product-design"
 expected = set()
 if root.exists():
     for name in ("ideate", "index"):
@@ -236,9 +187,11 @@ expected.add(
 )
 raise SystemExit(0 if expected <= disabled else 1)
 PY
-  pass "Product Design image ideation and duplicate nested skills are disabled"
-else
-  fail "Codex skill override policy is incomplete; rerun bootstrap"
+    pass "Product Design image ideation and duplicate nested skills are disabled"
+  else
+    fail "Codex skill override policy is incomplete; rerun bootstrap"
+  fi
+
 fi
 
 if ((failures)); then
@@ -246,4 +199,4 @@ if ((failures)); then
   exit 1
 fi
 
-echo "Agent tooling setup verified."
+echo "$runtime setup verified."

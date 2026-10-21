@@ -18,6 +18,10 @@
       "featured": 1,
       "id": "skill:feature-delivery",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "v3.4.0",
       "name": "feature-delivery",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
@@ -44,6 +48,10 @@
       "featured": 2,
       "id": "skill:code-native-ui-ideation",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "v3.4.0",
       "name": "code-native-ui-ideation",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
@@ -70,6 +78,10 @@
       "featured": 3,
       "id": "skill:bootstrap-repository",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "v3.4.0",
       "name": "bootstrap-repository",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
@@ -96,6 +108,10 @@
       "featured": 4,
       "id": "skill:scaffold-mintlify-site",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "v3.4.0",
       "name": "scaffold-mintlify-site",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
@@ -122,6 +138,10 @@
       "featured": 5,
       "id": "skill:review-mintlify-docs",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "v3.4.0",
       "name": "review-mintlify-docs",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
@@ -148,6 +168,10 @@
       "featured": 6,
       "id": "skill:generate-mintlify-reference",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "v3.4.0",
       "name": "generate-mintlify-reference",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
@@ -174,6 +198,10 @@
       "featured": 7,
       "id": "skill:write-mintlify-changelog",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "v3.4.0",
       "name": "write-mintlify-changelog",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
@@ -200,6 +228,10 @@
       "featured": 8,
       "id": "skill:xcodebuildmcp",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "v2.7.0",
       "name": "xcodebuildmcp",
       "ownerAvatarUrl": "https://github.com/getsentry.png?size=96",
@@ -226,6 +258,10 @@
       "featured": 9,
       "id": "skill:tune-mobile-client-performance",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "v3.4.0",
       "name": "tune-mobile-client-performance",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
@@ -252,6 +288,10 @@
       "featured": 10,
       "id": "skill:integrate-app-intents",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "v3.4.0",
       "name": "integrate-app-intents",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
@@ -278,6 +318,10 @@
       "featured": 11,
       "id": "skill:run-remote-dev-server",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "v3.4.0",
       "name": "run-remote-dev-server",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
@@ -304,6 +348,10 @@
       "featured": 12,
       "id": "skill:swiftui-pro",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "f9800713b24580bc444931949aad4519128605e8",
       "name": "swiftui-pro",
       "ownerAvatarUrl": "https://github.com/twostraws.png?size=96",
@@ -330,6 +378,10 @@
       "featured": 13,
       "id": "skill:apple-design",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": null,
       "name": "apple-design",
       "ownerAvatarUrl": "https://github.com/emilkowalski.png?size=96",
@@ -356,6 +408,10 @@
       "featured": 14,
       "id": "skill:animate-expo",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": null,
       "name": "animate-expo",
       "ownerAvatarUrl": "https://github.com/emilkowalski.png?size=96",
@@ -381,7 +437,11 @@
       "displayName": "Review Animations",
       "featured": 15,
       "id": "skill:review-animations",
-      "invocation": "Explicit",
+      "invocation": null,
+      "invocationByRuntime": {
+        "claude": "Explicit",
+        "codex": "Automatic"
+      },
       "lockedRef": null,
       "name": "review-animations",
       "ownerAvatarUrl": "https://github.com/emilkowalski.png?size=96",
@@ -408,6 +468,10 @@
       "featured": 16,
       "id": "skill:find-animation-opportunities",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": null,
       "name": "find-animation-opportunities",
       "ownerAvatarUrl": "https://github.com/emilkowalski.png?size=96",
@@ -434,6 +498,10 @@
       "featured": 17,
       "id": "skill:animation-vocabulary",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": null,
       "name": "animation-vocabulary",
       "ownerAvatarUrl": "https://github.com/emilkowalski.png?size=96",
@@ -460,6 +528,10 @@
       "featured": 18,
       "id": "skill:emil-design-eng",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": null,
       "name": "emil-design-eng",
       "ownerAvatarUrl": "https://github.com/emilkowalski.png?size=96",
@@ -485,7 +557,11 @@
       "displayName": "Pick UI Library",
       "featured": 19,
       "id": "skill:pick-ui-library",
-      "invocation": "Explicit",
+      "invocation": null,
+      "invocationByRuntime": {
+        "claude": "Explicit",
+        "codex": "Automatic"
+      },
       "lockedRef": null,
       "name": "pick-ui-library",
       "ownerAvatarUrl": "https://github.com/emilkowalski.png?size=96",
@@ -512,6 +588,10 @@
       "featured": 20,
       "id": "skill:improve-animations",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": null,
       "name": "improve-animations",
       "ownerAvatarUrl": "https://github.com/emilkowalski.png?size=96",
@@ -538,6 +618,10 @@
       "featured": 21,
       "id": "skill:animation-performance",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": null,
       "name": "animation-performance",
       "ownerAvatarUrl": "https://github.com/emilkowalski.png?size=96",
@@ -564,6 +648,10 @@
       "featured": 50,
       "id": "skill:accessibility",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": null,
       "name": "accessibility",
       "ownerAvatarUrl": "https://github.com/addyosmani.png?size=96",
@@ -590,6 +678,10 @@
       "featured": 50,
       "id": "skill:align-ui-to-design-system",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "v3.4.0",
       "name": "align-ui-to-design-system",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
@@ -616,6 +708,10 @@
       "featured": 50,
       "id": "skill:analyze-ui-video",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "v3.4.0",
       "name": "analyze-ui-video",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
@@ -642,6 +738,10 @@
       "featured": 50,
       "id": "skill:animate",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": null,
       "name": "animate",
       "ownerAvatarUrl": "https://github.com/emilkowalski.png?size=96",
@@ -668,6 +768,10 @@
       "featured": 50,
       "id": "skill:audit-design-system-health",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "v3.4.0",
       "name": "audit-design-system-health",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
@@ -694,6 +798,10 @@
       "featured": 50,
       "id": "skill:feature-spike",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "v3.4.0",
       "name": "feature-spike",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
@@ -720,6 +828,10 @@
       "featured": 50,
       "id": "skill:find-skills",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "d6b37f62ae23c3825b0ed16c73e123eee0a41fdc",
       "name": "find-skills",
       "ownerAvatarUrl": "https://github.com/vercel-labs.png?size=96",
@@ -746,6 +858,10 @@
       "featured": 50,
       "id": "skill:ios-accessibility",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": null,
       "name": "ios-accessibility",
       "ownerAvatarUrl": "https://github.com/dadederk.png?size=96",
@@ -772,6 +888,10 @@
       "featured": 50,
       "id": "skill:maplibre-cartography",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": null,
       "name": "maplibre-cartography",
       "ownerAvatarUrl": "https://github.com/maplibre.png?size=96",
@@ -798,6 +918,10 @@
       "featured": 50,
       "id": "skill:maplibre-source-wiring",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": null,
       "name": "maplibre-source-wiring",
       "ownerAvatarUrl": "https://github.com/maplibre.png?size=96",
@@ -824,6 +948,10 @@
       "featured": 50,
       "id": "skill:maplibre-terrain-rendering",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": null,
       "name": "maplibre-terrain-rendering",
       "ownerAvatarUrl": "https://github.com/maplibre.png?size=96",
@@ -850,6 +978,10 @@
       "featured": 50,
       "id": "skill:playwright-best-practices",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": null,
       "name": "playwright-best-practices",
       "ownerAvatarUrl": "https://github.com/currents-dev.png?size=96",
@@ -876,6 +1008,10 @@
       "featured": 50,
       "id": "skill:shadcn",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "7c9eaba1c0a6404c990c144a654792e3313c650d",
       "name": "shadcn",
       "ownerAvatarUrl": "https://github.com/shadcn-ui.png?size=96",
@@ -902,6 +1038,10 @@
       "featured": 50,
       "id": "skill:vercel-composition-patterns",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "063bee94c3f4df8453406c830b0a7df0f2860278",
       "name": "vercel-composition-patterns",
       "ownerAvatarUrl": "https://github.com/vercel-labs.png?size=96",
@@ -928,6 +1068,10 @@
       "featured": 50,
       "id": "skill:vercel-react-best-practices",
       "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
       "lockedRef": "063bee94c3f4df8453406c830b0a7df0f2860278",
       "name": "vercel-react-best-practices",
       "ownerAvatarUrl": "https://github.com/vercel-labs.png?size=96",
@@ -1830,5 +1974,5 @@
       "version": "Managed"
     }
   ],
-  "schemaVersion": 5
+  "schemaVersion": 6
 }

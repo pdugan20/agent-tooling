@@ -21,8 +21,8 @@ RETIRED_SKILLS = (
     "strict-tdd",
     "write-plan",
 )
-# Claude Code reads CLAUDE.md but not AGENTS.md. This hook supplies a
-# repository's AGENTS.md at session start so repositories need no CLAUDE.md shim.
+# The hook supplies AGENTS.md only when native Claude loading does not apply.
+# See its version and project-file checks before adding compatibility shims.
 # See global/hooks/agents_md_context.py.
 AGENTS_MD_HOOK = Path(__file__).resolve().parents[1] / "global/hooks/agents_md_context.py"
 AGENTS_MD_HOOK_MATCHER = "startup|clear|compact"
@@ -61,13 +61,18 @@ def ensure_agents_md_hook(data: dict[str, object], hook_path: Path) -> None:
 def update_settings(
     data: dict[str, object], agents_md_hook: Path = AGENTS_MD_HOOK
 ) -> dict[str, object]:
+    existing_plugins = data.get("enabledPlugins", {})
+    if isinstance(existing_plugins, dict) and existing_plugins.get(OFFICIAL_SUPERPOWERS) is True:
+        raise ValueError(
+            "Official Superpowers is enabled. Existing settings were preserved; "
+            "review the conflict with the configured fork before rerunning."
+        )
     plugins = data.setdefault("enabledPlugins", {})
     overrides = data.setdefault("skillOverrides", {})
     if not isinstance(plugins, dict) or not isinstance(overrides, dict):
         raise ValueError("enabledPlugins and skillOverrides must be JSON objects")
 
     data["outputStyle"] = OUTPUT_STYLE
-    plugins[OFFICIAL_SUPERPOWERS] = False
     plugins[CONFIGURED_SUPERPOWERS] = True
     for skill in EXPLICIT_PERSONAL_SKILLS:
         overrides[skill] = "user-invocable-only"
@@ -84,7 +89,10 @@ def main() -> None:
     args = parser.parse_args()
 
     data = json.loads(args.settings.read_text()) if args.settings.exists() else {}
-    update_settings(data)
+    try:
+        update_settings(data)
+    except ValueError as error:
+        parser.error(str(error))
 
     rendered = json.dumps(data, indent=2) + "\n"
     if args.dry_run:

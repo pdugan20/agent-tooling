@@ -1,3 +1,4 @@
+import { invocationLabel } from "@/catalog";
 import {
   BoxIcon,
   CheckCircle2Icon,
@@ -159,7 +160,7 @@ function WorkbenchTable({
           <TableHeader>
             <TableRow className="bg-muted/35 hover:bg-muted/35">
               <TableHead>Capability</TableHead>
-              <TableHead className="w-35">Works in</TableHead>
+              <TableHead className="w-35">Listed for</TableHead>
               <TableHead className="w-38">Source</TableHead>
               <TableHead className="w-32">Invocation</TableHead>
             </TableRow>
@@ -202,11 +203,7 @@ function WorkbenchTable({
                   {item.sourceLabel}
                 </TableCell>
                 <TableCell className="text-xs text-muted-foreground">
-                  {item.invocation === "Automatic"
-                    ? "Auto-starts"
-                    : item.invocation === "Explicit"
-                      ? "Only when asked"
-                      : "Plugin"}
+                  {invocationLabel(item)}
                 </TableCell>
               </TableRow>
             ))}
@@ -322,11 +319,7 @@ export function WorkbenchVariant({
           <div className="grid grid-cols-3 gap-2">
             <Metric icon={BoxIcon} label="Skills" value={skills} />
             <Metric icon={Layers3Icon} label="Plugins" value={plugins} />
-            <Metric
-              icon={CheckCircle2Icon}
-              label="Work in both"
-              value={shared}
-            />
+            <Metric icon={CheckCircle2Icon} label="Both apps" value={shared} />
           </div>
 
           <div className="sticky top-0 z-20 -mx-2 border-y bg-background/95 px-2 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/80">

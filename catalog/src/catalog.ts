@@ -19,7 +19,16 @@ export interface CatalogItem {
   featured: number;
   id: string;
   installations?: Installation[];
-  invocation?: "Automatic" | "Explicit" | null;
+  invocation?: "Automatic" | "Explicit" | "Unknown" | null;
+  invocationByRuntime?: Partial<Record<Runtime, string>>;
+  localOverrides?: Partial<Record<Runtime, string>>;
+  management?: string;
+  observations?: Array<{
+    runtime: Runtime;
+    path: string;
+    resolvedPath: string;
+    alias: string;
+  }>;
   name: string;
   ownerAvatarUrl?: string | null;
   path?: string;
@@ -28,7 +37,13 @@ export interface CatalogItem {
   repository?: string;
   repositoryUrl?: string | null;
   runtimes: Runtime[];
-  source: "personal" | "openai" | "anthropic" | "third-party" | "repository";
+  source:
+    | "personal"
+    | "openai"
+    | "anthropic"
+    | "third-party"
+    | "repository"
+    | "local";
   sourceLabel: string;
   sourceUrl?: string | null;
   state: string;
@@ -45,6 +60,15 @@ export interface CatalogPayload {
   items: CatalogItem[];
   message?: string;
   schemaVersion: number;
+  warnings?: string[];
+  configuration?: Array<{
+    runtime: string;
+    path: string;
+    exists: boolean;
+    mcpServerCount?: number;
+    hookEventCount?: number;
+    skillOverrideCount?: number;
+  }>;
 }
 
 export interface CatalogFilters {
@@ -135,6 +159,8 @@ export function filterItems(items: CatalogItem[], filters: CatalogFilters) {
         item.repositoryUrl,
         item.skillsShUrl,
         item.invocation,
+        ...Object.values(item.invocationByRuntime ?? {}),
+        item.management,
         item.state,
         item.version,
         item.repository,
@@ -219,4 +245,17 @@ export function formatSnapshotDate(value?: string) {
 
 export function runtimeLabel(runtime: Runtime) {
   return runtime === "codex" ? "Codex" : "Claude";
+}
+
+export function invocationLabel(item: CatalogItem): string {
+  if (item.type !== "skill") return "Plugin";
+  if (Object.keys(item.localOverrides ?? {}).length) return "Local override";
+  const policies = Object.values(item.invocationByRuntime ?? {});
+  if (new Set(policies).size > 1) return "Varies by app";
+  const policy = policies[0] ?? item.invocation;
+  return policy === "Automatic"
+    ? "Auto eligible"
+    : policy === "Explicit"
+      ? "Explicit"
+      : "Unknown policy";
 }
