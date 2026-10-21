@@ -1,0 +1,199 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Ownership and provenance decisions, not an install manifest or inventory of active runtime capabilities.",
+  "reviewedOn": "2026-10-21",
+  "selectedInventory": "skills-lock.json",
+  "entries": [
+    {
+      "id": "ast-grep",
+      "maintainer": "ast-grep/agent-skill",
+      "sourcePath": "ast-grep/skills/ast-grep/SKILL.md",
+      "status": "retained-not-adopted",
+      "recommendedScope": "structural-code-search-projects",
+      "decision": "Existing declared provenance retained. No new installation, package merge, or scope expansion.",
+      "comparison": {
+        "checkedOn": "2026-10-21",
+        "evidence": "separate-global-lock-declaration-not-content-verification"
+      }
+    },
+    {
+      "id": "atlas",
+      "maintainer": "ariga/atlas",
+      "sourcePath": "skills/atlas/SKILL.md",
+      "license": "Apache-2.0",
+      "status": "retained-not-adopted",
+      "recommendedScope": "postgres-projects",
+      "decision": "Project migration commands and database owners remain authoritative; preserve the older or locally modified variant.",
+      "comparison": {
+        "checkedOn": "2026-10-21",
+        "revision": "ed994a77898e48377f9a9c391f2d1c49f5703b8d",
+        "sourceUrl": "https://github.com/ariga/atlas/blob/ed994a77898e48377f9a9c391f2d1c49f5703b8d/skills/atlas/SKILL.md",
+        "evidence": "upstream-family-identified-base-unresolved",
+        "historicalEntrypointRevision": null
+      }
+    },
+    {
+      "id": "aws-containers",
+      "maintainer": "aws/agent-toolkit-for-aws",
+      "sourcePath": "skills/core-skills/aws-containers/SKILL.md",
+      "status": "retained-recovery-not-selected",
+      "recommendedScope": "aws-container-projects",
+      "decision": "Retain the recovered snapshot. An exact upstream content baseline is established, while consumer ownership and adoption remain separate decisions; recovery history is not an upstream pin.",
+      "comparison": {
+        "checkedOn": "2026-10-21",
+        "revision": "df5d2e847c021eb7332871ab8989d6f73dec887d",
+        "sourceUrl": "https://github.com/aws/agent-toolkit-for-aws/tree/df5d2e847c021eb7332871ab8989d6f73dec887d/skills/core-skills/aws-containers",
+        "evidence": "exact-tree",
+        "originalInstallationRevisionVerified": false
+      },
+      "recovery": {
+        "checkedOn": "2026-10-21",
+        "evidence": "exact-git-tree-recovery",
+        "repository": "pdugan20/agent-tooling",
+        "revision": "59ce443c322aaf971968a14af31dd1b1363f5fd8",
+        "sourcePath": ".agents/skills/aws-containers"
+      },
+      "license": "Apache-2.0"
+    },
+    {
+      "id": "axiom-macos",
+      "maintainer": "charleswiltgen/axiom",
+      "sourcePath": ".claude-plugin/plugins/axiom/skills/axiom-macos/SKILL.md",
+      "status": "retained-not-adopted",
+      "recommendedScope": "native-macos-projects",
+      "decision": "Existing declared provenance retained. No new installation, package merge, or scope expansion.",
+      "comparison": {
+        "checkedOn": "2026-10-21",
+        "evidence": "separate-global-lock-declaration-not-content-verification"
+      }
+    },
+    {
+      "id": "blender-motion-state-inspection",
+      "maintainer": "affaan-m/ECC",
+      "sourcePath": "skills/blender-motion-state-inspection/SKILL.md",
+      "license": "MIT",
+      "status": "retained-not-adopted",
+      "recommendedScope": "project-owned-asset-workflows",
+      "decision": "Retain as a project-owned asset-workflow dependency. Product evidence and private ownership bindings identify its consumer; no shared workplace adoption or automatic generation is implied.",
+      "comparison": {
+        "checkedOn": "2026-10-21",
+        "revision": "90606c8315ee09cafc303515c5f33024db6b9882",
+        "sourceUrl": "https://github.com/affaan-m/ECC/blob/90606c8315ee09cafc303515c5f33024db6b9882/skills/blender-motion-state-inspection/SKILL.md",
+        "evidence": "exact-tree",
+        "historicalEntrypointRevision": null
+      }
+    },
+    {
+      "id": "circleci-config",
+      "maintainer": "circleci-public/skills",
+      "sourcePath": "plugins/circleci/skills/config/SKILL.md",
+      "status": "provider-selected-fallback-retained",
+      "recommendedScope": "circleci-projects",
+      "decision": "Use the installed CircleCI provider in Codex. The redundant Codex standalone copy was moved to a recoverable private backup outside discovery. Keep the tracked native Claude fallback; Cursor compatibility and provider upstream pin remain unverified.",
+      "comparison": {
+        "checkedOn": "2026-10-21",
+        "revision": "06df697556d3300cf2693c59f0a51b0908ce0b43",
+        "sourceUrl": "https://github.com/circleci-public/skills/tree/06df697556d3300cf2693c59f0a51b0908ce0b43/plugins/circleci/skills/config",
+        "evidence": "exact-tree",
+        "providerPackageVersion": "1.0.4",
+        "providerUpstreamRevisionVerified": false
+      }
+    },
+    {
+      "id": "information-architecture",
+      "maintainer": "Owl-Listener/designer-skills",
+      "sourcePath": "ux-strategy/skills/information-architecture/SKILL.md",
+      "license": "MIT",
+      "status": "retained-not-adopted",
+      "recommendedScope": "design-projects",
+      "decision": "Retain as an evaluation candidate; validate research assumptions and companion references before adoption.",
+      "comparison": {
+        "checkedOn": "2026-10-21",
+        "revision": "9a6930cf84a822eb458624bd11c61aac5bbdf224",
+        "sourceUrl": "https://github.com/Owl-Listener/designer-skills/blob/9a6930cf84a822eb458624bd11c61aac5bbdf224/ux-strategy/skills/information-architecture/SKILL.md",
+        "evidence": "exact-tree",
+        "historicalEntrypointRevision": null
+      }
+    },
+    {
+      "id": "navigation-patterns",
+      "maintainer": "Owl-Listener/designer-skills",
+      "sourcePath": "interaction-design/skills/navigation-patterns/SKILL.md",
+      "license": "MIT",
+      "status": "retained-not-adopted",
+      "recommendedScope": "design-projects",
+      "decision": "Retain as an evaluation candidate; fixed destination-count heuristics must not become global product policy.",
+      "comparison": {
+        "checkedOn": "2026-10-21",
+        "revision": "9a6930cf84a822eb458624bd11c61aac5bbdf224",
+        "sourceUrl": "https://github.com/Owl-Listener/designer-skills/blob/9a6930cf84a822eb458624bd11c61aac5bbdf224/interaction-design/skills/navigation-patterns/SKILL.md",
+        "evidence": "exact-tree",
+        "historicalEntrypointRevision": null
+      }
+    },
+    {
+      "id": "scenario",
+      "maintainer": "scenario-labs/skills",
+      "sourcePath": "skills/scenario/SKILL.md",
+      "license": "MIT",
+      "status": "retained-not-adopted",
+      "recommendedScope": "project-owned-asset-workflows",
+      "decision": "Retain as a project-owned asset-workflow dependency. Product evidence and private ownership bindings identify its consumer; no shared workplace adoption or automatic generation is implied.",
+      "comparison": {
+        "checkedOn": "2026-10-21",
+        "revision": "6e7b8c30f3589c57cf515a00820ddef7c81cc11f",
+        "sourceUrl": "https://github.com/scenario-labs/skills/blob/6e7b8c30f3589c57cf515a00820ddef7c81cc11f/skills/scenario/SKILL.md",
+        "evidence": "upstream-family-identified-base-unresolved",
+        "historicalEntrypointRevision": null
+      }
+    },
+    {
+      "id": "scenario-3d",
+      "maintainer": "scenario-labs/skills",
+      "sourcePath": "skills/scenario-3d/SKILL.md",
+      "license": "MIT",
+      "status": "retained-not-adopted",
+      "recommendedScope": "project-owned-asset-workflows",
+      "decision": "Retain as a project-owned asset-workflow dependency. Product evidence and private ownership bindings identify its consumer; no shared workplace adoption or automatic generation is implied.",
+      "comparison": {
+        "checkedOn": "2026-10-21",
+        "revision": "6e7b8c30f3589c57cf515a00820ddef7c81cc11f",
+        "sourceUrl": "https://github.com/scenario-labs/skills/blob/6e7b8c30f3589c57cf515a00820ddef7c81cc11f/skills/scenario-3d/SKILL.md",
+        "evidence": "historical-entrypoint",
+        "historicalEntrypointRevision": "f63246dc5ad5de723d8f1b0309c7af7e7edb239f"
+      }
+    },
+    {
+      "id": "supabase-postgres-best-practices",
+      "maintainer": "supabase/agent-skills",
+      "sourcePath": "skills/supabase-postgres-best-practices/SKILL.md",
+      "license": "MIT",
+      "status": "retained-not-adopted",
+      "recommendedScope": "postgres-projects",
+      "decision": "Provider-neutral Postgres use is relevant; this does not select Supabase hosting or authorize database writes.",
+      "comparison": {
+        "checkedOn": "2026-10-21",
+        "revision": "c9be0e931b7930f7d02126d04774d904c381e7d7",
+        "sourceUrl": "https://github.com/supabase/agent-skills/blob/c9be0e931b7930f7d02126d04774d904c381e7d7/skills/supabase-postgres-best-practices/SKILL.md",
+        "evidence": "exact-tree",
+        "historicalEntrypointRevision": null
+      }
+    },
+    {
+      "id": "technical-writer",
+      "maintainer": "onewave-ai/claude-skills",
+      "sourcePath": "technical-writer/SKILL.md",
+      "license": "MIT",
+      "status": "retained-not-adopted",
+      "recommendedScope": "documentation-projects",
+      "decision": "Generic technical documentation; keep organization-specific product writing and publishing under their existing owners.",
+      "comparison": {
+        "checkedOn": "2026-10-21",
+        "revision": "b2267d9171af4f56848d82992381b20b89b44056",
+        "sourceUrl": "https://github.com/onewave-ai/claude-skills/blob/b2267d9171af4f56848d82992381b20b89b44056/technical-writer/SKILL.md",
+        "evidence": "exact-tree",
+        "historicalEntrypointRevision": null
+      }
+    }
+  ]
+}

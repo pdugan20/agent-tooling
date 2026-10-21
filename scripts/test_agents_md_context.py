@@ -15,6 +15,21 @@ agents_md_context = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(agents_md_context)
 
 
+def patch_environment(name: str, value: str):
+    import os
+
+    previous = os.environ.get(name)
+    os.environ[name] = value
+
+    def restore() -> None:
+        if previous is None:
+            os.environ.pop(name, None)
+        else:
+            os.environ[name] = previous
+
+    return restore
+
+
 def run_hook(stdin: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         [sys.executable, str(MODULE_PATH)],
@@ -27,6 +42,10 @@ def run_hook(stdin: str) -> subprocess.CompletedProcess[str]:
 
 class AgentsMdContextTests(unittest.TestCase):
     def setUp(self) -> None:
+        # Pin the hook to a Claude version without native AGENTS.md support so the
+        # existing expectations describe the fallback path; native tests override it.
+        self.version = patch_environment("AGENTS_MD_HOOK_CLAUDE_VERSION", "2.1.200")
+        self.addCleanup(self.version)
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
         self.repository = Path(self.temporary.name).resolve() / "repository"
@@ -38,6 +57,27 @@ class AgentsMdContextTests(unittest.TestCase):
 
         self.assertIn("Keep data synthetic.", context)
         self.assertIn(str(self.repository / "AGENTS.md"), context)
+
+    def test_native_support_suppresses_the_hook_without_a_project_claude_file(self) -> None:
+        restore = patch_environment("AGENTS_MD_HOOK_CLAUDE_VERSION", "2.1.299 (Claude Code)")
+        self.addCleanup(restore)
+        self.assertEqual(agents_md_context.build_context(self.repository), "")
+
+    def test_native_support_still_supplies_when_a_parent_claude_file_blocks_it(self) -> None:
+        restore = patch_environment("AGENTS_MD_HOOK_CLAUDE_VERSION", "2.1.299")
+        self.addCleanup(restore)
+        nested = self.repository / "packages" / "ui"
+        nested.mkdir(parents=True)
+        (nested / "AGENTS.md").write_text("# UI rules\n\nUse tokens.\n")
+        (self.repository / "CLAUDE.local.md").write_text("Personal sandbox notes.\n")
+        context = agents_md_context.build_context(nested)
+        self.assertIn("Keep data synthetic.", context)
+        self.assertIn("Use tokens.", context)
+
+    def test_unknown_version_keeps_the_fallback(self) -> None:
+        restore = patch_environment("AGENTS_MD_HOOK_CLAUDE_VERSION", "not a version")
+        self.addCleanup(restore)
+        self.assertIn("Keep data synthetic.", agents_md_context.build_context(self.repository))
 
     def test_repository_claude_md_takes_precedence(self) -> None:
         for claude_file in ("CLAUDE.md", ".claude/CLAUDE.md"):

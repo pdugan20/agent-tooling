@@ -21,7 +21,7 @@ RELATIVE_COMPUTER_USE_COMMAND = (
     "SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
 )
 COMPUTER_USE_SUFFIX = (
-    ".codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/"
+    "computer-use/Codex Computer Use.app/Contents/SharedSupport/"
     "SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
 )
 PRODUCT_DESIGN_DISABLED_SKILLS = ("ideate", "index")
@@ -53,8 +53,8 @@ def _insert_root_fallback(text: str) -> str:
     return f"{normalized}\n" if normalized else f"{FALLBACK_LINE}\n"
 
 
-def _repair_computer_use_command(text: str, home: Path) -> str:
-    client = home / COMPUTER_USE_SUFFIX
+def _repair_computer_use_command(text: str, codex_home: Path) -> str:
+    client = codex_home / COMPUTER_USE_SUFFIX
     if not os.access(client, os.X_OK):
         return text
 
@@ -76,10 +76,10 @@ def _repair_computer_use_command(text: str, home: Path) -> str:
     return "\n".join(lines) + "\n"
 
 
-def _product_design_skill_paths(home: Path) -> list[Path]:
+def _product_design_skill_paths(codex_home: Path) -> list[Path]:
     roots = (
-        home / ".codex/plugins/cache/openai-curated-remote/product-design",
-        home / ".codex/.tmp/plugins/plugins/product-design",
+        codex_home / "plugins/cache/openai-curated-remote/product-design",
+        codex_home / ".tmp/plugins/plugins/product-design",
     )
     paths: set[Path] = set()
     for root in roots:
@@ -117,8 +117,8 @@ def _disable_skill(text: str, path: Path) -> str:
     )
 
 
-def _disable_product_design_image_ideation(text: str, home: Path) -> str:
-    for path in _product_design_skill_paths(home):
+def _disable_product_design_image_ideation(text: str, codex_home: Path) -> str:
+    for path in _product_design_skill_paths(codex_home):
         text = _disable_skill(text, path)
     return text
 
@@ -197,12 +197,14 @@ def update_config(
     home: Path,
     additional_disabled_skills: tuple[Path, ...] = (),
     managed_mcp_servers: dict[str, dict[str, Any]] | None = None,
+    codex_home: Path | None = None,
 ) -> str:
     """Return an updated config without changing secrets or runtime auth."""
 
     updated = _insert_root_fallback(text)
-    updated = _repair_computer_use_command(updated, home)
-    updated = _disable_product_design_image_ideation(updated, home)
+    selected_home = codex_home or home / ".codex"
+    updated = _repair_computer_use_command(updated, selected_home)
+    updated = _disable_product_design_image_ideation(updated, selected_home)
     for path in additional_disabled_skills:
         updated = _disable_skill(updated, path.resolve())
     for name, spec in sorted((managed_mcp_servers or {}).items()):
@@ -213,6 +215,7 @@ def update_config(
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=Path, required=True)
+    parser.add_argument("--codex-home", type=Path)
     parser.add_argument("--home", type=Path, default=Path.home())
     parser.add_argument("--disable-skill", type=Path, action="append", default=[])
     parser.add_argument("--mcp-servers", type=Path)
@@ -226,6 +229,7 @@ def main() -> None:
         args.home,
         tuple(args.disable_skill),
         managed_mcp_servers,
+        args.codex_home,
     )
     if updated == original:
         return

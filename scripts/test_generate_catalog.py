@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import generate_catalog
 
@@ -16,7 +19,7 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 24)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
-        self.assertEqual(catalog["schemaVersion"], 5)
+        self.assertEqual(catalog["schemaVersion"], 6)
         self.assertEqual(
             next(item for item in items if item["name"] == "xcodebuildmcp")["displayName"],
             "XcodeBuildMCP",
@@ -411,6 +414,120 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertIsNone(items[0]["sourceUrl"])
         self.assertIsNone(items[0]["repositoryUrl"])
         self.assertIsNone(items[0]["skillsShUrl"])
+
+    def test_runtime_policies_do_not_translate_claude_flags_into_codex(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            metadata = {"disable-model-invocation": "true"}
+            self.assertEqual(
+                generate_catalog.invocation_policies(root, metadata),
+                {"codex": "Automatic", "claude": "Explicit"},
+            )
+            (root / "agents").mkdir()
+            (root / "agents/openai.yaml").write_text(
+                "policy:\n  allow_implicit_invocation: false\n"
+            )
+            self.assertEqual(
+                generate_catalog.invocation_policies(root, {}),
+                {"codex": "Explicit", "claude": "Automatic"},
+            )
+
+    def test_inline_policy_and_unrecognized_values_are_not_misrepresented(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "agents").mkdir()
+            manifest = root / "agents/openai.yaml"
+            manifest.write_text("policy: {allow_implicit_invocation: false}\n")
+            self.assertEqual(generate_catalog.invocation_policies(root, {})["codex"], "Explicit")
+            manifest.write_text('policy:\n  allow_implicit_invocation: "false"\n')
+            self.assertEqual(generate_catalog.invocation_policies(root, {})["codex"], "Unknown")
+
+    def test_user_scan_distinguishes_owners_and_preserves_same_name_copies(self):
+        with (
+            tempfile.TemporaryDirectory() as temporary,
+            mock.patch.dict(os.environ, {}, clear=True),
+        ):
+            home = Path(temporary)
+            external = home / "external"
+            external.mkdir()
+            (external / "SKILL.md").write_text(
+                "---\nname: example\ndescription: External skill\n---\n"
+            )
+            for folder in (
+                home / ".agents/skills",
+                home / ".claude/skills",
+                home / ".codex/skills",
+            ):
+                folder.mkdir(parents=True)
+            (home / ".agents/skills/example").symlink_to(external)
+            (home / ".claude/skills/alias").symlink_to(external)
+            copy = home / ".codex/skills/example"
+            copy.mkdir()
+            (copy / "SKILL.md").write_bytes((external / "SKILL.md").read_bytes())
+            (home / ".agents/skills/broken").symlink_to(home / "missing")
+            warnings = []
+            settings = {
+                "codex": {
+                    "skills": {"config": [{"path": str(external / "SKILL.md"), "enabled": False}]}
+                }
+            }
+            items = generate_catalog.user_skill_items([], home, warnings, settings)
+            self.assertEqual(len(items), 2)
+            self.assertEqual(len({item["id"] for item in items}), 2)
+            shared = next(item for item in items if len(item["observations"]) == 2)
+            self.assertEqual(shared["runtimes"], ["codex", "claude"])
+            self.assertEqual(shared["management"], "External owner")
+            self.assertEqual(shared["localOverrides"]["codex"], "Disabled locally")
+            self.assertTrue(warnings)
+
+    def test_arbitrary_claude_override_values_never_enter_the_snapshot(self):
+        with (
+            tempfile.TemporaryDirectory() as temporary,
+            mock.patch.dict(os.environ, {}, clear=True),
+        ):
+            home = Path(temporary)
+            skill = home / ".claude/skills/example"
+            skill.mkdir(parents=True)
+            (skill / "SKILL.md").write_text("---\nname: example\ndescription: Fixture\n---\n")
+            settings = {
+                "claude": {
+                    "skillOverrides": {"example": "https://private.invalid/?token=fixture-secret"}
+                }
+            }
+            items = generate_catalog.user_skill_items([], home, [], settings)
+            self.assertEqual(len(items), 1)
+            self.assertNotIn("fixture-secret", json.dumps(items))
+            self.assertNotIn("localOverrides", items[0])
+            settings["claude"]["skillOverrides"]["example"] = "user-invocable-only"
+            items = generate_catalog.user_skill_items([], home, [], settings)
+            self.assertEqual(items[0]["localOverrides"], {"claude": "User-only policy"})
+
+    def test_config_summary_omits_values_and_snapshot_tolerates_absent_claude(self):
+        with (
+            tempfile.TemporaryDirectory() as temporary,
+            mock.patch.dict(os.environ, {}, clear=True),
+        ):
+            home = Path(temporary)
+            config = home / ".codex/config.toml"
+            config.parent.mkdir()
+            config.write_text(
+                'model_provider = "sensitive-value"\n[mcp_servers.private]\n'
+                'command = "sensitive-value"\n[hooks]\nStop = "sensitive-value"\n'
+            )
+            with (
+                mock.patch.object(Path, "home", return_value=home),
+                mock.patch.object(
+                    generate_catalog,
+                    "run_json_command",
+                    side_effect=[{"installed": []}, FileNotFoundError()],
+                ),
+            ):
+                snapshot = generate_catalog.build_runtime_snapshot()
+            self.assertNotIn("sensitive-value", json.dumps(snapshot))
+            self.assertTrue(snapshot["warnings"])
+            self.assertEqual(snapshot["configuration"][0]["mcpServerCount"], 1)
+            self.assertEqual(snapshot["configuration"][0]["hookEventCount"], 1)
+            self.assertEqual(snapshot["items"], [])
 
     def test_humanizes_use_railway_without_an_acronym(self) -> None:
         self.assertEqual(generate_catalog.humanize_name("use-railway"), "Use Railway")

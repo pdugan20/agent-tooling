@@ -1,146 +1,116 @@
 # Architecture and scope
 
-`agent-tooling` is the canonical source for Patrick's shared Codex and Claude Code setup. Runtime caches and product
-settings are generated machine state; edit this repository rather than patching installed copies.
+`agent-tooling` owns Patrick's selected agent configuration. Codex is the primary harness; Claude Code support is
+optional. The [setup guide](setup.md) documents the default Codex commands and explicit Claude commands.
 
-## Sources of truth
+## Ownership
 
 | Concern | Canonical source | Runtime destination |
 | --- | --- | --- |
 | Shared working agreement | `global/AGENTS.md` | `~/.codex/AGENTS.md` and the active Claude profile |
-| Patrick skills | `pdugan20/skills` releases | Skills CLI snapshots and user-level links |
-| Managed skill snapshots | `.agents/skills/*` and `skills-lock.json` | User-level skill links for both products |
-| Marketplace-installed Codex plugins | `config/codex-plugins.txt` | Codex configuration and plugin cache |
-| Codex-managed plugins | `config/codex-managed-plugins.txt` | Signed-in Codex account/workspace |
-| Managed Codex MCP servers | `config/codex-mcp-servers.json` | `~/.codex/config.toml` |
-| Claude plugins | `config/claude-plugins.txt` | Claude user settings and plugin cache |
-| Configured Superpowers policy | `config/superpowers.json` | The maintained fork and both plugin caches |
-| Machine policy | `scripts/configure-codex.py` and `scripts/configure-claude.py` | Product settings files |
-| Repository-specific behavior | The nearest repository `AGENTS.md` | Travels with that repository |
-| Repository `AGENTS.md` in Claude | `global/hooks/agents_md_context.py` | Claude `SessionStart` hook set by `scripts/configure-claude.py` |
-| Browsable inventory | Generated `catalog/data.json` | Local catalog and optional machine snapshot |
+| Patrick-owned skill content | [Skills](https://github.com/pdugan20/skills) releases | Locked snapshots selected here |
+| Selected standalone skills | `.agents/skills/*` and `skills-lock.json` | User-level skill links |
+| CLI-managed Codex plugin selection | `config/codex-plugins.txt` | Configured marketplaces and installed plugins |
+| Desired desktop-managed plugins | `config/codex-managed-plugins.txt` | Signed-in account or workspace plugin state |
+| Selected standalone Codex MCP servers | `config/codex-mcp-servers.json` | Named tables in `~/.codex/config.toml` |
+| Optional Claude plugins and settings | `config/claude-plugins.txt`, `scripts/configure-claude.py` | Active Claude profile |
+| Configured Superpowers baseline | `config/superpowers.json` | Maintained fork and installed plugin |
+| Project behavior | Each project's `AGENTS.md` and local configuration | That project |
+| Selected-capability catalog | Generated `catalog/data.json` | Local browser catalog |
 
-Text documentation explains the model but does not duplicate exact plugin or skill inventories. The config files,
-lockfile, generated catalog, and installed-product listings are authoritative.
+Edit managed sources here and Patrick-owned skills in Skills. Preserve settings owned by the user, an application,
+a provider, another repository, or an administrator. This repository owns a subset of a machine's configuration.
 
-## Three kinds of scope
+## Model, harness, and provider
 
-- **Management scope** identifies the repository and lockfile that own an artifact.
-- **Runtime availability** identifies whether it can run in every repository or only one project.
-- **Persistence scope** identifies whether it travels through Git, follows a signed-in account, or remains on one
-  machine.
+The model generates responses. The harness supplies instructions, skill discovery, tools, permissions, and session
+behavior. A provider or proxy routes model requests. These are separate choices.
 
-These are independent. The official `skills` CLI describes upstream snapshots as project-scoped because their
-lockfile lives here, while `npm run bootstrap` links those same skills into both products' user-level skill folders.
-Their effective runtime availability is therefore all repositories.
+Using Claude through Codex does not make Claude Code's settings, slash commands, output styles, or language-server
+plugins active. OpenCodex documents its [Codex integration](https://opencodex.me/guides/codex-integration/) separately
+from model routing. Keep accounts, proxy lifecycle, and machine recovery in private local notes.
 
-## Global or project-specific
+## Instructions and configuration
 
-| Put it in this shared setup when… | Put it in a project when… |
-| --- | --- |
-| Guidance should behave the same across most codebases. | It names project architecture, schemas, endpoints, commands, or release lanes. |
-| It represents a reusable personal workflow or design method. | It must be versioned and reviewed with one application. |
-| A plugin provides a broadly useful service integration. | Only that project needs or should pin the capability. |
+Codex natively loads global `AGENTS.md` guidance and project instructions from the project root down to the working
+directory. `AGENTS.override.md` takes precedence at its directory level. This repo configures `CLAUDE.md` as a
+fallback when the normal instruction names are absent; it is a compatibility choice, not a requirement for new projects.
+Read nested instructions before editing below the working directory.
+[Official instruction discovery](https://learn.chatgpt.com/docs/agent-configuration/agents-md)
 
-Global does not mean always active. Invocation policy is separate: a global skill can be explicit-only, while a
-project skill can trigger automatically when a request clearly matches it. Repository instructions should govern
-local behavior without copying globally installed plugin files.
+User configuration, trusted project `.codex/config.toml` files, command overrides, and managed policies can all
+affect the result. A user config file alone does not establish effective settings. Project trust controls whether
+project `.codex/` configuration loads; enforced organizational requirements constrain local choices.
+[Official configuration layers](https://learn.chatgpt.com/docs/config-file/config-basic)
 
-### Apple platform skills
+The repository's Codex configurator manages the instruction fallback, selected skill overrides, a legacy
+computer-use command repair, and the named MCP manifest entries. It preserves unrelated configuration, including
+provider routing. Its legacy repair is not a recommendation to install a separate computer-use server.
 
-The table above also decides where Apple platform skills go:
+## Skill ownership and discovery
 
-- Keep a skill global when most Swift apps benefit from it, for example `swiftui-pro` and `ios-accessibility`. An
-  app can still override its defaults in a repository ADR.
-- Lock a skill in the app repository when only that app uses the framework, or when the app pins the skill next to an
-  ADR that overrides its defaults. NextUp locks `swiftdata-pro` this way.
-- Lock individual `Prisma-Labs-Dev/apple-skills` references per app. Do not install the full Apple Skills plugin.
-- Check the license before adoption. Git redistributes every locked snapshot, so a source-available license, such as
-  PolyForm Perimeter, needs an explicit owner decision.
+The Skills CLI installs selected snapshots under `.agents/skills/` and records provenance in `skills-lock.json`.
+Default bootstrap links them into `~/.agents/skills` for Codex. `bootstrap:claude` links them into the active Claude skill directory. `.claude/skills/`
+entries in this repository are compatibility links.
 
-## Skills
+Codex supports repository and user `.agents/skills` directories, symlinked folders, and runtime-supplied skills.
+A machine can also contain legacy skill locations and plugin-bundled skills. The current chat's available-skills
+catalog is the evidence for what the agent can invoke. Duplicate names do not imply merged contents.
+[Official skill discovery](https://learn.chatgpt.com/docs/build-skills#where-to-save-skills)
 
-The public [Skills](https://github.com/pdugan20/skills) repository is canonical for Patrick's design, UI-analysis,
-delivery, mobile-performance, and documentation skills. This repository consumes its tagged releases alongside
-third-party skills. Every exact snapshot is installed by the
-[`skills` CLI](https://github.com/vercel-labs/skills), stored under
-`.agents/skills/`, and tracked by `skills-lock.json`. The `.claude/skills/` entries are compatibility links, not
-separate copies.
+Do not edit locked snapshots. Release first-party changes upstream, install the reviewed release here, and inspect
+the diff. Skills linked directly from another checkout follow that checkout and need their own ownership and update
+policy. A globally available skill is not necessarily managed by this repository.
 
-Do not edit locked snapshots. Release first-party changes from Skills, install the new tag here, and
-review the snapshot and lockfile diff. Run `npm run skills:update` for third-party updates. If a source needs local
-policy, prefer runtime configuration or a clearly named addition to Skills over a silent fork.
+Management scope, runtime availability, and persistence are independent. A snapshot managed here can run globally;
+a project-owned skill can remain local; account-managed plugins can follow a sign-in without being locked here.
+See [invocation policy](skill-invocation.md) for automatic and explicit use.
 
-## Managed Codex MCP servers
+## Plugins and compatibility
 
-`config/codex-mcp-servers.json` is the exact, non-secret desired state for standalone Codex MCP servers that should
-survive machine setup. `scripts/configure-codex.py` converges only those named tables in `~/.codex/config.toml` and
-preserves unrelated servers and authentication state. `scripts/verify-setup.sh` checks the resulting configuration.
+Plugins distribute skills, MCP connections, and supported runtime extensions. Current OpenAI documentation prefers
+portable root `plugin.json` manifests with OpenAI-specific settings under `extensions.com.openai`.
+The `.codex-plugin/plugin.json` compatibility layout remains supported. Existing upstream packages need not be
+rewritten merely to match the newer layout. [Official packaging guidance](https://developers.openai.com/plugins/build/plugins)
 
-The initial XcodeBuildMCP entry is deliberately a Codex-only pilot. It pins the npm package and matching upstream
-skill to v2.7.0, enables only Simulator, semantic UI automation, and debugging, and disables XcodeBuildMCP's Sentry
-telemetry. Runtime log capture is part of the Simulator launch workflow; `logging` is not a current v2.7.0 workflow
-name. Computer use remains the visual complement, and Instruments or `xctrace` remains the performance profiler.
+Local or Git marketplaces, the public plugin directory, workspace installations, and runtime bundles have different
+management paths. This repo's CLI and desktop manifests describe its chosen maintenance split; they are not an
+exhaustive taxonomy of Codex. Local enablement settings do not replace workspace installation policy.
 
-Promote another standalone MCP into this manifest only when its behavior should be global, its command and version
-can be pinned without secrets, setup can verify it, and a plugin or repository-local configuration is not the better
-ownership boundary.
+Codex supports lifecycle hooks, including hooks bundled with manually installed desktop plugins. Non-managed hooks
+require review and trust of their current definitions; public-directory submission has additional restrictions.
+Do not infer hook activation from plugin installation. [Official hooks guidance](https://learn.chatgpt.com/docs/hooks)
 
-## Plugin layers
+Claude's `outputStyles` and `lspServers` declarations are not equivalent Codex components. Skills and MCP capabilities
+can be reused where supported, but each package needs a compatibility review. An Anthropic marketplace name alone
+does not make a package Claude-only. [Official migration guidance](https://developers.openai.com/plugins/guides/submit-claude-plugin)
 
-Codex has three plugin layers:
+Use only the configured Superpowers fork. Its invocation groups and policy patches live in `config/superpowers.json`.
+Strict planning, TDD, worktrees, orchestration, and image generation retain the opt-in boundaries in `global/AGENTS.md`.
 
-1. Marketplace-installed plugins managed by the scripts in this repository.
-2. Plugins installed from the Codex Plugins tab and updated through the signed-in account/workspace.
-3. Bundles supplied by the Codex application or primary runtime.
+## Standalone MCP servers
 
-Claude plugins are installed at user scope from `config/claude-plugins.txt`. Claude paths use `$CLAUDE_CONFIG_DIR`
-when set and otherwise default to `~/.claude`. The configured Superpowers fork is the only Superpowers installation
-enabled in either product. Its exact version, upstream baseline, policy patches, and invocation groups live in
-`config/superpowers.json` rather than duplicated prose.
+`config/codex-mcp-servers.json` pins standalone servers that should survive setup. The configurator converges those
+named tables and preserves unrelated servers and authentication. Plugin-provided tools and other local servers
+have separate owners.
 
-The catalog groups different Codex and Claude package IDs under one stable logical capability ID. Each row retains
-the per-product package, delivery method, version, and state, so grouping does not hide which installation supplies
-the capability.
+The XcodeBuildMCP selection enables Simulator, semantic UI automation, and debugging with telemetry disabled.
+Its exact package version and environment live in the manifest. Computer use supplies visual judgment; Instruments
+or `xctrace` and suitable device evidence support performance claims.
 
-Generated-image ideation remains opt-in through `global/AGENTS.md` and Codex skill overrides. Code-native UI
-exploration in the project browser or simulator is the default.
+## Catalog and persistence
 
-## Claude-only language servers
+The catalog records selected skills and plugins, grouping equivalent package IDs under a logical capability.
+Its local snapshot observes user skill entrypoints, CLI plugins, and configuration counts; it can also scan project
+skills. Resolved paths establish whether a skill link points to the selected source. Matching names alone do not
+establish ownership, and distinct copies remain separate. Declared invocation is recorded independently for each
+harness; local overrides are shown separately and do not establish effective session policy.
 
-Claude Code supports plugin-provided `lspServers`; Codex's plugin format does not currently define an equivalent
-component. Claude's Swift plugin uses Xcode or Swift's `sourcekit-lsp`, while its TypeScript plugin uses
-`typescript-language-server`. `npm run setup` installs the TypeScript prerequisites and `npm run setup:check` verifies
-both binaries.
+The local file stays ignored by Git. Configuration values and credentials are not copied into it. System/admin skills,
+plugin skill trees, nested project directories, and effective project/managed configuration are outside its coverage.
+Runtime bundles remain filtered from the plugin comparison. Inventory, effective availability, and usage differ.
 
-Installing those Claude plugins through a Codex marketplace would create plugin state without supplying Claude's LSP
-tool. Codex instead uses project builds, type checks, linters, tests, and editor context.
-
-- [Claude Code LSP plugin reference](https://code.claude.com/docs/en/plugins-reference#lsp-servers)
-- [Codex plugin structure](https://developers.openai.com/plugins/build/plugins#plugin-structure)
-
-## Persistence across machines
-
-Git carries the working agreement, maintained skills, locked upstream skills, plugin manifests, catalog, scripts,
-and repository-specific instructions. A new machine applies them with `npm run setup`.
-
-Git does not carry:
-
-- OAuth sessions, API keys, provider credentials, or trusted-workspace decisions;
-- macOS permissions, simulators, certificates, provisioning, or developer toolchains;
-- installed product caches, task history, memory, or most desktop preferences; or
-- working trees and uncommitted changes from other repositories.
-
-Keep credentials and personal data out of this repository. Inspect the current machine without changing canonical
-state with:
-
-```bash
-codex plugin list --json
-codex plugin marketplace list
-claude plugin list --json
-npm run setup:check
-npm run mcp:check
-npm run catalog:snapshot
-```
-
-The generated **This Mac** catalog snapshot is ignored by Git and is never a portable source of truth.
+Git carries this repo's selected configuration, locks, scripts, and docs. Accounts, credentials, permissions,
+application caches, task history, other checkouts, and local customizations have separate persistence rules.
+Use the [machine audit](maintenance.md#audit-a-machine) to find missing ownership before attempting cleanup.
+Record retention and source decisions through the [capability ownership guide](capability-ownership.md).

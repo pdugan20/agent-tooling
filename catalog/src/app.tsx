@@ -189,6 +189,34 @@ export function App() {
           </Tabs>
         </header>
 
+        {scope === "local" && activePayload?.generatedAt && (
+          <details className="shrink-0 border-b bg-muted/30 px-4 py-2 text-xs">
+            <summary className="cursor-pointer">
+              Snapshot coverage
+              {activePayload.warnings?.length
+                ? ` · ${activePayload.warnings.length} notices`
+                : ""}
+            </summary>
+            <div className="space-y-1 py-2 text-muted-foreground">
+              <p>
+                User skill folders and CLI plugin reports. Configuration counts
+                only; system/admin skills, nested project skills, plugin skill
+                trees and effective session policy are outside this scan.
+              </p>
+              {activePayload.configuration?.map((record) => (
+                <p key={record.path}>
+                  {record.runtime}:{" "}
+                  {record.exists
+                    ? `${record.mcpServerCount ?? 0} MCP entries · ${record.hookEventCount ?? 0} hook events · ${record.skillOverrideCount ?? 0} skill overrides`
+                    : "No configuration file found"}
+                </p>
+              ))}
+              {activePayload.warnings?.map((warning) => (
+                <p key={warning}>{warning}</p>
+              ))}
+            </div>
+          </details>
+        )}
         {!collections || !activePayload ? (
           <LoadingState />
         ) : variant === "workbench" ? (

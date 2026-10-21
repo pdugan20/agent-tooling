@@ -1,45 +1,57 @@
-# Quality Tooling
+# Quality tooling
 
-This repository uses a layered quality gate: each tool must cover a distinct defect class, remain reasonably quiet,
-and support reproducible installation. Generated catalogs and third-party skill snapshots are validated for
-provenance and structure but are not reformatted as locally authored source.
+Repository checks cover source quality, provenance, and configuration contracts. They do not establish that a
+signed-in desktop chat can use every selected capability. Run `npm run verify` for the repository gate and the
+[setup checks](setup.md#current-command-boundary) separately for installed configuration.
 
-## Adopted checks
+## Checks used here
 
-| Tool | Role | Policy |
+| Tool | Role | Version source |
 | --- | --- | --- |
-| Prettier | JSON, YAML, HTML, CSS, and JavaScript formatting | Exact npm version; check mode in CI |
-| Markdownlint | Markdown structure | Exact npm version; repository-specific rule exceptions |
-| Claude Code validator | Claude plugin and marketplace schema | Official CLI, strict mode |
-| Codex creator validators | Skill and plugin schema plus Codex interface metadata | Built-in workflows, run before publishing |
-| Agent Ecosystem `skill-validator` | Independent portable-skill structure, references, and script checks | Version 1.5.6 pinned in `skills` CI; strict mode |
-| ClaudeLint | Shared Claude configuration and plugin-specific policy checks where it adds coverage | Exact npm version; not the canonical portable-skill validator |
-| Repository validators | Cross-file identity, version, source, and policy invariants | Unit-tested Python |
-| Skills CLI | Portable skill discovery and provenance lock generation | Pinned command version in release repositories |
-| Ruff | Python linting and formatting | Pinned pre-commit release |
-| ShellCheck and shfmt | Shell correctness and formatting | Pinned pre-commit releases |
-| actionlint | GitHub Actions syntax and expression semantics | Checksum-pinned binary in CI |
-| Gitleaks | Staged and full-history secret scanning | Checksum-pinned binary in CI |
-| Typos | Low-noise spelling checks across source and documentation | Version 1.48.0; local and CI gate |
-| zizmor | GitHub Actions and Dependabot security analysis | Version 1.28.0; pedantic persona, medium severity and confidence |
-| Lychee | External and internal documentation links | Version 0.24.2; scheduled rather than a PR gate because network failures are nondeterministic |
+| Prettier | Catalog code and configuration formatting | `package.json` and `package-lock.json` |
+| Markdownlint | Maintained Markdown structure | `package.json` and `.markdownlint.json` |
+| TypeScript | Catalog type checks | `package.json` and catalog tsconfig files |
+| ClaudeLint | Retained Claude configuration checks and explicit strict validation of selected skill snapshots | `package.json`, `.claudelintrc.json`, and `lint:claude` |
+| Repository validators and tests | Source, version, link, plugin, configuration, release, and dependency-policy contracts | `scripts/` |
+| Ruff | Python linting and formatting | `.pre-commit-config.yaml` |
+| ShellCheck and shfmt | Shell correctness and formatting | `.pre-commit-config.yaml` |
+| actionlint and zizmor | Workflow syntax and security analysis | `scripts/install-ci-tools.sh` |
+| Gitleaks | Staged and full-history secret scanning | `scripts/install-ci-tools.sh` |
+| Typos | Low-noise spelling checks | `scripts/install-ci-tools.sh` |
+| Lychee | Scheduled internal and external link checks | `scripts/install-ci-tools.sh` and `.lychee.toml` |
 
-Binary release checksums live in `scripts/install-ci-tools.sh`. GitHub Actions are pinned to full commits and
-maintained through Dependabot.
+`npm run verify` runs unit tests, catalog drift detection, pre-commit checks, full-history secret scanning, and
+whitespace checks. Catalog compilation has its own `npm run catalog:build` command.
+Snapshots are excluded from blanket formatting and Markdown rewrites. They are still subject to provenance policy
+and the explicit ClaudeLint skill-validation command. This compatibility check is not proof of Codex runtime behavior.
 
-## Deferred tools
+## Checks in publishing repositories
 
-| Candidate | Decision |
+Skills CLI records installed skill provenance here. The Skills repository owns its portable-skill validation and
+behavioral evaluation. Plugin publishers own manifest validation and installation smoke tests for their supported
+clients. Claude's validator and Codex's creator workflows are relevant to those packages; they are not interchangeable
+universal validators. See [authoring](authoring.md).
+
+## Dependency updates
+
+Renovate owns npm and GitHub Actions update PRs under [`renovate.json`](../renovate.json).
+Dependabot's retained configuration sets its update PR limits to zero. Reviewed Renovate rules permit selected
+minor and patch updates to merge after required checks; major and other exceptional changes need dashboard approval.
+This does not authorize automatic instruction, plugin, or skill updates.
+
+GitHub Actions use full commit pins. Exact tool versions and checksums live in the configuration and installer files
+above; documentation does not maintain a second version inventory.
+
+## Deferred checks
+
+| Candidate | Current decision |
 | --- | --- |
-| `skills-ref` | Keep as an occasional compatibility check, not a release gate. The official project describes the reference library as demonstration-only. |
-| Taplo | Defer until the repository owns meaningful TOML configuration; `check-toml` already catches syntax errors. |
-| yamllint and check-jsonschema | Defer because Prettier, pre-commit syntax hooks, actionlint, ClaudeLint, and repository invariants cover the current YAML and JSON surfaces. |
-| Vale or a broad dictionary spell checker | Defer until an editorial style policy is desired. Typos catches objective misspellings with less prose noise. |
-| ESLint or Biome | Defer until executable JavaScript or TypeScript becomes a meaningful source surface. |
-| Additional dependency scanners | Dependabot and lockfiles are sufficient for the current development-only dependencies. Reassess if this repository ships a runtime or container. |
+| `skills-ref` | Occasional compatibility check; not an additional release gate |
+| Taplo | TOML syntax checks cover the current surface; revisit when richer TOML policy is needed |
+| yamllint and check-jsonschema | Add only when they catch gaps left by existing syntax, workflow, and contract checks |
+| Vale or a broad dictionary | Typos handles objective spelling errors; broader editorial enforcement remains optional |
+| ESLint or Biome | Reassess against concrete catalog lint gaps; current checks include types, formatting, and tests |
+| Additional dependency scanners | Reassess if this private tooling repository starts distributing a runtime or container |
 
-## Review cadence
-
-Review versions during normal Dependabot maintenance. Re-run this audit when a repository adds a new language,
-runtime, package ecosystem, deployment workflow, or large documentation surface; those changes can justify a tool
-that would otherwise be redundant.
+Review the gate when adding a language, runtime, distribution channel, or new defect class. Keep each check's
+scope explicit, especially while Claude runtime support becomes optional.

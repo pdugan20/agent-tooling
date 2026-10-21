@@ -10,30 +10,8 @@ if ! command -v claude >/dev/null 2>&1; then
   exit 1
 fi
 
-for retired_plugin in \
-  mintlify-docs@patrick-plugins \
-  mintlify-docs@pdugan20-plugins \
-  mintlify-docs@patrick-tools \
-  patrick-workflows@pdugan20-plugins \
-  patrick-workflows@patrick-tools; do
-  if claude plugin list --json | PLUGIN_ID="$retired_plugin" python3 -c '
-import json, os, sys
-target = os.environ["PLUGIN_ID"]
-raise SystemExit(0 if any(item.get("id") == target and item.get("scope") == "user" for item in json.load(sys.stdin)) else 1)
-'; then
-    claude plugin uninstall "$retired_plugin" --scope user --yes
-  fi
-done
-
-for retired_marketplace in pdugan20-plugins patrick-tools; do
-  if claude plugin marketplace list --json | MARKETPLACE_NAME="$retired_marketplace" python3 -c '
-import json, os, sys
-target = os.environ["MARKETPLACE_NAME"]
-raise SystemExit(0 if any(item.get("name") == target for item in json.load(sys.stdin)) else 1)
-'; then
-    claude plugin marketplace remove "$retired_marketplace"
-  fi
-done
+# Validate settings before any plugin command can persist installation changes.
+python3 "$ROOT/scripts/configure-claude.py" --settings "$claude_config_dir/settings.json" --dry-run >/dev/null
 
 ensure_marketplace() {
   local name=$1
@@ -76,15 +54,6 @@ else:
     missing) claude plugin install "$plugin" --scope user ;;
   esac
 done <"$ROOT/config/claude-plugins.txt"
-
-while IFS= read -r plugin; do
-  [[ -n $plugin ]] || continue
-  echo "Disabling undeclared user-scoped Claude plugin: $plugin"
-  claude plugin disable "$plugin" --scope user
-done < <(
-  python3 "$ROOT/scripts/reconcile_claude_plugins.py" \
-    --manifest "$ROOT/config/claude-plugins.txt" <<<"$(claude plugin list --json)"
-)
 
 python3 "$ROOT/scripts/configure-claude.py" --settings "$claude_config_dir/settings.json"
 

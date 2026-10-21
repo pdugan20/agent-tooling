@@ -94,6 +94,7 @@ export function CatalogFiltersBar({
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All sources</SelectItem>
+          <SelectItem value="local">External local</SelectItem>
           <SelectItem value="personal">Patrick</SelectItem>
           <SelectItem value="openai">OpenAI</SelectItem>
           <SelectItem value="anthropic">Anthropic</SelectItem>

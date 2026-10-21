@@ -57,10 +57,44 @@ function DetailBody({ item }: { item: CatalogItem }) {
         </p>
       </div>
 
+      {item.invocationByRuntime && (
+        <div className="space-y-2 text-sm">
+          <h3 className="font-medium">Declared invocation</h3>
+          {Object.entries(item.invocationByRuntime).map(([runtime, policy]) => (
+            <p key={runtime}>
+              {runtime === "codex" ? "Codex" : "Claude"}:{" "}
+              {policy === "Automatic" ? "Eligible for automatic use" : policy}
+              {item.localOverrides?.[runtime as "codex" | "claude"] && (
+                <span className="block text-xs text-muted-foreground">
+                  Local override:{" "}
+                  {item.localOverrides[runtime as "codex" | "claude"]}
+                </span>
+              )}
+            </p>
+          ))}
+          <p className="text-xs text-muted-foreground">
+            Packaging defaults; instructions, trust, and runtime settings can
+            further restrict use. This does not prove a skill ran.
+          </p>
+        </div>
+      )}
+      {item.management && (
+        <p className="text-sm">Ownership: {item.management}</p>
+      )}
+      {item.observations && (
+        <div className="space-y-2 text-xs">
+          <h3 className="font-medium">Observed entrypoints</h3>
+          {item.observations.map((observation) => (
+            <p key={observation.path} className="break-all">
+              {observation.runtime}: {observation.path}
+            </p>
+          ))}
+        </div>
+      )}
       <Separator />
 
       <dl className="grid grid-cols-[7rem_minmax(0,1fr)] gap-x-4 gap-y-4 text-sm">
-        <dt className="text-muted-foreground">Works in</dt>
+        <dt className="text-muted-foreground">Listed for</dt>
         <dd>
           <RuntimeBadges runtimes={item.runtimes} />
         </dd>
@@ -108,7 +142,9 @@ function DetailBody({ item }: { item: CatalogItem }) {
       {item.path && (
         <div className="space-y-2">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Managed from
+            {item.management === "External owner"
+              ? "Observed source"
+              : "Managed from"}
           </h3>
           <code className="block [overflow-wrap:anywhere] rounded-md bg-muted px-3 py-2 font-mono text-xs leading-5">
             {item.path}

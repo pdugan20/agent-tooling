@@ -49,6 +49,15 @@ version when compatibility requires it.
 
 ### Changed
 
+- Plugin refresh preserves unselected installations and limits marketplace updates to selected names.
+- The local catalog observes external user skills, resolved-source ownership, configuration counts, and unavailable
+  CLI inventory notices. Invocation labels distinguish Codex and Claude defaults from observed local overrides.
+- Setup, bootstrap, and setup checks now default to Codex. Explicit `setup:claude`, `bootstrap:claude`, and
+  `setup:check:claude` commands configure the optional Claude Code harness independently.
+- Setup preserves extra skills, installed plugins, marketplaces, and unrelated provider configuration. Conflicting
+  instruction or skill paths stop bootstrap without replacement; plugin retirement remains separate maintenance.
+- Shortened the README and updated Codex configuration, discovery, plugin, and ownership documentation.
+
 - Updated Emil Kowalski's `animate-expo`, `animation-vocabulary`, `apple-design`, `emil-design-eng`,
   `find-animation-opportunities`, `pick-ui-library` and `review-animations` snapshots to the current upstream.
 - Documented that Codex treats its session skill catalog as authoritative, so Claude's

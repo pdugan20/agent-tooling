@@ -9,6 +9,7 @@ import json
 import os
 import re
 import subprocess
+import tomllib
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -211,23 +212,205 @@ def read_skill_interface(
 ) -> tuple[str | None, str | None, str]:
     agents_manifest = skill_root / "agents/openai.yaml"
     if not agents_manifest.exists():
-        invocation = (
-            "Explicit"
-            if frontmatter.get("disable-model-invocation", "").lower() == "true"
-            else "Automatic"
-        )
-        return None, None, invocation
+        return None, None, "Automatic"
 
     text = agents_manifest.read_text(encoding="utf-8")
     display_name_match = re.search(r'(?m)^\s+display_name:\s*["\']?(.+?)["\']?\s*$', text)
     description_match = re.search(r'(?m)^\s+short_description:\s*["\']?(.+?)["\']?\s*$', text)
-    implicit_match = re.search(r"(?m)^\s+allow_implicit_invocation:\s*(true|false)\s*$", text)
+    policy_block = re.search(r"(?m)^policy:\s*\n((?:[ \t]+[^\n]*\n?|\n)*)", text)
+    implicit_match = re.search(
+        r"(?m)^\s+allow_implicit_invocation:\s*(true|false)\s*(?:#.*)?$",
+        policy_block.group(1) if policy_block else "",
+    )
     display_name = display_name_match.group(1).strip("\"'") if display_name_match else None
     description = description_match.group(1).strip("\"'") if description_match else None
-    invocation = (
-        "Automatic" if implicit_match is None or implicit_match.group(1) == "true" else "Explicit"
-    )
+    if not implicit_match:
+        inline = re.search(r"(?m)^policy:\s*\{([^}]+)\}\s*$", text)
+        if inline:
+            implicit_match = re.search(
+                r"\ballow_implicit_invocation:\s*(true|false)\s*(?:,|$)", inline.group(1)
+            )
+    invocation = "Automatic"
+    if implicit_match:
+        invocation = "Automatic" if implicit_match.group(1) == "true" else "Explicit"
+    elif "allow_implicit_invocation" in text:
+        invocation = "Unknown"
     return display_name, description, invocation
+
+
+def invocation_policies(skill_root: Path, frontmatter: dict[str, str]) -> dict[str, str]:
+    """Declared packaging policy, not proof of effective runtime availability."""
+    return {
+        "codex": read_skill_interface(skill_root, frontmatter)[2],
+        "claude": (
+            "Explicit"
+            if frontmatter.get("disable-model-invocation", "").lower() == "true"
+            else "Automatic"
+        ),
+    }
+
+
+def common_invocation(policies: dict[str, str]) -> str | None:
+    values = set(policies.values())
+    return next(iter(values)) if len(values) == 1 else None
+
+
+def runtime_configuration(home: Path, warnings: list[str]) -> tuple[list[dict[str, Any]], dict]:
+    """Summarize configuration without copying commands, URLs, environment values or secrets."""
+    codex_home = Path(os.environ.get("CODEX_HOME", home / ".codex"))
+    claude_home = Path(os.environ.get("CLAUDE_CONFIG_DIR", home / ".claude"))
+    records = []
+    settings = {}
+    for runtime, path in (
+        ("codex", codex_home / "config.toml"),
+        ("claude", claude_home / "settings.json"),
+        ("claude-mcp", claude_home / ".mcp.json"),
+        ("claude-user", home / ".claude.json"),
+    ):
+        record = {"runtime": runtime, "path": str(path), "exists": path.is_file()}
+        records.append(record)
+        if not path.is_file():
+            continue
+        try:
+            data = tomllib.loads(path.read_text()) if runtime == "codex" else load_json(path)
+            if not isinstance(data, dict):
+                raise ValueError("expected object")
+            if runtime == "codex":
+                skill_config = data.get("skills", {})
+                if not isinstance(skill_config, dict) or not isinstance(
+                    skill_config.get("config", []), list
+                ):
+                    raise ValueError("invalid skill configuration")
+            elif runtime == "claude" and not isinstance(data.get("skillOverrides", {}), dict):
+                raise ValueError("invalid skill overrides")
+            settings[runtime] = data
+            record["mcpServerCount"] = len(data.get("mcp_servers", data.get("mcpServers", {})))
+            record["hookEventCount"] = len(data.get("hooks", {}))
+            record["skillOverrideCount"] = (
+                len(data.get("skills", {}).get("config", []))
+                if runtime == "codex"
+                else len(data.get("skillOverrides", {}))
+            )
+            record["hasProviderRouting"] = bool(
+                data.get("model_provider") or data.get("model_providers")
+            )
+        except (OSError, ValueError, TypeError, AttributeError):
+            settings.pop(runtime, None)
+            warnings.append(f"Could not summarize {runtime} configuration; review it locally.")
+    return records, settings
+
+
+def user_skill_items(
+    canonical_skills: list[dict[str, Any]], home: Path, warnings: list[str], settings: dict
+) -> list[dict[str, Any]]:
+    """Observe standalone entrypoints, grouping aliases only when their resolved files match."""
+    codex_home = Path(os.environ.get("CODEX_HOME", home / ".codex"))
+    claude_home = Path(os.environ.get("CLAUDE_CONFIG_DIR", home / ".claude"))
+    selected = {(ROOT / item["path"]).resolve(): item for item in canonical_skills}
+    groups: dict[Path, dict[str, Any]] = {}
+    roots = (
+        ("codex", home / ".agents/skills"),
+        ("codex", codex_home / "skills"),
+        ("claude", claude_home / "skills"),
+    )
+    for runtime, root in roots:
+        if not root.is_dir():
+            continue
+        try:
+            directories = sorted(root.iterdir())
+        except OSError:
+            warnings.append(f"Could not scan {runtime} user skill directory.")
+            continue
+        for directory in directories:
+            if directory.name.startswith("."):
+                continue
+            path = directory / "SKILL.md"
+            if directory.is_symlink() and not directory.exists():
+                warnings.append(f"Broken {runtime} skill link: {directory.name}")
+                continue
+            if not path.is_file():
+                continue
+            try:
+                resolved = path.resolve()
+                frontmatter = read_frontmatter(path)
+                name = frontmatter.get("name")
+                if not name:
+                    raise CatalogError("skill has no name")
+                if resolved not in groups:
+                    policies = invocation_policies(path.parent, frontmatter)
+                    item = (
+                        dict(selected[resolved])
+                        if resolved in selected
+                        else {
+                            "availability": "Global",
+                            "description": frontmatter.get("description", ""),
+                            "displayName": read_skill_interface(path.parent, frontmatter)[0]
+                            or humanize_name(name),
+                            "featured": 550,
+                            "id": "observed-skill:" + str(resolved),
+                            "name": name,
+                            "path": str(resolved),
+                            "source": "local",
+                            "sourceLabel": "External owner",
+                            "sourceUrl": None,
+                            "type": "skill",
+                            "version": "Unverified",
+                            "invocationByRuntime": policies,
+                        }
+                    )
+                    item.update(
+                        {
+                            "runtimes": [],
+                            "observations": [],
+                            "state": "Observed",
+                            "management": "Selected here"
+                            if resolved in selected
+                            else "External owner",
+                        }
+                    )
+                    groups[resolved] = item
+                item = groups[resolved]
+                if runtime not in item["runtimes"]:
+                    item["runtimes"].append(runtime)
+                item["observations"].append(
+                    {
+                        "runtime": runtime,
+                        "path": str(path),
+                        "resolvedPath": str(resolved),
+                        "alias": directory.name,
+                    }
+                )
+                if runtime == "codex":
+                    disabled = settings.get("codex", {}).get("skills", {}).get("config", [])
+                    for entry in disabled:
+                        if isinstance(entry, dict) and isinstance(entry.get("path"), str):
+                            configured = Path(entry["path"]).expanduser().resolve()
+                            if entry.get("enabled") is False and configured in (
+                                resolved,
+                                resolved.parent,
+                            ):
+                                item.setdefault("localOverrides", {})[runtime] = "Disabled locally"
+                else:
+                    override = settings.get("claude", {}).get("skillOverrides", {}).get(name)
+                    labels = {
+                        "on": "Automatic eligibility policy",
+                        "off": "Disabled locally",
+                        "ask": "Ask policy",
+                        "user-invocable-only": "User-only policy",
+                    }
+                    if isinstance(override, str) and override in labels:
+                        item.setdefault("localOverrides", {})[runtime] = labels[override]
+            except (CatalogError, OSError, ValueError, RuntimeError):
+                warnings.append(f"Could not read {runtime} skill: {directory.name}")
+    items = list(groups.values())
+    for item in items:
+        item["invocationByRuntime"] = {
+            runtime: policy
+            for runtime, policy in item["invocationByRuntime"].items()
+            if runtime in item["runtimes"]
+        }
+        item["invocation"] = common_invocation(item["invocationByRuntime"])
+    return items
 
 
 def skill_item(
@@ -243,7 +426,8 @@ def skill_item(
     if not name or name != skill_root.name:
         raise CatalogError(f"{display_path(skill_path)} name must match its directory")
 
-    display_name, short_description, invocation = read_skill_interface(skill_root, frontmatter)
+    display_name, short_description, _ = read_skill_interface(skill_root, frontmatter)
+    policies = invocation_policies(skill_root, frontmatter)
     resolved_source_url = source_url or github_file_url(
         AGENT_TOOLING_REPOSITORY,
         skill_path.relative_to(ROOT).as_posix(),
@@ -254,7 +438,8 @@ def skill_item(
         "displayName": display_name or humanize_name(name),
         "featured": SKILL_PRIORITY.get(name, 50),
         "id": f"skill:{name}",
-        "invocation": invocation,
+        "invocation": common_invocation(policies),
+        "invocationByRuntime": policies,
         "name": name,
         "path": skill_path.relative_to(ROOT).as_posix(),
         "runtimes": ["codex", "claude"],
@@ -303,6 +488,7 @@ def project_skill_items(repos_root: Path) -> list[dict[str, Any]]:
             display_name, short_description, invocation = read_skill_interface(
                 skill_root, frontmatter
             )
+            policies = invocation_policies(skill_root, frontmatter)
             lock_entry = locked_skills.get(name, {})
             upstream_source = lock_entry.get("source") if isinstance(lock_entry, dict) else None
             source = (
@@ -340,7 +526,8 @@ def project_skill_items(repos_root: Path) -> list[dict[str, Any]]:
                     "displayName": display_name or humanize_name(name),
                     "featured": 600,
                     "id": f"project-skill:{repository.name}:{name}",
-                    "invocation": invocation,
+                    "invocation": common_invocation({r: policies[r] for r in runtimes}),
+                    "invocationByRuntime": {r: policies[r] for r in runtimes},
                     "name": name,
                     "path": f"{repository.name}/.agents/skills/{name}/SKILL.md",
                     "pathHref": None,
@@ -506,7 +693,7 @@ def build_catalog() -> dict[str, Any]:
             "catalog/plugin-metadata.json",
         ],
         "items": items,
-        "schemaVersion": 5,
+        "schemaVersion": 6,
     }
 
 
@@ -555,7 +742,7 @@ def include_runtime_plugin(
 
 
 def run_json_command(command: list[str]) -> Any:
-    completed = subprocess.run(command, check=True, capture_output=True, text=True)
+    completed = subprocess.run(command, check=True, capture_output=True, text=True, timeout=20)
     return json.loads(completed.stdout)
 
 
@@ -569,21 +756,29 @@ def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
         if item["type"] == "plugin"
         for installation in item["installations"]
     }
-    items: list[dict[str, Any]] = []
-    codex_data = run_json_command(["codex", "plugin", "list", "--json"])
-    for skill in canonical_skills:
-        installed_runtimes = []
-        if (Path.home() / ".agents/skills" / skill["name"] / "SKILL.md").exists():
-            installed_runtimes.append("codex")
-        claude_config_dir = Path(os.environ.get("CLAUDE_CONFIG_DIR", Path.home() / ".claude"))
-        if (claude_config_dir / "skills" / skill["name"] / "SKILL.md").exists():
-            installed_runtimes.append("claude")
-        if installed_runtimes:
-            runtime_skill = dict(skill)
-            runtime_skill["runtimes"] = installed_runtimes
-            runtime_skill["state"] = "Installed"
-            items.append(runtime_skill)
+    warnings: list[str] = []
+    configuration, settings = runtime_configuration(Path.home(), warnings)
+    items = user_skill_items(canonical_skills, Path.home(), warnings, settings)
 
+    def plugin_inventory(runtime: str, fallback: Any) -> Any:
+        try:
+            data = run_json_command([runtime, "plugin", "list", "--json"])
+            if not isinstance(data, type(fallback)):
+                raise ValueError("unexpected inventory shape")
+            rows = data.get("installed", []) if runtime == "codex" else data
+            if not isinstance(rows, list) or not all(isinstance(row, dict) for row in rows):
+                raise ValueError("unexpected plugin rows")
+            required = ("pluginId", "name") if runtime == "codex" else ("id",)
+            if not all(all(isinstance(row.get(key), str) for key in required) for row in rows):
+                raise ValueError("missing plugin identity")
+            return data
+        except (OSError, ValueError, subprocess.SubprocessError):
+            warnings.append(
+                f"{runtime.title()} CLI plugin inventory unavailable; skills are still shown."
+            )
+            return fallback
+
+    codex_data = plugin_inventory("codex", {})
     for index, plugin in enumerate(codex_data.get("installed", [])):
         plugin_id = plugin["pluginId"]
         desired = desired_ids.get((plugin_id, "codex"))
@@ -645,7 +840,7 @@ def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
             }
         )
 
-    claude_data = run_json_command(["claude", "plugin", "list", "--json"])
+    claude_data = plugin_inventory("claude", [])
     user_plugins = [plugin for plugin in claude_data if plugin.get("scope") == "user"]
     for index, plugin in enumerate(user_plugins):
         plugin_id = plugin["id"]
@@ -717,12 +912,24 @@ def build_runtime_snapshot(repos_root: Path | None = None) -> dict[str, Any]:
         "generatedAt": datetime.now(UTC).isoformat(),
         "items": items,
         "message": (
-            "Installed global capabilities and project skills found under the selected "
-            "repositories root."
-            if repos_root is not None
-            else "What Codex and Claude currently report as installed on this computer."
+            "Observed user skill entrypoints and CLI plugin reports; "
+            "file presence does not prove active-session availability."
         ),
-        "schemaVersion": 5,
+        "warnings": warnings,
+        "configuration": configuration,
+        "coverage": {
+            "userSkills": True,
+            "projectSkills": repos_root is not None,
+            "configuration": "Presence and counts only; values are not copied.",
+            "excluded": [
+                "plugin-bundled skill enumeration",
+                "system/admin skills",
+                "nested repository skills",
+                "effective project/managed configuration",
+                "desktop account inventory",
+            ],
+        },
+        "schemaVersion": 6,
     }
 
 

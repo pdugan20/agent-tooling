@@ -1,57 +1,28 @@
-# Output styles
+# Writing style by harness
 
-An output style changes how the agent writes. It is part of the system prompt, so it
-applies to every response in every session, with no invocation.
+## Codex
 
-This is the difference that matters when you choose between a style and a skill:
+Put persistent writing preferences in the shared `global/AGENTS.md` when they should apply across projects.
+Project-specific preferences belong in that project's instructions. Codex loads those instructions without a skill
+invocation. [Official instruction guidance](https://learn.chatgpt.com/docs/agent-configuration/agents-md)
 
-| | Output style | Skill |
-| --- | --- | --- |
-| Applies | Every response, always | Only when invoked |
-| Scope | Prose the agent writes | Whatever the skill does |
-| Selected by | `outputStyle` in settings | A call, or a slash command |
+A writing skill can guide a particular documentation task. It does not replace persistent instructions for every
+response. This repository does not install a Codex equivalent of Claude's `simple-english` output style, and selecting
+a Claude model through Codex does not activate Claude Code's style settings.
 
-A skill cannot make the agent write differently by default, because a skill runs only
-when something calls it. If you want every answer to read a certain way, you need a
-style.
+## Optional Claude Code style
 
-## What is configured here
+`global/output-styles/simple-english.md` is a Claude Code output style. Bootstrap links it into the active Claude
+profile's `output-styles/` directory, and `scripts/configure-claude.py` selects it with `outputStyle`.
+The configurator replaces a stale selection. This mechanism applies to Claude Code sessions.
 
-`global/output-styles/simple-english.md` holds the managed style.
-`scripts/bootstrap.sh` links it into `<claude-config>/output-styles/`, and
-`scripts/configure-claude.py` selects it with `outputStyle`. The selection is managed,
-not defaulted: a stale value from an earlier release is replaced, so one machine cannot
-keep writing in an old style.
+The text is adapted from [AminBlg/SimpleEnglish](https://github.com/AminBlg/SimpleEnglish). Its local amendment retains
+`may`, `might`, and `could` when they express uncertainty. Removing those words must not turn an uncertain claim
+into a factual assertion. Read the managed file for the complete writing guidance.
 
-## simple-english
+To change the Claude style, edit the canonical style or add another file and update `OUTPUT_STYLE` in the configurator.
+`npm run bootstrap:claude` applies the Claude links and selection; restart Claude afterward. Default bootstrap configures Codex.
+Use `/output-style` in Claude to inspect the selected style.
 
-The style applies ASD-STE100 Simplified Technical English: one meaning per word, active
-voice, simple tenses, short sentences, small noun clusters, and no marketing adjectives.
-
-It is adapted from [AminBlg/SimpleEnglish](https://github.com/AminBlg/SimpleEnglish),
-which measured it across 7 models and 8 writing tasks and reported 41 to 85 percent
-fewer STE violations per 100 words. A blind pairwise judge preferred the style output in
-45 of 56 pairs. That evaluation is the reason this source was chosen over the two other
-STE implementations.
-
-### The one local amendment
-
-The upstream style bans `may`, `might`, and `could` outright. That rule is wrong for
-this use, and the local copy carves them out.
-
-A hedge carries the author's confidence, and confidence is content. "The request may
-have failed" and "the request failed" are different claims. A length rule that deletes
-the hedge does not shorten the sentence, it fabricates certainty the source never
-stated. The amendment keeps those modals when they mark real uncertainty, and deletes
-them only when they are padding ("this may potentially help to improve").
-
-The failure it prevents is the most common way a well-intentioned plain-language rewrite
-goes wrong, and it is documented in
-[danyuchn/asd-ste100-skill](https://github.com/danyuchn/asd-ste100-skill), which states
-the rule clearly even though its own packaging is a skill rather than a style.
-
-## Changing the style
-
-Edit `global/output-styles/simple-english.md`, or add a file beside it and change
-`OUTPUT_STYLE` in `scripts/configure-claude.py`. Run `npm run bootstrap` to link it,
-then start a new session. `/output-style` shows the current selection.
+Claude's `outputStyles` declaration does not transfer to Codex plugin packaging.
+[Official compatibility guidance](https://developers.openai.com/plugins/guides/submit-claude-plugin)

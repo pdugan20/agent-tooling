@@ -4,150 +4,42 @@
 [![Release](https://img.shields.io/github/v/release/pdugan20/agent-tooling)](https://github.com/pdugan20/agent-tooling/releases/latest)
 [![License](https://img.shields.io/github/license/pdugan20/agent-tooling)](LICENSE)
 
-Portable, canonical tooling shared across Codex and Claude Code projects: working agreements, reusable skills, a
-reconciled plugin inventory, and machine setup.
+Patrick's reproducible agent setup: shared instructions, pinned skills, plugin selections, and machine configuration.
+Codex is the primary harness; Claude Code is an optional companion.
 
-## Quick start
+## Setup
 
-Prerequisites are macOS, Node.js 24.19.0, Python 3, Xcode or a Swift toolchain providing `sourcekit-lsp`,
-Codex CLI, Claude Code, and GitHub CLI. Authenticate the three CLIs, then run:
+Follow the [setup guide](docs/setup.md) for prerequisites, installation, and checks.
+`npm run setup` configures Codex; `npm run setup:claude` adds the optional Claude Code setup.
 
-```bash
-gh repo clone pdugan20/agent-tooling
-cd agent-tooling
-npm run setup
-```
+Reusable Patrick-owned skills are authored in [Skills](https://github.com/pdugan20/skills).
+This repository selects their releases alongside third-party skills and links the locked snapshots into the runtimes.
+See the [architecture](docs/architecture.md) for ownership and scope.
 
-The checkout can live anywhere. Setup scripts resolve the repository from their own location and do not require a
-particular parent directory or repository collection layout.
-
-If `CLAUDE_CONFIG_DIR` is set, setup, refresh, and verification use that active Claude profile instead of
-`~/.claude`. Existing non-symlink instruction or skill paths are never replaced automatically.
-
-The setup uses Xcode's bundled `sourcekit-lsp` for Claude's Swift code intelligence and installs the TypeScript
-language server required by Claude's TypeScript plugin. Codex does not currently load Claude's LSP plugin component;
-it continues to use project builds, type checks, linters, tests, and editor context for those languages.
-
-Restart Codex and Claude afterward. Product OAuth sessions, API keys, local toolchains, and repository-specific
-instructions remain machine- or project-local. Run `npm run mcp:check` after authenticating Codex connectors.
-
-The setup script installs only marketplace-managed Codex plugins. After signing in, open the Codex Plugins tab and
-confirm the entries in [`config/codex-managed-plugins.txt`](config/codex-managed-plugins.txt); Codex owns and updates
-that separate account/workspace layer.
-
-## Included
-
-| Area                   | Purpose                                                  | Canonical source                                      |
-| ---------------------- | -------------------------------------------------------- | ----------------------------------------------------- |
-| Shared instructions    | Exploration, production, Firebase, and safety policy     | [`global/AGENTS.md`](global/AGENTS.md)                |
-| Patrick skills         | Versioned repository, design, delivery, and documentation skills | [`pdugan20/skills`](https://github.com/pdugan20/skills) |
-| Managed skill snapshots | Skills CLI installations with source provenance         | [`.agents/skills/`](.agents/skills/), `skills-lock.json` |
-| Managed Codex MCP       | Pinned Xcode, Simulator, logging, and LLDB automation    | [`config/codex-mcp-servers.json`](config/codex-mcp-servers.json) |
-| Plugin setup           | Marketplace-installed and Codex-managed plugin sets      | [`config/`](config/)                                  |
-| Machine setup          | Bootstrap, refresh, configuration, and verification      | [`scripts/`](scripts/)                                |
-
-Every skill is installed into this repository by the Skills CLI, committed under
-[`.agents/skills/`](.agents/skills/), and tracked by `skills-lock.json`. Most come from the tagged public
-[Skills](https://github.com/pdugan20/skills) collection; the rest retain their original publisher provenance
-(`find-skills` from `vercel-labs/skills` is the skills.sh discovery helper: `npx skills find <query>`). The
-current set, with counts and per-skill provenance, is generated rather than written down: run `npm run catalog`, or
-read `skills-lock.json`. Bootstrap links every canonical snapshot into each agent's home-directory skill
-location, so their **runtime availability** is global across repositories. Do not edit snapshots by hand. Use
-`npm run skills:update` for upstream updates, or install a new Skills tag explicitly, and review the diff.
-
-The Codex pilot pins XcodeBuildMCP and its official upstream skill to v2.7.0. Bootstrap enables only Simulator,
-semantic UI automation, and debugging workflows, disables the tool's own Sentry telemetry, and leaves visual
-inspection to computer use. Start a new Codex task after setup so the MCP tool inventory reloads.
-
-The first-party `tune-mobile-client-performance` skill is pinned from Patrick Skills v3.4.0. It routes a concrete
-SwiftUI, Swift, React Native, or Expo runtime symptom through evidence collection and causal tuning; it does not
-replace Instruments, device evidence, or the structured Xcode and Simulator pilot.
-
-The first-party `integrate-app-intents` skill is also pinned from v3.4.0. It guides Siri, Shortcuts, Spotlight,
-widgets, controls, App Schemas, and AppIntentsTesting work while preserving each app's existing data, routing,
-privacy, availability, and verification boundaries.
-
-The first-party `run-remote-dev-server` skill is pinned from v3.4.0. It runs development servers persistently on an
-SSH-accessible host, keeps the application bound to localhost, and exposes previews privately through Tailscale
-Serve without enabling Funnel or guessing destructive route-removal syntax.
-
-## Catalog
-
-Browse the canonical setup in a searchable local web catalog:
+## Browse the setup
 
 ```bash
+npm ci
 npm run catalog
 ```
 
-Open [localhost:4173/catalog/](http://127.0.0.1:4173/catalog/). To compare the repository with installed plugins and
-skills on the current Mac, run `npm run catalog:snapshot`, reopen the catalog with `?runtime=local`, and choose
-**This Mac**. The snapshot is machine-local and ignored by Git.
-
-To include repository-scoped skills from a folder of Git checkouts without hardcoding that folder into the setup,
-pass it when creating the local snapshot:
-
-```bash
-npm run catalog:snapshot -- --repos-root /path/to/repositories
-```
-
-The scanner reads only immediate child primary repositories and their canonical `.agents/skills` metadata. Linked
-worktrees are skipped so the catalog does not repeat the same project profile. It does not copy project skills into
-`agent-tooling` or make them global.
-
-The catalog labels effective availability separately from ownership and source. “All repositories” describes where
-the capability can run; it does not mean its canonical source is stored globally or updated outside this repository.
-Source names link to the canonical GitHub skill or plugin when the publisher exposes one.
-
-Plugins are grouped by logical capability. When Codex and Claude use different package IDs for the same capability,
-the catalog shows one row with separate installation details for each app. Summary counts therefore count
-capabilities, not package records.
-
-## Common commands
-
-| Command                          | Purpose                                            |
-| -------------------------------- | -------------------------------------------------- |
-| `npm run setup`                  | Configure the complete setup on a new machine      |
-| `npm run bootstrap`              | Reapply shared links and non-secret runtime policy |
-| `npm run plugins:refresh:codex`  | Refresh the desired Codex plugin set               |
-| `npm run plugins:refresh:claude` | Refresh the desired Claude plugin set              |
-| `npm run setup:check`            | Compare this Mac with the desired setup            |
-| `npm run mcp:check`              | Check machine-local Codex MCP authentication       |
-| `npm run skills:update`          | Check and apply upstream skill updates for review  |
-| `npm run catalog`                | Generate and serve the browser catalog             |
-| `npm run verify`                 | Run the complete local and GitHub Actions gate     |
-
-`npm run` commands are the supported user-facing interface. They delegate to the scripts in [`scripts/`](scripts/)
-so documentation and automation share memorable, stable command names while the implementation can evolve.
+The catalog shows the selected capabilities and their sources. Its optional **This Mac** snapshot compares installed
+state within the scanner's coverage; it is not a complete machine inventory. See [catalog usage](docs/setup.md#browse-the-catalog).
 
 ## Development
 
 ```bash
 nvm use
 npm ci
-python3 -m pip install pre-commit==4.6.1
-brew install actionlint gitleaks lychee typos-cli zizmor
-pre-commit install --hook-type pre-commit --hook-type pre-push
 npm run verify
 ```
 
-The `ci` job is the stable required check. Verification covers unit tests, skill validation, Markdown and formatting,
-Python and shell quality, workflow syntax, catalog drift, repository policy, full-history secret scanning, and
-whitespace. It also checks spelling with Typos and GitHub Actions security with zizmor. Network-dependent link
-validation runs on a weekly schedule.
+Install the [verification prerequisites](docs/setup.md#develop-this-repository) before the first run.
 
-## Documentation
-
-- [Architecture and scope](docs/architecture.md): sources of truth, runtime layers, placement rules, and persistence.
-- [Maintenance](docs/maintenance.md): updates, plugin refreshes, Superpowers review, and releases.
-- [Authoring](docs/authoring.md): linting, formatting, validation, and behavioral testing for skills and plugins.
-- [Quality tooling](docs/quality-tooling.md): adopted checks, version policy, and deferred alternatives.
-- [Skill visibility and invocation](docs/skill-invocation.md): the two gates, what each `skillOverrides` value does, and the measured precedence.
-- [Output styles](docs/output-styles.md): how the agent writes by default, and why a style rather than a skill.
-- [Changelog](CHANGELOG.md): curated repository releases and upgrade notes.
-- [Issues](https://github.com/pdugan20/agent-tooling/issues): current bugs, setup follow-ups, and proposed improvements.
-
-## Releases
-
-Repository releases use `vMAJOR.MINOR.PATCH` tags and curated notes from `CHANGELOG.md`. The configured Superpowers
-fork has its own upstream-derived version and release process. See the
-[maintenance guide](docs/maintenance.md#release-agent-tooling) for both update paths.
+- [Maintenance](docs/maintenance.md): update skills, plugins, the catalog, and releases.
+- [Skill invocation](docs/skill-invocation.md): Codex controls and Claude compatibility.
+- [Authoring](docs/authoring.md): validation and runtime checks.
+- [Quality tooling](docs/quality-tooling.md): repository gates and dependency policy.
+- [Writing style](docs/output-styles.md): Codex instructions and the Claude-only output style.
+- [Documentation audit](docs/documentation-audit.md): verified guidance and remaining follow-ups.
+- [Changelog](CHANGELOG.md): releases and upgrade notes.

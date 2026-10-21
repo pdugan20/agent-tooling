@@ -819,58 +819,22 @@ def validate_repository() -> None:
         if '"$HOME/.claude/' in script:
             raise ValidationError(f"{script_name} must not bypass CLAUDE_CONFIG_DIR")
 
-    for script_name in ("install-claude-plugins.sh", "refresh-claude-plugins.sh"):
-        script = (ROOT / "scripts" / script_name).read_text(encoding="utf-8")
-        new_marketplace = script.index("ensure_marketplace patrick-plugins")
-        for retired_id in (
-            "mintlify-docs@patrick-plugins",
-            "mintlify-docs@pdugan20-plugins",
-            "mintlify-docs@patrick-tools",
-            "patrick-workflows@pdugan20-plugins",
-            "patrick-workflows@patrick-tools",
-        ):
-            if script.index(retired_id) > new_marketplace:
-                raise ValidationError(
-                    f"{script_name} must retire {retired_id} before adding its replacement"
-                )
-        for retired_marketplace in ("pdugan20-plugins", "patrick-tools"):
-            if script.index(retired_marketplace) > new_marketplace:
-                raise ValidationError(
-                    f"{script_name} must retire {retired_marketplace} before adding its replacement"
-                )
-        if "scripts/reconcile_claude_plugins.py" not in script:
-            raise ValidationError(
-                f"{script_name} must disable undeclared enabled user-scoped plugins"
+    for runtime in ("codex", "claude"):
+        for operation in ("install", "refresh"):
+            script_name = f"{operation}-{runtime}-plugins.sh"
+            script = (ROOT / "scripts" / script_name).read_text(encoding="utf-8")
+            destructive = re.search(
+                r"\b(?:codex|claude) plugin (?:marketplace )?(?:remove|uninstall|disable)\b",
+                script,
             )
-        if "ensure_marketplace mintlify-marketplace mintlify/mintlify-claude-plugin" not in script:
-            raise ValidationError(f"{script_name} must add Mintlify's canonical marketplace")
-        if "ensure_marketplace patrick-plugins pdugan20/plugins" not in script:
-            raise ValidationError(f"{script_name} must add Patrick's plugin marketplace")
-
-    for script_name in ("install-codex-plugins.sh", "refresh-codex-plugins.sh"):
-        script = (ROOT / "scripts" / script_name).read_text(encoding="utf-8")
-        new_marketplace = script.index("ensure_marketplace patrick-plugins")
-        for retired_id in (
-            "mintlify-docs@patrick-plugins",
-            "mintlify-docs@pdugan20-plugins",
-            "mintlify-docs@patrick-tools",
-            "patrick-workflows@pdugan20-plugins",
-            "patrick-workflows@patrick-tools",
-        ):
-            if script.index(retired_id) > new_marketplace:
-                raise ValidationError(
-                    f"{script_name} must retire {retired_id} before adding its replacement"
-                )
-        for retired_marketplace in ("pdugan20-plugins", "patrick-tools"):
-            if script.index(retired_marketplace) > new_marketplace:
-                raise ValidationError(
-                    f"{script_name} must retire {retired_marketplace} before adding its replacement"
-                )
-        if (
-            "ensure_marketplace patrick-plugins https://github.com/pdugan20/plugins.git"
-            not in script
-        ):
-            raise ValidationError(f"{script_name} must add Patrick's plugin marketplace")
+            if destructive or "scripts/reconcile_claude_plugins.py" in script:
+                raise ValidationError(f"{script_name} must preserve unselected installed tooling")
+            if "ensure_marketplace patrick-plugins" not in script:
+                raise ValidationError(f"{script_name} must add Patrick's plugin marketplace")
+            if operation == "refresh" and not re.search(
+                rf'{runtime} plugin marketplace (?:upgrade|update) "\$marketplace"', script
+            ):
+                raise ValidationError(f"{script_name} must scope marketplace refresh by name")
 
 
 # Counts of skills or plugins drift the moment the set changes, and prose has no gate to

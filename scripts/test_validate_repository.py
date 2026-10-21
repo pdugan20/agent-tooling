@@ -465,7 +465,7 @@ jobs:
             )
 
             subprocess.run(
-                ["bash", str(validate_repository.ROOT / "scripts/bootstrap.sh")],
+                ["bash", str(validate_repository.ROOT / "scripts/bootstrap.sh"), "--claude"],
                 check=True,
                 capture_output=True,
                 text=True,
@@ -477,27 +477,9 @@ jobs:
                 validate_repository.ROOT / "global/AGENTS.md",
             )
             self.assertTrue((claude_profile / "skills/code-native-ui-ideation").is_symlink())
-            self.assertFalse((home / ".agents/skills/production-hardening").is_symlink())
-            self.assertFalse((claude_profile / "skills/production-hardening").is_symlink())
+            self.assertTrue((home / ".agents/skills/production-hardening").is_symlink())
+            self.assertTrue((claude_profile / "skills/production-hardening").is_symlink())
             self.assertFalse((home / ".claude").exists())
-
-    def test_retired_marketplaces_are_removed_before_replacement_registration(self) -> None:
-        for runtime in ("claude", "codex"):
-            for operation in ("install", "refresh"):
-                script = (
-                    validate_repository.ROOT / "scripts" / f"{operation}-{runtime}-plugins.sh"
-                ).read_text(encoding="utf-8")
-                replacement = script.index("ensure_marketplace patrick-plugins")
-                for retired_marketplace in ("pdugan20-plugins", "patrick-tools"):
-                    self.assertLess(script.index(retired_marketplace), replacement)
-                for retired_plugin in (
-                    "mintlify-docs@patrick-plugins",
-                    "mintlify-docs@pdugan20-plugins",
-                    "mintlify-docs@patrick-tools",
-                    "patrick-workflows@pdugan20-plugins",
-                    "patrick-workflows@patrick-tools",
-                ):
-                    self.assertLess(script.index(retired_plugin), replacement)
 
     def test_release_tag_must_match_repository_version(self) -> None:
         with (

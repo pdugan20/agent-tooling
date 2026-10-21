@@ -21,7 +21,7 @@ personal PreToolUse hook validates supported branch-creation and rename calls.
 Name every new chat or session with a short lowercase slug of one to three
 hyphenated words: the project or surface first, then the task when it adds
 meaning. Examples: `sony-tv-polish`, `listening-page-polish`, `inflight-eval`,
-`opencodex-setup`, `rune-401k`. Avoid sentences, title case, articles,
+`opencodex-setup`, `calendar-setup`. Avoid sentences, title case, articles,
 dates, ticket noise, and prefixes such as `codex/`. In the Codex app, set the
 title with `set_thread_title` once the task is clear in the first turn, and
 retitle only when the task changes substantially. In other runtimes, use the
@@ -33,7 +33,7 @@ himself unless he asks for a new one.
 ### Local preview controls
 
 - Always include the current local-network (LAN) URL when sharing a local development preview, with the port and relevant route. Do not provide only localhost. Detect the active LAN IP each time and verify the preview responds through it; do not reuse a stale address.
-- Keep TanStack Query Devtools and its floating launcher disabled in Patrick's local previews across sessions. For Rune, preserve `VITE_SHOW_IN_APP_QUERY_DEV_TOOLS=false` when starting or restarting Vite, including in new worktrees, detached sessions, and sanitized environments. Do not enable it unless Patrick explicitly asks.
+- Keep TanStack Query Devtools and its floating launcher disabled in Patrick's local previews across sessions. For projects using Vite, preserve `VITE_SHOW_IN_APP_QUERY_DEV_TOOLS=false` when starting or restarting Vite, including in new worktrees, detached sessions, and sanitized environments. Do not enable it unless Patrick explicitly asks.
 
 ### Temporary checkout lifecycle
 
@@ -153,12 +153,31 @@ When a repository installs the `mattpocock/skills` planning set, the split is: S
   cannot see a tool builds its own version and does not mention the swap, so the owner
   believes the named tool ran.
 
+## Project product writing
+
+- Before drafting or editing issue-tracker or knowledge-base content, follow the consuming project's writing instructions and required skills. Keep organization-specific routing in that project.
+
 ## Instruction files
 
 Treat `AGENTS.md` as the canonical cross-agent instruction file. A repository may keep `CLAUDE.md` as a compatibility shim or for genuinely Claude-specific guidance. Preserve existing user work and follow the nearest applicable instruction file.
 
-Claude Code does not read `AGENTS.md` itself. The shared `SessionStart` hook from `agent-tooling` supplies the repository's `AGENTS.md` instead. Do not add `CLAUDE.md` or hidden, git-excluded `CLAUDE.local.md` shims to a repository only to load `AGENTS.md`. If a session shows no repository instructions, check the hook before adding a file. The hook does not load nested `AGENTS.md` files below the working directory, so read those before editing in their directories.
+Claude Code 2.1.277 and later reads a repository's `AGENTS.md` natively when no `CLAUDE.md`, `.claude/CLAUDE.md`, or `CLAUDE.local.md` exists in the working directory or above it; `~/.claude/CLAUDE.md` does not count. The shared `SessionStart` hook from `agent-tooling` supplies `AGENTS.md` only when that native loading does not apply (older version, or a project Claude file present), so the file is never injected twice. Do not add `CLAUDE.md` or hidden, git-excluded `CLAUDE.local.md` shims to a repository only to load `AGENTS.md`. If a session shows no repository instructions, check the installed version and the hook before adding a file. Neither path loads nested `AGENTS.md` files below the working directory, so read those before editing in their directories.
 
 ## Private account and machine notes
 
-Before diagnosing account or connector authentication, read `~/.codex/local/account-notes.md` if it exists. Keep account/machine-specific troubleshooting in that private local file, not in project documentation or shared trackers. Never store credentials or tokens in notes.
+Before diagnosing account or connector authentication, model routing, missing or denied local tools, or anything involving the OpenCodex proxy, read `~/.codex/local/account-notes.md` if it exists. It points to the private OpenCodex runbook (`~/.codex/local/opencodex-runbook.md`), which owns proxy setup, routing, the upgrade procedure, and troubleshooting; read the runbook before changing or upgrading the proxy. Keep account/machine-specific troubleshooting in those private local files, not in project documentation or shared trackers. Never store credentials or tokens in notes.
+
+## OpenCodex tool catalogs
+
+Sessions may run through the local OpenCodex proxy. For Claude, prefer an
+`anthropic/<model>` row; Codex tools pass through unchanged there. On
+`cursor/*` models the listed local tool set changes per request (sometimes
+Cursor-native `Shell`/`Read`/`Glob`/`Grep`, sometimes Codex `exec` with nested
+`tools.*`) and listed Cursor-native tools may still be denied. This is known
+proxy behavior, not a fault in the session. When a top-level local tool is
+missing or denied, do not retry it; reach `exec` through the dynamic-tool
+namespace (`GetDynamicTools` with pattern `^exec$`, then `CallDynamicTool` in
+namespace `opencodex-responses`), which works in every request. Read a deferred
+tool's schema before its first call instead of guessing argument names. For
+thread coordination, `wait_threads` may fail; poll `read_thread`. Procedure
+and history live in `~/.codex/local/opencodex-runbook.md`.

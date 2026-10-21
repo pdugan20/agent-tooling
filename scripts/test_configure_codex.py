@@ -68,6 +68,32 @@ class ConfigureCodexTests(unittest.TestCase):
 
             self.assertFalse(parsed["skills"]["config"][0]["enabled"])
 
+    def test_computer_use_repair_stays_in_selected_codex_home(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            home = Path(directory)
+            custom = home / "custom-codex"
+            for selected in (home / ".codex", custom):
+                client = selected / configure_codex.COMPUTER_USE_SUFFIX
+                client.parent.mkdir(parents=True)
+                client.write_text("#!/bin/sh\nexit 0\n")
+                client.chmod(0o755)
+            original = (
+                "[mcp_servers.computer-use]\n"
+                f'command = "{configure_codex.RELATIVE_COMPUTER_USE_COMMAND}"\n'
+            )
+            updated = configure_codex.update_config(original, home, codex_home=custom)
+            parsed = tomllib.loads(updated)
+            self.assertEqual(
+                parsed["mcp_servers"]["computer-use"]["command"],
+                str(custom / configure_codex.COMPUTER_USE_SUFFIX),
+            )
+            (custom / configure_codex.COMPUTER_USE_SUFFIX).unlink()
+            updated = configure_codex.update_config(original, home, codex_home=custom)
+            self.assertEqual(
+                tomllib.loads(updated)["mcp_servers"]["computer-use"]["command"],
+                configure_codex.RELATIVE_COMPUTER_USE_COMMAND,
+            )
+
     def test_disables_an_additional_repository_skill(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             home = Path(directory)
