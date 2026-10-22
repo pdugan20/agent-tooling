@@ -2,6 +2,11 @@
 
 Apply this guidance across repositories unless a nearer `AGENTS.md` overrides it.
 
+This file is published in a public repository. Keep employer, client, and
+teammate names, ticket identifiers, and private notes out of it; put
+organization rules in that organization's repositories and personal notes in
+`~/.codex/local/`, which no repository tracks.
+
 ## Personal branch names
 
 For branches created for Patrick, use the personal policy in
@@ -166,6 +171,10 @@ Claude Code 2.1.277 and later reads a repository's `AGENTS.md` natively when no 
 ## Private account and machine notes
 
 Before diagnosing account or connector authentication, model routing, missing or denied local tools, or anything involving the OpenCodex proxy, read `~/.codex/local/account-notes.md` if it exists. It points to the private OpenCodex runbook (`~/.codex/local/opencodex-runbook.md`), which owns proxy setup, routing, the upgrade procedure, and troubleshooting; read the runbook before changing or upgrading the proxy. Keep account/machine-specific troubleshooting in those private local files, not in project documentation or shared trackers. Never store credentials or tokens in notes.
+
+Before sharing a pull request link, read `~/.codex/local/pr-links.md` if it
+exists. Before drafting text Patrick will post, or that is posted under his
+name, read `~/.codex/local/writing-voice.md` if it exists.
 
 ## OpenCodex tool catalogs
 
