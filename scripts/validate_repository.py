@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import subprocess
 from pathlib import Path
@@ -866,6 +867,81 @@ def validate_prose_counts() -> None:
                 )
 
 
+# This repository is public. A private, untracked list of terms (employer,
+# client and teammate names, ticket prefixes) blocks commits that would publish
+# them. The list lives outside the repository so it never names what it blocks;
+# without it, as in CI, the check is skipped.
+PUBLIC_DENYLIST_ENV = "AGENT_TOOLING_PUBLIC_DENYLIST"
+DEFAULT_PUBLIC_DENYLIST = Path.home() / ".codex/local/public-repo-denylist.txt"
+
+
+def load_public_denylist(path: Path) -> list[re.Pattern[str]]:
+    patterns = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if line and not line.startswith("#"):
+            patterns.append(re.compile(line, re.IGNORECASE))
+    return patterns
+
+
+def public_content_errors(files: dict[str, str], patterns: list[re.Pattern[str]]) -> list[str]:
+    errors = []
+    for name, text in sorted(files.items()):
+        for number, line in enumerate(text.splitlines(), 1):
+            for pattern in patterns:
+                if pattern.search(line):
+                    errors.append(
+                        f"{name}:{number} matches private term pattern {pattern.pattern!r}"
+                    )
+    return errors
+
+
+def tracked_text_files() -> dict[str, str]:
+    # Read the staged blobs, which are what a commit records. This covers
+    # symlink targets and decodes non-UTF-8 content lossily instead of skipping it.
+    listed = subprocess.run(
+        ["git", "ls-files", "--stage", "-z"], cwd=ROOT, check=True, capture_output=True
+    ).stdout.decode("utf-8", errors="replace")
+    entries = []
+    for record in filter(None, listed.split("\0")):
+        meta, name = record.split("\t", 1)
+        mode, blob = meta.split()[:2]
+        if mode != "160000":
+            entries.append((name, blob))
+    if not entries:
+        return {}
+    batch = subprocess.run(
+        ["git", "cat-file", "--batch"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        input="".join(f"{blob}\n" for _, blob in entries).encode(),
+    ).stdout
+    files = {}
+    offset = 0
+    for name, _ in entries:
+        header_end = batch.index(b"\n", offset)
+        size = int(batch[offset:header_end].split()[2])
+        start = header_end + 1
+        files[name] = batch[start : start + size].decode("utf-8", errors="replace")
+        offset = start + size + 1
+    return files
+
+
+def validate_public_content() -> None:
+    denylist = Path(os.environ.get(PUBLIC_DENYLIST_ENV, DEFAULT_PUBLIC_DENYLIST))
+    if not denylist.is_file():
+        return
+    errors = public_content_errors(tracked_text_files(), load_public_denylist(denylist))
+    if errors:
+        shown = "; ".join(errors[:5])
+        more = f" (and {len(errors) - 5} more)" if len(errors) > 5 else ""
+        raise ValidationError(
+            f"private terms in a public repository: {shown}{more}. "
+            "Move organization content to its own repository and personal notes to ~/.codex/local/."
+        )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--release-tag")
@@ -874,6 +950,7 @@ def main() -> None:
     try:
         validate_repository()
         validate_prose_counts()
+        validate_public_content()
         if args.release_tag:
             version = validate_release_tag(args.release_tag)
             print(f"Agent tooling release tag matches repository version {version}.")

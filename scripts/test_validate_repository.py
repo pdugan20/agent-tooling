@@ -525,6 +525,31 @@ jobs:
     def test_current_repository_has_no_prose_counts(self) -> None:
         validate_repository.validate_prose_counts()
 
+    def test_public_content_blocks_private_terms(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            denylist = Path(directory) / "denylist.txt"
+            denylist.write_text("# comment\n\nacme-corp\n\\bACME-[0-9]+\\b\n", encoding="utf-8")
+            patterns = validate_repository.load_public_denylist(denylist)
+        self.assertEqual(len(patterns), 2)
+        files = {
+            "global/AGENTS.md": "Pair links with acme-7 tickets.\nAsk @lee_Acme-Corp.\n",
+            "README.md": "Nothing private here.\n",
+        }
+        errors = validate_repository.public_content_errors(files, patterns)
+        self.assertEqual(
+            [error.split(" ")[0] for error in errors],
+            ["global/AGENTS.md:1", "global/AGENTS.md:2"],
+        )
+        self.assertEqual(
+            validate_repository.public_content_errors({"README.md": "clean\n"}, patterns), []
+        )
+
+    def test_public_content_check_is_skipped_without_a_denylist(self) -> None:
+        with mock.patch.dict(
+            os.environ, {validate_repository.PUBLIC_DENYLIST_ENV: "/nonexistent/denylist"}
+        ):
+            validate_repository.validate_public_content()
+
 
 if __name__ == "__main__":
     unittest.main()
