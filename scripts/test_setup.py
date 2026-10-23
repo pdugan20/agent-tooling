@@ -85,7 +85,7 @@ class SetupTests(unittest.TestCase):
             "SETUP_CALLS": str(self.calls),
             "SETUP_REPOSITORY": str(ROOT),
         }
-        for name in ("bash", "python3", "dirname", "mkdir", "ln", "readlink", "awk"):
+        for name in ("bash", "python3", "git", "dirname", "mkdir", "ln", "readlink", "awk"):
             (self.bin / name).symlink_to(shutil.which(name))
         for name in ("codex", "claude", "npm", "sourcekit-lsp", "typescript-language-server"):
             path = self.bin / name
@@ -139,7 +139,10 @@ class SetupTests(unittest.TestCase):
         )
         ideate.parent.mkdir(parents=True)
         ideate.write_text("fixture")
-        self.run_script("setup-new-machine.sh")
+        # Installation preserves unrelated broken links; its final doctor reports them.
+        result = self.run_script("setup-new-machine.sh", check=False)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("broken-link", result.stdout)
         after = tomllib.loads(config.read_text())
         for key in ("model_provider", "model", "model_providers", "hooks"):
             self.assertEqual(after[key], original[key])

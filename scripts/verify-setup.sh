@@ -194,6 +194,12 @@ PY
 
 fi
 
+if python3 "$ROOT/scripts/check_skill_ownership.py"; then
+  pass "User skill sources and private recovery bindings"
+else
+  fail "User skill ownership audit failed; run npm run skills:doctor"
+fi
+
 if ((failures)); then
   echo "$failures setup check(s) failed." >&2
   exit 1
