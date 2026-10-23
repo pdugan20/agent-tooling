@@ -15,8 +15,14 @@ IGNORED = {".git", "__pycache__", "node_modules", ".DS_Store"}
 
 def tree_files(root: Path) -> dict[str, str]:
     """Hash runtime resources; generated Python caches are not source."""
+
+    def fail_on_walk_error(error: OSError) -> None:
+        raise error
+
     result = {}
-    for directory, directories, files in os.walk(root, followlinks=False):
+    for directory, directories, files in os.walk(
+        root, followlinks=False, onerror=fail_on_walk_error
+    ):
         directories[:] = sorted(name for name in directories if name not in IGNORED)
         for name in sorted(
             files + [name for name in directories if (Path(directory) / name).is_symlink()]

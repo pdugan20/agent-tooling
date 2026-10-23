@@ -1,9 +1,11 @@
 """Regression checks for complete-resource ownership and recoverability."""
 
+import os
 import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from check_skill_ownership import audit, tree_files, tree_hash
 
@@ -45,6 +47,28 @@ class OwnershipTests(unittest.TestCase):
         }
         (self.source / "reference.md").write_text("changed")
         self.assertIn("resource-drift", self.codes(ledger))
+
+    def test_unreadable_nested_directory_fails_instead_of_pinning_a_partial_tree(self):
+        references = self.source / "references"
+        references.mkdir()
+        (references / "guide.md").write_text("Required runtime instructions")
+        self.git("init", "-q")
+        self.git("add", ".")
+        self.assertTrue(audit([self.installed], {})["ok"])
+
+        original_scandir = os.scandir
+
+        def unreadable_scandir(path):
+            if Path(path).resolve() == references.resolve():
+                raise PermissionError("Cannot read nested resources")
+            return original_scandir(path)
+
+        with patch("check_skill_ownership.os.scandir", side_effect=unreadable_scandir):
+            report = audit([self.installed], {})
+
+        self.assertFalse(report["ok"])
+        self.assertEqual(report["entries"], [])
+        self.assertEqual(report["findings"][0]["code"], "unreadable-or-external-resource")
 
     def test_broken_link_and_divergent_duplicate(self):
         (self.installed / "broken").symlink_to(self.root / "missing")
