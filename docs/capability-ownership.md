@@ -43,3 +43,23 @@ rules remain authoritative. Preserve original files and evidence during any late
 
 See [machine audits](maintenance.md#audit-a-machine) for inventory coverage and the
 [documentation audit](documentation-audit.md) for the separate Codex-first setup work.
+
+## Read-only machine doctor
+
+Run `npm run skills:doctor` before and after installation changes. Setup verification runs the same check.
+It discovers immediate user skills across shared, legacy Codex and Claude roots, resolves links, and hashes
+the complete resource tree. It reports broken links, untracked resources, source/hash drift and divergent
+duplicate names. Tracked local edits are reported separately from missing source history.
+
+The private machine ledger can add `treeSha256` to an existing binding and `recoverySource` pointing to a
+committed, byte-identical recovery directory. Such a binding also needs an owner and intended scope. This
+allows an intentionally retained standalone copy to remain usable while its exact bytes have recoverable
+history. A recovery directory must match every resource and have a clean committed source tree; a staged
+copy is insufficient. The warning remains visible because retention is not adoption or an upstream pin.
+
+The doctor never installs, updates, deletes or repairs a skill. To inspect paths, use
+`python3 scripts/check_skill_ownership.py --json` and save the report outside tracked directories. For
+bounded fixtures or another installation root, repeat `--root` and supply `--ledger` explicitly. Plugin
+and system bundles remain owned by their package managers; project skills need a separate bounded scan.
+Ignore only generated Python caches, Git internals, dependency installs and OS metadata. Linked external
+resources require explicit self-contained packaging before the doctor can claim a complete tree hash.
