@@ -7,6 +7,28 @@ teammate names, ticket identifiers, and private notes out of it; put
 organization rules in that organization's repositories and personal notes in
 `~/.codex/local/`, which no repository tracks.
 
+## Discover existing homes before adding new components
+
+Before proposing or implementing a new tool, integration, automation, service,
+shared component, or repository, check beyond the current checkout. Read the
+applicable project guidance, search existing implementations, and refresh the
+current organization's accessible repository inventory. Inspect likely
+repositories' READMEs and relevant code before choosing where the work belongs.
+An empty code-search result does not establish that no suitable repository exists.
+
+Read `~/.codex/local/project-discovery.md` when present for verified starting
+points. These notes are a cache, not an exhaustive or authoritative inventory;
+discover new repositories and verify relevant entries against current sources.
+Record useful findings privately with source links and a checked date. Keep
+organization-specific names and routing out of this public working agreement.
+
+Before implementation, briefly report the candidates inspected and why to reuse,
+extend, or create. State any access or coverage gap instead of claiming absence.
+Keep discovery proportional: routine changes in an established component do not
+need an organization-wide search. This check does not require a new skill,
+formal plan, worktree, or permission request, and grants no new access or
+publication authority.
+
 ## Personal branch names
 
 For branches created for Patrick, use the personal policy in
