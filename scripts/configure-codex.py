@@ -28,6 +28,7 @@ PRODUCT_DESIGN_DISABLED_SKILLS = ("ideate", "index")
 SKILL_CONFIG_HEADER = "[[skills.config]]"
 MCP_NAME_RE = re.compile(r"^[A-Za-z0-9_-]+$")
 MCP_ENV_KEY_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+MCP_TOOL_NAME_RE = re.compile(r"^[A-Za-z0-9_.-]+$")
 
 
 def _insert_root_fallback(text: str) -> str:
@@ -157,6 +158,20 @@ def _render_mcp_server(name: str, spec: dict[str, Any]) -> str:
             if not isinstance(value, (int, float)) or isinstance(value, bool) or value <= 0:
                 raise ValueError(f"Managed MCP server {name} {field} must be positive")
             lines.append(f"{field} = {value}")
+    for field in ("enabled_tools", "disabled_tools"):
+        tool_names = spec.get(field)
+        if tool_names is None:
+            continue
+        if (
+            not isinstance(tool_names, list)
+            or not tool_names
+            or not all(
+                isinstance(item, str) and MCP_TOOL_NAME_RE.fullmatch(item) for item in tool_names
+            )
+            or len(set(tool_names)) != len(tool_names)
+        ):
+            raise ValueError(f"Managed MCP server {name} {field} must be unique tool names")
+        lines.append(f"{field} = {json.dumps(tool_names)}")
     return "\n".join(lines) + "\n"
 
 

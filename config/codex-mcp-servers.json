@@ -1,4 +1,38 @@
 {
+  "circleci": {
+    "args": ["mcp", "start"],
+    "command": "/opt/homebrew/bin/circleci",
+    "enabled": true,
+    "enabled_tools": [
+      "circleci_artifact",
+      "circleci_auth_me",
+      "circleci_config_process",
+      "circleci_config_validate",
+      "circleci_job_artifact",
+      "circleci_job_get",
+      "circleci_job_output",
+      "circleci_job_output_get",
+      "circleci_job_output_list",
+      "circleci_job_resource_usage",
+      "circleci_job_resource_usage_get",
+      "circleci_my_runs",
+      "circleci_orb_get",
+      "circleci_orb_list",
+      "circleci_orb_source",
+      "circleci_pipeline_list",
+      "circleci_project_get",
+      "circleci_project_list",
+      "circleci_run_get",
+      "circleci_run_list",
+      "circleci_run_watch",
+      "circleci_testresult",
+      "circleci_testresult_get",
+      "circleci_testresult_list",
+      "circleci_version",
+      "circleci_workflow_get",
+      "circleci_workflow_list"
+    ]
+  },
   "xcodebuildmcp": {
     "args": ["--yes", "xcodebuildmcp@2.7.0", "mcp"],
     "command": "npx",

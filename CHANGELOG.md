@@ -49,6 +49,8 @@ version when compatibility requires it.
 
 ### Changed
 
+- The CircleCI MCP server is managed with a read-only tool allowlist, and managed MCP servers can pin
+  `enabled_tools` or `disabled_tools`.
 - Plugin refresh preserves unselected installations and limits marketplace updates to selected names.
 - The local catalog observes external user skills, resolved-source ownership, configuration counts, and unavailable
   CLI inventory notices. Invocation labels distinguish Codex and Claude defaults from observed local overrides.
