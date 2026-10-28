@@ -51,6 +51,9 @@ version when compatibility requires it.
 
 - The CircleCI MCP server is managed with a read-only tool allowlist, and managed MCP servers can pin
   `enabled_tools` or `disabled_tools`.
+- Preview verification authorization follows the user's request rather than requiring a
+  deployment label. Automatic CI grants no additional write authority; narrower user limits
+  still apply, and preview evidence requires the final revision and applied configuration.
 - Plugin refresh preserves unselected installations and limits marketplace updates to selected names.
 - The local catalog observes external user skills, resolved-source ownership, configuration counts, and unavailable
   CLI inventory notices. Invocation labels distinguish Codex and Claude defaults from observed local overrides.
