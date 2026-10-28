@@ -182,6 +182,41 @@ class ConfigureCodexTests(unittest.TestCase):
                 [{"path": "/tmp/example/SKILL.md", "enabled": False}],
             )
 
+    def test_renders_tool_allowlist_and_replaces_an_unrestricted_server(self) -> None:
+        servers = {
+            "circleci": {
+                "command": "/opt/homebrew/bin/circleci",
+                "args": ["mcp", "start"],
+                "enabled": True,
+                "enabled_tools": ["circleci_job_get", "circleci_job_output"],
+            }
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            home = Path(directory)
+            original = (
+                "[mcp_servers.circleci]\n"
+                'command = "/opt/homebrew/bin/circleci"\n'
+                'args = ["mcp", "start"]\n'
+            )
+
+            updated = configure_codex.update_config(original, home, managed_mcp_servers=servers)
+
+            self.assertEqual(tomllib.loads(updated)["mcp_servers"]["circleci"], servers["circleci"])
+            self.assertEqual(
+                configure_codex.update_config(updated, home, managed_mcp_servers=servers),
+                updated,
+            )
+
+    def test_rejects_invalid_tool_allowlists(self) -> None:
+        base = {"command": "server", "args": []}
+        for tools in ([], ["dup", "dup"], ["bad name"], "circleci_job_get"):
+            with self.subTest(tools=tools), self.assertRaises(ValueError):
+                configure_codex.update_config(
+                    "",
+                    Path("/tmp"),
+                    managed_mcp_servers={"server": {**base, "enabled_tools": tools}},
+                )
+
 
 if __name__ == "__main__":
     unittest.main()

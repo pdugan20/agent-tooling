@@ -98,6 +98,11 @@ The XcodeBuildMCP selection enables Simulator, semantic UI automation, and debug
 Its exact package version and environment live in the manifest. Computer use supplies visual judgment; Instruments
 or `xctrace` and suitable device evidence support performance claims.
 
+The CircleCI server runs through the installed CLI (`circleci mcp start`) with an `enabled_tools` allowlist of read-only
+tools: jobs, step output, workflows, pipelines, runs, test results, artifacts, config validation, and project, orb,
+and resource-usage reads. Secret, environment-variable, trigger, rerun, cancel, approval, rollback, and generic API
+tools stay out of agent sessions; use the CLI or web app directly for those.
+
 ## Catalog and persistence
 
 The catalog records selected skills and plugins, grouping equivalent package IDs under a logical capability.
