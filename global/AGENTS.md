@@ -97,6 +97,17 @@ Use when Patrick says `ship`, `merge`, `release`, `PR`, `production`, or `harden
 - Check relevant accessibility, failure states, loading states, and platform behavior.
 - Run focused verification first, then the appropriate broader checks before claiming readiness.
 - Do not deploy, mutate production data, push, or open a PR without explicit authorization.
+- Repositories may create PR previews automatically, including for drafts. That CI
+  behavior alone grants no authority for additional deployment, configuration, or data
+  writes. When Patrick explicitly requests preview verification, the request covers the
+  necessary non-secret preview values on a documented companion branch named after the
+  PR branch, including its push and preview redeploy. An explicitly requested preview
+  label can express that intent, but label presence is not required. Preserve earlier
+  authorization and honor narrower limits such as read-only or no-push instructions.
+  Shared base values, default branches, secrets, data resets, and anything that reaches
+  a real environment still require explicit approval. Verify the final deployed revision
+  and applied values before accepting preview evidence; a warm URL or values push alone
+  is insufficient.
 - For a substantial production feature spanning meaningful behavior or multiple subsystems, allow the personal `feature-delivery` skill to apply automatically.
 
 ### Hardening
