@@ -8,6 +8,7 @@ import argparse
 import json
 import os
 import re
+import shlex
 import tempfile
 import tomllib
 from pathlib import Path
@@ -29,6 +30,12 @@ SKILL_CONFIG_HEADER = "[[skills.config]]"
 MCP_NAME_RE = re.compile(r"^[A-Za-z0-9_-]+$")
 MCP_ENV_KEY_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 MCP_TOOL_NAME_RE = re.compile(r"^[A-Za-z0-9_.-]+$")
+# Checks an agent's git push against the branch's real base. See
+# global/hooks/agent_push_scope.py. Codex skips a new or changed hook definition
+# until it is reviewed and trusted in /hooks.
+PUSH_SCOPE_HOOK = Path(__file__).resolve().parents[1] / "global/hooks/agent_push_scope.py"
+PUSH_SCOPE_HOOK_MATCHER = r"^(Bash|exec_command|shell|shell_command|functions\.exec_command)$"
+HOOK_TABLE_RE = re.compile(r"(?m)^\[\[?([^\]\n]+)\]\]?\s*$")
 
 
 def _insert_root_fallback(text: str) -> str:
@@ -207,12 +214,49 @@ def load_mcp_servers(path: Path) -> dict[str, dict[str, Any]]:
     return data
 
 
+def _render_push_scope_hook(hook_path: Path) -> str:
+    command = f"python3 {shlex.quote(str(hook_path))}"
+    return (
+        "[[hooks.PreToolUse]]\n"
+        f"matcher = {json.dumps(PUSH_SCOPE_HOOK_MATCHER)}\n\n"
+        "[[hooks.PreToolUse.hooks]]\n"
+        'type = "command"\n'
+        f"command = {json.dumps(command)}\n"
+        "timeout = 30\n"
+        'statusMessage = "Checking agent push scope"\n'
+    )
+
+
+def _upsert_push_scope_hook(text: str, hook_path: Path) -> str:
+    """Add or refresh the push scope PreToolUse entry, leaving other hooks alone."""
+
+    rendered = _render_push_scope_hook(hook_path)
+    headers = list(HOOK_TABLE_RE.finditer(text))
+    for index, header in enumerate(headers):
+        if header.group(0).strip() != "[[hooks.PreToolUse]]":
+            continue
+        end = len(text)
+        for following in headers[index + 1 :]:
+            if following.group(1) != "hooks.PreToolUse.hooks":
+                end = following.start()
+                break
+        if PUSH_SCOPE_HOOK.name not in text[header.start() : end]:
+            continue
+        prefix = text[: header.start()].rstrip()
+        suffix = text[end:].lstrip("\n")
+        parts = [part for part in (prefix, rendered.rstrip(), suffix.rstrip()) if part]
+        return "\n\n".join(parts) + "\n"
+    separator = "" if not text.strip() else "\n\n"
+    return text.rstrip() + separator + rendered
+
+
 def update_config(
     text: str,
     home: Path,
     additional_disabled_skills: tuple[Path, ...] = (),
     managed_mcp_servers: dict[str, dict[str, Any]] | None = None,
     codex_home: Path | None = None,
+    push_scope_hook: Path | None = None,
 ) -> str:
     """Return an updated config without changing secrets or runtime auth."""
 
@@ -224,6 +268,8 @@ def update_config(
         updated = _disable_skill(updated, path.resolve())
     for name, spec in sorted((managed_mcp_servers or {}).items()):
         updated = _upsert_mcp_server(updated, name, spec)
+    if push_scope_hook is not None:
+        updated = _upsert_push_scope_hook(updated, push_scope_hook)
     return updated
 
 
@@ -245,6 +291,7 @@ def main() -> None:
         tuple(args.disable_skill),
         managed_mcp_servers,
         args.codex_home,
+        PUSH_SCOPE_HOOK,
     )
     if updated == original:
         return

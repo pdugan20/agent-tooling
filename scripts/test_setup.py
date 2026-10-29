@@ -144,8 +144,14 @@ class SetupTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("broken-link", result.stdout)
         after = tomllib.loads(config.read_text())
-        for key in ("model_provider", "model", "model_providers", "hooks"):
+        for key in ("model_provider", "model", "model_providers"):
             self.assertEqual(after[key], original[key])
+        # Setup adds only its managed push scope hook and keeps other hook settings.
+        self.assertEqual(after["hooks"]["path"], original["hooks"]["path"])
+        self.assertEqual(
+            [entry["hooks"][0]["statusMessage"] for entry in after["hooks"]["PreToolUse"]],
+            ["Checking agent push scope"],
+        )
         self.assertEqual(after["mcp_servers"]["external"], original["mcp_servers"]["external"])
         self.assertIn(str(ideate.resolve()), [item["path"] for item in after["skills"]["config"]])
         self.assertEqual(settings.read_text(), '{"untouched": true}\n')

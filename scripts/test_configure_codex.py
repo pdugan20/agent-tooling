@@ -182,6 +182,44 @@ class ConfigureCodexTests(unittest.TestCase):
                 [{"path": "/tmp/example/SKILL.md", "enabled": False}],
             )
 
+    def test_push_scope_hook_is_added_once_beside_existing_hooks(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            home = Path(directory)
+            original = (
+                "[hooks.state]\n\n"
+                "[[hooks.PreToolUse]]\n"
+                'matcher = "^Bash$"\n\n'
+                "[[hooks.PreToolUse.hooks]]\n"
+                'type = "command"\n'
+                'command = "/usr/bin/python3 /private/branch-naming/validate.py"\n\n'
+                "[[skills.config]]\n"
+                'path = "/tmp/example/SKILL.md"\n'
+                "enabled = false\n"
+            )
+            old = Path("/old checkout/global/hooks/agent_push_scope.py")
+            new = Path("/new/global/hooks/agent_push_scope.py")
+
+            first = configure_codex.update_config(original, home, push_scope_hook=old)
+            moved = configure_codex.update_config(first, home, push_scope_hook=new)
+            again = configure_codex.update_config(moved, home, push_scope_hook=new)
+
+            self.assertEqual(again, moved)
+            parsed = tomllib.loads(moved)
+            entries = parsed["hooks"]["PreToolUse"]
+            self.assertEqual(len(entries), 2)
+            self.assertIn("branch-naming", entries[0]["hooks"][0]["command"])
+            self.assertEqual(entries[1]["hooks"][0]["command"], f"python3 {new}")
+            self.assertEqual(entries[1]["hooks"][0]["timeout"], 30)
+            self.assertRegex("exec_command", entries[1]["matcher"])
+            self.assertRegex("functions.exec_command", entries[1]["matcher"])
+            self.assertEqual(len(parsed["skills"]["config"]), 1)
+
+    def test_push_scope_hook_is_optional(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            updated = configure_codex.update_config("", Path(directory))
+            self.assertNotIn("agent_push_scope", updated)
+            self.assertTrue(configure_codex.PUSH_SCOPE_HOOK.is_file())
+
     def test_renders_tool_allowlist_and_replaces_an_unrestricted_server(self) -> None:
         servers = {
             "circleci": {

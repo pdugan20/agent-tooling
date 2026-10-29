@@ -26,15 +26,22 @@ RETIRED_SKILLS = (
 # See global/hooks/agents_md_context.py.
 AGENTS_MD_HOOK = Path(__file__).resolve().parents[1] / "global/hooks/agents_md_context.py"
 AGENTS_MD_HOOK_MATCHER = "startup|clear|compact"
+# Checks an agent's git push against the branch's real base. See
+# global/hooks/agent_push_scope.py. It fetches the base, so it gets a longer timeout.
+PUSH_SCOPE_HOOK = Path(__file__).resolve().parents[1] / "global/hooks/agent_push_scope.py"
+PUSH_SCOPE_HOOK_MATCHER = "Bash"
+PUSH_SCOPE_HOOK_TIMEOUT = 30
 
 
-def ensure_agents_md_hook(data: dict[str, object], hook_path: Path) -> None:
+def ensure_hook(
+    data: dict[str, object], event: str, matcher: str, hook_path: Path, timeout: int
+) -> None:
     hooks = data.setdefault("hooks", {})
     if not isinstance(hooks, dict):
         raise ValueError("hooks must be a JSON object")
-    groups = hooks.setdefault("SessionStart", [])
+    groups = hooks.setdefault(event, [])
     if not isinstance(groups, list):
-        raise ValueError("hooks.SessionStart must be a JSON array")
+        raise ValueError(f"hooks.{event} must be a JSON array")
 
     # Drop earlier copies, including ones that point at a previous checkout path.
     def is_managed(group: object) -> bool:
@@ -46,20 +53,30 @@ def ensure_agents_md_hook(data: dict[str, object], hook_path: Path) -> None:
     groups[:] = [group for group in groups if not is_managed(group)]
     groups.append(
         {
-            "matcher": AGENTS_MD_HOOK_MATCHER,
+            "matcher": matcher,
             "hooks": [
                 {
                     "type": "command",
                     "command": f"python3 {shlex.quote(str(hook_path))}",
-                    "timeout": 10,
+                    "timeout": timeout,
                 }
             ],
         }
     )
 
 
+def ensure_agents_md_hook(data: dict[str, object], hook_path: Path) -> None:
+    ensure_hook(data, "SessionStart", AGENTS_MD_HOOK_MATCHER, hook_path, 10)
+
+
+def ensure_push_scope_hook(data: dict[str, object], hook_path: Path) -> None:
+    ensure_hook(data, "PreToolUse", PUSH_SCOPE_HOOK_MATCHER, hook_path, PUSH_SCOPE_HOOK_TIMEOUT)
+
+
 def update_settings(
-    data: dict[str, object], agents_md_hook: Path = AGENTS_MD_HOOK
+    data: dict[str, object],
+    agents_md_hook: Path = AGENTS_MD_HOOK,
+    push_scope_hook: Path = PUSH_SCOPE_HOOK,
 ) -> dict[str, object]:
     existing_plugins = data.get("enabledPlugins", {})
     if isinstance(existing_plugins, dict) and existing_plugins.get(OFFICIAL_SUPERPOWERS) is True:
@@ -79,6 +96,7 @@ def update_settings(
     for skill in RETIRED_SKILLS:
         overrides.pop(skill, None)
     ensure_agents_md_hook(data, agents_md_hook)
+    ensure_push_scope_hook(data, push_scope_hook)
     return data
 
 
