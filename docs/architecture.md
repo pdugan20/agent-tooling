@@ -81,6 +81,14 @@ Codex supports lifecycle hooks, including hooks bundled with manually installed 
 require review and trust of their current definitions; public-directory submission has additional restrictions.
 Do not infer hook activation from plugin installation. [Official hooks guidance](https://learn.chatgpt.com/docs/hooks)
 
+Setup registers `global/hooks/agent_push_scope.py` as a `PreToolUse` hook for Claude's `Bash` tool and Codex's
+shell tools. It runs only when an agent's command contains `git push`; terminal git and other commands never reach
+it. It compares each pushed branch with its pull request base, or the default branch when no pull request exists,
+and refuses undeclared changes to CI configuration, buildkit inputs, `ci-tool-versions.env` or `package.json`
+scripts, and stacks deeper than two pull requests. Its refusal names the files and the `Agent-Scope:` line that
+declares them. Codex skips the entry until it is reviewed and trusted in `/hooks`. The hook allows the push when it
+cannot read the repository.
+
 Claude's `outputStyles` and `lspServers` declarations are not equivalent Codex components. Skills and MCP capabilities
 can be reused where supported, but each package needs a compatibility review. An Anthropic marketplace name alone
 does not make a package Claude-only. [Official migration guidance](https://developers.openai.com/plugins/guides/submit-claude-plugin)

@@ -162,6 +162,10 @@ When a repository installs the `mattpocock/skills` planning set, the split is: S
 - Never copy raw production data, credentials, tokens, or personal data into prompts, logs, fixtures, or reports.
 - For new Firestore query shapes, assess index requirements before treating the implementation as complete.
 
+## Errors in the area you change
+
+An error in the area you are changing is your bug until shown otherwise; find its cause instead of working around it by bumping versions or retrying.
+
 ## Code Review Rules
 
 - Flag changes that make strict planning, TDD, worktrees, parallel-agent orchestration,

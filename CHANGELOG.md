@@ -8,6 +8,12 @@ version when compatibility requires it.
 
 ### Added
 
+- Added an agent push scope hook for Claude and Codex shell tools. Before an agent pushes, it compares the branch
+  with its pull request base or the default branch and refuses undeclared CI configuration, buildkit,
+  `ci-tool-versions.env` and `package.json` script changes, and stacks deeper than two pull requests. A branch
+  declares intended changes with an `Agent-Scope:` line in a commit message or the pull request body. People
+  running git in a terminal never reach it. Codex runs it after the definition is trusted in `/hooks`.
+- Shared instructions now treat an error in the area being changed as the agent's own bug until shown otherwise.
 - Adopted Emil Kowalski's `animation-performance` (frame budget, composite-only properties, diagnosing dropped
   frames) and `improve-animations` (codebase-wide motion audit and implementation plans) as shared snapshots.
 - Adopted the MapLibre `maplibre-cartography`, `maplibre-source-wiring` and `maplibre-terrain-rendering` skills
