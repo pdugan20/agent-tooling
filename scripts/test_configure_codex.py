@@ -214,6 +214,25 @@ class ConfigureCodexTests(unittest.TestCase):
             self.assertRegex("functions.exec_command", entries[1]["matcher"])
             self.assertEqual(len(parsed["skills"]["config"]), 1)
 
+    def test_push_scope_hook_update_keeps_sibling_commands_in_its_entry(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            home = Path(directory)
+            first = configure_codex.update_config(
+                "", home, push_scope_hook=Path("/old/agent_push_scope.py")
+            )
+            shared = first + (
+                '\n[[hooks.PreToolUse.hooks]]\ntype = "command"\ncommand = "echo mine"\n'
+            )
+
+            updated = configure_codex.update_config(
+                shared, home, push_scope_hook=Path("/new/agent_push_scope.py")
+            )
+
+            entry = tomllib.loads(updated)["hooks"]["PreToolUse"][0]
+            commands = [hook["command"] for hook in entry["hooks"]]
+            self.assertEqual(commands, ["python3 /new/agent_push_scope.py", "echo mine"])
+            self.assertEqual(entry["hooks"][0]["timeout"], 30)
+
     def test_push_scope_hook_is_optional(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             updated = configure_codex.update_config("", Path(directory))

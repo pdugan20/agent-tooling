@@ -240,8 +240,18 @@ def _upsert_push_scope_hook(text: str, hook_path: Path) -> str:
             if following.group(1) != "hooks.PreToolUse.hooks":
                 end = following.start()
                 break
-        if PUSH_SCOPE_HOOK.name not in text[header.start() : end]:
+        block = text[header.start() : end]
+        if PUSH_SCOPE_HOOK.name not in block:
             continue
+        if block.count("[[hooks.PreToolUse.hooks]]") > 1:
+            # Someone added other commands to this entry; repoint only the managed command.
+            replacement = f"command = {json.dumps(f'python3 {shlex.quote(str(hook_path))}')}"
+            line = re.search(
+                rf"(?m)^command\s*=\s*\".*{re.escape(PUSH_SCOPE_HOOK.name)}.*\"[ \t]*$", block
+            )
+            if line:
+                block = block[: line.start()] + replacement + block[line.end() :]
+            return text[: header.start()] + block + text[end:]
         prefix = text[: header.start()].rstrip()
         suffix = text[end:].lstrip("\n")
         parts = [part for part in (prefix, rendered.rstrip(), suffix.rstrip()) if part]
