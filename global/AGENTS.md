@@ -207,6 +207,17 @@ Treat `AGENTS.md` as the canonical cross-agent instruction file. A repository ma
 
 Claude Code 2.1.277 and later reads a repository's `AGENTS.md` natively when no `CLAUDE.md`, `.claude/CLAUDE.md`, or `CLAUDE.local.md` exists in the working directory or above it; `~/.claude/CLAUDE.md` does not count. The shared `SessionStart` hook from `agent-tooling` supplies `AGENTS.md` only when that native loading does not apply (older version, or a project Claude file present), so the file is never injected twice. Do not add `CLAUDE.md` or hidden, git-excluded `CLAUDE.local.md` shims to a repository only to load `AGENTS.md`. If a session shows no repository instructions, check the installed version and the hook before adding a file. Neither path loads nested `AGENTS.md` files below the working directory, so read those before editing in their directories.
 
+## Check capabilities before claiming an access gap
+
+Before saying a service is unreachable, falling back to a browser, or asking
+Patrick for access, check in this order: (1) search the full tool catalog,
+including deferred tools, for the service name; (2) look for an installed skill
+whose description matches the task; (3) run the service's own CLI auth check,
+such as `gh auth status` or `circleci auth me`; (4) read the tooling index at
+the top of `~/.codex/local/account-notes.md`. Report a gap only after all four
+miss, and name what you checked. A missing environment token or config file is
+not a gap: CLIs often keep credentials in the system keychain.
+
 ## Private account and machine notes
 
 Before diagnosing account or connector authentication, model routing, missing or denied local tools, or anything involving the OpenCodex proxy, read `~/.codex/local/account-notes.md` if it exists. It points to the private OpenCodex runbook (`~/.codex/local/opencodex-runbook.md`), which owns proxy setup, routing, the upgrade procedure, and troubleshooting; read the runbook before changing or upgrading the proxy. Keep account/machine-specific troubleshooting in those private local files, not in project documentation or shared trackers. Never store credentials or tokens in notes.

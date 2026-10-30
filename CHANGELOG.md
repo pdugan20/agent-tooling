@@ -8,6 +8,8 @@ version when compatibility requires it.
 
 ### Added
 
+- Shared instructions now require checking the tool catalog, installed skills, the service's CLI auth and the private
+  tooling index before reporting that a service is unreachable.
 - Added an agent push scope hook for Claude and Codex shell tools. Before an agent pushes, it compares the branch
   with its pull request base or the default branch and refuses undeclared CI configuration, buildkit,
   `ci-tool-versions.env` and `package.json` script changes, and stacks deeper than two pull requests. A branch
