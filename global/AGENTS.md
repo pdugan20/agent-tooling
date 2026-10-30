@@ -166,6 +166,8 @@ When a repository installs the `mattpocock/skills` planning set, the split is: S
 
 An error in the area you are changing is your bug until shown otherwise; find its cause instead of working around it by bumping versions or retrying.
 
+A pending check is not a pass: report merge and CI results per job with their final state, and say "still running" for anything not finished.
+
 ## Code Review Rules
 
 - Flag changes that make strict planning, TDD, worktrees, parallel-agent orchestration,
