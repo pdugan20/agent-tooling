@@ -14,6 +14,8 @@ version when compatibility requires it.
   declares intended changes with an `Agent-Scope:` line in a commit message or the pull request body. People
   running git in a terminal never reach it. Codex runs it after the definition is trusted in `/hooks`.
 - Shared instructions now treat an error in the area being changed as the agent's own bug until shown otherwise.
+- Shared instructions now report merge and CI results per job with their final state and call unfinished jobs
+  still running, never passed.
 - Adopted Emil Kowalski's `animation-performance` (frame budget, composite-only properties, diagnosing dropped
   frames) and `improve-animations` (codebase-wide motion audit and implementation plans) as shared snapshots.
 - Adopted the MapLibre `maplibre-cartography`, `maplibre-source-wiring` and `maplibre-terrain-rendering` skills
