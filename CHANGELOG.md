@@ -63,6 +63,9 @@ version when compatibility requires it.
 
 ### Changed
 
+- Renovate no longer updates dependencies inside skill snapshots under `.agents/skills/`. It had auto-merged a
+  `playwright-core` bump into Stageshow's vendored `package.json`, editing a snapshot that must match its locked
+  upstream commit. That change is reverted; Skills CLI remains the only updater for snapshots.
 - The agent push scope hook no longer treats `scripts` in a vendored skill snapshot's `package.json` under
   `.agents/skills/` as a package-script change, so adopting a skill that ships its own package needs no
   `Agent-Scope` declaration. The other guards are unchanged, including buildkit and tool-version files inside a
