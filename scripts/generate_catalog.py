@@ -28,6 +28,7 @@ PATRICK_SKILLS_SOURCE = "pdugan20/skills"
 UPSTREAM_SOURCE_LABELS = {
     "shadcn-ui/ui": "shadcn/ui",
     "addyosmani/web-quality-skills": "Addy Osmani",
+    "benjitaylor/skills": "Benji Taylor",
     "vercel-labs/agent-skills": "Vercel Labs",
     "currents-dev/playwright-best-practices-skill": "Currents",
     "dadederk/ios-accessibility-agent-skill": "Daniel Devesa Derksen-Staats",

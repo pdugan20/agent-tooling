@@ -8,6 +8,10 @@ version when compatibility requires it.
 
 ### Added
 
+- Adopted Benji Taylor's `stageshow` as a shared snapshot pinned to upstream commit `8020574`. It builds faux
+  product UI for marketing stills, feature cards, bento grids and cursor demos in React, and films the result for
+  review. Shared instructions now direct agents to copy a skill's kit or examples into the target project and work
+  there, never inside the installed skill folder.
 - Shared instructions now require checking the tool catalog, installed skills, the service's CLI auth and the private
   tooling index before reporting that a service is unreachable.
 - Added an agent push scope hook for Claude and Codex shell tools. Before an agent pushes, it compares the branch
@@ -59,6 +63,13 @@ version when compatibility requires it.
 
 ### Changed
 
+- Renovate no longer updates dependencies inside skill snapshots under `.agents/skills/`. It had auto-merged a
+  `playwright-core` bump into Stageshow's vendored `package.json`, editing a snapshot that must match its locked
+  upstream commit. That change is reverted; Skills CLI remains the only updater for snapshots.
+- The agent push scope hook no longer treats `scripts` in a vendored skill snapshot's `package.json` under
+  `.agents/skills/` as a package-script change, so adopting a skill that ships its own package needs no
+  `Agent-Scope` declaration. The other guards are unchanged, including buildkit and tool-version files inside a
+  snapshot.
 - The CircleCI MCP server is managed with a read-only tool allowlist, and managed MCP servers can pin
   `enabled_tools` or `disabled_tools`.
 - Preview verification authorization follows the user's request rather than requiring a

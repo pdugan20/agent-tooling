@@ -84,6 +84,11 @@
       "matchUpdateTypes": ["digest", "pin", "pinDigest", "lockFileMaintenance"],
       "dependencyDashboardApproval": true,
       "automerge": false
+    },
+    {
+      "description": "Skill snapshots are installed and updated only by Skills CLI",
+      "matchFileNames": [".agents/skills/**"],
+      "enabled": false
     }
   ]
 }

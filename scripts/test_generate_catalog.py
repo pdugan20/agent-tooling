@@ -15,7 +15,7 @@ class CatalogGenerationTests(unittest.TestCase):
         catalog = generate_catalog.build_catalog()
         items = catalog["items"]
 
-        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 36)
+        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 37)
         self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 24)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
@@ -179,6 +179,12 @@ class CatalogGenerationTests(unittest.TestCase):
                     "Emil Kowalski",
                     ".agents/skills/review-animations/SKILL.md",
                     "https://github.com/emilkowalski/skills/blob/main/skills/review-animations/SKILL.md",
+                ),
+                "stageshow": (
+                    "Benji Taylor",
+                    ".agents/skills/stageshow/SKILL.md",
+                    "https://github.com/benjitaylor/skills/blob/"
+                    "802057409787133703c56001080169e347305572/stageshow/SKILL.md",
                 ),
                 "find-skills": (
                     "Vercel Labs",

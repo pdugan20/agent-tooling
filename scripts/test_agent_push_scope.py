@@ -137,6 +137,24 @@ class AgentPushScopeTests(unittest.TestCase):
         self.assertIsNotNone(reason)
         self.assertIn("package-scripts: package.json (lint)", reason)
 
+    def test_skill_snapshot_package_scripts_need_no_declaration(self) -> None:
+        self.repo.branch("feat/skill")
+        snapshot = {"name": "kit", "scripts": {"dev": "vite", "typecheck": "tsc"}}
+        self.repo.write(".agents/skills/kit/package.json", json.dumps(snapshot))
+        self.repo.commit("vendor a skill with its own package.json")
+        self.assertIsNone(self.repo.check())
+
+        self.repo.write("tools/package.json", json.dumps({"scripts": {"dev": "vite"}}))
+        self.repo.write(".agents/skills/kit/buildkit/bake.sh", "echo\n")
+        self.repo.write(".agents/skills/kit/ci-tool-versions.env", "NODE=24\n")
+        self.repo.commit("a nested package and snapshot build configuration")
+        reason = self.repo.check()
+        self.assertIsNotNone(reason)
+        self.assertIn("package-scripts: tools/package.json (dev)", reason)
+        self.assertNotIn(".agents/skills/kit/package.json", reason)
+        self.assertIn("buildkit: .agents/skills/kit/buildkit/bake.sh", reason)
+        self.assertIn("ci-tool-versions: .agents/skills/kit/ci-tool-versions.env", reason)
+
     def test_merge_forward_that_drops_a_base_script_is_refused(self) -> None:
         self.repo.branch("feat/app")
         self.repo.write("package.json", json.dumps({"version": "1.0.1", "scripts": {"lint": "x"}}))

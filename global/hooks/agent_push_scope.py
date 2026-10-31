@@ -12,7 +12,8 @@ remote default branch) and denies the push when:
 - the three-dot diff touches a guarded area the branch has not declared:
   ci-config (.circleci/, .github/workflows/, .github/actions/), buildkit (any
   path inside a buildkit directory), ci-tool-versions (ci-tool-versions.env), or
-  package-scripts (a change to the "scripts" object of any package.json); or
+  package-scripts (a change to the "scripts" object of any package.json outside
+  the vendored skill snapshots under .agents/skills/); or
 - the pull request sits more than MAX_STACK_DEPTH levels above the default
   branch.
 
@@ -44,6 +45,9 @@ SHELL_TOOLS = ("Bash", "exec_command", "shell", "shell_command", "functions.exec
 SCOPES = ("ci-config", "buildkit", "ci-tool-versions", "package-scripts")
 SCOPE_LINE = re.compile(r"(?im)^\s*Agent-Scope:\s*(.+?)\s*$")
 CI_PREFIXES = (".circleci/", ".github/workflows/", ".github/actions/")
+# Skill snapshots are installed verbatim by the Skills CLI and never run as this
+# repository's packages, so their package.json scripts are not package-scripts.
+SKILL_SNAPSHOT_PREFIX = ".agents/skills/"
 GIT_TIMEOUT = 5
 FETCH_TIMEOUT = 15
 GH_TIMEOUT = 8
@@ -279,7 +283,9 @@ def problems_for(push: Push, refspec: str | None) -> list[str]:
         scope = classify(path)
         if scope:
             found.setdefault(scope, []).append(path)
-        if PurePosixPath(path).name == "package.json":
+        if PurePosixPath(path).name == "package.json" and not path.startswith(
+            SKILL_SNAPSHOT_PREFIX
+        ):
             keys = changed_scripts(push.cwd, merge_base, head, path)
             if keys:
                 found.setdefault("package-scripts", []).append(f"{path} ({', '.join(keys)})")

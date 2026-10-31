@@ -125,12 +125,20 @@ class RepositoryValidationTests(unittest.TestCase):
         )
         self.assertEqual(rules[3]["matchUpdateTypes"], ["patch", "minor"])
         self.assertEqual(
-            rules[-1],
+            rules[-2],
             {
                 "description": "Unsafe update types require manual approval",
                 "matchUpdateTypes": ["digest", "pin", "pinDigest", "lockFileMaintenance"],
                 "dependencyDashboardApproval": True,
                 "automerge": False,
+            },
+        )
+        self.assertEqual(
+            rules[-1],
+            {
+                "description": "Skill snapshots are installed and updated only by Skills CLI",
+                "matchFileNames": [".agents/skills/**"],
+                "enabled": False,
             },
         )
 
@@ -439,6 +447,10 @@ jobs:
         self.assertEqual(
             skills_lock["skills"]["xcodebuildmcp"]["ref"],
             validate_repository.XCODEBUILDMCP_REF,
+        )
+        self.assertEqual(
+            skills_lock["skills"]["stageshow"]["ref"],
+            validate_repository.STAGESHOW_REF,
         )
         self.assertEqual(
             set((validate_repository.ROOT / ".agents/skills").glob("*/skills/*/SKILL.md")),

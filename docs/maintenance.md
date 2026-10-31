@@ -95,6 +95,19 @@ headless `stream-json` init event:
 Leave the duplicate in place. Do not edit the snapshot to remove it. The same package shape affects
 `swift-testing-pro` in repositories that lock it.
 
+On 2026-10-31, Stageshow was installed from the exact upstream commit
+`802057409787133703c56001080169e347305572`, the repository's first release, using Skills CLI 1.7.4:
+
+```bash
+npx skills@1.7.4 add https://github.com/benjitaylor/skills/tree/802057409787133703c56001080169e347305572/stageshow --agent codex claude-code --skill stageshow -y
+```
+
+Repository policy requires that commit, so moving to a newer upstream revision is a reviewed change to
+`STAGESHOW_REF` and the lock together. The skill is MIT licensed, but its bundled app icons and brand marks keep
+their own terms, listed in its `NOTICE.md` and `kit/brands/SOURCES.md`. Keep the snapshot unmodified.
+Stageshow's workflow installs packages and films output beside its examples; the shared agreement directs agents
+to do that work in the target project instead, because the installed folder links back to this checkout.
+
 ## Verify repository changes
 
 Install the [verification prerequisites](setup.md#develop-this-repository), then run:
