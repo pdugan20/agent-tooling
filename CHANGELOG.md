@@ -67,6 +67,9 @@ version when compatibility requires it.
 
 ### Changed
 
+- Development tooling now resolves `js-yaml` 4.3.2 and 5.5.0 and `brace-expansion` 5.0.12, clearing their Dependabot
+  advisories. A scoped `overrides` entry lifts `markdownlint-cli`'s `js-yaml` pin until a `markdownlint-cli` release no
+  longer needs it.
 - Renovate no longer updates dependencies inside skill snapshots under `.agents/skills/`. It had auto-merged a
   `playwright-core` bump into Stageshow's vendored `package.json`, editing a snapshot that must match its locked
   upstream commit. That change is reverted; Skills CLI remains the only updater for snapshots.
