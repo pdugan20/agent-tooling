@@ -1032,6 +1032,36 @@
     {
       "availability": "Global",
       "brand": null,
+      "contentHash": "bf9f07985a62882deae7935b5b1162fb5bf66b248930bb14a75dcaf9d67291b7",
+      "description": "Build faux product UI that looks like a real product, as a still illustration or an animated demo with a cursor. Browser and app windows, dashboards, phones, notifications, terminals, bento grids and cursor walkthroughs, framed, masked and cropped the way a marketing page, feature card or docs hero needs them. Use whenever someone wants a fake or mocked UI, a product demo or walkthrough animation, a hero or feature-card illustration of an app, a product shot in the style of a polished marketing site, or an animated cursor doing things in an interface, even if they never say \"faux UI\". React and plain CSS.",
+      "displayName": "Stageshow",
+      "featured": 50,
+      "id": "skill:stageshow",
+      "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
+      "lockedRef": "802057409787133703c56001080169e347305572",
+      "name": "stageshow",
+      "ownerAvatarUrl": "https://github.com/benjitaylor.png?size=96",
+      "path": ".agents/skills/stageshow/SKILL.md",
+      "repositoryUrl": "https://github.com/benjitaylor/skills",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "skillsShUrl": "https://skills.sh/benjitaylor/skills/stageshow",
+      "source": "third-party",
+      "sourceLabel": "Benji Taylor",
+      "sourceUrl": "https://github.com/benjitaylor/skills/blob/802057409787133703c56001080169e347305572/stageshow/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "Git"
+    },
+    {
+      "availability": "Global",
+      "brand": null,
       "contentHash": "575757e3e25761c8c562d6e395d29f0b76c98b1273c0bd72d88e6ab1bc9c7d42",
       "description": "",
       "displayName": "Vercel Composition Patterns",
