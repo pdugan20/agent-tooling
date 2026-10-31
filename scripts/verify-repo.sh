@@ -27,6 +27,7 @@ fi
 
 npm test
 npm run catalog:check
+node scripts/check_skill_snapshots.mjs
 
 repository_files=()
 while IFS= read -r -d '' file; do
