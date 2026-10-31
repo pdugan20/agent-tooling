@@ -9,8 +9,9 @@ version when compatibility requires it.
 ### Added
 
 - `npm run verify` now checks that every skill snapshot still produces its `skills-lock.json` hash, so an edit that
-  did not come from a Skills CLI install fails CI. Four skills whose locked hash came from an upstream tree the install
-  cannot reproduce are pinned in `config/skill-snapshot-hashes.json` by their installed tree hash instead.
+  did not come from a Skills CLI install fails CI. Three skills whose locked hash covers upstream files the install
+  leaves out or materializes are pinned in `config/skill-snapshot-hashes.json` by their installed tree hash instead.
+  `find-skills` and `vercel-composition-patterns` were reinstalled at their locked commits to refresh stale lock hashes.
 - Adopted Benji Taylor's `stageshow` as a shared snapshot pinned to upstream commit `8020574`. It builds faux
   product UI for marketing stills, feature cards, bento grids and cursor demos in React, and films the result for
   review. Shared instructions now direct agents to copy a skill's kit or examples into the target project and work
