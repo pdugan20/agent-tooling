@@ -78,6 +78,7 @@ Use for visual design, UI variants, motion tuning, prototypes, copy changes, and
 - Keep changes easy to inspect and undo.
 - Verify the changed surface proportionally: render it, exercise the interaction, take a screenshot when useful, and run a focused compile or check when practical.
 - Ask before expanding a small design iteration into architecture or production hardening work.
+- When a skill ships a kit, examples, or a playground (such as Stageshow), copy what you need into the target project and install, build, and film there. Installed skill folders link to locked snapshots in `agent-tooling`, so never add files, install dependencies, or write output inside them.
 
 ## Code-native visual ideation
 

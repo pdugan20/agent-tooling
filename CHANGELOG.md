@@ -8,6 +8,10 @@ version when compatibility requires it.
 
 ### Added
 
+- Adopted Benji Taylor's `stageshow` as a shared snapshot pinned to upstream commit `8020574`. It builds faux
+  product UI for marketing stills, feature cards, bento grids and cursor demos in React, and films the result for
+  review. Shared instructions now direct agents to copy a skill's kit or examples into the target project and work
+  there, never inside the installed skill folder.
 - Shared instructions now require checking the tool catalog, installed skills, the service's CLI auth and the private
   tooling index before reporting that a service is unreachable.
 - Added an agent push scope hook for Claude and Codex shell tools. Before an agent pushes, it compares the branch
