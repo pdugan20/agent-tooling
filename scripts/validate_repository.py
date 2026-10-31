@@ -109,6 +109,11 @@ EXPECTED_RENOVATE_RULES = [
         "dependencyDashboardApproval": True,
         "automerge": False,
     },
+    {
+        "description": "Skill snapshots are installed and updated only by Skills CLI",
+        "matchFileNames": [".agents/skills/**"],
+        "enabled": False,
+    },
 ]
 CUSTOM_SKILLS = {
     "align-ui-to-design-system": True,
