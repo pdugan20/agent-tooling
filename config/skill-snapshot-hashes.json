@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Locked skills whose Skills CLI hash cannot be recomputed from the installed snapshot. Each entry pins the lock hash and the installed tree hash, so snapshot edits are still detected. scripts/check_skill_snapshots.mjs reads this file.",
+  "exceptions": {
+    "find-skills": {
+      "lockHash": "b146008599c31057cef1c145774cea5d5afb30e8f43fa802e47a4b461419aaaf",
+      "installedTreeHash": "913b9d37d0d54047dd65222bb8c67b2bf04e3cb87dcad1729068d7a8b2c8c396",
+      "checkedOn": "2026-10-31",
+      "reason": "Installed files match vercel-labs/skills at the locked ref byte for byte. The lock hash was recorded at the August install, before the ref was pinned, from a source tree that commit does not reproduce."
+    },
+    "swiftui-pro": {
+      "lockHash": "e0edf9a937bbb8c86c170b130ff825f158cc286f07ec477b67835e9c1b20267e",
+      "installedTreeHash": "8cd08525623ff66ceb8eca1f7372af7b1dfe591fab561b0d66a00086995817f3",
+      "checkedOn": "2026-10-31",
+      "reason": "Upstream links skills/swiftui-pro/references to the top-level references folder. Skills CLI hashes the source with that link skipped and installs it as real files."
+    },
+    "vercel-composition-patterns": {
+      "lockHash": "575757e3e25761c8c562d6e395d29f0b76c98b1273c0bd72d88e6ab1bc9c7d42",
+      "installedTreeHash": "f98931159fa9c7fed043bcd18a891a46dcf89ababa38df13a4c5b7b30dc0ce07",
+      "checkedOn": "2026-10-31",
+      "reason": "Installed files match vercel-labs/agent-skills at the locked ref byte for byte. The lock hash was recorded from an earlier source tree that commit does not reproduce."
+    },
+    "vercel-react-best-practices": {
+      "lockHash": "3219a1944e404ffc14d1d9d6aef6dd2e3855b81387ee0a044ccbfe14d34c2357",
+      "installedTreeHash": "451c3cb0e335a2a9a6a1beaa54c22decbdb942f4104ae3d7b6d1979114986d79",
+      "checkedOn": "2026-10-31",
+      "reason": "Upstream ships metadata.json, which Skills CLI includes in the source hash and leaves out of the install."
+    }
+  }
+}

@@ -58,6 +58,15 @@ affected workflow before committing. Do not patch the generated snapshot, run a 
 or auto-merge instruction updates. If a personal customization is genuinely needed, create a clearly named skill in
 Skills instead of silently diverging the upstream copy.
 
+`npm run verify` recomputes each snapshot's hash the way Skills CLI does and compares it with `computedHash` in
+`skills-lock.json`, so an edit to a snapshot that did not come from a Skills CLI install fails CI. Skills CLI hashes
+the upstream source before installing it, so a few locked hashes cannot be recomputed from the installed copy: upstream
+files the installer leaves out, such as `metadata.json`, and links it turns into real files. Those skills are listed in
+`config/skill-snapshot-hashes.json` with the lock hash, the installed tree hash, and the reason. The check fails when
+an exception goes stale, so after updating one of those skills, compare the new install with upstream at its ref
+(`npm run skills:check`) and then update or remove its entry. `node scripts/check_skill_snapshots.mjs --print` prints
+the installed tree hashes.
+
 Skill updates remain deliberately reviewed. Use the existing CLI install and update path, inspect instruction
 changes, and preserve provenance. No scheduled skill-update or auto-merge workflow is configured here.
 
