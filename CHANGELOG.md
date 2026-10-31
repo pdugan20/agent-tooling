@@ -63,6 +63,10 @@ version when compatibility requires it.
 
 ### Changed
 
+- The agent push scope hook no longer treats `scripts` in a vendored skill snapshot's `package.json` under
+  `.agents/skills/` as a package-script change, so adopting a skill that ships its own package needs no
+  `Agent-Scope` declaration. The other guards are unchanged, including buildkit and tool-version files inside a
+  snapshot.
 - The CircleCI MCP server is managed with a read-only tool allowlist, and managed MCP servers can pin
   `enabled_tools` or `disabled_tools`.
 - Preview verification authorization follows the user's request rather than requiring a
