@@ -17,8 +17,11 @@ Claude already loads it when that directory has a CLAUDE.md or .claude/CLAUDE.md
 (the repository's own choice), or a CLAUDE.local.md that imports AGENTS.md.
 Files are returned root first, the same order Claude uses for CLAUDE.md.
 
-Nested AGENTS.md files below the working directory are not loaded. Claude loads
-nested CLAUDE.md files lazily, and no hook event does that for AGENTS.md.
+Nested AGENTS.md files below the working directory are left to Claude. When
+native loading applies, Claude reads a subdirectory's AGENTS.md as it opens files
+there, unless that subdirectory has its own CLAUDE.md. When this hook supplies
+the chain instead, nothing loads those nested files; no hook event fires as
+Claude moves into a subdirectory.
 
 The hook never fails a session. Unreadable input, a missing file, or any other
 error produces no output and exit 0.
