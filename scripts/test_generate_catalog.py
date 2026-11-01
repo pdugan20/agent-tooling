@@ -57,7 +57,7 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertTrue(
             all(
                 item["path"].startswith(".agents/skills/")
-                and item["sourceUrl"].startswith("https://github.com/pdugan20/skills/blob/v3.4.0/")
+                and item["sourceUrl"].startswith("https://github.com/pdugan20/skills/blob/v3.5.0/")
                 for item in items
                 if item["type"] == "skill" and item["name"] in managed
             )
