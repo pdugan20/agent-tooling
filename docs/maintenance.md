@@ -129,10 +129,12 @@ This is the exact `ci` status check used by GitHub Actions. It validates the can
 without inspecting authenticated runtime state. Continue to use `npm run setup:check` separately after applying the
 setup on a real machine.
 
-ClaudeLint remains in the repository gate. `lint:claude` explicitly validates `.agents/skills` with strict settings,
-even though pre-commit excludes snapshots from blanket file matching. Preserve upstream snapshots on compatibility
-failures; do not reformat or patch them locally. Repository policy separately checks lock provenance, compatibility
-links, the configured Superpowers baseline, and desired plugin state.
+ClaudeLint remains in the repository gate for Claude configuration files. It does not validate skill snapshots:
+`claudelint validate-skills` ignores `--path`, and `.claudelintignore` excludes the snapshot directories, so the former
+`validate-skills --path .agents/skills` step checked nothing. Patrick-owned skills are validated in Skills before release,
+and the snapshot hash check confirms every locked snapshot is unmodified. Do not reformat or patch upstream snapshots
+locally. Repository policy separately checks lock provenance, compatibility links, the configured Superpowers
+baseline, and desired plugin state.
 
 ### Secret scanning
 
