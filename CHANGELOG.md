@@ -67,6 +67,7 @@ version when compatibility requires it.
 
 ### Changed
 
+- `claude-code-lint` is upgraded from 0.7.1 to 0.10.0, which resolves `zod` 4.6.7 and clears its `npm audit` advisory.
 - The ownership inventory records `axiom-macos` as locked project-scoped in the Halfway repository at `v27.6.1`, with a
   new `project-lock-in-consumer-repository` evidence level for skills a consuming repository locks itself.
 - Development tooling now resolves `js-yaml` 4.3.2 and 5.5.0 and `brace-expansion` 5.0.12, clearing their Dependabot
