@@ -11,6 +11,9 @@ version when compatibility requires it.
 - `lint:claude` no longer runs `claudelint validate-skills --path .agents/skills`. The linter ignores `--path`, and
   `.claudelintignore` excludes the snapshot directories, so the step validated nothing and a broken skill passed it. Skill
   content is validated where it is authored, and the snapshot hash check confirms locked snapshots are unmodified.
+- Shared instructions and the `AGENTS.md` context hook now say that Claude Code reads a subdirectory's `AGENTS.md`
+  as it opens files there when native loading applies, so nested instructions need no `CLAUDE.md` shim. Codex still
+  loads only the files from the project root down to its working directory.
 
 ## [0.9.0] - 2026-10-31
 
@@ -78,9 +81,6 @@ version when compatibility requires it.
 - `claude-code-lint` is upgraded from 0.7.1 to 0.10.0, which resolves `zod` 4.6.7 and clears its `npm audit` advisory.
 - The ownership inventory records `axiom-macos` as locked project-scoped in the Halfway repository at `v27.6.1`, with a
   new `project-lock-in-consumer-repository` evidence level for skills a consuming repository locks itself.
-- Shared instructions and the `AGENTS.md` context hook now say that Claude Code reads a subdirectory's `AGENTS.md`
-  as it opens files there when native loading applies, so nested instructions need no `CLAUDE.md` shim. Codex still
-  loads only the files from the project root down to its working directory.
 - Development tooling now resolves `js-yaml` 4.3.2 and 5.5.0 and `brace-expansion` 5.0.12, clearing their Dependabot
   advisories.
 - `markdownlint-cli` is upgraded to 0.50.0, which brings `markdown-it` 15.0.3 and `smol-toml` 1.9.1 and clears their
