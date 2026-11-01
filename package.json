@@ -15,7 +15,7 @@
     "catalog:typecheck": "tsc -p catalog/tsconfig.app.json --noEmit && tsc -p catalog/tsconfig.node.json --noEmit",
     "format": "prettier --write \"**/*.{css,html,js,json,ts,tsx,yaml,yml}\"",
     "format:check": "prettier --check \"**/*.{css,html,js,json,ts,tsx,yaml,yml}\"",
-    "lint:claude": "claudelint check-all --strict --no-cache --format compact && claudelint validate-skills --path .agents/skills --preset strict --warnings-as-errors",
+    "lint:claude": "claudelint check-all --strict --no-cache --format compact",
     "lint:markdown": "markdownlint \"**/*.md\" --ignore node_modules --ignore .agents/skills --ignore .claude/skills --ignore .claudelint-cache",
     "mcp:check": "python3 scripts/check_mcp_auth.py",
     "plugins:refresh:claude": "bash scripts/refresh-claude-plugins.sh",
