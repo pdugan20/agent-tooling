@@ -7,6 +7,9 @@ __pycache__/
 .env
 .env.*
 !.env.example
+# Skill snapshots are committed byte for byte, including eval fixtures.
+!.agents/skills/**/.env
+!.agents/skills/**/.env.*
 node_modules/
 *.local.json
 credentials/

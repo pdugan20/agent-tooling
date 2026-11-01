@@ -22,7 +22,7 @@
         "claude": "Automatic",
         "codex": "Automatic"
       },
-      "lockedRef": "v3.4.0",
+      "lockedRef": "v3.5.0",
       "name": "feature-delivery",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
       "path": ".agents/skills/feature-delivery/SKILL.md",
@@ -34,7 +34,7 @@
       "skillsShUrl": "https://skills.sh/pdugan20/skills/feature-delivery",
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.4.0/skills/feature-delivery/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.5.0/skills/feature-delivery/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -52,7 +52,7 @@
         "claude": "Automatic",
         "codex": "Automatic"
       },
-      "lockedRef": "v3.4.0",
+      "lockedRef": "v3.5.0",
       "name": "code-native-ui-ideation",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
       "path": ".agents/skills/code-native-ui-ideation/SKILL.md",
@@ -64,7 +64,7 @@
       "skillsShUrl": "https://skills.sh/pdugan20/skills/code-native-ui-ideation",
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.4.0/skills/code-native-ui-ideation/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.5.0/skills/code-native-ui-ideation/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -72,7 +72,7 @@
     {
       "availability": "Global",
       "brand": null,
-      "contentHash": "58d298102b755aca8fcf39d92920d1e5abd087dbdfd771d49921d9691ab70dbe",
+      "contentHash": "80467af3f1f8dcfa23911aff57cb124b1dd01032a5644a5ce48c3d480a7363ec",
       "description": "Scaffold repositories to the right maturity",
       "displayName": "Bootstrap Repository",
       "featured": 3,
@@ -82,7 +82,7 @@
         "claude": "Automatic",
         "codex": "Automatic"
       },
-      "lockedRef": "v3.4.0",
+      "lockedRef": "v3.5.0",
       "name": "bootstrap-repository",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
       "path": ".agents/skills/bootstrap-repository/SKILL.md",
@@ -94,7 +94,7 @@
       "skillsShUrl": "https://skills.sh/pdugan20/skills/bootstrap-repository",
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.4.0/skills/bootstrap-repository/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.5.0/skills/bootstrap-repository/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -102,7 +102,7 @@
     {
       "availability": "Global",
       "brand": null,
-      "contentHash": "4e0fe665444cfd3df8e9422e80839212b6efcc768b800099003cab3c854ed720",
+      "contentHash": "6379fc962fd68658819c05f5d1ef73c430539b848cbee9f3eb25a32aae09daf5",
       "description": "Create a project-specific Mintlify site",
       "displayName": "Scaffold Mintlify Site",
       "featured": 4,
@@ -112,7 +112,7 @@
         "claude": "Automatic",
         "codex": "Automatic"
       },
-      "lockedRef": "v3.4.0",
+      "lockedRef": "v3.5.0",
       "name": "scaffold-mintlify-site",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
       "path": ".agents/skills/scaffold-mintlify-site/SKILL.md",
@@ -124,7 +124,7 @@
       "skillsShUrl": "https://skills.sh/pdugan20/skills/scaffold-mintlify-site",
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.4.0/skills/scaffold-mintlify-site/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.5.0/skills/scaffold-mintlify-site/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -132,7 +132,7 @@
     {
       "availability": "Global",
       "brand": null,
-      "contentHash": "39b8005a25d1cebe51734f6cc1fd03374ddb31efa8cd1be9c05d311bd57d29df",
+      "contentHash": "2587a7d7393502edae28578f151911fe420fb9478ae8d34dcf759bb938007442",
       "description": "Audit Mintlify content and navigation",
       "displayName": "Review Mintlify Docs",
       "featured": 5,
@@ -142,7 +142,7 @@
         "claude": "Automatic",
         "codex": "Automatic"
       },
-      "lockedRef": "v3.4.0",
+      "lockedRef": "v3.5.0",
       "name": "review-mintlify-docs",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
       "path": ".agents/skills/review-mintlify-docs/SKILL.md",
@@ -154,7 +154,7 @@
       "skillsShUrl": "https://skills.sh/pdugan20/skills/review-mintlify-docs",
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.4.0/skills/review-mintlify-docs/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.5.0/skills/review-mintlify-docs/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -162,7 +162,7 @@
     {
       "availability": "Global",
       "brand": null,
-      "contentHash": "14f3bbe3514a90a5695ada99db604493b73d21abcd0b6405a5b7baa6ef0e6ac0",
+      "contentHash": "e0aaaa6f40a5f138a1782632068ba0b64812346aded92880bb5a17b3786a5630",
       "description": "Generate source-backed reference docs",
       "displayName": "Generate Mintlify Reference",
       "featured": 6,
@@ -172,7 +172,7 @@
         "claude": "Automatic",
         "codex": "Automatic"
       },
-      "lockedRef": "v3.4.0",
+      "lockedRef": "v3.5.0",
       "name": "generate-mintlify-reference",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
       "path": ".agents/skills/generate-mintlify-reference/SKILL.md",
@@ -184,7 +184,7 @@
       "skillsShUrl": "https://skills.sh/pdugan20/skills/generate-mintlify-reference",
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.4.0/skills/generate-mintlify-reference/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.5.0/skills/generate-mintlify-reference/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -202,7 +202,7 @@
         "claude": "Automatic",
         "codex": "Automatic"
       },
-      "lockedRef": "v3.4.0",
+      "lockedRef": "v3.5.0",
       "name": "write-mintlify-changelog",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
       "path": ".agents/skills/write-mintlify-changelog/SKILL.md",
@@ -214,7 +214,7 @@
       "skillsShUrl": "https://skills.sh/pdugan20/skills/write-mintlify-changelog",
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.4.0/skills/write-mintlify-changelog/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.5.0/skills/write-mintlify-changelog/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -252,7 +252,7 @@
     {
       "availability": "Global",
       "brand": null,
-      "contentHash": "f0599e491c841106eba286b61e6a9f4a788898c7a61a5f1b8b3e6fe48563ef04",
+      "contentHash": "381c3618e4b5c99a3adb76b5987b6a3ec524a74cb10a71acdd6d49ee0d0afba5",
       "description": "Diagnose and smooth a mobile interaction",
       "displayName": "Tune Mobile Client Performance",
       "featured": 9,
@@ -262,7 +262,7 @@
         "claude": "Automatic",
         "codex": "Automatic"
       },
-      "lockedRef": "v3.4.0",
+      "lockedRef": "v3.5.0",
       "name": "tune-mobile-client-performance",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
       "path": ".agents/skills/tune-mobile-client-performance/SKILL.md",
@@ -274,7 +274,7 @@
       "skillsShUrl": "https://skills.sh/pdugan20/skills/tune-mobile-client-performance",
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.4.0/skills/tune-mobile-client-performance/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.5.0/skills/tune-mobile-client-performance/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -282,7 +282,7 @@
     {
       "availability": "Global",
       "brand": null,
-      "contentHash": "130e6d7aa2cee2357aaa5dadf11a45bd815a952edb881b1a7325bd1ddc1512d1",
+      "contentHash": "d0411944f50543d44ab15b9876b6b614537ba4055a52f03ae0ee86349e217616",
       "description": "Build reliable Apple system integrations",
       "displayName": "Integrate App Intents",
       "featured": 10,
@@ -292,7 +292,7 @@
         "claude": "Automatic",
         "codex": "Automatic"
       },
-      "lockedRef": "v3.4.0",
+      "lockedRef": "v3.5.0",
       "name": "integrate-app-intents",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
       "path": ".agents/skills/integrate-app-intents/SKILL.md",
@@ -304,7 +304,7 @@
       "skillsShUrl": "https://skills.sh/pdugan20/skills/integrate-app-intents",
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.4.0/skills/integrate-app-intents/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.5.0/skills/integrate-app-intents/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -312,7 +312,7 @@
     {
       "availability": "Global",
       "brand": null,
-      "contentHash": "4597cd23ff5e253d1a71753c84411303de0b0df51671854e4d4d13082f78fda7",
+      "contentHash": "50a3824363c7471a0f0594da48763171d6652b6357987793f3f683984a3841a7",
       "description": "Host private remote development previews",
       "displayName": "Run Remote Dev Server",
       "featured": 11,
@@ -322,7 +322,7 @@
         "claude": "Automatic",
         "codex": "Automatic"
       },
-      "lockedRef": "v3.4.0",
+      "lockedRef": "v3.5.0",
       "name": "run-remote-dev-server",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
       "path": ".agents/skills/run-remote-dev-server/SKILL.md",
@@ -334,7 +334,7 @@
       "skillsShUrl": "https://skills.sh/pdugan20/skills/run-remote-dev-server",
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.4.0/skills/run-remote-dev-server/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.5.0/skills/run-remote-dev-server/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -682,7 +682,7 @@
         "claude": "Automatic",
         "codex": "Automatic"
       },
-      "lockedRef": "v3.4.0",
+      "lockedRef": "v3.5.0",
       "name": "align-ui-to-design-system",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
       "path": ".agents/skills/align-ui-to-design-system/SKILL.md",
@@ -694,7 +694,7 @@
       "skillsShUrl": "https://skills.sh/pdugan20/skills/align-ui-to-design-system",
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.4.0/skills/align-ui-to-design-system/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.5.0/skills/align-ui-to-design-system/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -702,7 +702,7 @@
     {
       "availability": "Global",
       "brand": null,
-      "contentHash": "06d3e758308ffff106fee61ddeac0f1681c772caf3ad6f77c096b34d52c0294b",
+      "contentHash": "3ef24bae339cda7cec44643bca693ac0bc17130ae77cb1dc953211f376c6cefa",
       "description": "Dissect UI recordings against real code",
       "displayName": "Analyze UI Video",
       "featured": 50,
@@ -712,7 +712,7 @@
         "claude": "Automatic",
         "codex": "Automatic"
       },
-      "lockedRef": "v3.4.0",
+      "lockedRef": "v3.5.0",
       "name": "analyze-ui-video",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
       "path": ".agents/skills/analyze-ui-video/SKILL.md",
@@ -724,7 +724,7 @@
       "skillsShUrl": "https://skills.sh/pdugan20/skills/analyze-ui-video",
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.4.0/skills/analyze-ui-video/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.5.0/skills/analyze-ui-video/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -772,7 +772,7 @@
         "claude": "Automatic",
         "codex": "Automatic"
       },
-      "lockedRef": "v3.4.0",
+      "lockedRef": "v3.5.0",
       "name": "audit-design-system-health",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
       "path": ".agents/skills/audit-design-system-health/SKILL.md",
@@ -784,7 +784,7 @@
       "skillsShUrl": "https://skills.sh/pdugan20/skills/audit-design-system-health",
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.4.0/skills/audit-design-system-health/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.5.0/skills/audit-design-system-health/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -792,7 +792,7 @@
     {
       "availability": "Global",
       "brand": null,
-      "contentHash": "af2ab4b971ffa8d6a8bda7c1fbc7f02c3dcc1cb1801f69c5c2fab724c87a4fc1",
+      "contentHash": "414efff4f8a7a7f4abe59ea8958106f33a11e92e49b79f67038983a3f4b08249",
       "description": "Test feature value or feasibility before investing",
       "displayName": "Feature Spike",
       "featured": 50,
@@ -802,7 +802,7 @@
         "claude": "Automatic",
         "codex": "Automatic"
       },
-      "lockedRef": "v3.4.0",
+      "lockedRef": "v3.5.0",
       "name": "feature-spike",
       "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
       "path": ".agents/skills/feature-spike/SKILL.md",
@@ -814,7 +814,7 @@
       "skillsShUrl": "https://skills.sh/pdugan20/skills/feature-spike",
       "source": "personal",
       "sourceLabel": "Pat Dugan",
-      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.4.0/skills/feature-spike/SKILL.md",
+      "sourceUrl": "https://github.com/pdugan20/skills/blob/v3.5.0/skills/feature-spike/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
