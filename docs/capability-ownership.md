@@ -27,6 +27,8 @@ retired copies stay recoverable outside skill discovery.
 - `upstream-family-identified-base-unresolved`: the upstream is identified, but the exact older or modified base is unresolved.
 - `separate-global-lock-declaration-not-content-verification`: a different manager declares the source; this pass did not verify its bytes.
 - `exact-git-tree-recovery`: files were restored from the recorded repository commit and checked against its Git blobs.
+- `project-lock-in-consumer-repository`: a consuming repository locks the skill in its own `skills-lock.json` at the
+  recorded revision; that repository owns updates, and the catalog observes it through `--repos-root`.
 
 A comparison revision is not an installed-version claim. Repository-level license metadata is evidence to review
 before redistribution, not a substitute for checking notices and any skill-specific license.

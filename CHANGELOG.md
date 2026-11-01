@@ -67,6 +67,8 @@ version when compatibility requires it.
 
 ### Changed
 
+- The ownership inventory records `axiom-macos` as locked project-scoped in the Halfway repository at `v27.6.1`, with a
+  new `project-lock-in-consumer-repository` evidence level for skills a consuming repository locks itself.
 - Development tooling now resolves `js-yaml` 4.3.2 and 5.5.0 and `brace-expansion` 5.0.12, clearing their Dependabot
   advisories.
 - `markdownlint-cli` is upgraded to 0.50.0, which brings `markdown-it` 15.0.3 and `smol-toml` 1.9.1 and clears their

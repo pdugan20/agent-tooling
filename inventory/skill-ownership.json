@@ -61,11 +61,14 @@
       "sourcePath": ".claude-plugin/plugins/axiom/skills/axiom-macos/SKILL.md",
       "status": "retained-not-adopted",
       "recommendedScope": "native-macos-projects",
-      "decision": "Existing declared provenance retained. No new installation, package merge, or scope expansion.",
+      "decision": "Not selected here. Locked project-scoped in pdugan20/halfway (skills-lock.json, v27.6.1) on 2026-10-24; the user-global copy was removed.",
       "comparison": {
-        "checkedOn": "2026-10-21",
-        "evidence": "separate-global-lock-declaration-not-content-verification"
-      }
+        "checkedOn": "2026-10-24",
+        "revision": "v27.6.1",
+        "sourceUrl": "https://github.com/charleswiltgen/axiom/tree/v27.6.1/.claude-plugin/plugins/axiom/skills/axiom-macos",
+        "evidence": "project-lock-in-consumer-repository"
+      },
+      "license": "MIT"
     },
     {
       "id": "blender-motion-state-inspection",
