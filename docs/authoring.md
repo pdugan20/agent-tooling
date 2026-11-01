@@ -48,8 +48,9 @@ npm run verify
 ```
 
 The full gate runs tests, catalog drift checks, pre-commit validators, repository policy, and secret scanning.
-The retained `lint:claude` command also runs strict validation over `.agents/skills`; the pre-commit file exclusion
-does not suppress that explicit whole-tree command. Inspect compatibility failures without editing upstream snapshots.
+`lint:claude` checks Claude configuration files only. Skill content is validated where it is authored: Patrick-owned
+skills in Skills before release, and third-party skills upstream. Here, the snapshot hash check confirms each locked
+snapshot is unmodified.
 See [setup](setup.md#develop-this-repository) for prerequisites and [quality tooling](quality-tooling.md) for scope.
 
 ## Check behavior in the runtime

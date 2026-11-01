@@ -16,6 +16,7 @@ it does not change setup scripts, selected capabilities, runtime configuration, 
 | Plugin inventory | CLI, desktop, workspace, and cached state were treated too categorically | Documented the selected maintenance split and limits of each observation |
 | Catalog | Snapshot originally checked only selected entrypoint names and mixed invocation policies | Added observed user skills, resolved-source identity, separate runtime policies, configuration counts, and explicit coverage notices |
 | Validation | Maintenance claimed locked snapshots were excluded from lint policy despite whole-tree ClaudeLint validation | Corrected to match `package.json` and pre-commit behavior |
+| Skill validation | `lint:claude` claimed strict skill-snapshot validation, but `validate-skills --path` validated nothing (2026-10-31) | Removed the no-op step; skill content is validated at its source and snapshots by the hash check |
 | Dependency maintenance | Quality guide still attributed updates to Dependabot | Corrected to Renovate and its checked-in policy |
 
 ## Verification basis

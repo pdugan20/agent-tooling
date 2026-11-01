@@ -11,7 +11,7 @@ signed-in desktop chat can use every selected capability. Run `npm run verify` f
 | Prettier | Catalog code and configuration formatting | `package.json` and `package-lock.json` |
 | Markdownlint | Maintained Markdown structure | `package.json` and `.markdownlint.json` |
 | TypeScript | Catalog type checks | `package.json` and catalog tsconfig files |
-| ClaudeLint | Retained Claude configuration checks and explicit strict validation of selected skill snapshots | `package.json`, `.claudelintrc.json`, and `lint:claude` |
+| ClaudeLint | Claude configuration file checks | `package.json`, `.claudelintrc.json`, and `lint:claude` |
 | Repository validators and tests | Source, version, link, plugin, configuration, release, and dependency-policy contracts | `scripts/` |
 | Ruff | Python linting and formatting | `.pre-commit-config.yaml` |
 | ShellCheck and shfmt | Shell correctness and formatting | `.pre-commit-config.yaml` |
@@ -23,7 +23,8 @@ signed-in desktop chat can use every selected capability. Run `npm run verify` f
 `npm run verify` runs unit tests, catalog drift detection, pre-commit checks, full-history secret scanning, and
 whitespace checks. Catalog compilation has its own `npm run catalog:build` command.
 Snapshots are excluded from blanket formatting and Markdown rewrites. They are still subject to provenance policy
-and the explicit ClaudeLint skill-validation command. This compatibility check is not proof of Codex runtime behavior.
+and the snapshot hash check, which confirms they match their locked install. Skill content is validated in its source
+repository. Neither check is proof of Codex runtime behavior.
 
 ## Checks in publishing repositories
 

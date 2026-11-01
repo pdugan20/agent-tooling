@@ -6,6 +6,12 @@ version when compatibility requires it.
 
 ## [Unreleased]
 
+### Changed
+
+- `lint:claude` no longer runs `claudelint validate-skills --path .agents/skills`. The linter ignores `--path`, and
+  `.claudelintignore` excludes the snapshot directories, so the step validated nothing and a broken skill passed it. Skill
+  content is validated where it is authored, and the snapshot hash check confirms locked snapshots are unmodified.
+
 ## [0.9.0] - 2026-10-31
 
 ### Added
