@@ -15,6 +15,10 @@ version when compatibility requires it.
 
 ### Changed
 
+- Updated all fourteen Patrick-owned skill provenance locks to `pdugan20/skills` v3.5.0 and refreshed the catalog.
+  v3.5.0 adds isolated and harder evals for `feature-spike`, including eval fixtures inside its snapshot, and
+  reviewed trust exceptions; the four new pilot skills stay unselected. Skill snapshot `.env` fixtures are now
+  committed so locked hashes match fresh clones.
 - `lint:claude` no longer runs `claudelint validate-skills --path .agents/skills`. The linter ignores `--path`, and
   `.claudelintignore` excludes the snapshot directories, so the step validated nothing and a broken skill passed it. Skill
   content is validated where it is authored, and the snapshot hash check confirms locked snapshots are unmodified.
