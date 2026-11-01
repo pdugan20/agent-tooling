@@ -6,6 +6,13 @@ version when compatibility requires it.
 
 ## [Unreleased]
 
+### Added
+
+- Added a security threat model in `docs/security/threat-model.md`. It names the repository's protected assets, entry
+  points, and trust boundaries, then the principal threats (supply-chain compromise, authority expansion, disclosure or
+  unintended writes, and CI or release tampering) with the controls each requires, review priorities, and the
+  assumptions that remain unconfirmed.
+
 ### Changed
 
 - `lint:claude` no longer runs `claudelint validate-skills --path .agents/skills`. The linter ignores `--path`, and
