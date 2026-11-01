@@ -6,6 +6,8 @@ version when compatibility requires it.
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-10-31
+
 ### Added
 
 - `npm run verify` now checks that every skill snapshot still produces its `skills-lock.json` hash, so an edit that
@@ -110,6 +112,12 @@ version when compatibility requires it.
   v3.3.0 makes `feature-delivery` confirm requested capabilities before it selects an execution mode and adds
   trust boundaries to `feature-spike`, `bootstrap-repository`, and `review-mintlify-docs`.
 - Updated all fourteen Patrick-owned skill provenance locks to `pdugan20/skills` v3.4.0 and refreshed the catalog.
+
+### Upgrade notes
+
+Pull the repository, run `npm ci` and `npm run bootstrap`, then start new Codex tasks. Bootstrap links the new and
+updated skill snapshots, including Stageshow, and registers the agent push scope hook; Codex runs it after you trust the
+definition in `/hooks`. If you use Claude Code, run `npm run bootstrap:claude` as well.
 
 ## [0.8.0] - 2026-07-31
 
@@ -318,7 +326,8 @@ workflow snapshots.
 Pull the repository, run `npm run bootstrap`, refresh the configured Codex and Claude plugins, and start new
 tasks in both products.
 
-[unreleased]: https://github.com/pdugan20/agent-tooling/compare/v0.8.0...HEAD
+[unreleased]: https://github.com/pdugan20/agent-tooling/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/pdugan20/agent-tooling/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/pdugan20/agent-tooling/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/pdugan20/agent-tooling/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/pdugan20/agent-tooling/compare/v0.5.0...v0.6.0
