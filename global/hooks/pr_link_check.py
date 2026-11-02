@@ -20,6 +20,11 @@ Which repositories Linear review indexes is private, so the list is read one
 file only the bare-number check runs.
 
 Fenced code and inline code are exempt, so a copy-paste block of URLs passes.
+
+The link pair is checked line by line, because the format puts both links on
+one line. A complete pair earlier in the reply does not excuse a later
+GitHub-only mention. A number written right after "issue" is treated as an
+issue reference and left alone.
 """
 
 from __future__ import annotations
@@ -40,6 +45,7 @@ MARKDOWN_LINK_RE = re.compile(r"\[[^\]]*\]\([^)\s]+\)")
 URL_RE = re.compile(r"https?://\S+")
 # "#13081" in prose. Headings (##), HTML entities (&#123;) and URL fragments are excluded.
 BARE_NUMBER_RE = re.compile(r"(?<![\w&/#])#(\d{2,6})\b")
+ISSUE_WORD_RE = re.compile(r"\bissues?\s+$", re.IGNORECASE)
 GITHUB_PR_RE = re.compile(r"https?://github\.com/([\w.-]+/[\w.-]+)/pull/(\d+)")
 LINEAR_REVIEW_RE = re.compile(r"https?://linear\.review/([\w.-]+/[\w.-]+)/pull/(\d+)")
 
@@ -64,20 +70,25 @@ def find_problems(text: str, repos: set[str]) -> list[str]:
     problems: list[str] = []
 
     prose = URL_RE.sub(" ", MARKDOWN_LINK_RE.sub(" ", body))
-    bare = sorted({match.group(1) for match in BARE_NUMBER_RE.finditer(prose)}, key=int)
+    bare = sorted(
+        {
+            match.group(1)
+            for match in BARE_NUMBER_RE.finditer(prose)
+            if not ISSUE_WORD_RE.search(prose[max(0, match.start() - 12) : match.start()])
+        },
+        key=int,
+    )
     if bare:
         problems.append("bare numbers with no link: " + ", ".join(f"#{number}" for number in bare))
 
-    reviewed = {(repo.lower(), number) for repo, number in LINEAR_REVIEW_RE.findall(body)}
-    missing = sorted(
-        {
-            f"{repo}#{number}"
-            for repo, number in GITHUB_PR_RE.findall(body)
-            if repo.lower() in repos and (repo.lower(), number) not in reviewed
-        }
-    )
+    missing: set[str] = set()
+    for line in body.splitlines():
+        reviewed = {(repo.lower(), number) for repo, number in LINEAR_REVIEW_RE.findall(line)}
+        for repo, number in GITHUB_PR_RE.findall(line):
+            if repo.lower() in repos and (repo.lower(), number) not in reviewed:
+                missing.add(f"{repo}#{number}")
     if missing:
-        problems.append("GitHub link with no Linear review link: " + ", ".join(missing))
+        problems.append("GitHub link with no Linear review link: " + ", ".join(sorted(missing)))
     return problems
 
 

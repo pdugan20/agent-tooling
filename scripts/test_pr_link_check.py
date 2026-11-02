@@ -42,6 +42,16 @@ class FindProblemsTests(unittest.TestCase):
         text = "See [#87](https://github.com/someone/tools/pull/87)."
         self.assertEqual(pr_link_check.find_problems(text, REPOS), [])
 
+    def test_each_mention_needs_its_own_pair(self) -> None:
+        row = f"| [#1201]({GH.format(n=1201)}) | green |"
+        text = f"Review {pair(1201)}.\n\n| PR | State |\n|---|---|\n{row}"
+        problems = pr_link_check.find_problems(text, REPOS)
+        self.assertEqual(problems, ["GitHub link with no Linear review link: acme/app#1201"])
+
+    def test_issue_references_are_not_pull_requests(self) -> None:
+        text = "The bug is tracked in issue #1201 and Issues #1202; no pull request exists yet."
+        self.assertEqual(pr_link_check.find_problems(text, REPOS), [])
+
     def test_code_is_exempt(self) -> None:
         text = (
             "Paste this:\n\n```\n" + GH.format(n=1201) + "\n#1202\n```\n\nThe `#1203` label stays."
