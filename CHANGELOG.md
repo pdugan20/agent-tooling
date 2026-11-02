@@ -8,6 +8,9 @@ version when compatibility requires it.
 
 ### Added
 
+- Added `global/hooks/pr_link_check.py`, a `Stop` hook that setup registers for Claude and Codex. It sends a reply
+  back once when it mentions a pull request without the link pair the global `AGENTS.md` now requires for every
+  mention.
 - Added a security threat model in `docs/security/threat-model.md`. It names the repository's protected assets, entry
   points, and trust boundaries, then the principal threats (supply-chain compromise, authority expansion, disclosure or
   unintended writes, and CI or release tampering) with the controls each requires, review priorities, and the
@@ -15,6 +18,8 @@ version when compatibility requires it.
 
 ### Changed
 
+- The global `AGENTS.md` now states the pull request link pair itself instead of pointing at a private note: every
+  mention, including passing ones, links GitHub and, where indexed, Linear review.
 - Updated all fourteen Patrick-owned skill provenance locks to `pdugan20/skills` v3.5.0 and refreshed the catalog.
   v3.5.0 adds isolated and harder evals for `feature-spike`, including eval fixtures inside its snapshot, and
   reviewed trust exceptions; the four new pilot skills stay unselected. Skill snapshot `.env` fixtures are now

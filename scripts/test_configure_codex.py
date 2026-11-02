@@ -239,6 +239,31 @@ class ConfigureCodexTests(unittest.TestCase):
             self.assertNotIn("agent_push_scope", updated)
             self.assertTrue(configure_codex.PUSH_SCOPE_HOOK.is_file())
 
+    def test_pr_link_stop_hook_is_added_once_beside_push_scope(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            home = Path(directory)
+            push = Path("/new/global/hooks/agent_push_scope.py")
+            old = Path("/old checkout/global/hooks/pr_link_check.py")
+            new = Path("/new/global/hooks/pr_link_check.py")
+
+            first = configure_codex.update_config("", home, push_scope_hook=push, pr_link_hook=old)
+            moved = configure_codex.update_config(
+                first, home, push_scope_hook=push, pr_link_hook=new
+            )
+            again = configure_codex.update_config(
+                moved, home, push_scope_hook=push, pr_link_hook=new
+            )
+
+            self.assertEqual(again, moved)
+            parsed = tomllib.loads(moved)
+            stop = parsed["hooks"]["Stop"]
+            self.assertEqual(len(stop), 1)
+            self.assertNotIn("matcher", stop[0])
+            self.assertEqual(stop[0]["hooks"][0]["command"], f"python3 {new}")
+            self.assertEqual(stop[0]["hooks"][0]["timeout"], 10)
+            self.assertEqual(len(parsed["hooks"]["PreToolUse"]), 1)
+            self.assertTrue(configure_codex.PR_LINK_HOOK.is_file())
+
     def test_renders_tool_allowlist_and_replaces_an_unrestricted_server(self) -> None:
         servers = {
             "circleci": {

@@ -35,6 +35,9 @@ MCP_TOOL_NAME_RE = re.compile(r"^[A-Za-z0-9_.-]+$")
 # until it is reviewed and trusted in /hooks.
 PUSH_SCOPE_HOOK = Path(__file__).resolve().parents[1] / "global/hooks/agent_push_scope.py"
 PUSH_SCOPE_HOOK_MATCHER = r"^(Bash|exec_command|shell|shell_command|functions\.exec_command)$"
+# Sends a reply back once when it mentions a pull request without the link pair
+# from global/AGENTS.md. See global/hooks/pr_link_check.py. Stop takes no matcher.
+PR_LINK_HOOK = Path(__file__).resolve().parents[1] / "global/hooks/pr_link_check.py"
 HOOK_TABLE_RE = re.compile(r"(?m)^\[\[?([^\]\n]+)\]\]?\s*$")
 
 
@@ -227,27 +230,40 @@ def _render_push_scope_hook(hook_path: Path) -> str:
     )
 
 
-def _upsert_push_scope_hook(text: str, hook_path: Path) -> str:
-    """Add or refresh the push scope PreToolUse entry, leaving other hooks alone."""
+def _render_pr_link_hook(hook_path: Path) -> str:
+    command = f"python3 {shlex.quote(str(hook_path))}"
+    return (
+        "[[hooks.Stop]]\n\n"
+        "[[hooks.Stop.hooks]]\n"
+        'type = "command"\n'
+        f"command = {json.dumps(command)}\n"
+        "timeout = 10\n"
+        'statusMessage = "Checking pull request links"\n'
+    )
 
-    rendered = _render_push_scope_hook(hook_path)
+
+def _upsert_hook(text: str, event: str, hook_path: Path, rendered: str) -> str:
+    """Add or refresh one managed hook entry for an event, leaving other hooks alone."""
+
+    entry_header = f"[[hooks.{event}]]"
+    handler_table = f"hooks.{event}.hooks"
     headers = list(HOOK_TABLE_RE.finditer(text))
     for index, header in enumerate(headers):
-        if header.group(0).strip() != "[[hooks.PreToolUse]]":
+        if header.group(0).strip() != entry_header:
             continue
         end = len(text)
         for following in headers[index + 1 :]:
-            if following.group(1) != "hooks.PreToolUse.hooks":
+            if following.group(1) != handler_table:
                 end = following.start()
                 break
         block = text[header.start() : end]
-        if PUSH_SCOPE_HOOK.name not in block:
+        if hook_path.name not in block:
             continue
-        if block.count("[[hooks.PreToolUse.hooks]]") > 1:
+        if block.count(f"[[{handler_table}]]") > 1:
             # Someone added other commands to this entry; repoint only the managed command.
             replacement = f"command = {json.dumps(f'python3 {shlex.quote(str(hook_path))}')}"
             line = re.search(
-                rf"(?m)^command\s*=\s*\".*{re.escape(PUSH_SCOPE_HOOK.name)}.*\"[ \t]*$", block
+                rf"(?m)^command\s*=\s*\".*{re.escape(hook_path.name)}.*\"[ \t]*$", block
             )
             if line:
                 block = block[: line.start()] + replacement + block[line.end() :]
@@ -260,6 +276,14 @@ def _upsert_push_scope_hook(text: str, hook_path: Path) -> str:
     return text.rstrip() + separator + rendered
 
 
+def _upsert_push_scope_hook(text: str, hook_path: Path) -> str:
+    return _upsert_hook(text, "PreToolUse", hook_path, _render_push_scope_hook(hook_path))
+
+
+def _upsert_pr_link_hook(text: str, hook_path: Path) -> str:
+    return _upsert_hook(text, "Stop", hook_path, _render_pr_link_hook(hook_path))
+
+
 def update_config(
     text: str,
     home: Path,
@@ -267,6 +291,7 @@ def update_config(
     managed_mcp_servers: dict[str, dict[str, Any]] | None = None,
     codex_home: Path | None = None,
     push_scope_hook: Path | None = None,
+    pr_link_hook: Path | None = None,
 ) -> str:
     """Return an updated config without changing secrets or runtime auth."""
 
@@ -280,6 +305,8 @@ def update_config(
         updated = _upsert_mcp_server(updated, name, spec)
     if push_scope_hook is not None:
         updated = _upsert_push_scope_hook(updated, push_scope_hook)
+    if pr_link_hook is not None:
+        updated = _upsert_pr_link_hook(updated, pr_link_hook)
     return updated
 
 
@@ -302,6 +329,7 @@ def main() -> None:
         managed_mcp_servers,
         args.codex_home,
         PUSH_SCOPE_HOOK,
+        PR_LINK_HOOK,
     )
     if updated == original:
         return
