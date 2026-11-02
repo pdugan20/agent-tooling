@@ -109,6 +109,32 @@ class ConfigureClaudeTests(unittest.TestCase):
     def test_default_push_scope_hook_points_at_this_checkout(self) -> None:
         self.assertTrue(configure_claude.PUSH_SCOPE_HOOK.is_file())
 
+    def test_pr_link_stop_hook_is_installed_once_without_a_matcher(self) -> None:
+        agents = Path("/checkout/global/hooks/agents_md_context.py")
+        push = Path("/checkout/global/hooks/agent_push_scope.py")
+        link = Path("/checkout/global/hooks/pr_link_check.py")
+        data = {
+            "hooks": {
+                "Stop": [
+                    {
+                        "hooks": [
+                            {"type": "command", "command": "python3 /x/simple_english_check.py"}
+                        ]
+                    },
+                    {"hooks": [{"type": "command", "command": "python3 /old/pr_link_check.py"}]},
+                ]
+            }
+        }
+
+        configure_claude.update_settings(data, agents, push, link)
+        updated = configure_claude.update_settings(data, agents, push, link)
+
+        groups = updated["hooks"]["Stop"]
+        commands = [entry["command"] for group in groups for entry in group["hooks"]]
+        self.assertEqual(commands, ["python3 /x/simple_english_check.py", f"python3 {link}"])
+        self.assertNotIn("matcher", groups[-1])
+        self.assertTrue(configure_claude.PR_LINK_HOOK.is_file())
+
 
 if __name__ == "__main__":
     unittest.main()

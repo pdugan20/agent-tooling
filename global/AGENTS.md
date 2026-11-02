@@ -223,9 +223,16 @@ not a gap: CLIs often keep credentials in the system keychain.
 
 Before diagnosing account or connector authentication, model routing, missing or denied local tools, or anything involving the OpenCodex proxy, read `~/.codex/local/account-notes.md` if it exists. It points to the private OpenCodex runbook (`~/.codex/local/opencodex-runbook.md`), which owns proxy setup, routing, the upgrade procedure, and troubleshooting; read the runbook before changing or upgrading the proxy. Keep account/machine-specific troubleshooting in those private local files, not in project documentation or shared trackers. Never store credentials or tokens in notes.
 
-Before sharing a pull request link, read `~/.codex/local/pr-links.md` if it
-exists. Before drafting text Patrick will post, or that is posted under his
-name, read `~/.codex/local/writing-voice.md` if it exists.
+Every pull request you put in front of Patrick is a link pair, never a bare
+number: `[#123](https://github.com/<owner>/<repo>/pull/123) · [Linear
+review](https://linear.review/<owner>/<repo>/pull/123)`, followed by its
+linked issue when one exists. This covers every mention, including passing
+references, tables, lists, status updates and follow-ups, not only the first
+time you share it. `~/.codex/local/pr-links.md`, when it exists, lists the
+repositories Linear review indexes and holds the rest of the convention;
+elsewhere use the GitHub link alone. Before drafting text Patrick will post,
+or that is posted under his name, read `~/.codex/local/writing-voice.md` if
+it exists.
 
 ## OpenCodex tool catalogs
 

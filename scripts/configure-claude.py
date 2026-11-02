@@ -31,10 +31,13 @@ AGENTS_MD_HOOK_MATCHER = "startup|clear|compact"
 PUSH_SCOPE_HOOK = Path(__file__).resolve().parents[1] / "global/hooks/agent_push_scope.py"
 PUSH_SCOPE_HOOK_MATCHER = "Bash"
 PUSH_SCOPE_HOOK_TIMEOUT = 30
+# Sends a reply back once when it mentions a pull request without the link pair
+# from global/AGENTS.md. See global/hooks/pr_link_check.py. Stop takes no matcher.
+PR_LINK_HOOK = Path(__file__).resolve().parents[1] / "global/hooks/pr_link_check.py"
 
 
 def ensure_hook(
-    data: dict[str, object], event: str, matcher: str, hook_path: Path, timeout: int
+    data: dict[str, object], event: str, matcher: str | None, hook_path: Path, timeout: int
 ) -> None:
     hooks = data.setdefault("hooks", {})
     if not isinstance(hooks, dict):
@@ -51,18 +54,15 @@ def ensure_hook(
         )
 
     groups[:] = [group for group in groups if not is_managed(group)]
-    groups.append(
+    group: dict[str, object] = {} if matcher is None else {"matcher": matcher}
+    group["hooks"] = [
         {
-            "matcher": matcher,
-            "hooks": [
-                {
-                    "type": "command",
-                    "command": f"python3 {shlex.quote(str(hook_path))}",
-                    "timeout": timeout,
-                }
-            ],
+            "type": "command",
+            "command": f"python3 {shlex.quote(str(hook_path))}",
+            "timeout": timeout,
         }
-    )
+    ]
+    groups.append(group)
 
 
 def ensure_agents_md_hook(data: dict[str, object], hook_path: Path) -> None:
@@ -73,10 +73,15 @@ def ensure_push_scope_hook(data: dict[str, object], hook_path: Path) -> None:
     ensure_hook(data, "PreToolUse", PUSH_SCOPE_HOOK_MATCHER, hook_path, PUSH_SCOPE_HOOK_TIMEOUT)
 
 
+def ensure_pr_link_hook(data: dict[str, object], hook_path: Path) -> None:
+    ensure_hook(data, "Stop", None, hook_path, 10)
+
+
 def update_settings(
     data: dict[str, object],
     agents_md_hook: Path = AGENTS_MD_HOOK,
     push_scope_hook: Path = PUSH_SCOPE_HOOK,
+    pr_link_hook: Path = PR_LINK_HOOK,
 ) -> dict[str, object]:
     existing_plugins = data.get("enabledPlugins", {})
     if isinstance(existing_plugins, dict) and existing_plugins.get(OFFICIAL_SUPERPOWERS) is True:
@@ -97,6 +102,7 @@ def update_settings(
         overrides.pop(skill, None)
     ensure_agents_md_hook(data, agents_md_hook)
     ensure_push_scope_hook(data, push_scope_hook)
+    ensure_pr_link_hook(data, pr_link_hook)
     return data
 
 

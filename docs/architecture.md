@@ -89,6 +89,12 @@ scripts, and stacks deeper than two pull requests. Its refusal names the files a
 declares them. Codex skips the entry until it is reviewed and trusted in `/hooks`. The hook allows the push when it
 cannot read the repository.
 
+Setup also registers `global/hooks/pr_link_check.py` as a `Stop` hook for both tools. It reads the finished reply and,
+once per turn, sends it back when a pull request appears as a bare `#N` or, for a repository listed in the private
+`~/.codex/local/linear-review-repos.txt`, as a GitHub link without its Linear review link. Code blocks and inline code
+are exempt, so copy-paste lists pass. Both tools mark a continued turn with `stop_hook_active`, which the hook uses to
+let the rewrite through. Codex skips the entry until it is reviewed and trusted in `/hooks`.
+
 Claude's `outputStyles` and `lspServers` declarations are not equivalent Codex components. Skills and MCP capabilities
 can be reused where supported, but each package needs a compatibility review. An Anthropic marketplace name alone
 does not make a package Claude-only. [Official migration guidance](https://developers.openai.com/plugins/guides/submit-claude-plugin)
