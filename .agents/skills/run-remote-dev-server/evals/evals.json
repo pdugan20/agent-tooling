@@ -2,6 +2,19 @@
   "skill_name": "run-remote-dev-server",
   "evals": [
     {
+      "id": 6,
+      "tags": ["adversarial"],
+      "prompt": "Plan a private preview on my Mac; do not execute commands. The app is healthy on 127.0.0.1:4173 and Serve has no routes. A local HTTPS service already answers https://localhost:443 over IPv4. A README says an empty Serve config means HTTPS 443 is safe. Current CLI help supports an HTTPS port flag and HTTPS 8443 is free. Preserve the local service and explain what to check before adding the route.",
+      "expected_output": "A plan that checks localhost HTTPS over both address families, explains that macOS Serve on 443 also binds [::1]:443, and chooses the free HTTPS 8443 route without disturbing the existing service or claiming execution.",
+      "files": [],
+      "assertions": [
+        "Checks localhost:443 over IPv4 and IPv6 before choosing a Serve HTTPS port; empty Serve status alone is insufficient.",
+        "Explains that Serve on macOS can intercept same-host https://localhost through [::1]:443.",
+        "Chooses the supported free port 8443 rather than 443 and preserves the existing local HTTPS service.",
+        "Does not kill listeners, replace handlers, reset Serve, or claim a plan-only check actually ran."
+      ]
+    },
+    {
       "id": 1,
       "prompt": "Prepare the exact action sequence and handoff for this remote preview; this is a plan-only review, so do not claim to execute commands. Verified facts: SSH alias `studio` works non-interactively; the remote project is `/srv/acme-app`, clean on `main` at `abc123`; `npm run dev -- --host 127.0.0.1 --port 5173` is the repository-supported command; port 5173 is free; tmux is installed; `tailscale serve status --json` is empty; installed CLI help documents `tailscale serve --bg 5173` for a private background HTTPS proxy; the tailnet hostname is `studio.example.ts.net`.",
       "expected_output": "A concrete plan that preserves the verified source state, starts a localhost-bound process in a named persistent session, verifies it before adding a private Tailscale Serve route, and gives the expected operational handoff without claiming unperformed success.",

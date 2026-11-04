@@ -97,6 +97,12 @@ confirms it. Do not replace an existing handler or reset unrelated routes. If
 there is no safe non-conflicting route, explain the collision and stop before
 changing it.
 
+On macOS, Tailscale Serve on HTTPS 443 also binds `[::1]:443`, so
+`https://localhost` on that host can reach Tailscale instead of a local HTTPS
+service. Before choosing 443, check whether a local HTTPS service answers on
+`localhost:443` over IPv4 and IPv6. When one does, prefer a free port at 8443
+or above and preserve the existing local service.
+
 Use the exact HTTPS URL reported by Tailscale. Verify it from the client device
 when that device is available; otherwise verify that Serve maps the URL to the
 responsive localhost service and state the remaining client-side check.

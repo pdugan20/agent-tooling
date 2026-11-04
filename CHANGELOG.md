@@ -18,6 +18,10 @@ version when compatibility requires it.
 
 ### Changed
 
+- Added a macOS HTTPS 443 collision rule to the selected `run-remote-dev-server` snapshot and an adversarial
+  eval: check local HTTPS over IPv4 and IPv6, and prefer 8443+ when a local service answers. This pending consumer
+  patch must be released from the canonical Skills source and reinstalled before snapshot verification can pass.
+
 - The global `AGENTS.md` now states the pull request link pair itself instead of pointing at a private note: every
   mention, including passing ones, links GitHub and, where indexed, Linear review.
 - Updated all fourteen Patrick-owned skill provenance locks to `pdugan20/skills` v3.5.0 and refreshed the catalog.
