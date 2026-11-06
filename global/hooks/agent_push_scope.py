@@ -58,6 +58,8 @@ GH_TIMEOUT = 8
 PUSH_SKIP_FLAGS = ("--delete", "-d", "--tags", "--all", "--mirror", "--prune")
 PUSH_VALUED = ("--repo", "--receive-pack", "--exec", "-o", "--push-option", "--recurse-submodules")
 PR_BASE_FLAGS = ("--base", "-B")
+PR_REPO_FLAGS = ("--repo", "-R")
+PR_HEAD_FLAGS = ("--head", "-H")
 
 
 @dataclass
@@ -69,10 +71,12 @@ class Push:
 
 @dataclass
 class PullRequestBase:
-    """A gh pr create or gh pr edit that names the base the pull request will target."""
+    """A gh pr create, or a gh pr edit that changes the base, and the repository it targets."""
 
     cwd: str
-    base: str
+    base: str | None
+    repo: str | None = None
+    head: str | None = None
 
 
 def run(args: list[str], cwd: str, timeout: int = GIT_TIMEOUT) -> str | None:
@@ -119,18 +123,31 @@ def git_push(args: list[str], cwd: str) -> Push | None:
     return push
 
 
+def flag_value(args: list[str], flags: tuple[str, ...]) -> str | None:
+    """The value of the first of flags in args, written as "--flag value" or "--flag=value"."""
+    for index, arg in enumerate(args):
+        if arg in flags and index + 1 < len(args):
+            return args[index + 1]
+        for flag in flags:
+            if arg.startswith(flag + "="):
+                return arg[len(flag) + 1 :]
+    return None
+
+
 def pull_request_base(args: list[str], cwd: str) -> PullRequestBase | None:
-    """The base of a gh pr create or gh pr edit command, when it names one."""
+    """A gh pr create, or a gh pr edit that names a base. Create defaults to gh-merge-base."""
     if len(args) < 2 or args[0] != "pr" or args[1] not in ("create", "edit"):
         return None
     rest = args[2:]
-    for index, arg in enumerate(rest):
-        if arg in PR_BASE_FLAGS and index + 1 < len(rest):
-            return PullRequestBase(cwd=cwd, base=rest[index + 1])
-        for flag in PR_BASE_FLAGS:
-            if arg.startswith(flag + "="):
-                return PullRequestBase(cwd=cwd, base=arg[len(flag) + 1 :])
-    return None
+    base = flag_value(rest, PR_BASE_FLAGS)
+    if base is None and args[1] == "edit":
+        return None
+    return PullRequestBase(
+        cwd=cwd,
+        base=base,
+        repo=flag_value(rest, PR_REPO_FLAGS),
+        head=flag_value(rest, PR_HEAD_FLAGS) if args[1] == "create" else None,
+    )
 
 
 def find_commands(command: str, cwd: str, depth: int = 0) -> list[Push | PullRequestBase]:
@@ -191,10 +208,33 @@ def default_branch(cwd: str, remote: str) -> str | None:
     return None
 
 
-def pull_request(cwd: str, branch: str) -> dict | None:
+def repository_default_branch(cwd: str, repo: str) -> str | None:
     output = run(
-        ["gh", "pr", "view", branch, "--json", "number,baseRefName,body,state"], cwd, GH_TIMEOUT
+        ["gh", "repo", "view", repo, "--json", "defaultBranchRef"]
+        + ["--jq", ".defaultBranchRef.name"],
+        cwd,
+        GH_TIMEOUT,
     )
+    return output.strip() if output and output.strip() else None
+
+
+def configured_merge_base(cwd: str, head: str | None) -> str | None:
+    """The base gh pr create uses without --base: the head branch's gh-merge-base config."""
+    branch = head.split(":")[-1] if head else None
+    if not branch:
+        current = run(["git", "symbolic-ref", "--quiet", "--short", "HEAD"], cwd)
+        branch = current.strip() if current else None
+    if not branch:
+        return None
+    value = run(["git", "config", "--get", f"branch.{branch}.gh-merge-base"], cwd)
+    return value.strip() if value and value.strip() else None
+
+
+def pull_request(cwd: str, branch: str, repo: str | None = None) -> dict | None:
+    command = ["gh", "pr", "view", branch, "--json", "number,baseRefName,body,state"]
+    if repo:
+        command += ["--repo", repo]
+    output = run(command, cwd, GH_TIMEOUT)
     if not output:
         return None
     try:
@@ -204,13 +244,13 @@ def pull_request(cwd: str, branch: str) -> dict | None:
     return data if isinstance(data, dict) and data.get("state") == "OPEN" else None
 
 
-def stack_depth(cwd: str, base: str, default: str) -> int:
+def stack_depth(cwd: str, base: str, default: str, repo: str | None = None) -> int:
     """Count open pull requests from one targeting base down to the default branch."""
     depth = 1
     seen = {base}
     while base != default and depth <= MAX_STACK_DEPTH:
         depth += 1
-        parent = pull_request(cwd, base)
+        parent = pull_request(cwd, base, repo) if repo else pull_request(cwd, base)
         if not parent:
             break
         base = parent.get("baseRefName") or default
@@ -331,14 +371,20 @@ def problems_for(push: Push, refspec: str | None) -> list[str]:
 
 
 def stack_problem(request: PullRequestBase) -> str | None:
-    default = default_branch(request.cwd, "origin")
-    if not default or request.base == default:
+    base = request.base or configured_merge_base(request.cwd, request.head)
+    if not base:
         return None
-    depth = stack_depth(request.cwd, request.base, default)
+    if request.repo:
+        default = repository_default_branch(request.cwd, request.repo)
+    else:
+        default = default_branch(request.cwd, "origin")
+    if not default or base == default:
+        return None
+    depth = stack_depth(request.cwd, base, default, request.repo)
     if depth <= MAX_STACK_DEPTH:
         return None
     return (
-        f"A pull request based on {request.base} would sit at least {depth} pull requests above "
+        f"A pull request based on {base} would sit at least {depth} pull requests above "
         f"{default}; the limit is {MAX_STACK_DEPTH}. Base it on {default}, or on a branch whose "
         f"pull request targets {default}, or land the lower pull requests first."
     )
