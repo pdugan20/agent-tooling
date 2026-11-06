@@ -82,10 +82,13 @@ require review and trust of their current definitions; public-directory submissi
 Do not infer hook activation from plugin installation. [Official hooks guidance](https://learn.chatgpt.com/docs/hooks)
 
 Setup registers `global/hooks/agent_push_scope.py` as a `PreToolUse` hook for Claude's `Bash` tool and Codex's
-shell tools. It runs only when an agent's command contains `git push`; terminal git and other commands never reach
-it. It compares each pushed branch with its pull request base, or the default branch when no pull request exists,
+shell tools. It runs only when an agent's command contains `git push`, `gh pr create` or `gh pr edit`; terminal
+git and other commands never reach it. It compares each pushed branch with its pull request base, or the default
+branch when no pull request exists,
 and refuses undeclared changes to CI configuration, buildkit inputs, `ci-tool-versions.env` or `package.json`
-scripts, and stacks deeper than two pull requests. Its refusal names the files and the `Agent-Scope:` line that
+scripts. It also refuses a `gh pr create` or `gh pr edit` whose base would put the new pull request more than two
+levels above the default branch, which stops a stack from growing while still letting an existing one be updated as
+its lower pull requests land. Its refusal names the files and the `Agent-Scope:` line that
 declares them. Codex skips the entry until it is reviewed and trusted in `/hooks`. The hook allows the push when it
 cannot read the repository.
 

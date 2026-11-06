@@ -185,7 +185,7 @@ class AgentPushScopeTests(unittest.TestCase):
 
         self.assertIsNone(self.repo.check())
 
-    def test_stack_deeper_than_two_is_refused(self) -> None:
+    def stack_three_deep(self) -> None:
         previous = "main"
         for name in ("feat/one", "feat/two", "feat/three"):
             self.repo.branch(name, previous)
@@ -195,12 +195,32 @@ class AgentPushScopeTests(unittest.TestCase):
             self.pull_requests[name] = {"baseRefName": previous, "body": ""}
             previous = name
 
-        git(self.repo.path, "checkout", "--quiet", "feat/two")
+    def test_an_existing_deep_stack_can_still_be_updated(self) -> None:
+        self.stack_three_deep()
+        self.repo.write("src/feat/three.ts", "export const x = 1\n")
+        self.repo.commit("update")
         self.assertIsNone(self.repo.check())
-        git(self.repo.path, "checkout", "--quiet", "feat/three")
-        reason = self.repo.check()
-        self.assertIsNotNone(reason)
-        self.assertIn("stacked at least 3 pull requests above main", reason)
+
+    def test_a_pull_request_that_deepens_a_stack_past_two_is_refused(self) -> None:
+        self.stack_three_deep()
+        for command in (
+            "gh pr create --base feat/two --title x --body y",
+            "gh pr create -B feat/three --fill",
+            "gh pr edit 12 --base=feat/two",
+            "bash -lc 'gh pr create --draft --base feat/two'",
+        ):
+            with self.subTest(command=command):
+                reason = self.repo.check(command)
+                self.assertIsNotNone(reason)
+                self.assertIn("would sit at least 3 pull requests above main", reason)
+        for command in (
+            "gh pr create --base feat/one --title x",
+            "gh pr create --base main",
+            "gh pr create --fill",
+            "gh pr view feat/two --json baseRefName",
+        ):
+            with self.subTest(command=command):
+                self.assertIsNone(self.repo.check(command))
 
     def test_parses_wrapped_and_chained_push_commands(self) -> None:
         cwd = str(self.repo.path)
