@@ -7,24 +7,28 @@ package-script changes into a pull request that never meant to make them, and
 the pull request's own checks then run the carried configuration. This hook runs
 before an agent's shell tool executes a git push. It compares each pushed branch
 with its real base (the pull request's base when one exists, otherwise the
-remote default branch) and denies the push when:
+remote default branch) and denies the push when the three-dot diff touches a
+guarded area the branch has not declared: ci-config (.circleci/,
+.github/workflows/, .github/actions/), buildkit (any path inside a buildkit
+directory), ci-tool-versions (ci-tool-versions.env), or package-scripts (a
+change to the "scripts" object of any package.json outside the vendored skill
+snapshots under .agents/skills/).
 
-- the three-dot diff touches a guarded area the branch has not declared:
-  ci-config (.circleci/, .github/workflows/, .github/actions/), buildkit (any
-  path inside a buildkit directory), ci-tool-versions (ci-tool-versions.env), or
-  package-scripts (a change to the "scripts" object of any package.json outside
-  the vendored skill snapshots under .agents/skills/); or
-- the pull request sits more than MAX_STACK_DEPTH levels above the default
-  branch.
+It also refuses to start a pull request more than MAX_STACK_DEPTH levels above
+the default branch: a "gh pr create" or "gh pr edit" whose base is a branch with
+an open pull request already stacked MAX_STACK_DEPTH deep. The limit applies
+where a stack grows, so a stack that already exists can still be updated while
+its lower pull requests land.
 
 A branch declares intent with an "Agent-Scope:" line in a commit message on the
 branch or in the pull request body, for example
 "Agent-Scope: ci-config, package-scripts".
 
 The hook is registered for agent shell tools only. People running git in a
-terminal never reach it, and a command without "git" and "push" returns before
-any subprocess runs. It never executes the supplied command. It allows the push
-when it cannot read the repository, so a broken environment never blocks work.
+terminal never reach it, and a command without a git push or a gh pull request
+command returns before any subprocess runs. It never executes the supplied
+command. It allows the command when it cannot read the repository, so a broken
+environment never blocks work.
 This is a guardrail, not a security boundary: scripts, aliases, and dynamic
 shell expansion are not interpreted.
 """
@@ -53,6 +57,9 @@ FETCH_TIMEOUT = 15
 GH_TIMEOUT = 8
 PUSH_SKIP_FLAGS = ("--delete", "-d", "--tags", "--all", "--mirror", "--prune")
 PUSH_VALUED = ("--repo", "--receive-pack", "--exec", "-o", "--push-option", "--recurse-submodules")
+PR_BASE_FLAGS = ("--base", "-B")
+PR_REPO_FLAGS = ("--repo", "-R")
+PR_HEAD_FLAGS = ("--head", "-H")
 
 
 @dataclass
@@ -60,6 +67,16 @@ class Push:
     cwd: str
     remote: str = "origin"
     refspecs: list[str] = field(default_factory=list)
+
+
+@dataclass
+class PullRequestBase:
+    """A gh pr create, or a gh pr edit that changes the base, and the repository it targets."""
+
+    cwd: str
+    base: str | None
+    repo: str | None = None
+    head: str | None = None
 
 
 def run(args: list[str], cwd: str, timeout: int = GIT_TIMEOUT) -> str | None:
@@ -106,7 +123,34 @@ def git_push(args: list[str], cwd: str) -> Push | None:
     return push
 
 
-def find_pushes(command: str, cwd: str, depth: int = 0) -> list[Push]:
+def flag_value(args: list[str], flags: tuple[str, ...]) -> str | None:
+    """The value of the first of flags in args, written as "--flag value" or "--flag=value"."""
+    for index, arg in enumerate(args):
+        if arg in flags and index + 1 < len(args):
+            return args[index + 1]
+        for flag in flags:
+            if arg.startswith(flag + "="):
+                return arg[len(flag) + 1 :]
+    return None
+
+
+def pull_request_base(args: list[str], cwd: str) -> PullRequestBase | None:
+    """A gh pr create, or a gh pr edit that names a base. Create defaults to gh-merge-base."""
+    if len(args) < 2 or args[0] != "pr" or args[1] not in ("create", "edit"):
+        return None
+    rest = args[2:]
+    base = flag_value(rest, PR_BASE_FLAGS)
+    if base is None and args[1] == "edit":
+        return None
+    return PullRequestBase(
+        cwd=cwd,
+        base=base,
+        repo=flag_value(rest, PR_REPO_FLAGS),
+        head=flag_value(rest, PR_HEAD_FLAGS) if args[1] == "create" else None,
+    )
+
+
+def find_commands(command: str, cwd: str, depth: int = 0) -> list[Push | PullRequestBase]:
     if depth > 3:
         return []
     lexer = shlex.shlex(command, posix=True, punctuation_chars=";&|()\n")
@@ -122,7 +166,7 @@ def find_pushes(command: str, cwd: str, depth: int = 0) -> list[Push]:
             segments.append([])
         else:
             segments[-1].append(token)
-    pushes: list[Push] = []
+    found: list[Push | PullRequestBase] = []
     for words in segments:
         while words and (
             re.match(r"^[A-Za-z_][A-Za-z0-9_]*=", words[0])
@@ -137,13 +181,21 @@ def find_pushes(command: str, cwd: str, depth: int = 0) -> list[Push]:
         elif program == "git":
             push = git_push(list(words[1:]), cwd)
             if push:
-                pushes.append(push)
+                found.append(push)
+        elif program == "gh":
+            base = pull_request_base(list(words[1:]), cwd)
+            if base:
+                found.append(base)
         elif program in ("bash", "zsh", "sh"):
             for index, arg in enumerate(words[1:], 1):
                 if arg.startswith("-") and "c" in arg and index + 1 < len(words):
-                    pushes.extend(find_pushes(words[index + 1], cwd, depth + 1))
+                    found.extend(find_commands(words[index + 1], cwd, depth + 1))
                     break
-    return pushes
+    return found
+
+
+def find_pushes(command: str, cwd: str) -> list[Push]:
+    return [item for item in find_commands(command, cwd) if isinstance(item, Push)]
 
 
 def default_branch(cwd: str, remote: str) -> str | None:
@@ -156,10 +208,33 @@ def default_branch(cwd: str, remote: str) -> str | None:
     return None
 
 
-def pull_request(cwd: str, branch: str) -> dict | None:
+def repository_default_branch(cwd: str, repo: str) -> str | None:
     output = run(
-        ["gh", "pr", "view", branch, "--json", "number,baseRefName,body,state"], cwd, GH_TIMEOUT
+        ["gh", "repo", "view", repo, "--json", "defaultBranchRef"]
+        + ["--jq", ".defaultBranchRef.name"],
+        cwd,
+        GH_TIMEOUT,
     )
+    return output.strip() if output and output.strip() else None
+
+
+def configured_merge_base(cwd: str, head: str | None) -> str | None:
+    """The base gh pr create uses without --base: the head branch's gh-merge-base config."""
+    branch = head.split(":")[-1] if head else None
+    if not branch:
+        current = run(["git", "symbolic-ref", "--quiet", "--short", "HEAD"], cwd)
+        branch = current.strip() if current else None
+    if not branch:
+        return None
+    value = run(["git", "config", "--get", f"branch.{branch}.gh-merge-base"], cwd)
+    return value.strip() if value and value.strip() else None
+
+
+def pull_request(cwd: str, branch: str, repo: str | None = None) -> dict | None:
+    command = ["gh", "pr", "view", branch, "--json", "number,baseRefName,body,state"]
+    if repo:
+        command += ["--repo", repo]
+    output = run(command, cwd, GH_TIMEOUT)
     if not output:
         return None
     try:
@@ -169,13 +244,13 @@ def pull_request(cwd: str, branch: str) -> dict | None:
     return data if isinstance(data, dict) and data.get("state") == "OPEN" else None
 
 
-def stack_depth(cwd: str, base: str, default: str) -> int:
-    """Count open pull requests from this one down to the default branch."""
+def stack_depth(cwd: str, base: str, default: str, repo: str | None = None) -> int:
+    """Count open pull requests from one targeting base down to the default branch."""
     depth = 1
     seen = {base}
     while base != default and depth <= MAX_STACK_DEPTH:
         depth += 1
-        parent = pull_request(cwd, base)
+        parent = pull_request(cwd, base, repo) if repo else pull_request(cwd, base)
         if not parent:
             break
         base = parent.get("baseRefName") or default
@@ -268,15 +343,6 @@ def problems_for(push: Push, refspec: str | None) -> list[str]:
     merge_base = merge_base.strip()
 
     problems: list[str] = []
-    if pr:
-        depth = stack_depth(push.cwd, base, default)
-        if depth > MAX_STACK_DEPTH:
-            problems.append(
-                f"{branch} is stacked at least {depth} pull requests above {default}; the limit "
-                f"is {MAX_STACK_DEPTH}. Land or fold the lower branches, then rebuild this one "
-                f"on {default} plus its own change."
-            )
-
     diff = run(["git", "diff", "--name-only", f"{merge_base}...{head}"], push.cwd) or ""
     found: dict[str, list[str]] = {}
     for path in diff.splitlines():
@@ -304,6 +370,26 @@ def problems_for(push: Push, refspec: str | None) -> list[str]:
     return problems
 
 
+def stack_problem(request: PullRequestBase) -> str | None:
+    base = request.base or configured_merge_base(request.cwd, request.head)
+    if not base:
+        return None
+    if request.repo:
+        default = repository_default_branch(request.cwd, request.repo)
+    else:
+        default = default_branch(request.cwd, "origin")
+    if not default or base == default:
+        return None
+    depth = stack_depth(request.cwd, base, default, request.repo)
+    if depth <= MAX_STACK_DEPTH:
+        return None
+    return (
+        f"A pull request based on {base} would sit at least {depth} pull requests above "
+        f"{default}; the limit is {MAX_STACK_DEPTH}. Base it on {default}, or on a branch whose "
+        f"pull request targets {default}, or land the lower pull requests first."
+    )
+
+
 def check(event: dict) -> str | None:
     if event.get("tool_name", "") not in SHELL_TOOLS:
         return None
@@ -313,16 +399,25 @@ def check(event: dict) -> str | None:
     command = args.get("command", args.get("cmd", ""))
     if isinstance(command, list):
         command = shlex.join(str(part) for part in command)
-    if not isinstance(command, str) or "git" not in command or "push" not in command:
+    if not isinstance(command, str):
+        return None
+    pushing = "git" in command and "push" in command
+    opening = "gh" in command and "pr" in command and ("create" in command or "edit" in command)
+    if not pushing and not opening:
         return None
     cwd = os.path.expanduser(args.get("workdir") or event.get("cwd") or os.getcwd())
     problems: list[str] = []
-    for push in find_pushes(command, cwd):
-        for refspec in push.refspecs or [None]:
-            problems.extend(problems_for(push, refspec))
+    for item in find_commands(command, cwd):
+        if isinstance(item, PullRequestBase):
+            problem = stack_problem(item)
+            if problem:
+                problems.append(problem)
+            continue
+        for refspec in item.refspecs or [None]:
+            problems.extend(problems_for(item, refspec))
     if not problems:
         return None
-    return "Agent push scope check refused this push.\n" + "\n".join(problems)
+    return "Agent push scope check refused this command.\n" + "\n".join(problems)
 
 
 def main() -> int:

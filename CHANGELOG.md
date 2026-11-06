@@ -18,6 +18,12 @@ version when compatibility requires it.
 
 ### Changed
 
+- The push scope hook now applies its two-level stack limit when a pull request is created or rebased onto another
+  branch (`gh pr create`, including its `gh-merge-base` default when `--base` is omitted, or `gh pr edit` with
+  `--base`), in the repository the command targets, including one chosen with `-R`, instead of on every push. An
+  existing stack can be
+  updated while its lower pull requests land, so carried review fixes are no longer stranded behind the limit, and a
+  new pull request still can't deepen a stack past two. The guarded-area checks still run on every push.
 - The global `AGENTS.md` now states the pull request link pair itself instead of pointing at a private note: every
   mention, including passing ones, links GitHub and, where indexed, Linear review.
 - Updated all fourteen Patrick-owned skill provenance locks to `pdugan20/skills` v3.5.0 and refreshed the catalog.

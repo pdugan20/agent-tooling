@@ -63,11 +63,17 @@ class AgentPushScopeTests(unittest.TestCase):
         self.addCleanup(self.directory.cleanup)
         self.repo = Repository(Path(self.directory.name))
         self.pull_requests: dict[str, dict] = {}
+        self.other_repo_pull_requests: dict[str, dict] = {}
         patcher = mock.patch.object(hook, "pull_request", self.fake_pull_request)
         patcher.start()
         self.addCleanup(patcher.stop)
+        default = mock.patch.object(hook, "repository_default_branch", lambda cwd, repo: "trunk")
+        default.start()
+        self.addCleanup(default.stop)
 
-    def fake_pull_request(self, cwd: str, branch: str) -> dict | None:
+    def fake_pull_request(self, cwd: str, branch: str, repo: str | None = None) -> dict | None:
+        if repo:
+            return self.other_repo_pull_requests.get(branch)
         return self.pull_requests.get(branch)
 
     def test_commands_without_a_push_never_start_a_subprocess(self) -> None:
@@ -185,7 +191,7 @@ class AgentPushScopeTests(unittest.TestCase):
 
         self.assertIsNone(self.repo.check())
 
-    def test_stack_deeper_than_two_is_refused(self) -> None:
+    def stack_three_deep(self) -> None:
         previous = "main"
         for name in ("feat/one", "feat/two", "feat/three"):
             self.repo.branch(name, previous)
@@ -195,12 +201,57 @@ class AgentPushScopeTests(unittest.TestCase):
             self.pull_requests[name] = {"baseRefName": previous, "body": ""}
             previous = name
 
-        git(self.repo.path, "checkout", "--quiet", "feat/two")
+    def test_an_existing_deep_stack_can_still_be_updated(self) -> None:
+        self.stack_three_deep()
+        self.repo.write("src/feat/three.ts", "export const x = 1\n")
+        self.repo.commit("update")
         self.assertIsNone(self.repo.check())
-        git(self.repo.path, "checkout", "--quiet", "feat/three")
-        reason = self.repo.check()
+
+    def test_a_pull_request_that_deepens_a_stack_past_two_is_refused(self) -> None:
+        self.stack_three_deep()
+        for command in (
+            "gh pr create --base feat/two --title x --body y",
+            "gh pr create -B feat/three --fill",
+            "gh pr edit 12 --base=feat/two",
+            "bash -lc 'gh pr create --draft --base feat/two'",
+        ):
+            with self.subTest(command=command):
+                reason = self.repo.check(command)
+                self.assertIsNotNone(reason)
+                self.assertIn("would sit at least 3 pull requests above main", reason)
+        for command in (
+            "gh pr create --base feat/one --title x",
+            "gh pr create --base main",
+            "gh pr create --fill",
+            "gh pr view feat/two --json baseRefName",
+        ):
+            with self.subTest(command=command):
+                self.assertIsNone(self.repo.check(command))
+
+    def test_create_without_a_base_uses_the_configured_merge_base(self) -> None:
+        self.stack_three_deep()
+        self.repo.branch("feat/four", "feat/three")
+        git(self.repo.path, "config", "branch.feat/four.gh-merge-base", "feat/two")
+        reason = self.repo.check("gh pr create --fill")
         self.assertIsNotNone(reason)
-        self.assertIn("stacked at least 3 pull requests above main", reason)
+        self.assertIn("based on feat/two would sit at least 3", reason)
+        git(self.repo.path, "config", "branch.feat/four.gh-merge-base", "feat/one")
+        self.assertIsNone(self.repo.check("gh pr create --fill"))
+        git(self.repo.path, "checkout", "--quiet", "main")
+        self.assertIsNone(self.repo.check("gh pr create --fill --head feat/four"))
+        git(self.repo.path, "config", "branch.feat/four.gh-merge-base", "feat/two")
+        self.assertIsNotNone(self.repo.check("gh pr create --fill --head feat/four"))
+
+    def test_a_repository_selector_checks_that_repository(self) -> None:
+        self.stack_three_deep()
+        # The other repository has no stack under feat/two, so the local stack must not refuse it.
+        self.assertIsNone(self.repo.check("gh pr create -R someone/other --base feat/two"))
+        self.other_repo_pull_requests["x/one"] = {"baseRefName": "trunk", "body": ""}
+        self.other_repo_pull_requests["x/two"] = {"baseRefName": "x/one", "body": ""}
+        reason = self.repo.check("gh pr create --repo=someone/other --base x/two")
+        self.assertIsNotNone(reason)
+        self.assertIn("above trunk", reason)
+        self.assertIsNone(self.repo.check("gh pr create -R someone/other --base x/one"))
 
     def test_parses_wrapped_and_chained_push_commands(self) -> None:
         cwd = str(self.repo.path)
