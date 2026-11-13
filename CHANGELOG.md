@@ -8,6 +8,11 @@ version when compatibility requires it.
 
 ### Added
 
+- Adopted six more of Emil Kowalski's skills as locked snapshots: `choreograph` (coordinating several elements that
+  animate together), `gestures` (drag, swipe and sheet interactions), `remove-animations` (subtracting motion an
+  interface doesn't need), `break-ui` (stress-testing a component with worst-case data), `mobile-native` (making a
+  web app feel native on a phone) and `learn-taste` (turning design corrections into rules, explicit invocation
+  only). The updated skills link to `choreograph` and `gestures`, so they arrive together.
 - Added `global/hooks/pr_link_check.py`, a `Stop` hook that setup registers for Claude and Codex. It sends a reply
   back once when it mentions a pull request without the link pair the global `AGENTS.md` now requires for every
   mention.
@@ -18,6 +23,11 @@ version when compatibility requires it.
 
 ### Changed
 
+- Updated Emil Kowalski's ten existing snapshots to upstream `0f2e23b`. The update corrects Motion shorthand
+  guidance (`x`/`y`/`scale` are hardware accelerated from Motion 14.2; older versions still need the full
+  `transform` string), narrows the composite-only tier to `transform` and `opacity`, documents duration
+  exceptions for modals, drawers, sheets and toasts, and fixes the reduced-motion, Reanimated, Haptics and spring
+  examples.
 - The push scope hook now applies its two-level stack limit when a pull request is created or rebased onto another
   branch (`gh pr create`, including its `gh-merge-base` default when `--base` is omitted, or `gh pr edit` with
   `--base`), in the repository the command targets, including one chosen with `-R`, instead of on every push. An
