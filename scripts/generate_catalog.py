@@ -64,6 +64,12 @@ SKILL_PRIORITY = {
     "pick-ui-library": 19,
     "improve-animations": 20,
     "animation-performance": 21,
+    "choreograph": 22,
+    "gestures": 23,
+    "remove-animations": 24,
+    "break-ui": 25,
+    "mobile-native": 26,
+    "learn-taste": 27,
 }
 
 

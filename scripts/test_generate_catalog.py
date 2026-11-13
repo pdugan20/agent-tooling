@@ -15,7 +15,7 @@ class CatalogGenerationTests(unittest.TestCase):
         catalog = generate_catalog.build_catalog()
         items = catalog["items"]
 
-        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 37)
+        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 43)
         self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 24)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
@@ -179,6 +179,36 @@ class CatalogGenerationTests(unittest.TestCase):
                     "Emil Kowalski",
                     ".agents/skills/review-animations/SKILL.md",
                     "https://github.com/emilkowalski/skills/blob/main/skills/review-animations/SKILL.md",
+                ),
+                "break-ui": (
+                    "Emil Kowalski",
+                    ".agents/skills/break-ui/SKILL.md",
+                    "https://github.com/emilkowalski/skills/blob/main/skills/break-ui/SKILL.md",
+                ),
+                "choreograph": (
+                    "Emil Kowalski",
+                    ".agents/skills/choreograph/SKILL.md",
+                    "https://github.com/emilkowalski/skills/blob/main/skills/choreograph/SKILL.md",
+                ),
+                "gestures": (
+                    "Emil Kowalski",
+                    ".agents/skills/gestures/SKILL.md",
+                    "https://github.com/emilkowalski/skills/blob/main/skills/gestures/SKILL.md",
+                ),
+                "learn-taste": (
+                    "Emil Kowalski",
+                    ".agents/skills/learn-taste/SKILL.md",
+                    "https://github.com/emilkowalski/skills/blob/main/skills/learn-taste/SKILL.md",
+                ),
+                "mobile-native": (
+                    "Emil Kowalski",
+                    ".agents/skills/mobile-native/SKILL.md",
+                    "https://github.com/emilkowalski/skills/blob/main/skills/mobile-native/SKILL.md",
+                ),
+                "remove-animations": (
+                    "Emil Kowalski",
+                    ".agents/skills/remove-animations/SKILL.md",
+                    "https://github.com/emilkowalski/skills/blob/main/skills/remove-animations/SKILL.md",
                 ),
                 "stageshow": (
                     "Benji Taylor",
