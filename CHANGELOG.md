@@ -34,6 +34,9 @@ version when compatibility requires it.
   existing stack can be
   updated while its lower pull requests land, so carried review fixes are no longer stranded behind the limit, and a
   new pull request still can't deepen a stack past two. The guarded-area checks still run on every push.
+- The global working agreement checks checkout guidance and resolved skill
+  sources before loading repository-local skills, preserves edits during
+  cleanup, and requires a fresh catalog check after installation changes.
 - The global `AGENTS.md` now states the pull request link pair itself instead of pointing at a private note: every
   mention, including passing ones, links GitHub and, where indexed, Linear review.
 - Updated all fourteen Patrick-owned skill provenance locks to `pdugan20/skills` v3.5.0 and refreshed the catalog.

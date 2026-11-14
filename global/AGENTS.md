@@ -59,7 +59,7 @@ himself unless he asks for a new one.
 
 ### Local preview controls
 
-- Always include the current local-network (LAN) URL when sharing a local development preview, with the port and relevant route. Do not provide only localhost. Detect the active LAN IP each time and verify the preview responds through it; do not reuse a stale address.
+- Patrick usually views previews from another device on the same local network as the machine running them. Never give only localhost. Give the current LAN URL with port and route for every preview, detect the LAN IP each time, and verify each URL responds, including any sign-in flow, before sharing it. Machine-specific setup (LAN sign-in, Tailscale for off-network) is in `~/.codex/local/account-notes.md`.
 - Keep TanStack Query Devtools and its floating launcher disabled in Patrick's local previews across sessions. For projects using Vite, preserve `VITE_SHOW_IN_APP_QUERY_DEV_TOOLS=false` when starting or restarting Vite, including in new worktrees, detached sessions, and sanitized environments. Do not enable it unless Patrick explicitly asks.
 
 ### Temporary checkout lifecycle
@@ -88,6 +88,8 @@ Use for visual design, UI variants, motion tuning, prototypes, copy changes, and
 - Present UI variants through an in-place toggle or keyboard shortcut on the same preview surface; do not send separate demo URLs for each option.
 - Do not replace live code variants with generated images, static mockups, or a separate browser-based option picker.
 - Treat image generation as opt-in, never inferred from phrases such as “visual revs,” “standalone versions,” “brainstorm,” or “compare directions.”
+- Make previews, variants, fixtures, and in-progress screens look and read like the shipped product. Never put "preview", "local", "local only", "mock", "draft", "unsaved", "changes aren't saved", or "coming in a later pass" in screens, badges, banners, status text, notices, button labels, accessible names, or fixture data, even when edits live only in browser state. The one exception is a temporary toggle between versions under comparison, kept visually separate from the product UI. Report caveats such as "nothing is saved yet" to Patrick, never in the interface.
+- Never write an ellipsis ("…" or "...") in interface text: menu items, buttons, labels, links, headings, status and loading text, placeholders, toasts, or accessible names. Write "Move", "Add subordinate", "Exporting" and "Loading support relationships", not "Move…" or "Loading…". Remove any you find in text you touch.
 
 ### Production
 
@@ -203,6 +205,17 @@ A pending check is not a pass: report merge and CI results per job with their fi
 - Before drafting or editing issue-tracker or knowledge-base content, follow the consuming project's writing instructions and required skills. Keep organization-specific routing in that project.
 
 ## Instruction files
+
+Before reading a repository-local skill or treating a skill as current, check
+the checkout's branch, dirty state, and the skill's resolved source. When the
+checkout's skill ownership or invocation guidance differs from the current
+default branch, report the mismatch and verify the intended source before
+loading the skill. Use an existing installation doctor when available. A
+registered name is not proof that its file is a shipping skill: exclude eval
+fixtures, retired copies, and duplicate sources. Preserve local edits before
+cleanup; do not switch branches, merge unrelated work, or discard files just to
+refresh instructions. Verify installation changes in a fresh client catalog;
+an already-running chat may retain its earlier instructions and skill list.
 
 Treat `AGENTS.md` as the canonical cross-agent instruction file. A repository may keep `CLAUDE.md` as a compatibility shim or for genuinely Claude-specific guidance. Preserve existing user work and follow the nearest applicable instruction file.
 
