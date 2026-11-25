@@ -171,6 +171,8 @@ An error in the area you are changing is your bug until shown otherwise; find it
 
 A pending check is not a pass: report merge and CI results per job with their final state, and say "still running" for anything not finished.
 
+A ready pull request is not an approved one: before recommending a merge or a merge order, check each pull request's review decision against the branch's required approvals. The author's own review comments don't count. Until a pull request has the approvals it needs, its next step is getting reviewed.
+
 ## Code Review Rules
 
 - Flag changes that make strict planning, TDD, worktrees, parallel-agent orchestration,
