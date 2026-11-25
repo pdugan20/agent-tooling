@@ -60,6 +60,7 @@ himself unless he asks for a new one.
 ### Local preview controls
 
 - Patrick usually views previews from another device on the same local network as the machine running them. Never give only localhost. Give the current LAN URL with port and route for every preview, detect the LAN IP each time, and verify each URL responds, including any sign-in flow, before sharing it. Machine-specific setup (LAN sign-in, Tailscale for off-network) is in `~/.codex/local/account-notes.md`.
+- Check UI and runtime changes on a local dev server, shared through the LAN URL or a private Tailscale Serve route when Patrick looks from another device. Don't open, wait on, or sign in to a pull request's cloud preview environment unless he asks for it: those take many minutes to deploy, and their sign-in often fails while they start. When repository guidance asks for cloud-preview validation, give the local evidence and say in the pull request that the cloud preview wasn't checked.
 - Keep TanStack Query Devtools and its floating launcher disabled in Patrick's local previews across sessions. For projects using Vite, preserve `VITE_SHOW_IN_APP_QUERY_DEV_TOOLS=false` when starting or restarting Vite, including in new worktrees, detached sessions, and sanitized environments. Do not enable it unless Patrick explicitly asks.
 
 ### Temporary checkout lifecycle
