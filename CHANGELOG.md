@@ -6,6 +6,8 @@ version when compatibility requires it.
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-11-26
+
 ### Added
 
 - Adopted six more of Emil Kowalski's skills as locked snapshots: `choreograph` (coordinating several elements that
@@ -75,6 +77,16 @@ version when compatibility requires it.
   were never selected here. A project that needs them should lock the full set itself.
 - Removed the shared instruction that split planning work between Superpowers and the `mattpocock/skills` planning
   set. The set is project-scoped, so its routing belongs in the repository that installs it.
+
+### Upgrade notes
+
+Pull the repository, run `npm ci` and `npm run bootstrap`, then start new Codex tasks. Remove the retired
+Superpowers plugin once on each machine with the commands in
+[maintenance](docs/maintenance.md#remove-the-retired-superpowers-plugin); `npm run setup:check` fails until no
+Superpowers plugin is enabled. Bootstrap does not prune links, so delete the `maplibre-cartography`,
+`maplibre-source-wiring` and `maplibre-terrain-rendering` links that now dangle under `~/.agents/skills`. Codex runs
+the new pull request link hook after you trust its definition in `/hooks`. If you use Claude Code, run
+`npm run bootstrap:claude` as well and delete the same three links from its skills directory.
 
 ## [0.9.0] - 2026-10-31
 
@@ -396,7 +408,8 @@ workflow snapshots.
 Pull the repository, run `npm run bootstrap`, refresh the configured Codex and Claude plugins, and start new
 tasks in both products.
 
-[unreleased]: https://github.com/pdugan20/agent-tooling/compare/v0.9.0...HEAD
+[unreleased]: https://github.com/pdugan20/agent-tooling/compare/v0.10.0...HEAD
+[0.10.0]: https://github.com/pdugan20/agent-tooling/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/pdugan20/agent-tooling/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/pdugan20/agent-tooling/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/pdugan20/agent-tooling/compare/v0.6.0...v0.7.0
