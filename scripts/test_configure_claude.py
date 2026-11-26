@@ -12,9 +12,12 @@ SPEC.loader.exec_module(configure_claude)
 
 
 class ConfigureClaudeTests(unittest.TestCase):
-    def test_routes_superpowers_to_configured_fork(self) -> None:
+    def test_removes_retired_superpowers_fork(self) -> None:
         data = {
-            "enabledPlugins": {"unrelated@example": True},
+            "enabledPlugins": {
+                "unrelated@example": True,
+                "superpowers@superpowers-configured": True,
+            },
             "skillOverrides": {
                 "production-hardening": "user-invocable-only",
                 "strict-tdd": "user-invocable-only",
@@ -26,7 +29,7 @@ class ConfigureClaudeTests(unittest.TestCase):
 
         self.assertIs(updated["enabledPlugins"]["unrelated@example"], True)
         self.assertNotIn("superpowers@claude-plugins-official", updated["enabledPlugins"])
-        self.assertIs(updated["enabledPlugins"]["superpowers@superpowers-configured"], True)
+        self.assertNotIn("superpowers@superpowers-configured", updated["enabledPlugins"])
         self.assertNotIn("strict-tdd", updated["skillOverrides"])
         self.assertNotIn("production-hardening", updated["skillOverrides"])
         self.assertEqual(updated["skillOverrides"]["unrelated-skill"], "name-only")

@@ -8,7 +8,8 @@ import tempfile
 from pathlib import Path
 
 OFFICIAL_SUPERPOWERS = "superpowers@claude-plugins-official"
-CONFIGURED_SUPERPOWERS = "superpowers@superpowers-configured"
+# Selected by earlier versions of this setup; removed from settings when found.
+RETIRED_PLUGINS = ("superpowers@superpowers-configured",)
 EXPLICIT_PERSONAL_SKILLS = ("review-animations",)
 # ASD-STE100 Simplified Technical English. Applies to every response the main
 # agent writes, in every session, with no invocation. See
@@ -87,7 +88,7 @@ def update_settings(
     if isinstance(existing_plugins, dict) and existing_plugins.get(OFFICIAL_SUPERPOWERS) is True:
         raise ValueError(
             "Official Superpowers is enabled. Existing settings were preserved; "
-            "review the conflict with the configured fork before rerunning."
+            "its session bootstrap makes strict workflows automatic. Disable it and rerun."
         )
     plugins = data.setdefault("enabledPlugins", {})
     overrides = data.setdefault("skillOverrides", {})
@@ -95,7 +96,8 @@ def update_settings(
         raise ValueError("enabledPlugins and skillOverrides must be JSON objects")
 
     data["outputStyle"] = OUTPUT_STYLE
-    plugins[CONFIGURED_SUPERPOWERS] = True
+    for plugin in RETIRED_PLUGINS:
+        plugins.pop(plugin, None)
     for skill in EXPLICIT_PERSONAL_SKILLS:
         overrides[skill] = "user-invocable-only"
     for skill in RETIRED_SKILLS:

@@ -1,7 +1,7 @@
 # Maintenance
 
-`agent-tooling` is the canonical consumer configuration for Patrick's shared instructions, locked skill set,
-desired plugin state, and configured Superpowers baseline. Codex is the primary harness; Claude Code support is
+`agent-tooling` is the canonical consumer configuration for Patrick's shared instructions, locked skill set
+and desired plugin state. Codex is the primary harness; Claude Code support is
 optional. Patrick-owned skills are released from `pdugan20/skills`. Default bootstrap and setup checks target Codex; use the explicit Claude commands for its optional harness.
 See [setup boundaries](setup.md#current-command-boundary).
 
@@ -12,7 +12,7 @@ See [setup boundaries](setup.md#current-command-boundary).
 - [Repository verification](#verify-repository-changes) and [releases](#release-agent-tooling)
 - [Catalog](#maintain-the-catalog) and [machine audits](#audit-a-machine)
 - [Codex plugins](#refresh-installed-codex-plugins) and [optional Claude plugins](#refresh-optional-claude-plugins)
-- [Configured Superpowers fork](#update-the-configured-superpowers-fork)
+- [Retired Superpowers plugin](#remove-the-retired-superpowers-plugin)
 
 ## Update shared instructions
 
@@ -133,8 +133,8 @@ ClaudeLint remains in the repository gate for Claude configuration files. It doe
 `claudelint validate-skills` ignores `--path`, and `.claudelintignore` excludes the snapshot directories, so the former
 `validate-skills --path .agents/skills` step checked nothing. Patrick-owned skills are validated in Skills before release,
 and the snapshot hash check confirms every locked snapshot is unmodified. Do not reformat or patch upstream snapshots
-locally. Repository policy separately checks lock provenance, compatibility links, the configured Superpowers
-baseline, and desired plugin state.
+locally. Repository policy separately checks lock provenance, compatibility links, and desired plugin
+state.
 
 ### Secret scanning
 
@@ -150,8 +150,7 @@ Install both local hooks with `pre-commit install --hook-type pre-commit --hook-
 ## Release agent tooling
 
 GitHub releases describe the complete repository setup and use ordinary SemVer tags. `package.json` is the
-repository version source. The Superpowers fork is versioned in its own repository and is not coupled to this
-repository's release number.
+repository version source.
 
 1. Move the completed entries from `[Unreleased]` into a dated version section in `CHANGELOG.md`.
 2. Bump the root `package.json` version according to SemVer and refresh `package-lock.json`.
@@ -227,8 +226,8 @@ reapplies Codex configuration fixes. It honors `CODEX_HOME` and preserves unsele
 check the result. This command does not update the Codex application or guarantee an account-managed plugin refresh.
 
 Setup installation preserves existing plugins and caches, including retired IDs. It only adds selected plugins that
-are missing. `npm run setup:check` checks the selected enabled set and configured Superpowers baseline; conflicting
-Superpowers installations fail the check and remain intact for explicit review. Claude configuration also stops
+are missing. `npm run setup:check` checks the selected enabled set and fails while a Superpowers plugin is
+still enabled; that installation remains intact for explicit removal. Claude configuration also stops
 when its settings explicitly enable official Superpowers; it preserves the settings file instead of disabling that plugin. Legacy cleanup is a separate decision.
 Account-managed plugins listed in
 `config/codex-managed-plugins.txt` must be checked in the Codex Plugins tab because the CLI does not authoritatively
@@ -253,7 +252,7 @@ npm run plugins:refresh:claude
 Underneath, this runs `claude plugin marketplace update <name>` and `claude plugin update` for the entries in
 `config/claude-plugins.txt`. Restart Claude afterward. Selecting a Claude model in Codex does not require this step.
 
-`npm run setup:check:claude` requires the selected plugins and configured Superpowers baseline. Setup preserves
+`npm run setup:check:claude` requires the selected plugins and no enabled Superpowers plugin. Setup preserves
 undeclared user plugins and their enablement; refresh does too. Marketplace updates are limited to selected names.
 The retained `scripts/reconcile_claude_plugins.py` helper can report undeclared IDs from supplied JSON, but setup and
 refresh do not use that report to disable or remove anything. Review ownership separately before retirement.
@@ -267,31 +266,21 @@ The `.agents/skills/` snapshots and `.claude/skills/` compatibility links give
 both runtimes the same Patrick-owned skill contents without a second plugin
 installation.
 
-## Update the configured Superpowers fork
+## Remove the retired Superpowers plugin
 
-The actual Superpowers plugin is installed from [`pdugan20/superpowers`](https://github.com/pdugan20/superpowers),
-a thin fork of [`obra/superpowers`](https://github.com/obra/superpowers). The fork keeps an `upstream` Git remote and
-documents its intentionally small patch set in `CUSTOMIZATION.md`. `config/superpowers.json` is this repository's
-machine-readable record of the installed baseline.
+This setup selected a configured fork of [`obra/superpowers`](https://github.com/obra/superpowers) until 2026-11-25.
+Its strict workflows were already explicit-only here, and the verification rules it still
+supplied now live in `global/AGENTS.md`. Setup never uninstalls plugins, so remove it once on each machine that had it:
 
-Run `npm run superpowers:check` at any time. A weekly GitHub Actions job runs the same comparison and opens one issue
-when upstream `main` advances.
+```bash
+codex plugin remove superpowers@superpowers-configured
+codex plugin marketplace remove superpowers-configured
+claude plugin uninstall superpowers@superpowers-configured
+claude plugin marketplace remove superpowers-configured
+```
 
-To update safely:
-
-1. In the fork checkout, fetch `upstream` and review the commits since `config/superpowers.json`'s
-   `upstreamCommit`.
-2. Merge or rebase the new upstream version into a branch of the fork. Resolve conflicts by preserving the three
-   policy patches documented in `CUSTOMIZATION.md`; do not copy upstream over the fork wholesale.
-3. Bump the fork to `<upstream-version>-config.<revision>` and update both plugin manifests and marketplace entries.
-4. Run the fork's configured-policy test, Codex packaging tests, hook tests, version check, and
-   `claude plugin validate .`.
-5. Push the fork, then update `upstreamVersion`, `upstreamCommit`, and `forkVersion` in
-   `config/superpowers.json`. Regenerate the catalog and run `npm run verify` here.
-6. Refresh Codex plugins; refresh Claude plugins when validating its compatibility support. Restart the affected
-   products. Use `npm run setup:check` for Codex and `npm run setup:check:claude` for Claude.
-7. Start new tasks and smoke-test one automatic workflow (for example debugging) plus negative prompts for TDD,
-   brainstorming, worktrees, and the browser option picker.
+Run the Claude commands only where Claude Code had the plugin. `npm run bootstrap:claude` removes the fork's
+`enabledPlugins` entry from Claude settings, and the setup checks fail while any Superpowers plugin is still enabled.
 
 Because plugin cache paths can include versions, rerun `npm run bootstrap` after a Codex or Product Design update,
 then start a new task so the configured skill overrides point at the current installation.

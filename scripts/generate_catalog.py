@@ -693,7 +693,6 @@ def build_catalog() -> dict[str, Any]:
         "generatedFrom": [
             ".agents/skills/*/SKILL.md",
             "skills-lock.json",
-            "config/superpowers.json",
             "config/codex-plugins.txt",
             "config/codex-managed-plugins.txt",
             "config/claude-plugins.txt",

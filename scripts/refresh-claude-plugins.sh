@@ -30,7 +30,6 @@ raise SystemExit(0 if any(item.get("name") == target for item in data) else 1)
 
 ensure_marketplace claude-plugins-official anthropics/claude-plugins-official
 ensure_marketplace patrick-plugins pdugan20/plugins
-ensure_marketplace superpowers-configured pdugan20/superpowers
 ensure_marketplace mintlify-marketplace mintlify/mintlify-claude-plugin
 
 marketplaces=$(python3 -c 'import sys; print("\n".join(sorted({line.strip().rsplit("@", 1)[1] for line in open(sys.argv[1]) if line.strip() and not line.lstrip().startswith("#")})))' "$ROOT/config/claude-plugins.txt")

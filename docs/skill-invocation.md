@@ -28,8 +28,8 @@ Do not modify locked snapshots to change policy; update their canonical source o
 
 ## Personal workflow boundaries
 
-`global/AGENTS.md` defines which workflows need an explicit request. `config/superpowers.json` records the fork's
-explicit-only and automatic groups. Preserve those boundaries when changing metadata or packaging.
+`global/AGENTS.md` defines which workflows need an explicit request. Preserve those boundaries when
+changing metadata or packaging.
 An explicit skill invocation does not independently authorize publishing, deployment, or live-data mutation.
 
 When a required named skill is unavailable, stop and ask the owner to run or restore it. Do not silently substitute
@@ -56,6 +56,5 @@ In that measurement, `disable-model-invocation: true` in `SKILL.md` prevented ag
 `on`. A runtime refusal at that gate was not an approval prompt. Preserve the upstream snapshot rather than patching
 it locally to bypass the restriction.
 
-This repo sets Claude's `review-animations` override to `user-invocable-only`. The configured Superpowers fork also
-contains Claude-specific invocation controls. Their visibility effects must be evaluated in Claude separately from
-Codex's `allow_implicit_invocation`. This documentation update does not introduce a new approval-hook workflow.
+This repo sets Claude's `review-animations` override to `user-invocable-only`. Its visibility effect must be
+evaluated in Claude separately from Codex's `allow_implicit_invocation`. This documentation update does not introduce a new approval-hook workflow.

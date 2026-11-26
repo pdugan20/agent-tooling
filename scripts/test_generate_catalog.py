@@ -16,7 +16,7 @@ class CatalogGenerationTests(unittest.TestCase):
         items = catalog["items"]
 
         self.assertEqual(len([item for item in items if item["type"] == "skill"]), 40)
-        self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 24)
+        self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 23)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
         self.assertEqual(catalog["schemaVersion"], 6)
@@ -239,24 +239,6 @@ class CatalogGenerationTests(unittest.TestCase):
                 ),
             },
         )
-
-    def test_superpowers_plugin_provenance_is_explicit(self) -> None:
-        items = generate_catalog.build_catalog()["items"]
-        plugins = [
-            item
-            for item in items
-            if "superpowers@superpowers-configured" in item.get("pluginIds", [])
-        ]
-
-        self.assertEqual(len(plugins), 1)
-        self.assertEqual(plugins[0]["runtimes"], ["codex", "claude"])
-        self.assertTrue(
-            all(plugin["displayName"] == "Superpowers (Configured)" for plugin in plugins)
-        )
-        self.assertTrue(all("upstream" in plugin["description"].lower() for plugin in plugins))
-        self.assertTrue(all(plugin["path"] == "config/superpowers.json" for plugin in plugins))
-        self.assertTrue(all(plugin["version"] == "6.2.0-config.2" for plugin in plugins))
-        self.assertNotIn("Desired", {item["state"] for item in items})
 
     def test_mintlify_docs_are_personal_skills(self) -> None:
         items = generate_catalog.build_catalog()["items"]

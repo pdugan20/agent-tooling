@@ -30,9 +30,8 @@ if args == ["plugin", "list", "--json"]:
     state = Path(os.environ["SETUP_CALLS"]).with_name(runtime + "-added.json")
     added = json.loads(state.read_text()) if state.exists() else []
     ids = [item for item in ids if item != ids[0] or item in added]
-    pin = json.loads((root / "config/superpowers.json").read_text())
     rows = [{("pluginId" if runtime == "codex" else "id"): item,
-             "enabled": True, "scope": "user", "version": pin["forkVersion"]}
+             "enabled": True, "scope": "user", "version": "1.0.0"}
             for item in [*ids, "external-extra@outside", "mintlify-docs@patrick-tools"]
             if item and not item.startswith("#")]
     print(json.dumps({"installed": rows} if runtime == "codex" else rows))

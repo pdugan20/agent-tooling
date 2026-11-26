@@ -1,7 +1,6 @@
 {
   "enabledPlugins": {
-    "superpowers@claude-plugins-official": false,
-    "superpowers@superpowers-configured": true
+    "superpowers@claude-plugins-official": false
   },
   "skillOverrides": {
     "review-animations": "user-invocable-only"
