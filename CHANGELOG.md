@@ -58,12 +58,16 @@ version when compatibility requires it.
 - Bootstrap no longer disables a nested `swiftui-pro` copy, setup checks no longer expect that override, and
   repository policy now fails when any locked snapshot contains a nested skill. The `swiftui-pro` hash exception is
   gone because its lock hash recomputes from the installed files.
+- Shared instructions now count a regression test only once it has failed without the fix and passed with it, and
+  treat a subagent's report of success as a claim to check against its diff.
 
 ### Removed
 
 - Removed the three MapLibre snapshots (`maplibre-cartography`, `maplibre-source-wiring` and
   `maplibre-terrain-rendering`). No personal project uses MapLibre, and the skills cross-link four siblings that
   were never selected here. A project that needs them should lock the full set itself.
+- Removed the shared instruction that split planning work between Superpowers and the `mattpocock/skills` planning
+  set. The set is project-scoped, so its routing belongs in the repository that installs it.
 
 ## [0.9.0] - 2026-10-31
 
