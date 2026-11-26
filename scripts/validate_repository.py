@@ -154,18 +154,6 @@ UPSTREAM_SKILLS = {
         "vercel-labs/skills",
         "skills/find-skills/SKILL.md",
     ),
-    "maplibre-cartography": (
-        "maplibre/maplibre-agent-skills",
-        "skills/maplibre-cartography/SKILL.md",
-    ),
-    "maplibre-source-wiring": (
-        "maplibre/maplibre-agent-skills",
-        "skills/maplibre-source-wiring/SKILL.md",
-    ),
-    "maplibre-terrain-rendering": (
-        "maplibre/maplibre-agent-skills",
-        "skills/maplibre-terrain-rendering/SKILL.md",
-    ),
     "analyze-ui-video": (
         "pdugan20/skills",
         "skills/analyze-ui-video/SKILL.md",
@@ -253,7 +241,7 @@ UPSTREAM_SKILLS = {
 }
 PATRICK_SKILLS_REF = "v3.5.0"
 XCODEBUILDMCP_REF = "v2.7.0"
-STAGESHOW_REF = "802057409787133703c56001080169e347305572"
+STAGESHOW_REF = "299140fafd08df55a9c234e610c3f64af3f45531"
 EXPECTED_EXPLICIT_SUPERPOWERS = {
     "brainstorming",
     "dispatching-parallel-agents",
@@ -666,9 +654,8 @@ def validate_repository() -> None:
     if upstream_skill_names != set(UPSTREAM_SKILLS):
         raise ValidationError(".agents/skills must match the exact locked upstream skill set")
     nested_skill_files = set((ROOT / ".agents/skills").glob("*/skills/*/SKILL.md"))
-    expected_nested_skill = ROOT / ".agents/skills/swiftui-pro/skills/swiftui-pro/SKILL.md"
-    if nested_skill_files != {expected_nested_skill}:
-        raise ValidationError("the SwiftUI upstream compatibility skill changed unexpectedly")
+    if nested_skill_files:
+        raise ValidationError("locked skill snapshots must not contain nested skill copies")
     for skill_name, (expected_source, expected_path) in UPSTREAM_SKILLS.items():
         lock_entry = locked_skills[skill_name]
         if not isinstance(lock_entry, dict):

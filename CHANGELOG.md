@@ -49,6 +49,25 @@ version when compatibility requires it.
 - Shared instructions and the `AGENTS.md` context hook now say that Claude Code reads a subdirectory's `AGENTS.md`
   as it opens files there when native loading applies, so nested instructions need no `CLAUDE.md` shim. Codex still
   loads only the files from the project root down to its working directory.
+- Updated four third-party snapshots after reviewing their upstream diffs. `shadcn` moves to upstream `4233ed1`,
+  which adds a DESIGN.md design-system workflow and `Trace` guidance for assistant activity. `stageshow` moves to
+  release 1.1.1 (`299140f`), with new `Button`, `Card`, `Divider` and `Draft` kit parts and stricter filming
+  checks. `playwright-best-practices` follows its default branch, with a rewritten coverage guide and corrected
+  examples. `swiftui-pro` moves to upstream `f2920b6`, which corrects three examples and drops the nested duplicate
+  skill.
+- Bootstrap no longer disables a nested `swiftui-pro` copy, setup checks no longer expect that override, and
+  repository policy now fails when any locked snapshot contains a nested skill. The `swiftui-pro` hash exception is
+  gone because its lock hash recomputes from the installed files.
+- Shared instructions now count a regression test only once it has failed without the fix and passed with it, and
+  treat a subagent's report of success as a claim to check against its diff.
+
+### Removed
+
+- Removed the three MapLibre snapshots (`maplibre-cartography`, `maplibre-source-wiring` and
+  `maplibre-terrain-rendering`). No personal project uses MapLibre, and the skills cross-link four siblings that
+  were never selected here. A project that needs them should lock the full set itself.
+- Removed the shared instruction that split planning work between Superpowers and the `mattpocock/skills` planning
+  set. The set is project-scoped, so its routing belongs in the repository that installs it.
 
 ## [0.9.0] - 2026-10-31
 

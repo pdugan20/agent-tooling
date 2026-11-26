@@ -128,8 +128,6 @@ The personal `feature-delivery` skill is the exception: it may trigger automatic
 
 The configured Superpowers plugin is maintained as a thin fork of `obra/superpowers`. It disables the always-on session bootstrap and removes the brainstorming Visual Companion/browser option-picker. Do not restore either behavior through repository-level instructions.
 
-When a repository installs the `mattpocock/skills` planning set, the split is: Superpowers keeps the plan document and its execution (`writing-plans`, `executing-plans`, `subagent-driven-development`); `grill-with-docs` owns decisions recorded as ADRs and glossary terms; `to-tickets` and `wayfinder` own the issue-tracker layer (tracer-bullet tickets with blocking edges, multi-session decision maps). Do not add a skill that duplicates either side, and do not fan out for planning.
-
 ## Bounded batch authorization
 
 - When Patrick approves a named, finite batch (for example, "continue through the rest of Batch 1" or "do all recommended items in this batch"), treat that as authorization to complete the identified items without stopping for routine confirmations between them.
@@ -171,6 +169,10 @@ When a repository installs the `mattpocock/skills` planning set, the split is: S
 An error in the area you are changing is your bug until shown otherwise; find its cause instead of working around it by bumping versions or retrying.
 
 A pending check is not a pass: report merge and CI results per job with their final state, and say "still running" for anything not finished.
+
+A regression test counts only once you have seen it fail without the fix and pass with it.
+
+A subagent's report of success is a claim: read its diff and rerun its checks before repeating the result.
 
 A ready pull request is not an approved one: before recommending a merge or a merge order, check each pull request's review decision against the branch's required approvals. The author's own review comments don't count. Until a pull request has the approvals it needs, its next step is getting reviewed.
 

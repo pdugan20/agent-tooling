@@ -164,13 +164,12 @@ raise SystemExit(0 if enabled.get("superpowers@claude-plugins-official") is not 
 fi
 
 if [[ $runtime == codex ]]; then
-  if python3 - "$codex_home" "$ROOT" <<'PY'; then
+  if python3 - "$codex_home" <<'PY'; then
 import sys
 import tomllib
 from pathlib import Path
 
 codex_home = Path(sys.argv[1])
-repository = Path(sys.argv[2])
 config = tomllib.loads((codex_home / "config.toml").read_text())
 disabled = {
     Path(item["path"]).resolve()
@@ -182,12 +181,9 @@ expected = set()
 if root.exists():
     for name in ("ideate", "index"):
         expected.update(path.resolve() for path in root.glob(f"*/skills/{name}/SKILL.md"))
-expected.add(
-    (repository / ".agents/skills/swiftui-pro/skills/swiftui-pro/SKILL.md").resolve()
-)
 raise SystemExit(0 if expected <= disabled else 1)
 PY
-    pass "Product Design image ideation and duplicate nested skills are disabled"
+    pass "Product Design image ideation skills are disabled"
   else
     fail "Codex skill override policy is incomplete; rerun bootstrap"
   fi
