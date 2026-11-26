@@ -174,6 +174,8 @@ A pending check is not a pass: report merge and CI results per job with their fi
 
 A ready pull request is not an approved one: before recommending a merge or a merge order, check each pull request's review decision against the branch's required approvals. The author's own review comments don't count. Until a pull request has the approvals it needs, its next step is getting reviewed.
 
+When a pull request template asks for a release backport decision, Patrick's standing decision is no backport. Tick the do-not-backport option with the reason "Not needed in the current release" and record it as his approved decision, unless he asks for a backport on that pull request. Leaving both options empty can let repository automation open backport pull requests nobody wanted.
+
 ## Code Review Rules
 
 - Flag changes that make strict planning, TDD, worktrees, parallel-agent orchestration,
