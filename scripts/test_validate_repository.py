@@ -454,7 +454,7 @@ jobs:
         )
         self.assertEqual(
             set((validate_repository.ROOT / ".agents/skills").glob("*/skills/*/SKILL.md")),
-            {validate_repository.ROOT / ".agents/skills/swiftui-pro/skills/swiftui-pro/SKILL.md"},
+            set(),
         )
 
     def test_bootstrap_honors_claude_config_dir(self) -> None:

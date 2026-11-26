@@ -342,7 +342,7 @@
     {
       "availability": "Global",
       "brand": null,
-      "contentHash": "e0edf9a937bbb8c86c170b130ff825f158cc286f07ec477b67835e9c1b20267e",
+      "contentHash": "88fefb2239299c8815366b89737ba15e91358ab3e9a6fb69af2436ed4a704299",
       "description": "Reviews SwiftUI code for modern best practices.",
       "displayName": "SwiftUI Pro",
       "featured": 12,
@@ -352,7 +352,7 @@
         "claude": "Automatic",
         "codex": "Automatic"
       },
-      "lockedRef": "f9800713b24580bc444931949aad4519128605e8",
+      "lockedRef": "f2920b63995263f57b3e198674e89a602efba6d2",
       "name": "swiftui-pro",
       "ownerAvatarUrl": "https://github.com/twostraws.png?size=96",
       "path": ".agents/skills/swiftui-pro/SKILL.md",
@@ -364,7 +364,7 @@
       "skillsShUrl": "https://skills.sh/twostraws/swiftui-agent-skill/swiftui-pro",
       "source": "third-party",
       "sourceLabel": "Paul Hudson",
-      "sourceUrl": "https://github.com/twostraws/swiftui-agent-skill/blob/f9800713b24580bc444931949aad4519128605e8/swiftui-pro/SKILL.md",
+      "sourceUrl": "https://github.com/twostraws/swiftui-agent-skill/blob/f2920b63995263f57b3e198674e89a602efba6d2/swiftui-pro/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "2.0.0"
@@ -1062,97 +1062,7 @@
     {
       "availability": "Global",
       "brand": null,
-      "contentHash": "9fc484e170614b80200d39d5f2029d1888c77e3ca084e412a40616e7d6d37e23",
-      "description": "Cartographic principles for MapLibre GL JS \u2014 label and symbol legibility on imagery vs. vector basemaps, figure-ground for point icons, styling vector roads over aerial imagery, visual hierarchy, sprites and route shields, layer ordering for data injection, and accessibility. Use when styling a map, choosing text or symbol colors, making markers or roads readable on satellite/aerial imagery, setting up icons, debugging shields, or ordering layers correctly.",
-      "displayName": "Maplibre Cartography",
-      "featured": 50,
-      "id": "skill:maplibre-cartography",
-      "invocation": "Automatic",
-      "invocationByRuntime": {
-        "claude": "Automatic",
-        "codex": "Automatic"
-      },
-      "lockedRef": null,
-      "name": "maplibre-cartography",
-      "ownerAvatarUrl": "https://github.com/maplibre.png?size=96",
-      "path": ".agents/skills/maplibre-cartography/SKILL.md",
-      "repositoryUrl": "https://github.com/maplibre/maplibre-agent-skills",
-      "runtimes": [
-        "codex",
-        "claude"
-      ],
-      "skillsShUrl": "https://skills.sh/maplibre/maplibre-agent-skills/maplibre-cartography",
-      "source": "third-party",
-      "sourceLabel": "MapLibre",
-      "sourceUrl": "https://github.com/maplibre/maplibre-agent-skills/blob/main/skills/maplibre-cartography/SKILL.md",
-      "state": "Configured",
-      "type": "skill",
-      "version": "Git"
-    },
-    {
-      "availability": "Global",
-      "brand": null,
-      "contentHash": "1d6287fe0f6fd41a64d95eb488a44290bf41b588fe6f8faae85dc3f053f1d374",
-      "description": "Getting a MapLibre GL JS source to actually render \u2014 TileJSON `url` versus hand-wired `tiles` templates, matching `source-layer` names to the tile schema, layer order and inserting below labels, `promoteId` and the feature ids that feature state needs, and the CORS and glyph failures behind a blank map. Use when a source is configured but nothing is drawing, or when setFeatureState does nothing.",
-      "displayName": "Maplibre Source Wiring",
-      "featured": 50,
-      "id": "skill:maplibre-source-wiring",
-      "invocation": "Automatic",
-      "invocationByRuntime": {
-        "claude": "Automatic",
-        "codex": "Automatic"
-      },
-      "lockedRef": null,
-      "name": "maplibre-source-wiring",
-      "ownerAvatarUrl": "https://github.com/maplibre.png?size=96",
-      "path": ".agents/skills/maplibre-source-wiring/SKILL.md",
-      "repositoryUrl": "https://github.com/maplibre/maplibre-agent-skills",
-      "runtimes": [
-        "codex",
-        "claude"
-      ],
-      "skillsShUrl": "https://skills.sh/maplibre/maplibre-agent-skills/maplibre-source-wiring",
-      "source": "third-party",
-      "sourceLabel": "MapLibre",
-      "sourceUrl": "https://github.com/maplibre/maplibre-agent-skills/blob/main/skills/maplibre-source-wiring/SKILL.md",
-      "state": "Configured",
-      "type": "skill",
-      "version": "Git"
-    },
-    {
-      "availability": "Global",
-      "brand": null,
-      "contentHash": "ab520b4f51536746ac2f2098f840d9444cdfd28210ff0640eeadb8d3d6fcdc42",
-      "description": "Drawing elevation in MapLibre GL JS once a raster-dem source works \u2014 hillshade and `hillshade-method`, the `color-relief` layer and the `[\"elevation\"]` expression, runtime contours with `maplibre-contour`, and 3D terrain with its camera and sky. Use when relief looks harsh, flat, or absent, or when the layer type or property for an elevation effect is unclear.",
-      "displayName": "Maplibre Terrain Rendering",
-      "featured": 50,
-      "id": "skill:maplibre-terrain-rendering",
-      "invocation": "Automatic",
-      "invocationByRuntime": {
-        "claude": "Automatic",
-        "codex": "Automatic"
-      },
-      "lockedRef": null,
-      "name": "maplibre-terrain-rendering",
-      "ownerAvatarUrl": "https://github.com/maplibre.png?size=96",
-      "path": ".agents/skills/maplibre-terrain-rendering/SKILL.md",
-      "repositoryUrl": "https://github.com/maplibre/maplibre-agent-skills",
-      "runtimes": [
-        "codex",
-        "claude"
-      ],
-      "skillsShUrl": "https://skills.sh/maplibre/maplibre-agent-skills/maplibre-terrain-rendering",
-      "source": "third-party",
-      "sourceLabel": "MapLibre",
-      "sourceUrl": "https://github.com/maplibre/maplibre-agent-skills/blob/main/skills/maplibre-terrain-rendering/SKILL.md",
-      "state": "Configured",
-      "type": "skill",
-      "version": "Git"
-    },
-    {
-      "availability": "Global",
-      "brand": null,
-      "contentHash": "7eb144f734450fee649dc1d209114775ddda07cbf45be84fe969d3d4f3971dce",
+      "contentHash": "634cbd076ce1e22bd714ada7417d3635a057fdcf78574aa70d99f91cb018283c",
       "description": "Use when writing Playwright tests, fixing flaky tests, debugging failures, implementing Page Object Model, configuring CI/CD, optimizing performance, mocking APIs, handling authentication or OAuth, testing accessibility (axe-core), file uploads/downloads, date/time mocking, WebSockets, geolocation, permissions, multi-tab/popup flows, mobile/responsive layouts, touch gestures, GraphQL, error handling, offline mode, multi-user collaboration, third-party services (payments, email verification), console error monitoring, global setup/teardown, test annotations (skip, fixme, slow), test tags (@smoke, @fast, @critical, filtering with --grep), project dependencies, security testing (XSS, CSRF, auth), performance budgets (Web Vitals, Lighthouse), iframes, component testing, canvas/WebGL, service workers/PWA, test coverage, i18n/localization, Electron apps, or browser extension testing. Covers E2E, component, API, visual, accessibility, security, Electron, and extension testing.",
       "displayName": "Playwright Best Practices",
       "featured": 50,
@@ -1182,8 +1092,8 @@
     {
       "availability": "Global",
       "brand": null,
-      "contentHash": "f615de216e085a84e31593ad0fa9062232adc40cd87b7c7ab2b8e49abf6500be",
-      "description": "Manages shadcn components and projects \u2014 adding, searching, fixing, debugging, styling, and composing UI, including chat interfaces. Provides project context, component docs, and usage examples. Applies when working with shadcn/ui, component registries, presets, --preset codes, or any project with a components.json file. Also triggers for \"shadcn init\", \"create an app with --preset\", or \"switch to --preset\".",
+      "contentHash": "b864a958765563321f485a96f4d59c0bb6539f4286ab6d8b8b66895b7ebd302d",
+      "description": "Manages shadcn components and projects \u2014 adding, searching, fixing, debugging, styling, and composing UI, including chat interfaces. Provides project context, component docs, and usage examples. Applies when working with shadcn/ui, component registries, presets, --preset codes, or any project with a components.json file. Also triggers for \"shadcn init\", \"create an app with --preset\", \"switch to --preset\", and for building a design system or applying a DESIGN.md or brand spec to shadcn/ui.",
       "displayName": "Shadcn",
       "featured": 50,
       "id": "skill:shadcn",
@@ -1192,7 +1102,7 @@
         "claude": "Automatic",
         "codex": "Automatic"
       },
-      "lockedRef": "7c9eaba1c0a6404c990c144a654792e3313c650d",
+      "lockedRef": "4233ed1caded8c38f4bc14b14afe1f93ebcaf966",
       "name": "shadcn",
       "ownerAvatarUrl": "https://github.com/shadcn-ui.png?size=96",
       "path": ".agents/skills/shadcn/SKILL.md",
@@ -1204,7 +1114,7 @@
       "skillsShUrl": "https://skills.sh/shadcn-ui/ui/shadcn",
       "source": "third-party",
       "sourceLabel": "shadcn/ui",
-      "sourceUrl": "https://github.com/shadcn-ui/ui/blob/7c9eaba1c0a6404c990c144a654792e3313c650d/skills/shadcn/SKILL.md",
+      "sourceUrl": "https://github.com/shadcn-ui/ui/blob/4233ed1caded8c38f4bc14b14afe1f93ebcaf966/skills/shadcn/SKILL.md",
       "state": "Configured",
       "type": "skill",
       "version": "Git"
@@ -1212,7 +1122,7 @@
     {
       "availability": "Global",
       "brand": null,
-      "contentHash": "bf9f07985a62882deae7935b5b1162fb5bf66b248930bb14a75dcaf9d67291b7",
+      "contentHash": "92725a1d58ce8fbc9b80bd117b4a78feefa230e0feb24865b70c9ed1cfdb581b",
       "description": "Build faux product UI that looks like a real product, as a still illustration or an animated demo with a cursor. Browser and app windows, dashboards, phones, notifications, terminals, bento grids and cursor walkthroughs, framed, masked and cropped the way a marketing page, feature card or docs hero needs them. Use whenever someone wants a fake or mocked UI, a product demo or walkthrough animation, a hero or feature-card illustration of an app, a product shot in the style of a polished marketing site, or an animated cursor doing things in an interface, even if they never say \"faux UI\". React and plain CSS.",
       "displayName": "Stageshow",
       "featured": 50,
@@ -1222,7 +1132,7 @@
         "claude": "Automatic",
         "codex": "Automatic"
       },
-      "lockedRef": "802057409787133703c56001080169e347305572",
+      "lockedRef": "299140fafd08df55a9c234e610c3f64af3f45531",
       "name": "stageshow",
       "ownerAvatarUrl": "https://github.com/benjitaylor.png?size=96",
       "path": ".agents/skills/stageshow/SKILL.md",
@@ -1234,10 +1144,10 @@
       "skillsShUrl": "https://skills.sh/benjitaylor/skills/stageshow",
       "source": "third-party",
       "sourceLabel": "Benji Taylor",
-      "sourceUrl": "https://github.com/benjitaylor/skills/blob/802057409787133703c56001080169e347305572/stageshow/SKILL.md",
+      "sourceUrl": "https://github.com/benjitaylor/skills/blob/299140fafd08df55a9c234e610c3f64af3f45531/stageshow/SKILL.md",
       "state": "Configured",
       "type": "skill",
-      "version": "Git"
+      "version": "1.1.1"
     },
     {
       "availability": "Global",

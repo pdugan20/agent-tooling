@@ -15,7 +15,7 @@ class CatalogGenerationTests(unittest.TestCase):
         catalog = generate_catalog.build_catalog()
         items = catalog["items"]
 
-        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 43)
+        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 40)
         self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 24)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
@@ -108,7 +108,7 @@ class CatalogGenerationTests(unittest.TestCase):
                 "shadcn": (
                     "shadcn/ui",
                     ".agents/skills/shadcn/SKILL.md",
-                    "https://github.com/shadcn-ui/ui/blob/7c9eaba1c0a6404c990c144a654792e3313c650d/skills/shadcn/SKILL.md",
+                    "https://github.com/shadcn-ui/ui/blob/4233ed1caded8c38f4bc14b14afe1f93ebcaf966/skills/shadcn/SKILL.md",
                 ),
                 "accessibility": (
                     "Addy Osmani",
@@ -214,33 +214,18 @@ class CatalogGenerationTests(unittest.TestCase):
                     "Benji Taylor",
                     ".agents/skills/stageshow/SKILL.md",
                     "https://github.com/benjitaylor/skills/blob/"
-                    "802057409787133703c56001080169e347305572/stageshow/SKILL.md",
+                    "299140fafd08df55a9c234e610c3f64af3f45531/stageshow/SKILL.md",
                 ),
                 "find-skills": (
                     "Vercel Labs",
                     ".agents/skills/find-skills/SKILL.md",
                     "https://github.com/vercel-labs/skills/blob/d6b37f62ae23c3825b0ed16c73e123eee0a41fdc/skills/find-skills/SKILL.md",
                 ),
-                "maplibre-cartography": (
-                    "MapLibre",
-                    ".agents/skills/maplibre-cartography/SKILL.md",
-                    "https://github.com/maplibre/maplibre-agent-skills/blob/main/skills/maplibre-cartography/SKILL.md",
-                ),
-                "maplibre-source-wiring": (
-                    "MapLibre",
-                    ".agents/skills/maplibre-source-wiring/SKILL.md",
-                    "https://github.com/maplibre/maplibre-agent-skills/blob/main/skills/maplibre-source-wiring/SKILL.md",
-                ),
-                "maplibre-terrain-rendering": (
-                    "MapLibre",
-                    ".agents/skills/maplibre-terrain-rendering/SKILL.md",
-                    "https://github.com/maplibre/maplibre-agent-skills/blob/main/skills/maplibre-terrain-rendering/SKILL.md",
-                ),
                 "swiftui-pro": (
                     "Paul Hudson",
                     ".agents/skills/swiftui-pro/SKILL.md",
                     "https://github.com/twostraws/swiftui-agent-skill/blob/"
-                    "f9800713b24580bc444931949aad4519128605e8/swiftui-pro/SKILL.md",
+                    "f2920b63995263f57b3e198674e89a602efba6d2/swiftui-pro/SKILL.md",
                 ),
                 "ios-accessibility": (
                     "Daniel Devesa Derksen-Staats",

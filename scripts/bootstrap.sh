@@ -55,8 +55,7 @@ else
   python3 "$ROOT/scripts/configure-codex.py" \
     --config "$codex_home/config.toml" \
     --codex-home "$codex_home" \
-    --mcp-servers "$ROOT/config/codex-mcp-servers.json" \
-    --disable-skill "$ROOT/.agents/skills/swiftui-pro/skills/swiftui-pro/SKILL.md"
+    --mcp-servers "$ROOT/config/codex-mcp-servers.json"
 fi
 
 echo "$runtime links and routing settings are configured."

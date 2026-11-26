@@ -155,24 +155,6 @@
       "skillPath": "skills/learn-taste/SKILL.md",
       "computedHash": "b84f191120e86041e0693d2b907156cfae7824e6a800728d56da1a312bd85554"
     },
-    "maplibre-cartography": {
-      "source": "maplibre/maplibre-agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/maplibre-cartography/SKILL.md",
-      "computedHash": "9fc484e170614b80200d39d5f2029d1888c77e3ca084e412a40616e7d6d37e23"
-    },
-    "maplibre-source-wiring": {
-      "source": "maplibre/maplibre-agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/maplibre-source-wiring/SKILL.md",
-      "computedHash": "1d6287fe0f6fd41a64d95eb488a44290bf41b588fe6f8faae85dc3f053f1d374"
-    },
-    "maplibre-terrain-rendering": {
-      "source": "maplibre/maplibre-agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/maplibre-terrain-rendering/SKILL.md",
-      "computedHash": "ab520b4f51536746ac2f2098f840d9444cdfd28210ff0640eeadb8d3d6fcdc42"
-    },
     "mobile-native": {
       "source": "emilkowalski/skills",
       "sourceType": "github",
@@ -189,7 +171,7 @@
       "source": "currents-dev/playwright-best-practices-skill",
       "sourceType": "github",
       "skillPath": "playwright-best-practices/SKILL.md",
-      "computedHash": "7eb144f734450fee649dc1d209114775ddda07cbf45be84fe969d3d4f3971dce"
+      "computedHash": "634cbd076ce1e22bd714ada7417d3635a057fdcf78574aa70d99f91cb018283c"
     },
     "remove-animations": {
       "source": "emilkowalski/skills",
@@ -226,24 +208,24 @@
     },
     "shadcn": {
       "source": "shadcn-ui/ui",
-      "ref": "7c9eaba1c0a6404c990c144a654792e3313c650d",
+      "ref": "4233ed1caded8c38f4bc14b14afe1f93ebcaf966",
       "sourceType": "github",
       "skillPath": "skills/shadcn/SKILL.md",
-      "computedHash": "f615de216e085a84e31593ad0fa9062232adc40cd87b7c7ab2b8e49abf6500be"
+      "computedHash": "b864a958765563321f485a96f4d59c0bb6539f4286ab6d8b8b66895b7ebd302d"
     },
     "stageshow": {
       "source": "benjitaylor/skills",
-      "ref": "802057409787133703c56001080169e347305572",
+      "ref": "299140fafd08df55a9c234e610c3f64af3f45531",
       "sourceType": "github",
       "skillPath": "stageshow/SKILL.md",
-      "computedHash": "bf9f07985a62882deae7935b5b1162fb5bf66b248930bb14a75dcaf9d67291b7"
+      "computedHash": "92725a1d58ce8fbc9b80bd117b4a78feefa230e0feb24865b70c9ed1cfdb581b"
     },
     "swiftui-pro": {
       "source": "twostraws/swiftui-agent-skill",
-      "ref": "f9800713b24580bc444931949aad4519128605e8",
+      "ref": "f2920b63995263f57b3e198674e89a602efba6d2",
       "sourceType": "github",
       "skillPath": "swiftui-pro/SKILL.md",
-      "computedHash": "e0edf9a937bbb8c86c170b130ff825f158cc286f07ec477b67835e9c1b20267e"
+      "computedHash": "88fefb2239299c8815366b89737ba15e91358ab3e9a6fb69af2436ed4a704299"
     },
     "tune-mobile-client-performance": {
       "source": "pdugan20/skills",

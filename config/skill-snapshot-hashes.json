@@ -2,12 +2,6 @@
   "schemaVersion": 1,
   "purpose": "Locked skills whose Skills CLI hash cannot be recomputed from the installed snapshot. Each entry pins the lock hash and the installed tree hash, so snapshot edits are still detected. scripts/check_skill_snapshots.mjs reads this file.",
   "exceptions": {
-    "swiftui-pro": {
-      "lockHash": "e0edf9a937bbb8c86c170b130ff825f158cc286f07ec477b67835e9c1b20267e",
-      "installedTreeHash": "8cd08525623ff66ceb8eca1f7372af7b1dfe591fab561b0d66a00086995817f3",
-      "checkedOn": "2026-10-31",
-      "reason": "Upstream links skills/swiftui-pro/references to the top-level references folder. Skills CLI hashes the source with that link skipped and installs it as real files."
-    },
     "vercel-composition-patterns": {
       "lockHash": "f98931159fa9c7fed043bcd18a891a46dcf89ababa38df13a4c5b7b30dc0ce07",
       "installedTreeHash": "94614590eb8d755279d38baf53f9fb48df06cb260e77e8fb626d24090f2a8c77",

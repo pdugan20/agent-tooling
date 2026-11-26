@@ -70,46 +70,46 @@ the installed tree hashes.
 Skill updates remain deliberately reviewed. Use the existing CLI install and update path, inspect instruction
 changes, and preserve provenance. No scheduled skill-update or auto-merge workflow is configured here.
 
-The upstream `swiftui-pro` package includes a nested Claude compatibility copy inside its canonical Codex-ready
-skill directory. The snapshot remains unmodified so `skills-lock.json` can track it exactly; `bootstrap.sh` uses
-Codex's supported per-skill configuration override to disable only that nested duplicate. Rerun bootstrap after an
-upstream update so the override follows the current checkout location.
-
-On 2026-10-07, SwiftUI Pro 2.0.0 was installed from the exact upstream commit
-`f9800713b24580bc444931949aad4519128605e8` using Skills CLI 1.5.24:
+On 2026-11-25, SwiftUI Pro was updated to the exact upstream commit
+`f2920b63995263f57b3e198674e89a602efba6d2` using Skills CLI 1.7.4:
 
 ```bash
-npx skills@1.5.24 add https://github.com/twostraws/swiftui-agent-skill/tree/f9800713b24580bc444931949aad4519128605e8/swiftui-pro --agent codex claude-code --skill swiftui-pro -y
+npx skills@1.7.4 add https://github.com/twostraws/swiftui-agent-skill/tree/f2920b63995263f57b3e198674e89a602efba6d2/swiftui-pro --agent codex claude-code --skill swiftui-pro -y
 ```
 
-The installer materializes the nested reference symlink as matching files. Both entrypoints and the plugin manifest
-declare 2.0.0, and both reference trees contain twelve documents. Keep this installer output intact. The upstream
-MIT copyright and license notice is retained in [licenses/swiftui-pro.txt](licenses/swiftui-pro.txt), outside the
-hash-tracked skill snapshot because upstream keeps its `LICENSE` at the repository root.
+The entrypoint still declares 2.0.0. Upstream moved its Claude plugin manifest to the repository root and removed
+the nested compatibility copy, so the snapshot holds one `SKILL.md` and one reference tree of twelve documents.
+Bootstrap no longer disables a duplicate, the lock hash recomputes from the installed files, and repository policy
+fails when any locked snapshot contains a nested skill. The update also corrects three examples: a named closure
+parameter in the binding setter, `try` on the throwing `Date` parser, and selection order in the reorder helper.
+The upstream MIT copyright and license notice is retained in [licenses/swiftui-pro.txt](licenses/swiftui-pro.txt),
+outside the hash-tracked skill snapshot because upstream keeps its `LICENSE` at the repository root.
 
-The update adds localization, resizable-layout guidance, and an opt-in deeper performance reference. During review,
-preserve its existing-target and toolchain checks, bounded feature/fix scope, and binding-setter behavior caveats.
-Deep performance restructuring requires a requested deep review or an established performance problem. This is a
-skill-content update; source and packaging verification does not establish iOS or device runtime behavior.
+During review, preserve its existing-target and toolchain checks, bounded feature/fix scope, and binding-setter
+behavior caveats. Deep performance restructuring requires a requested deep review or an established performance
+problem. Source and packaging verification does not establish iOS or device runtime behavior.
 
-The retained Claude compatibility behavior lists both `swiftui-pro` and `swiftui-pro:swiftui-pro`. Claude loads the
-directory as the plugin `swiftui-pro@skills-dir`, because it contains `.claude-plugin/plugin.json`. Before the
-2.0.0 update, the nested copy was older than the top-level skill. Measured on 2026-09-17 from the `skills` list in a
-headless `stream-json` init event:
+Before this update the snapshot carried a nested copy, and Claude listed both `swiftui-pro` and
+`swiftui-pro:swiftui-pro` because the directory contained `.claude-plugin/plugin.json`. Measured on 2026-09-17 from
+the `skills` list in a headless `stream-json` init event:
 
 - `skillOverrides` with the key `swiftui-pro:swiftui-pro` changes nothing.
-- `skillOverrides` with the key `swiftui-pro` hides the newer top-level copy and keeps the stale one.
+- `skillOverrides` with the key `swiftui-pro` hides the top-level copy and keeps the nested one.
 - `enabledPlugins` with `swiftui-pro@skills-dir` set to `false` hides both copies.
 
-Leave the duplicate in place. Do not edit the snapshot to remove it. The same package shape affects
-`swift-testing-pro` in repositories that lock it.
+The same package shape can affect `swift-testing-pro` in repositories that lock it. Leave such a duplicate in place
+and do not edit the snapshot to remove it.
 
-On 2026-10-31, Stageshow was installed from the exact upstream commit
-`802057409787133703c56001080169e347305572`, the repository's first release, using Skills CLI 1.7.4:
+On 2026-11-25, Stageshow was updated to the exact upstream commit
+`299140fafd08df55a9c234e610c3f64af3f45531`, release 1.1.1, using Skills CLI 1.7.4:
 
 ```bash
-npx skills@1.7.4 add https://github.com/benjitaylor/skills/tree/802057409787133703c56001080169e347305572/stageshow --agent codex claude-code --skill stageshow -y
+npx skills@1.7.4 add https://github.com/benjitaylor/skills/tree/299140fafd08df55a9c234e610c3f64af3f45531/stageshow --agent codex claude-code --skill stageshow -y
 ```
+
+Releases 1.1.0 and 1.1.1 add the `Button`, `Card`, `Divider` and `Draft` kit parts with their specimens, tell
+agents to restyle a kit part before hand-building a lookalike, tighten the filming checks, and fix a playground
+layout shake.
 
 Repository policy requires that commit, so moving to a newer upstream revision is a reviewed change to
 `STAGESHOW_REF` and the lock together. The skill is MIT licensed, but its bundled app icons and brand marks keep
@@ -344,15 +344,17 @@ copying SKILL.md contents or manually maintaining installed versions.
 ## Official shadcn skill
 
 The official `shadcn` skill is selected in `skills-lock.json` from `shadcn-ui/ui`,
-at commit `7c9eaba1c0a6404c990c144a654792e3313c650d`. It was originally installed
-with the Codex skill installer and is now managed as a shared Skills CLI snapshot.
-This migration preserves the existing instructions; it is not an upstream upgrade.
+at commit `4233ed1caded8c38f4bc14b14afe1f93ebcaf966`. It was originally installed
+with the Codex skill installer, moved to a shared Skills CLI snapshot at
+`7c9eaba1c0a6404c990c144a654792e3313c650d`, and updated on 2026-11-25. The update adds
+the DESIGN.md design-system workflow with its showcase assets and coverage script, and
+`Trace` guidance for assistant activity in chat interfaces.
 
 Use Skills CLI 1.5.24 or newer for this commit URL: 1.5.21 attempts to clone it as
-a branch and fails. The reviewed 1.5.24 installer supports fetching a commit SHA.
+a branch and fails. The update used 1.7.4.
 
 ```bash
-npx skills@1.5.24 add https://github.com/shadcn-ui/ui/tree/7c9eaba1c0a6404c990c144a654792e3313c650d/skills/shadcn --agent codex claude-code --skill shadcn -y
+npx skills@1.7.4 add https://github.com/shadcn-ui/ui/tree/4233ed1caded8c38f4bc14b14afe1f93ebcaf966/skills/shadcn --agent codex claude-code --skill shadcn -y
 ```
 
 Default bootstrap exposes the canonical snapshot through `~/.agents/skills/shadcn` for
