@@ -52,7 +52,7 @@ that an upstream bug still exists.
 
 Setup preserves extra skills, plugin installations, marketplaces, and unrelated settings. It does not remove legacy
 links or reconcile undeclared plugins. Conflicting selected links stop bootstrap; inspect and preserve the existing
-path before resolving ownership. Checks require the selected plugins and configured Superpowers baseline; a conflict
+path before resolving ownership. Checks require the selected plugins and no enabled Superpowers plugin; a conflict
 can stop configuration or fail verification without removing anything. Setup is not transactional: earlier successful additions remain
 if a later step fails. Rerun after resolving the reported conflict.
 

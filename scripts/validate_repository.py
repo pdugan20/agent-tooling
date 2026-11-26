@@ -12,7 +12,6 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SUPERPOWERS_CONFIG = ROOT / "config/superpowers.json"
 ROOT_PACKAGE = ROOT / "package.json"
 PACKAGE_LOCK = ROOT / "package-lock.json"
 CHANGELOG = ROOT / "CHANGELOG.md"
@@ -242,24 +241,6 @@ UPSTREAM_SKILLS = {
 PATRICK_SKILLS_REF = "v3.5.0"
 XCODEBUILDMCP_REF = "v2.7.0"
 STAGESHOW_REF = "299140fafd08df55a9c234e610c3f64af3f45531"
-EXPECTED_EXPLICIT_SUPERPOWERS = {
-    "brainstorming",
-    "dispatching-parallel-agents",
-    "executing-plans",
-    "finishing-a-development-branch",
-    "subagent-driven-development",
-    "test-driven-development",
-    "using-git-worktrees",
-    "using-superpowers",
-    "writing-plans",
-}
-EXPECTED_AUTOMATIC_SUPERPOWERS = {
-    "receiving-code-review",
-    "requesting-code-review",
-    "systematic-debugging",
-    "verification-before-completion",
-    "writing-skills",
-}
 
 
 class ValidationError(Exception):
@@ -587,38 +568,6 @@ def validate_repository() -> None:
     if lock_package.get("version") != package_version:
         raise ValidationError("package-lock packages root version must match package.json")
 
-    superpowers = load_json(SUPERPOWERS_CONFIG)
-    if superpowers.get("upstreamRepository") != "https://github.com/obra/superpowers.git":
-        raise ValidationError("Superpowers upstream repository must remain obra/superpowers")
-    if superpowers.get("forkRepository") != "https://github.com/pdugan20/superpowers.git":
-        raise ValidationError("Superpowers fork repository must remain pdugan20/superpowers")
-    if superpowers.get("marketplace") != "superpowers-configured":
-        raise ValidationError("Superpowers marketplace must remain superpowers-configured")
-    if superpowers.get("pluginId") != "superpowers@superpowers-configured":
-        raise ValidationError("Superpowers plugin ID must match its configured marketplace")
-
-    upstream_version = superpowers.get("upstreamVersion")
-    fork_version = superpowers.get("forkVersion")
-    if not isinstance(upstream_version, str) or not SEMVER_RE.fullmatch(upstream_version):
-        raise ValidationError("Superpowers upstreamVersion must be valid SemVer")
-    if not isinstance(fork_version, str) or not re.fullmatch(
-        rf"{re.escape(upstream_version)}-config\.[1-9]\d*", fork_version
-    ):
-        raise ValidationError("Superpowers forkVersion must extend upstreamVersion with -config.N")
-    if not re.fullmatch(r"[0-9a-f]{40}", str(superpowers.get("upstreamCommit", ""))):
-        raise ValidationError("Superpowers upstreamCommit must be a full Git SHA")
-    if set(superpowers.get("explicitOnlySkills", [])) != EXPECTED_EXPLICIT_SUPERPOWERS:
-        raise ValidationError("Superpowers explicit-only skill inventory changed unexpectedly")
-    if set(superpowers.get("automaticSkills", [])) != EXPECTED_AUTOMATIC_SUPERPOWERS:
-        raise ValidationError("Superpowers automatic skill inventory changed unexpectedly")
-    patches = superpowers.get("patches")
-    if (
-        not isinstance(patches, list)
-        or not patches
-        or not all(isinstance(item, str) and item for item in patches)
-    ):
-        raise ValidationError("Superpowers patches must be a non-empty string list")
-
     retired_plugin_root = ROOT / "plugins/patrick-delivery"
     if any(path.is_file() or path.is_symlink() for path in retired_plugin_root.rglob("*")):
         raise ValidationError("retired Patrick Delivery plugin must not remain in the repository")
@@ -708,11 +657,6 @@ def validate_repository() -> None:
             )
         plugin_manifests[manifest_path.name] = entries
 
-    plugin_id = str(superpowers["pluginId"])
-    if plugin_id not in plugin_manifests["codex-plugins.txt"]:
-        raise ValidationError("configured Superpowers must be desired in Codex")
-    if plugin_id not in plugin_manifests["claude-plugins.txt"]:
-        raise ValidationError("configured Superpowers must be desired in Claude")
     expo_id = "expo@claude-plugins-official"
     if expo_id not in plugin_manifests["codex-plugins.txt"]:
         raise ValidationError("the current vendor-backed Expo plugin must be desired in Codex")
@@ -756,6 +700,7 @@ def validate_repository() -> None:
         "patrick-workflows@pdugan20-plugins",
         "patrick-workflows@patrick-tools",
         "superpowers@claude-plugins-official",
+        "superpowers@superpowers-configured",
         "expo@openai-curated",
         "sentry@openai-curated",
         "mintlify@claude-plugins-official",

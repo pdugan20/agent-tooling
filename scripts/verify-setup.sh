@@ -16,8 +16,6 @@ fi
 claude_config_dir=${CLAUDE_CONFIG_DIR:-"$HOME/.claude"}
 codex_home=${CODEX_HOME:-"$HOME/.codex"}
 failures=0
-superpowers_plugin_id=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["pluginId"])' "$ROOT/config/superpowers.json")
-superpowers_version=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["forkVersion"])' "$ROOT/config/superpowers.json")
 
 pass() {
   echo "PASS $1"
@@ -106,17 +104,15 @@ raise SystemExit(0 if any(item.get("pluginId") == target and item.get("enabled")
     echo "INFO   $plugin"
   done <"$ROOT/config/codex-managed-plugins.txt"
 
-  if PLUGIN_ID="$superpowers_plugin_id" PLUGIN_VERSION="$superpowers_version" python3 -c '
-import json, os, sys
+  if python3 -c '
+import json, sys
 data = json.load(sys.stdin)
-matches = [item for item in data.get("installed", []) if item.get("pluginId", "").startswith("superpowers@")]
-expected = os.environ["PLUGIN_ID"]
-version = os.environ["PLUGIN_VERSION"]
-raise SystemExit(0 if len(matches) == 1 and matches[0].get("pluginId") == expected and matches[0].get("version") == version and matches[0].get("enabled") else 1)
+enabled = [item for item in data.get("installed", []) if item.get("pluginId", "").startswith("superpowers@") and item.get("enabled")]
+raise SystemExit(1 if enabled else 0)
 ' <<<"$codex_plugins"; then
-    pass "Configured Superpowers $superpowers_version is the only Codex Superpowers plugin"
+    pass "No Superpowers plugin is enabled in Codex"
   else
-    fail "Codex must enable only $superpowers_plugin_id at $superpowers_version"
+    fail "A Superpowers plugin is enabled in Codex; this setup retired it, so disable or remove it"
   fi
 
 fi
@@ -137,28 +133,15 @@ raise SystemExit(0 if any(item.get("id") == target and item.get("scope") == "use
     fi
   done <"$ROOT/config/claude-plugins.txt"
 
-  if PLUGIN_ID="$superpowers_plugin_id" PLUGIN_VERSION="$superpowers_version" python3 -c '
-import json, os, sys
+  if python3 -c '
+import json, sys
 data = json.load(sys.stdin)
-matches = [item for item in data if item.get("id", "").startswith("superpowers@") and item.get("scope") == "user" and item.get("enabled")]
-expected = os.environ["PLUGIN_ID"]
-version = os.environ["PLUGIN_VERSION"]
-raise SystemExit(0 if len(matches) == 1 and matches[0].get("id") == expected and matches[0].get("version") == version else 1)
+enabled = [item for item in data if item.get("id", "").startswith("superpowers@") and item.get("scope") == "user" and item.get("enabled")]
+raise SystemExit(1 if enabled else 0)
 ' <<<"$claude_plugins"; then
-    pass "Configured Superpowers $superpowers_version is the only enabled Claude Superpowers plugin"
+    pass "No Superpowers plugin is enabled in Claude"
   else
-    fail "Claude must enable only $superpowers_plugin_id at $superpowers_version"
-  fi
-
-  if PLUGIN_ID="$superpowers_plugin_id" python3 -c '
-import json, os, sys
-data = json.load(sys.stdin)
-enabled = data.get("enabledPlugins", {})
-raise SystemExit(0 if enabled.get("superpowers@claude-plugins-official") is not True and enabled.get(os.environ["PLUGIN_ID"]) is True else 1)
-' <"$claude_config_dir/settings.json"; then
-    pass "Claude routes Superpowers to the configured fork"
-  else
-    fail "Claude must disable official Superpowers and enable $superpowers_plugin_id"
+    fail "A Superpowers plugin is enabled in Claude; this setup retired it, so disable or remove it"
   fi
 
 fi

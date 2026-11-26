@@ -14,7 +14,6 @@ optional. The [setup guide](setup.md) documents the default Codex commands and e
 | Desired desktop-managed plugins | `config/codex-managed-plugins.txt` | Signed-in account or workspace plugin state |
 | Selected standalone Codex MCP servers | `config/codex-mcp-servers.json` | Named tables in `~/.codex/config.toml` |
 | Optional Claude plugins and settings | `config/claude-plugins.txt`, `scripts/configure-claude.py` | Active Claude profile |
-| Configured Superpowers baseline | `config/superpowers.json` | Maintained fork and installed plugin |
 | Project behavior | Each project's `AGENTS.md` and local configuration | That project |
 | Selected-capability catalog | Generated `catalog/data.json` | Local browser catalog |
 
@@ -102,8 +101,7 @@ Claude's `outputStyles` and `lspServers` declarations are not equivalent Codex c
 can be reused where supported, but each package needs a compatibility review. An Anthropic marketplace name alone
 does not make a package Claude-only. [Official migration guidance](https://developers.openai.com/plugins/guides/submit-claude-plugin)
 
-Use only the configured Superpowers fork. Its invocation groups and policy patches live in `config/superpowers.json`.
-Strict planning, TDD, worktrees, orchestration, and image generation retain the opt-in boundaries in `global/AGENTS.md`.
+No workflow plugin is selected. Strict planning, TDD, worktrees, orchestration, and image generation retain the opt-in boundaries in `global/AGENTS.md`.
 
 ## Standalone MCP servers
 

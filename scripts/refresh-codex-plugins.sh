@@ -21,7 +21,6 @@ ensure_marketplace firebase https://github.com/firebase/skills.git
 ensure_marketplace cloudflare https://github.com/cloudflare/skills.git
 ensure_marketplace claude-plugins-official https://github.com/anthropics/claude-plugins-official.git
 ensure_marketplace patrick-plugins https://github.com/pdugan20/plugins.git
-ensure_marketplace superpowers-configured https://github.com/pdugan20/superpowers.git
 ensure_marketplace mintlify-marketplace https://github.com/mintlify/mintlify-claude-plugin.git
 
 marketplaces=$(python3 -c 'import sys; print("\n".join(sorted({line.strip().rsplit("@", 1)[1] for line in open(sys.argv[1]) if line.strip() and not line.lstrip().startswith("#")})))' "$ROOT/config/codex-plugins.txt")

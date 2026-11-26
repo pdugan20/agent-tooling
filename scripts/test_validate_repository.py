@@ -422,15 +422,6 @@ jobs:
         with self.assertRaisesRegex(validate_repository.ValidationError, "install npm"):
             validate_repository.validate_workflow_automation_safety(workflows)
 
-    def test_superpowers_configuration_tracks_upstream_and_fork(self) -> None:
-        configuration = validate_repository.load_json(validate_repository.SUPERPOWERS_CONFIG)
-
-        self.assertEqual(configuration["upstreamVersion"], "6.2.0")
-        self.assertEqual(configuration["forkVersion"], "6.2.0-config.2")
-        self.assertEqual(configuration["marketplace"], "superpowers-configured")
-        self.assertIn("test-driven-development", configuration["explicitOnlySkills"])
-        self.assertIn("systematic-debugging", configuration["automaticSkills"])
-
     def test_managed_skills_are_locked_with_source_provenance(self) -> None:
         skills_lock = validate_repository.load_json(validate_repository.ROOT / "skills-lock.json")
 

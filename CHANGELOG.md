@@ -63,6 +63,13 @@ version when compatibility requires it.
 
 ### Removed
 
+- Removed the configured Superpowers plugin from the Codex and Claude selections, with its fork pin
+  (`config/superpowers.json`), the weekly upstream check workflow, `npm run superpowers:check` and the policy that
+  required the fork. Its strict workflows were already explicit-only here, and the shared
+  instructions now state the opt-in rule for strict workflows without naming a plugin. Setup checks fail while any
+  Superpowers plugin is still enabled, and Claude configuration removes the fork's `enabledPlugins` entry. Setup
+  never uninstalls plugins, so remove the plugin and its marketplace once on each machine that had it; see
+  [maintenance](docs/maintenance.md#remove-the-retired-superpowers-plugin).
 - Removed the three MapLibre snapshots (`maplibre-cartography`, `maplibre-source-wiring` and
   `maplibre-terrain-rendering`). No personal project uses MapLibre, and the skills cross-link four siblings that
   were never selected here. A project that needs them should lock the full set itself.

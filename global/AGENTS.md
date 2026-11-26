@@ -120,13 +120,9 @@ Use only when explicitly requested. Audit edge cases, accessibility, performance
 
 ## Strict workflows are opt-in
 
-The configured Superpowers fork enforces explicit-only invocation for brainstorming, strict TDD, implementation planning and execution, worktrees, parallel-agent orchestration, the full Superpowers router, and branch finishing. Use those workflows only when Patrick names the skill or explicitly requests that workflow.
-
-In Codex, invoke strict workflows with `$superpowers:<skill-name>`. In Claude, use `/superpowers:<skill-name>`. Common examples are `brainstorming`, `test-driven-development`, `writing-plans`, `executing-plans`, `using-git-worktrees`, and `finishing-a-development-branch`.
+Formal brainstorming, strict TDD, written implementation plans and their execution, worktrees, parallel-agent orchestration, and branch-finishing rituals are opt-in. Use them only when Patrick names a skill that provides one or explicitly requests that workflow. This setup selects no workflow plugin. Do not add a plugin or repository instruction that makes these workflows automatic.
 
 The personal `feature-delivery` skill is the exception: it may trigger automatically for substantial production feature implementation. It uses proportional planning, risk-based testing, implementation checkpoints, and production verification without implicitly invoking strict TDD, mandatory brainstorming, worktrees, or branch-finishing workflows. When a selected implementation needs a dedicated release-readiness audit, ask for hardening explicitly and follow the repository's production instructions or a separately requested release-readiness capability.
-
-The configured Superpowers plugin is maintained as a thin fork of `obra/superpowers`. It disables the always-on session bootstrap and removes the brainstorming Visual Companion/browser option-picker. Do not restore either behavior through repository-level instructions.
 
 ## Bounded batch authorization
 

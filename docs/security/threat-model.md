@@ -23,7 +23,7 @@ Instructions, tool output, and hook input cross into agent context or subprocess
 
 Settings writers install hook commands. MCP configuration selects local processes, debugging/UI workflows, and a CircleCI tool allowlist. Authentication checks report CLI status; connector login remains separate (`config/codex-mcp-servers.json`, `scripts/check_mcp_auth.py`, `docs/setup.md`).
 
-Local snapshots contain paths, descriptions, and installation state. Exclude credentials and configuration values. Release and scheduled-issue jobs use distinct GitHub write permissions (`scripts/generate_catalog.py`, `.gitignore`, `.github/workflows/release.yml`, `.github/workflows/superpowers-update-check.yml`).
+Local snapshots contain paths, descriptions, and installation state. Exclude credentials and configuration values. The release job is the only workflow with a GitHub write permission (`scripts/generate_catalog.py`, `.gitignore`, `.github/workflows/release.yml`).
 
 ## Principal threats and required controls
 

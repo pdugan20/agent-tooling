@@ -1,13 +1,4 @@
 {
-  "superpowers@superpowers-configured": {
-    "description": "The upstream Superpowers plugin with a small maintained policy patch: strict workflows are explicit-only, the always-on session bootstrap is disabled, and browser option-picking is removed.",
-    "displayName": "Superpowers (Configured)",
-    "source": "third-party",
-    "sourceLabel": "Upstream + local policy",
-    "sourceUrl": "https://github.com/pdugan20/superpowers",
-    "path": "config/superpowers.json",
-    "version": "6.2.0-config.2"
-  },
   "firebase@firebase": {
     "capabilityId": "firebase",
     "description": "Firebase, Firestore, Auth, hosting, rules, and Xcode setup guidance.",

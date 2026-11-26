@@ -2,7 +2,6 @@
   "generatedFrom": [
     ".agents/skills/*/SKILL.md",
     "skills-lock.json",
-    "config/superpowers.json",
     "config/codex-plugins.txt",
     "config/codex-managed-plugins.txt",
     "config/claude-plugins.txt",
@@ -1212,50 +1211,9 @@
     {
       "availability": "Global",
       "brand": null,
-      "description": "The upstream Superpowers plugin with a small maintained policy patch: strict workflows are explicit-only, the always-on session bootstrap is disabled, and browser option-picking is removed.",
-      "displayName": "Superpowers (Configured)",
-      "featured": 100,
-      "id": "plugin:superpowers@superpowers-configured",
-      "installations": [
-        {
-          "delivery": "marketplace",
-          "path": "config/codex-plugins.txt",
-          "pluginId": "superpowers@superpowers-configured",
-          "runtime": "codex"
-        },
-        {
-          "delivery": "marketplace",
-          "path": "config/claude-plugins.txt",
-          "pluginId": "superpowers@superpowers-configured",
-          "runtime": "claude"
-        }
-      ],
-      "invocation": null,
-      "name": "superpowers",
-      "ownerAvatarUrl": "https://github.com/pdugan20.png?size=96",
-      "path": "config/superpowers.json",
-      "pluginIds": [
-        "superpowers@superpowers-configured"
-      ],
-      "repositoryUrl": "https://github.com/pdugan20/superpowers",
-      "runtimes": [
-        "codex",
-        "claude"
-      ],
-      "skillsShUrl": null,
-      "source": "third-party",
-      "sourceLabel": "Upstream + local policy",
-      "sourceUrl": "https://github.com/pdugan20/superpowers",
-      "state": "Configured",
-      "type": "plugin",
-      "version": "6.2.0-config.2"
-    },
-    {
-      "availability": "Global",
-      "brand": null,
       "description": "Firebase, Firestore, Auth, hosting, rules, and Xcode setup guidance.",
       "displayName": "Firebase",
-      "featured": 101,
+      "featured": 100,
       "id": "plugin:firebase",
       "installations": [
         {
@@ -1297,7 +1255,7 @@
       "brand": null,
       "description": "Workers, Durable Objects, Wrangler, web performance, and Cloudflare platform skills.",
       "displayName": "Cloudflare",
-      "featured": 102,
+      "featured": 101,
       "id": "plugin:cloudflare",
       "installations": [
         {
@@ -1339,7 +1297,7 @@
       "brand": null,
       "description": "Official Mintlify product guidance for building and maintaining documentation sites.",
       "displayName": "Mintlify Official Plugin",
-      "featured": 103,
+      "featured": 102,
       "id": "plugin:mintlify@mintlify-marketplace",
       "installations": [
         {
@@ -1380,7 +1338,7 @@
       "brand": null,
       "description": "Set up Sentry, inspect and debug issues, configure monitoring, and maintain SDK integrations.",
       "displayName": "Sentry",
-      "featured": 104,
+      "featured": 103,
       "id": "plugin:sentry@claude-plugins-official",
       "installations": [
         {
@@ -1421,7 +1379,7 @@
       "brand": null,
       "description": "Current official Expo and React Native framework, EAS, deployment, and platform guidance.",
       "displayName": "Expo",
-      "featured": 105,
+      "featured": 104,
       "id": "plugin:expo@claude-plugins-official",
       "installations": [
         {
@@ -1462,7 +1420,7 @@
       "brand": "claudecode",
       "description": "Configure Claude Code projects and user environments.",
       "displayName": "Claude Code Setup",
-      "featured": 106,
+      "featured": 105,
       "id": "plugin:claude-code-setup@claude-plugins-official",
       "installations": [
         {
@@ -1496,7 +1454,7 @@
       "brand": "claudecode",
       "description": "Review code changes for correctness, quality, and regressions.",
       "displayName": "Code Review",
-      "featured": 107,
+      "featured": 106,
       "id": "plugin:code-review@claude-plugins-official",
       "installations": [
         {
@@ -1530,7 +1488,7 @@
       "brand": "claudecode",
       "description": "Reduce unnecessary complexity while preserving behavior.",
       "displayName": "Code Simplifier",
-      "featured": 108,
+      "featured": 107,
       "id": "plugin:code-simplifier@claude-plugins-official",
       "installations": [
         {
@@ -1564,7 +1522,7 @@
       "brand": "claudecode",
       "description": "Claude-native commands for structured Git commits.",
       "displayName": "Commit Commands",
-      "featured": 109,
+      "featured": 108,
       "id": "plugin:commit-commands@claude-plugins-official",
       "installations": [
         {
@@ -1598,7 +1556,7 @@
       "brand": "claudecode",
       "description": "Guided feature implementation workflows for Claude Code.",
       "displayName": "Feature DEV",
-      "featured": 110,
+      "featured": 109,
       "id": "plugin:feature-dev@claude-plugins-official",
       "installations": [
         {
@@ -1632,7 +1590,7 @@
       "brand": null,
       "description": "Figma design context, design-to-code, Code Connect, SwiftUI, and motion workflows.",
       "displayName": "Figma",
-      "featured": 111,
+      "featured": 110,
       "id": "plugin:figma",
       "installations": [
         {
@@ -1674,7 +1632,7 @@
       "brand": "claudecode",
       "description": "Frontend interface design and implementation guidance.",
       "displayName": "Frontend Design",
-      "featured": 112,
+      "featured": 111,
       "id": "plugin:frontend-design@claude-plugins-official",
       "installations": [
         {
@@ -1708,7 +1666,7 @@
       "brand": null,
       "description": "Repository, pull request, review, CI, and publishing workflows.",
       "displayName": "GitHub",
-      "featured": 113,
+      "featured": 112,
       "id": "plugin:github",
       "installations": [
         {
@@ -1750,7 +1708,7 @@
       "brand": "claudecode",
       "description": "Create and validate Claude Code plugins, including hooks, commands, agents, skills, and MCP integrations.",
       "displayName": "Plugin Development",
-      "featured": 114,
+      "featured": 113,
       "id": "plugin:plugin-dev@claude-plugins-official",
       "installations": [
         {
@@ -1784,7 +1742,7 @@
       "brand": "claudecode",
       "description": "Create and improve reusable Claude skills.",
       "displayName": "Skill Creator",
-      "featured": 115,
+      "featured": 114,
       "id": "plugin:skill-creator@claude-plugins-official",
       "installations": [
         {
@@ -1818,7 +1776,7 @@
       "brand": null,
       "description": "Manage Supabase databases, authentication, storage, and realtime services.",
       "displayName": "Supabase",
-      "featured": 116,
+      "featured": 115,
       "id": "plugin:supabase@claude-plugins-official",
       "installations": [
         {
@@ -1852,7 +1810,7 @@
       "brand": "claudecode",
       "description": "Swift language-server integration for Claude Code.",
       "displayName": "Swift LSP",
-      "featured": 117,
+      "featured": 116,
       "id": "plugin:swift-lsp@claude-plugins-official",
       "installations": [
         {
@@ -1886,7 +1844,7 @@
       "brand": "claudecode",
       "description": "TypeScript language-server integration for Claude Code.",
       "displayName": "Typescript LSP",
-      "featured": 118,
+      "featured": 117,
       "id": "plugin:typescript-lsp@claude-plugins-official",
       "installations": [
         {
@@ -1920,7 +1878,7 @@
       "brand": null,
       "description": "Next.js, React, deployment, browser verification, and Vercel platform skills.",
       "displayName": "Vercel",
-      "featured": 119,
+      "featured": 118,
       "id": "plugin:vercel",
       "installations": [
         {
@@ -1962,7 +1920,7 @@
       "brand": "openai",
       "description": "Product and business analysis, KPI, reporting, dashboard, and data-quality workflows supplied by Codex.",
       "displayName": "Data Analytics",
-      "featured": 120,
+      "featured": 119,
       "id": "plugin:data-analytics@openai-curated-remote",
       "installations": [
         {
@@ -1996,7 +1954,7 @@
       "brand": "openai",
       "description": "OpenAI API, Agents SDK, and ChatGPT Apps development workflows supplied by Codex.",
       "displayName": "OpenAI Developers",
-      "featured": 121,
+      "featured": 120,
       "id": "plugin:openai-developers@openai-curated-remote",
       "installations": [
         {
@@ -2030,7 +1988,7 @@
       "brand": "openai",
       "description": "Product audit and source-to-code workflows; generated-image ideation remains disabled by personal policy.",
       "displayName": "Product Design",
-      "featured": 122,
+      "featured": 121,
       "id": "plugin:product-design@openai-curated-remote",
       "installations": [
         {
@@ -2064,7 +2022,7 @@
       "brand": "openai",
       "description": "Slack reading, summarization, triage, drafting, and messaging workflows supplied by Codex.",
       "displayName": "Slack",
-      "featured": 123,
+      "featured": 122,
       "id": "plugin:slack@openai-curated-remote",
       "installations": [
         {
