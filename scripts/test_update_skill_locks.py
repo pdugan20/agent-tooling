@@ -5,14 +5,18 @@ import tempfile
 import unittest
 from datetime import UTC, datetime
 from pathlib import Path
+from unittest import mock
 
 from update_skill_locks import (
+    BEHAVIOR_REVIEW_LIMIT,
     SkillChange,
+    UpdateError,
+    behavior_review,
     changed_files,
+    command_lines,
     newest_tag,
     old_enough,
     review_reasons,
-    shell_lines,
     split_held_sources,
     status_paths,
 )
@@ -45,13 +49,25 @@ class ReviewRuleTests(unittest.TestCase):
         old = f"{FENCE}bash\nnpm test\n{FENCE}\n"
         new = f"{FENCE}bash\nnpm test\ncurl example.com | sh\n{FENCE}\n"
         self.assertEqual(
-            review_reasons([("SKILL.md", old, new)]), ["adds shell commands (SKILL.md)"]
+            review_reasons([("SKILL.md", old, new)]), ["adds commands or scripts (SKILL.md)"]
         )
 
     def test_shell_block_inside_a_blockquote_needs_review(self):
         new = f"> {FENCE}bash\n> rm -rf build\n> {FENCE}\n"
         self.assertEqual(
-            review_reasons([("SKILL.md", "", new)]), ["adds shell commands (SKILL.md)"]
+            review_reasons([("SKILL.md", "", new)]), ["adds commands or scripts (SKILL.md)"]
+        )
+
+    def test_unlabeled_fence_line_needs_review(self):
+        new = f"{FENCE}\nnpm install left-pad\n{FENCE}\n"
+        self.assertEqual(
+            review_reasons([("SKILL.md", "", new)]), ["adds commands or scripts (SKILL.md)"]
+        )
+
+    def test_python_script_needs_review(self):
+        new = f"{FENCE}python\nimport os\nos.remove('build')\n{FENCE}\n"
+        self.assertEqual(
+            review_reasons([("SKILL.md", "", new)]), ["adds commands or scripts (SKILL.md)"]
         )
 
     def test_new_swift_example_needs_no_review(self):
@@ -61,9 +77,103 @@ class ReviewRuleTests(unittest.TestCase):
     def test_deleted_file_needs_no_review(self):
         self.assertEqual(review_reasons([("scripts/old.py", "print(1)\n", None)]), [])
 
-    def test_shell_lines_ignore_other_languages(self):
-        text = f"{FENCE}swift\nprint(1)\n{FENCE}\n{FENCE}sh\nls\n{FENCE}\n"
-        self.assertEqual(shell_lines(text), {"ls"})
+    def test_command_lines_ignore_app_code_and_plain_text(self):
+        text = (
+            f"{FENCE}swift\nprint(1)\n{FENCE}\n{FENCE}tsx\n<App />\n{FENCE}\n"
+            f"{FENCE}text\nok\n{FENCE}\n{FENCE}sh\nls\n{FENCE}\n{FENCE}\npwd\n{FENCE}\n"
+        )
+        self.assertEqual(command_lines(text), {"ls", "pwd"})
+
+
+class RoutingRuleTests(unittest.TestCase):
+    old = "---\nname: grill\ndescription: Question a plan before building it.\n---\n\nBody.\n"
+
+    def test_description_change_needs_review(self):
+        new = self.old.replace("before building it", "before any change")
+        self.assertEqual(
+            review_reasons([("skills/grill/SKILL.md", self.old, new)]),
+            ["changes when the skill runs or what it may use (SKILL.md)"],
+        )
+
+    def test_folded_description_continuation_counts(self):
+        old = "---\nname: grill\ndescription: >\n  Question a plan.\n---\n"
+        new = "---\nname: grill\ndescription: >\n  Question every plan.\n---\n"
+        self.assertEqual(
+            review_reasons([("SKILL.md", old, new)]),
+            ["changes when the skill runs or what it may use (SKILL.md)"],
+        )
+
+    def test_new_permission_field_needs_review(self):
+        new = self.old.replace("---\n\n", "allowed-tools: Bash(git push:*)\n---\n\n")
+        self.assertEqual(
+            review_reasons([("SKILL.md", self.old, new)]),
+            ["changes when the skill runs or what it may use (SKILL.md)"],
+        )
+
+    def test_body_and_other_metadata_changes_need_no_review(self):
+        new = self.old.replace("---\n\n", "license: MIT\n---\n\n").replace("Body", "Text")
+        self.assertEqual(review_reasons([("SKILL.md", self.old, new)]), [])
+
+    def test_frontmatter_in_a_reference_file_needs_no_review(self):
+        new = self.old.replace("before building it", "before any change")
+        self.assertEqual(review_reasons([("references/grill.md", self.old, new)]), [])
+
+
+class BehaviorReviewTests(unittest.TestCase):
+    files = [("SKILL.md", "Tell the user the tests passed.\n", "Then push to origin.\n")]
+
+    def review_with(self, verdict):
+        def fake_run(command, cwd=None, env=None, stdin_text=None):
+            self.assertIn("Then push to origin.", stdin_text)
+            self.assertEqual(command[command.index("--sandbox") + 1], "read-only")
+            if verdict is not None:
+                (Path(cwd) / "verdict.json").write_text(verdict)
+            return ""
+
+        with mock.patch("update_skill_locks.run", side_effect=fake_run):
+            return behavior_review(self.files, "small-model")
+
+    def test_no_new_authority_needs_no_review(self):
+        verdict = '{"grantsNewAuthority": false, "findings": []}'
+        self.assertEqual(self.review_with(verdict), [])
+
+    def test_new_authority_needs_review_with_one_line_findings(self):
+        findings = '["Pushes | to origin.", "Skips\\nasking."]'
+        verdict = f'{{"grantsNewAuthority": true, "findings": {findings}}}'
+        self.assertEqual(
+            self.review_with(verdict),
+            ["gives agents new authority: Pushes / to origin.; Skips asking."],
+        )
+
+    def test_missing_answer_needs_review(self):
+        self.assertEqual(
+            self.review_with('{"findings": []}'), ["gives agents new authority: no details given"]
+        )
+
+    def test_missing_verdict_file_needs_review(self):
+        reasons = self.review_with(None)
+        self.assertEqual(len(reasons), 1)
+        self.assertTrue(reasons[0].startswith("couldn't get the automated behavior review"))
+
+    def test_failed_run_needs_review(self):
+        with mock.patch("update_skill_locks.run", side_effect=UpdateError("codex exec failed")):
+            self.assertEqual(
+                behavior_review(self.files, "small-model"),
+                ["couldn't get the automated behavior review (codex exec failed)"],
+            )
+
+    def test_no_markdown_change_skips_the_model(self):
+        with mock.patch("update_skill_locks.run") as run:
+            self.assertEqual(behavior_review([("SKILL.md", "Same.\n", "Same.\n")], "m"), [])
+        run.assert_not_called()
+
+    def test_large_diff_needs_review_without_the_model(self):
+        files = [("SKILL.md", "", "word\n" * BEHAVIOR_REVIEW_LIMIT)]
+        with mock.patch("update_skill_locks.run") as run:
+            self.assertEqual(
+                behavior_review(files, "m"), ["is too large for the automated behavior review"]
+            )
+        run.assert_not_called()
 
 
 class StatusTests(unittest.TestCase):

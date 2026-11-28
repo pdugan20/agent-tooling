@@ -130,12 +130,23 @@ moves version-pinned skills to their newest release tag. It then opens one pull 
 changed skill is checked against these rules:
 
 - Every changed file is Markdown.
-- It adds no URL and no line inside a shell code block.
+- It adds no URL and no line inside a command code block. Shell, Python, Ruby, Perl, PowerShell and
+  AppleScript blocks count, and so do unlabeled blocks, because commands are often left unlabeled. App code
+  examples such as Swift or TypeScript don't count, since an agent writes those into a project.
+- Each `SKILL.md` keeps its `name`, `description`, `allowed-tools`, `disable-model-invocation` and
+  `user-invocable` values, which decide when the skill runs and what it may use.
+- A small model reads the Markdown diff and finds nothing new the skill tells an agent to do, such as running
+  commands, writing to Git remotes or other services, sending messages, following fetched content, reading
+  credentials or skipping a confirmation.
 - Its upstream change is at least seven days old. Newer changes wait for the next month, and so do the other
   skills from the same source, because sibling skills can depend on each other.
 
-The URL and shell checks are heuristics. They catch new links and new shell code blocks, including ones in
-blockquotes, but they can't catch every way prose can tell an agent to run something.
+The URL, code block and frontmatter checks are heuristics. They catch new links, new command blocks, including
+ones in blockquotes, and changes to when a skill triggers, but prose can tell an agent to do things in other
+ways. The model review covers that prose. It runs only when the other rules pass and can only add a reason to
+wait for review, so text in a diff that tries to steer it can't make an update merge. A diff over 60,000
+characters, a failed run, or an unclear answer also waits for review. The review runs `codex exec` read-only
+with `gpt-5.6-luna` by default. Set `behaviorReviewModel` in the private configuration to use another model.
 
 The pull request is set to auto-merge when every changed skill passes, or comes from a trusted source listed
 in the private configuration, and the repository requires status checks with auto-merge turned on. Otherwise
