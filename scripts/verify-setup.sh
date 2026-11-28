@@ -61,6 +61,10 @@ for skill_dir in "$ROOT"/.agents/skills/*; do
   check_link "$skill_dir" "$skills_target/${skill_dir##*/}"
 done
 
+if ! python3 "$ROOT/scripts/link_xcode_skills.py" --target "$skills_target" --check; then
+  failures=$((failures + 1))
+fi
+
 if ! command -v "$runtime" >/dev/null 2>&1; then
   fail "$runtime CLI is not installed"
   exit 1

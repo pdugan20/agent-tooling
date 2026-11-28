@@ -1,9 +1,57 @@
 {
   "schemaVersion": 1,
   "purpose": "Ownership and provenance decisions, not an install manifest or inventory of active runtime capabilities.",
-  "reviewedOn": "2026-10-21",
+  "reviewedOn": "2026-11-28",
   "selectedInventory": "skills-lock.json",
   "entries": [
+    {
+      "id": "adopt-c-bounds-safety",
+      "maintainer": "Apple, bundled with Xcode",
+      "sourcePath": "Xcode.app/Contents/PlugIns/IDEIntelligenceChat.framework/Versions/A/Resources/adopt-c-bounds-safety.idechatprompttemplate",
+      "status": "not-adopted",
+      "recommendedScope": "c-language-projects",
+      "decision": "Left inside Xcode on 2026-11-28. No selected project has C or Objective-C sources.",
+      "comparison": {
+        "checkedOn": "2026-11-28",
+        "evidence": "Xcode 27.2 (27B52)"
+      }
+    },
+    {
+      "id": "app-intents-specialist",
+      "maintainer": "Apple, bundled with Xcode",
+      "sourcePath": "Xcode.app/Contents/PlugIns/IDEIntelligenceChat.framework/Versions/A/Resources/app-intents-specialist.idechatprompttemplate",
+      "status": "linked-from-xcode",
+      "recommendedScope": "app-intents-projects",
+      "decision": "Linked from the installed Xcode by scripts/link_xcode_skills.py on 2026-11-28. Its files stay in Xcode and update with it. App Intents API reference for entities, queries and parameters. Complements the integrate-app-intents workflow.",
+      "comparison": {
+        "checkedOn": "2026-11-28",
+        "evidence": "Xcode 27.2 (27B52)"
+      }
+    },
+    {
+      "id": "app-intents-whats-new-27",
+      "maintainer": "Apple, bundled with Xcode",
+      "sourcePath": "Xcode.app/Contents/PlugIns/IDEIntelligenceChat.framework/Versions/A/Resources/app-intents-whats-new-27.idechatprompttemplate",
+      "status": "linked-from-xcode",
+      "recommendedScope": "app-intents-projects",
+      "decision": "Linked from the installed Xcode by scripts/link_xcode_skills.py on 2026-11-28. Its files stay in Xcode and update with it. App Intents changes in the iOS 27 SDK. The newest numbered release is linked.",
+      "comparison": {
+        "checkedOn": "2026-11-28",
+        "evidence": "Xcode 27.2 (27B52)"
+      }
+    },
+    {
+      "id": "app-resizability",
+      "maintainer": "Apple, bundled with Xcode",
+      "sourcePath": "Xcode.app/Contents/PlugIns/IDEIntelligenceChat.framework/Versions/A/Resources/app-resizability.idechatprompttemplate",
+      "status": "linked-from-xcode",
+      "recommendedScope": "uikit-ios-projects",
+      "decision": "Linked from the installed Xcode by scripts/link_xcode_skills.py on 2026-11-28. Its files stay in Xcode and update with it. Prepares UIKit apps for resizable windows, including the foldable iPhone Duo.",
+      "comparison": {
+        "checkedOn": "2026-11-28",
+        "evidence": "Xcode 27.2 (27B52)"
+      }
+    },
     {
       "id": "ast-grep",
       "maintainer": "ast-grep/agent-skill",
@@ -30,6 +78,18 @@
         "sourceUrl": "https://github.com/ariga/atlas/blob/ed994a77898e48377f9a9c391f2d1c49f5703b8d/skills/atlas/SKILL.md",
         "evidence": "upstream-family-identified-base-unresolved",
         "historicalEntrypointRevision": null
+      }
+    },
+    {
+      "id": "audit-xcode-security-settings",
+      "maintainer": "Apple, bundled with Xcode",
+      "sourcePath": "Xcode.app/Contents/PlugIns/IDEIntelligenceChat.framework/Versions/A/Resources/audit-xcode-security-settings.idechatprompttemplate",
+      "status": "not-adopted",
+      "recommendedScope": "apple-release-audits",
+      "decision": "Left inside Xcode on 2026-11-28. Depends on tools available only inside Xcode. Run it from Xcode when an audit is wanted.",
+      "comparison": {
+        "checkedOn": "2026-11-28",
+        "evidence": "Xcode 27.2 (27B52)"
       }
     },
     {
@@ -84,6 +144,18 @@
         "sourceUrl": "https://github.com/affaan-m/ECC/blob/90606c8315ee09cafc303515c5f33024db6b9882/skills/blender-motion-state-inspection/SKILL.md",
         "evidence": "exact-tree",
         "historicalEntrypointRevision": null
+      }
+    },
+    {
+      "id": "building-document-based-swiftui-applications",
+      "maintainer": "Apple, bundled with Xcode",
+      "sourcePath": "Xcode.app/Contents/PlugIns/IDEIntelligenceChat.framework/Versions/A/Resources/building-document-based-swiftui-applications.idechatprompttemplate",
+      "status": "not-adopted",
+      "recommendedScope": "document-based-apps",
+      "decision": "Left inside Xcode on 2026-11-28. No selected project is document-based.",
+      "comparison": {
+        "checkedOn": "2026-11-28",
+        "evidence": "Xcode 27.2 (27B52)"
       }
     },
     {
@@ -183,6 +255,30 @@
       }
     },
     {
+      "id": "swiftui-specialist",
+      "maintainer": "Apple, bundled with Xcode",
+      "sourcePath": "Xcode.app/Contents/PlugIns/IDEIntelligenceChat.framework/Versions/A/Resources/swiftui-specialist.idechatprompttemplate",
+      "status": "not-adopted",
+      "recommendedScope": "swiftui-projects",
+      "decision": "Left inside Xcode on 2026-11-28. Overlaps swiftui-pro, the selected SwiftUI guide. Running both invites conflicting advice.",
+      "comparison": {
+        "checkedOn": "2026-11-28",
+        "evidence": "Xcode 27.2 (27B52)"
+      }
+    },
+    {
+      "id": "swiftui-whats-new-27",
+      "maintainer": "Apple, bundled with Xcode",
+      "sourcePath": "Xcode.app/Contents/PlugIns/IDEIntelligenceChat.framework/Versions/A/Resources/swiftui-whats-new-27.idechatprompttemplate",
+      "status": "linked-from-xcode",
+      "recommendedScope": "swiftui-projects",
+      "decision": "Linked from the installed Xcode by scripts/link_xcode_skills.py on 2026-11-28. Its files stay in Xcode and update with it. SwiftUI changes in the iOS 27 SDK. The newest numbered release is linked.",
+      "comparison": {
+        "checkedOn": "2026-11-28",
+        "evidence": "Xcode 27.2 (27B52)"
+      }
+    },
+    {
       "id": "technical-writer",
       "maintainer": "onewave-ai/claude-skills",
       "sourcePath": "technical-writer/SKILL.md",
@@ -196,6 +292,42 @@
         "sourceUrl": "https://github.com/onewave-ai/claude-skills/blob/b2267d9171af4f56848d82992381b20b89b44056/technical-writer/SKILL.md",
         "evidence": "exact-tree",
         "historicalEntrypointRevision": null
+      }
+    },
+    {
+      "id": "translation",
+      "maintainer": "Apple, bundled with Xcode",
+      "sourcePath": "Xcode.app/Contents/PlugIns/IDEXCStringsSupport.framework/Versions/A/Resources/Skills/translation/SKILL.md.packaged",
+      "status": "not-adopted",
+      "recommendedScope": "localized-apps",
+      "decision": "Left inside Xcode on 2026-11-28. Edits String Catalogs only through tools available inside Xcode, and no selected project is localized.",
+      "comparison": {
+        "checkedOn": "2026-11-28",
+        "evidence": "Xcode 27.2 (27B52)"
+      }
+    },
+    {
+      "id": "translation-coordinator",
+      "maintainer": "Apple, bundled with Xcode",
+      "sourcePath": "Xcode.app/Contents/PlugIns/IDEXCStringsSupport.framework/Versions/A/Resources/Skills/translation-coordinator/SKILL.md.packaged",
+      "status": "not-adopted",
+      "recommendedScope": "localized-apps",
+      "decision": "Left inside Xcode on 2026-11-28. Same as translation.",
+      "comparison": {
+        "checkedOn": "2026-11-28",
+        "evidence": "Xcode 27.2 (27B52)"
+      }
+    },
+    {
+      "id": "xctrace",
+      "maintainer": "Apple, bundled with Xcode",
+      "sourcePath": "Xcode.app/Contents/PlugIns/IDEIntelligenceChat.framework/Versions/A/Resources/xctrace.idechatprompttemplate",
+      "status": "linked-from-xcode",
+      "recommendedScope": "apple-performance-work",
+      "decision": "Linked from the installed Xcode by scripts/link_xcode_skills.py on 2026-11-28. Its files stay in Xcode and update with it. xctrace CLI and hang triage. Pairs with tune-mobile-client-performance.",
+      "comparison": {
+        "checkedOn": "2026-11-28",
+        "evidence": "Xcode 27.2 (27B52)"
       }
     }
   ]

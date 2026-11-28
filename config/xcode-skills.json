@@ -1,0 +1,11 @@
+{
+  "purpose": "Apple skills bundled with Xcode that setup links into the user skill folders. Their files stay in Xcode and are never committed here.",
+  "resources": "Contents/PlugIns/IDEIntelligenceChat.framework/Versions/A/Resources",
+  "skills": [
+    "app-intents-specialist",
+    "app-intents-whats-new-*",
+    "app-resizability",
+    "swiftui-whats-new-*",
+    "xctrace"
+  ]
+}

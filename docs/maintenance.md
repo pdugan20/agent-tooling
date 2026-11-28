@@ -120,6 +120,11 @@ to do that work in the target project instead, because the installed folder link
 
 ## Monthly skill updates
 
+The Apple skills copied from Xcode aren't part of these updates. They change when Xcode updates. After installing a
+new Xcode, run `npm run bootstrap` and `npm run bootstrap:claude` to refresh the copies and pick up a newly
+numbered release, and review [`config/xcode-skills.json`](../config/xcode-skills.json) against the skills the new
+Xcode ships.
+
 `scripts/update_skill_locks.py` updates the skills that each listed repository locks in its own
 `skills-lock.json`, including this one. The repository list is private machine configuration, by default
 `~/.codex/local/skill-update-targets.json`. A monthly Codex automation runs it and reports only what needs

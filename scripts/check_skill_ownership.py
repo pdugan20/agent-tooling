@@ -10,6 +10,8 @@ import os
 import subprocess
 from pathlib import Path
 
+from link_xcode_skills import MANIFEST, stale_files
+
 IGNORED = {".git", "__pycache__", "node_modules", ".DS_Store"}
 
 
@@ -88,8 +90,14 @@ def git_info(source: Path, files: dict[str, str]) -> dict:
     }
 
 
-def audit(roots: list[Path], ledger: dict, optional_roots: set[Path] | None = None) -> dict:
+def audit(
+    roots: list[Path],
+    ledger: dict,
+    optional_roots: set[Path] | None = None,
+    xcode_cache: Path | None = None,
+) -> dict:
     findings, entries, sources = [], [], {}
+    xcode_root = xcode_cache.resolve() if xcode_cache and xcode_cache.exists() else None
     bindings = {
         str(Path(item["path"]).expanduser().absolute()): item for item in ledger.get("bindings", [])
     }
@@ -112,6 +120,38 @@ def audit(roots: list[Path], ledger: dict, optional_roots: set[Path] | None = No
                 continue
             source = installed.resolve()
             key = str(source)
+            if xcode_root and source.is_relative_to(xcode_root):
+                # Apple ships these with Xcode, so they have no Git history to check. Their files
+                # must match the Xcode copies recorded in their manifest.
+                if key not in sources:
+                    try:
+                        stale = stale_files(source)
+                        files = tree_files(source)
+                    except (OSError, ValueError):
+                        finding("unreadable-or-external-resource", installed.name)
+                        continue
+                    files.pop(MANIFEST, None)
+                    sources[key] = {
+                        "path": key,
+                        "treeSha256": tree_hash(files),
+                        "files": len(files),
+                        "provider": "xcode",
+                        "stale": stale,
+                    }
+                if sources[key]["stale"]:
+                    finding("xcode-skill-changed-rerun-bootstrap", installed.name, "warning")
+                entries.append(
+                    {
+                        "name": installed.name,
+                        "path": str(installed),
+                        "source": key,
+                        "treeSha256": sources[key]["treeSha256"],
+                        "owner": "xcode",
+                        "scope": "apple-projects",
+                        "state": "linked-from-xcode",
+                    }
+                )
+                continue
             if key not in sources:
                 try:
                     files = tree_files(source)
@@ -202,7 +242,7 @@ def main() -> None:
     try:
         ledger = json.loads(ledger_path.read_text()) if ledger_path.exists() else {}
         optional_roots = set() if args.root else set(roots)
-        report = audit(roots, ledger, optional_roots)
+        report = audit(roots, ledger, optional_roots, Path.home() / ".agents/xcode-skills")
     except (OSError, ValueError, KeyError, TypeError) as error:
         raise SystemExit(f"Skill ownership audit failed: {type(error).__name__}") from error
     if args.json:

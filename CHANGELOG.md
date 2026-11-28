@@ -8,6 +8,12 @@ version when compatibility requires it.
 
 ### Added
 
+- Bootstrap links five Apple skills bundled with Xcode into the Codex and Claude skill folders, so they work outside
+  Xcode: `app-resizability` (resizable windows and the foldable iPhone Duo), `swiftui-whats-new-27`,
+  `app-intents-whats-new-27`, `app-intents-specialist` and `xctrace`. Bootstrap copies them from the installed
+  Xcode into `~/.agents/xcode-skills`, nothing from Xcode is committed, and the yearly "what's new" skills follow the
+  newest release Xcode ships. After an Xcode update, the setup check and the skill ownership audit say to rerun
+  bootstrap.
 - Added `scripts/update_skill_locks.py` (`npm run skills:update-all`). It updates every listed repository's locked
   skills monthly with one pull request each, and sets a pull request to auto-merge only when each changed skill is
   Markdown-only, adds no URLs or shell commands, and changed upstream at least seven days earlier.

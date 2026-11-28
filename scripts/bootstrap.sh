@@ -49,6 +49,8 @@ for skill_dir in "$ROOT"/.agents/skills/*; do
   link_path "$skill_dir" "$skills_target/${skill_dir##*/}"
 done
 
+python3 "$ROOT/scripts/link_xcode_skills.py" --target "$skills_target"
+
 if [[ $runtime == claude ]]; then
   python3 "$ROOT/scripts/configure-claude.py" --settings "$claude_config_dir/settings.json"
 else

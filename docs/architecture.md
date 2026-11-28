@@ -61,6 +61,18 @@ Do not edit locked snapshots. Release first-party changes upstream, install the 
 the diff. Skills linked directly from another checkout follow that checkout and need their own ownership and update
 policy. A globally available skill is not necessarily managed by this repository.
 
+Xcode ships Apple-written skills for its built-in coding assistant. Bootstrap links the ones listed in
+[`config/xcode-skills.json`](../config/xcode-skills.json) from the Xcode that `xcode-select` points to, so Codex and
+Claude can use them outside Xcode. `scripts/link_xcode_skills.py` copies each one into an ordinary skill folder under
+`~/.agents/xcode-skills` and links that folder into the user skill folder. The files are copies because Codex skips a
+skill whose `SKILL.md` is a symlink. Each folder's `.xcode-source.json` records where its files came from, and
+nothing from Xcode is committed here. After an Xcode update, the setup check fails and the skill ownership audit warns
+until bootstrap refreshes the copies. A name ending in `-*` follows the newest numbered release, so
+`swiftui-whats-new-*` moves to the next year's skill when Xcode ships it. Without Xcode, bootstrap links nothing and
+the setup check passes. The audit accepts these folders only when their recorded sources are inside an Xcode bundle.
+The decisions for every bundled skill, including those left out, are in
+[`inventory/skill-ownership.json`](../inventory/skill-ownership.json).
+
 Management scope, runtime availability, and persistence are independent. A snapshot managed here can run globally;
 a project-owned skill can remain local; account-managed plugins can follow a sign-in without being locked here.
 See [invocation policy](skill-invocation.md) for automatic and explicit use.
