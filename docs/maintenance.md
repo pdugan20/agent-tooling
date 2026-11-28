@@ -8,7 +8,8 @@ See [setup boundaries](setup.md#current-command-boundary).
 ## Tasks
 
 - [Shared instructions](#update-shared-instructions) and [Patrick skills](#update-patrick-skills)
-- [Upstream skills](#update-upstream-skills) and [freshness checks](#read-only-skill-freshness-and-usage)
+- [Upstream skills](#update-upstream-skills), [monthly updates](#monthly-skill-updates) and
+  [freshness checks](#read-only-skill-freshness-and-usage)
 - [Repository verification](#verify-repository-changes) and [releases](#release-agent-tooling)
 - [Catalog](#maintain-the-catalog) and [machine audits](#audit-a-machine)
 - [Codex plugins](#refresh-installed-codex-plugins) and [optional Claude plugins](#refresh-optional-claude-plugins)
@@ -67,8 +68,8 @@ an exception goes stale, so after updating one of those skills, compare the new 
 (`npm run skills:check`) and then update or remove its entry. `node scripts/check_skill_snapshots.mjs --print` prints
 the installed tree hashes.
 
-Skill updates remain deliberately reviewed. Use the existing CLI install and update path, inspect instruction
-changes, and preserve provenance. No scheduled skill-update or auto-merge workflow is configured here.
+Use the existing CLI install and update path, inspect instruction changes, and preserve provenance. Routine
+updates run monthly as [monthly skill updates](#monthly-skill-updates).
 
 On 2026-11-25, SwiftUI Pro was updated to the exact upstream commit
 `f2920b63995263f57b3e198674e89a602efba6d2` using Skills CLI 1.7.4:
@@ -116,6 +117,41 @@ Repository policy requires that commit, so moving to a newer upstream revision i
 their own terms, listed in its `NOTICE.md` and `kit/brands/SOURCES.md`. Keep the snapshot unmodified.
 Stageshow's workflow installs packages and films output beside its examples; the shared agreement directs agents
 to do that work in the target project instead, because the installed folder links back to this checkout.
+
+## Monthly skill updates
+
+`scripts/update_skill_locks.py` updates the skills that each listed repository locks in its own
+`skills-lock.json`, including this one. The repository list is private machine configuration, by default
+`~/.codex/local/skill-update-targets.json`. A monthly Codex automation runs it and reports only what needs
+attention.
+
+For each repository it clones the default branch into a temporary directory, runs the Skills CLI update and
+moves version-pinned skills to their newest release tag. It then opens one pull request per repository. Each
+changed skill is checked against these rules:
+
+- Every changed file is Markdown.
+- It adds no URL and no line inside a shell code block.
+- Its upstream change is at least seven days old. Newer changes wait for the next month.
+
+The URL and shell checks are heuristics. They catch new links and new shell code blocks, including ones in
+blockquotes, but they can't catch every way prose can tell an agent to run something.
+
+The pull request is set to auto-merge when every changed skill passes, or comes from a trusted source listed
+in the private configuration, and the repository requires status checks with auto-merge turned on. Otherwise
+it waits for review, and the description says why. Skills pinned to a commit are reported, not moved.
+Repositories in `report` mode, and repositories that don't commit their skill files, are checked without
+pushing anything.
+
+```bash
+python3 scripts/update_skill_locks.py --dry-run
+python3 scripts/update_skill_locks.py --only owner/repository
+```
+
+Each run writes a receipt to `~/.codex/local/skill-updates/` and lists plugin marketplaces that haven't
+refreshed in 30 days. Refresh those with the plugin commands below.
+
+A second run in the same month rebuilds that month's update branch from the default branch and turns off
+auto-merge first. Merge or move any fix you pushed to an update branch before running it again.
 
 ## Verify repository changes
 
@@ -294,8 +330,8 @@ without changing snapshots, locks or runtime links. The machine-local report is
 comparison hashes, source/ref and status for every selected standalone skill.
 
 - `current` means the files match the checked default branch.
-- `pinned-ref-verified` means they match the selected tag/commit; it does not mean
-  there is no newer release. Review upstream releases before advancing a pin.
+- `pinned-ref-verified` means they match the selected tag/commit. When a newer release
+  tag exists, the line names it. Review upstream releases before advancing a pin.
 - `source-differs` means the source and installation differ; inspect both before
   deciding whether this is an update, a local change or an installer discrepancy.
 - `unknown` means verification failed. Never display it as current.
@@ -321,9 +357,8 @@ portable selected inventory. Refresh plugin packages through their existing
 runtime-specific commands, not through the standalone skills updater. Account
 managed Codex plugins remain subject to the app's inventory limitations.
 
-Review freshness monthly and after a framework or plugin upgrade. This is a
-maintenance cadence, not an installed background scheduler. Do not auto-merge
-instruction changes or automatically enable newly introduced skills.
+Review freshness after a framework or plugin upgrade. Monthly updates follow
+[monthly skill updates](#monthly-skill-updates). Don't automatically enable newly introduced skills.
 
 For each substantial task, record the skills actually invoked with its evidence
 in the task or issue. The installed catalog is not a usage log. Project-specific

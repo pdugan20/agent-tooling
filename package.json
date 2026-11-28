@@ -23,6 +23,7 @@
     "setup": "bash scripts/setup-new-machine.sh",
     "setup:check": "bash scripts/verify-setup.sh",
     "skills:update": "npx skills update -p -y",
+    "skills:update-all": "python3 scripts/update_skill_locks.py",
     "test": "python3 -m unittest discover -s scripts -p 'test_*.py' -v && node --test scripts/test_skill_freshness.mjs",
     "verify": "bash scripts/verify-repo.sh",
     "skills:check": "node scripts/check_skill_freshness.mjs",

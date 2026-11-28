@@ -2,6 +2,7 @@
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import {
+  existsSync,
   mkdtempSync,
   realpathSync,
   statSync,
@@ -48,6 +49,22 @@ export function folderHash(root) {
   for (const file of files.sort((a, b) => a.path.localeCompare(b.path)))
     hash.update(file.path).update(file.content);
   return hash.digest("hex");
+}
+
+/** The highest version tag above the pinned one, with the same "v" prefix style. */
+export function newerRelease(tags, pinned) {
+  const parse = (tag) => {
+    const match = /^v?(\d+)\.(\d+)(?:\.(\d+))?$/.exec(tag);
+    return match ? match.slice(1).map((part) => Number(part ?? 0)) : null;
+  };
+  const compare = (a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2];
+  const current = parse(pinned);
+  if (!current) return undefined;
+  const prefixed = pinned.startsWith("v");
+  return tags
+    .filter((tag) => tag.startsWith("v") === prefixed && parse(tag))
+    .filter((tag) => compare(parse(tag), current) > 0)
+    .sort((a, b) => compare(parse(b), parse(a)))[0];
 }
 
 export function checkFreshness() {
@@ -106,20 +123,46 @@ export function checkFreshness() {
             : entry.ref && entry.ref !== "main" && entry.ref !== "master"
               ? "pinned-ref-verified"
               : "current";
+        if (entry.ref && !/^[a-f0-9]{40}$/.test(entry.ref)) {
+          const tags = execFileSync(
+            "git",
+            [
+              "ls-remote",
+              "--tags",
+              "--refs",
+              `https://github.com/${entry.source}.git`,
+            ],
+            {
+              encoding: "utf8",
+              timeout: 60000,
+              stdio: ["ignore", "pipe", "pipe"],
+            },
+          )
+            .split("\n")
+            .map((line) => line.split("refs/tags/")[1])
+            .filter(Boolean);
+          const newer = newerRelease(tags, entry.ref);
+          if (newer) result.newerRelease = newer;
+        }
       } catch {
         result.status = "unknown";
       }
       results.push(result);
-      console.log(`${result.status}: ${name}`);
+      const newer = result.newerRelease
+        ? ` (newer release ${result.newerRelease})`
+        : "";
+      console.log(`${result.status}: ${name}${newer}`);
     }
-    writeFileSync(
-      "catalog/skill-freshness.local.json",
-      JSON.stringify(
-        { checkedAt: new Date().toISOString(), results },
-        null,
-        2,
-      ) + "\n",
-    );
+    // Other repositories have no catalog directory; they only need the printed results.
+    if (existsSync("catalog"))
+      writeFileSync(
+        "catalog/skill-freshness.local.json",
+        JSON.stringify(
+          { checkedAt: new Date().toISOString(), results },
+          null,
+          2,
+        ) + "\n",
+      );
     if (
       results.some((result) =>
         ["unknown", "source-differs"].includes(result.status),
