@@ -7,11 +7,13 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from update_skill_locks import (
+    SkillChange,
     changed_files,
     newest_tag,
     old_enough,
     review_reasons,
     shell_lines,
+    split_held_sources,
     status_paths,
 )
 
@@ -126,6 +128,17 @@ class ChangedFilesTests(unittest.TestCase):
             files = changed_files(root, "example")
         self.assertEqual(files, [(".agents/skills/example/image.png", None, "")])
         self.assertEqual(review_reasons(files), ["changes files that aren't Markdown (image.png)"])
+
+
+class HeldSourceTests(unittest.TestCase):
+    def test_a_recent_change_holds_back_its_whole_source(self):
+        changes = [
+            SkillChange("grilling", "example/skills", None, None, None),
+            SkillChange("hig", "other/skills", None, None, None),
+        ]
+        kept, held = split_held_sources(changes, {"example/skills"})
+        self.assertEqual([change.name for change in kept], ["hig"])
+        self.assertEqual([change.name for change in held], ["grilling"])
 
 
 if __name__ == "__main__":
