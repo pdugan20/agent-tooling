@@ -11,6 +11,11 @@ version when compatibility requires it.
 - Added `scripts/update_skill_locks.py` (`npm run skills:update-all`). It updates every listed repository's locked
   skills monthly with one pull request each, and sets a pull request to auto-merge only when each changed skill is
   Markdown-only, adds no URLs or shell commands, and changed upstream at least seven days earlier.
+- Locked skill updates now also wait for review when a `SKILL.md` changes its `name`, `description` or permission
+  fields, when they add lines to Python, Ruby, PowerShell, AppleScript or unlabeled code blocks, or when a small
+  model reading the diff finds something new the skill tells an agent to do. A failed or unclear model review
+  waits for review too. The model gets the diff in a Responses API request with no tools, and only its yes-or-no
+  answer is kept.
 - `npm run skills:check` names a newer release for skills pinned to a version, and runs in repositories that have
   no catalog directory.
 
