@@ -150,9 +150,9 @@ characters, a failed request, or an unclear answer also waits for review.
 The review is one Responses API request with no tools, so the model can't read files or reach other services.
 It counts any attempt in the diff to steer the review as new authority. It uses `gpt-5.6-luna` at
 `OPENAI_BASE_URL`, or at the OpenAI API when that is unset, and sends `OPENAI_API_KEY` when it's set. Set
-`behaviorReviewModel` and `behaviorReviewBaseUrl` in the private configuration to change either. The model's
-findings go to the run output and receipt. The pull request says only that the review found new authority,
-because findings can repeat text from the diff.
+`behaviorReviewModel` and `behaviorReviewBaseUrl` in the private configuration to change either. Only the
+model's yes-or-no answer is kept. Its explanation could repeat text from the diff, which would then reach the
+pull request and the agent reading the run's output.
 
 The pull request is set to auto-merge when every changed skill passes, or comes from a trusted source listed
 in the private configuration, and the repository requires status checks with auto-merge turned on. Otherwise

