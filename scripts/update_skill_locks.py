@@ -221,6 +221,15 @@ def revert_skill(checkout: Path, skill: str) -> None:
         run(["git", "clean", "-fdq", "--", root], checkout)
 
 
+def split_held_sources(
+    changes: list[SkillChange], held_sources: set[str]
+) -> tuple[list[SkillChange], list[SkillChange]]:
+    """Skills from one source can depend on each other, so a source moves together or not at all."""
+    kept = [change for change in changes if change.source not in held_sources]
+    held = [change for change in changes if change.source in held_sources]
+    return kept, held
+
+
 def update_target(target: dict, config: dict, now: datetime, dry_run: bool) -> dict:
     repo = target["repository"]
     token = gh_token(target["githubUser"])
@@ -258,6 +267,7 @@ def update_target(target: dict, config: dict, now: datetime, dry_run: bool) -> d
         updated = json.loads(lock_path.read_text())["skills"]
         changes: list[SkillChange] = []
         drifted: list[str] = []
+        held_sources: set[str] = set()
         for name, entry in original.items():
             new_entry = updated.get(name, entry)
             committed = bool(run(["git", "ls-files", f".agents/skills/{name}"], checkout).strip())
@@ -289,11 +299,21 @@ def update_target(target: dict, config: dict, now: datetime, dry_run: bool) -> d
             if not old_enough(date, now):
                 revert_skill(checkout, name)
                 updated[name] = entry
+                held_sources.add(entry["source"])
                 notes.append(f"{name} changed upstream less than {COOLDOWN_DAYS} days ago")
                 continue
             reasons = [] if entry["source"] in trusted else review_reasons(files)
             changes.append(
                 SkillChange(name, entry["source"], entry.get("ref"), new_ref, date, reasons)
+            )
+
+        changes, held = split_held_sources(changes, held_sources)
+        for change in held:
+            revert_skill(checkout, change.name)
+            updated[change.name] = original[change.name]
+            notes.append(
+                f"{change.name} waits for the next run with the rest of {change.source}, "
+                f"which has skills that changed upstream less than {COOLDOWN_DAYS} days ago"
             )
 
         updated_lock = {**original_lock, "skills": updated}

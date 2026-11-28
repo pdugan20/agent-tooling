@@ -131,7 +131,8 @@ changed skill is checked against these rules:
 
 - Every changed file is Markdown.
 - It adds no URL and no line inside a shell code block.
-- Its upstream change is at least seven days old. Newer changes wait for the next month.
+- Its upstream change is at least seven days old. Newer changes wait for the next month, and so do the other
+  skills from the same source, because sibling skills can depend on each other.
 
 The URL and shell checks are heuristics. They catch new links and new shell code blocks, including ones in
 blockquotes, but they can't catch every way prose can tell an agent to run something.
