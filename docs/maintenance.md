@@ -147,6 +147,9 @@ python3 scripts/update_skill_locks.py --only owner/repository
 Each run writes a receipt to `~/.codex/local/skill-updates/` and lists plugin marketplaces that haven't
 refreshed in 30 days. Refresh those with the plugin commands below.
 
+A second run in the same month rebuilds that month's update branch from the default branch and turns off
+auto-merge first. Merge or move any fix you pushed to an update branch before running it again.
+
 ## Verify repository changes
 
 Install the [verification prerequisites](setup.md#develop-this-repository), then run:
