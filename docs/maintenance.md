@@ -133,6 +133,9 @@ changed skill is checked against these rules:
 - It adds no URL and no line inside a shell code block.
 - Its upstream change is at least seven days old. Newer changes wait for the next month.
 
+The URL and shell checks are heuristics. They catch new links and new shell code blocks, including ones in
+blockquotes, but they can't catch every way prose can tell an agent to run something.
+
 The pull request is set to auto-merge when every changed skill passes, or comes from a trusted source listed
 in the private configuration, and the repository requires status checks with auto-merge turned on. Otherwise
 it waits for review, and the description says why. Skills pinned to a commit are reported, not moved.

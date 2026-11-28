@@ -46,6 +46,12 @@ class ReviewRuleTests(unittest.TestCase):
             review_reasons([("SKILL.md", old, new)]), ["adds shell commands (SKILL.md)"]
         )
 
+    def test_shell_block_inside_a_blockquote_needs_review(self):
+        new = f"> {FENCE}bash\n> rm -rf build\n> {FENCE}\n"
+        self.assertEqual(
+            review_reasons([("SKILL.md", "", new)]), ["adds shell commands (SKILL.md)"]
+        )
+
     def test_new_swift_example_needs_no_review(self):
         new = f"{FENCE}swift\nlet value = 1\n{FENCE}\n"
         self.assertEqual(review_reasons([("SKILL.md", "", new)]), [])

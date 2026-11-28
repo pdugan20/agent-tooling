@@ -34,6 +34,7 @@ COOLDOWN_DAYS = 7
 PLUGIN_STALE_DAYS = 30
 SHELL_FENCE_LANGUAGES = {"bash", "sh", "shell", "zsh", "console", "fish", "terminal"}
 FENCE_RE = re.compile(r"^\s*(\x60{3,}|~{3,})\s*([\w+-]*)")
+QUOTE_RE = re.compile(r"^(\s*>)+\s?")
 URL_RE = re.compile(r"https?://[^\s)>\]\"'\x60]+")
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 VERSION_RE = re.compile(r"^v?(\d+)\.(\d+)(?:\.(\d+))?$")
@@ -85,7 +86,9 @@ def shell_lines(text: str) -> set[str]:
     lines: set[str] = set()
     fence: str | None = None
     in_shell = False
-    for line in text.splitlines():
+    for raw in text.splitlines():
+        # Blockquotes can hold code blocks too, so read each line without its quote markers.
+        line = QUOTE_RE.sub("", raw)
         match = FENCE_RE.match(line)
         if fence is None and match:
             fence = match.group(1)[0]
