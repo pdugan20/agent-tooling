@@ -190,18 +190,20 @@ def changed_files(checkout: Path, skill: str) -> list[tuple[str, str | None, str
     )
     files = []
     for path in status_paths(status):
-        old = subprocess.run(
-            ["git", "show", f"HEAD:{path}"], cwd=checkout, capture_output=True, text=True
-        )
         new_path = checkout / path
         if new_path.is_symlink() or (new_path.exists() and not new_path.is_file()):
             # A link or special file is never treated as plain Markdown.
             files.append((f"{path} (link or special file)", None, ""))
             continue
+        if not path.lower().endswith(".md"):
+            # Only Markdown content is inspected, so other files, including binaries, aren't read.
+            files.append((path, None, "" if new_path.exists() else None))
+            continue
+        old = subprocess.run(["git", "show", f"HEAD:{path}"], cwd=checkout, capture_output=True)
         files.append(
             (
                 path,
-                old.stdout if old.returncode == 0 else None,
+                old.stdout.decode(errors="replace") if old.returncode == 0 else None,
                 new_path.read_text(errors="replace") if new_path.is_file() else None,
             )
         )
@@ -209,9 +211,11 @@ def changed_files(checkout: Path, skill: str) -> list[tuple[str, str | None, str
 
 
 def revert_skill(checkout: Path, skill: str) -> None:
-    root = f".agents/skills/{skill}"
-    run(["git", "checkout", "HEAD", "--", root], checkout)
-    run(["git", "clean", "-fdq", "--", root], checkout)
+    """Put a skill's installed files back as committed, removing anything the update added."""
+    for root in (f".agents/skills/{skill}", f".claude/skills/{skill}"):
+        if run(["git", "ls-files", root], checkout).strip():
+            run(["git", "checkout", "HEAD", "--", root], checkout)
+        run(["git", "clean", "-fdq", "--", root], checkout)
 
 
 def update_target(target: dict, config: dict, now: datetime, dry_run: bool) -> dict:
@@ -263,6 +267,7 @@ def update_target(target: dict, config: dict, now: datetime, dry_run: bool) -> d
                             ".agents/skills, so the change can't be reviewed in a pull request"
                         )
                 updated[name] = entry
+                revert_skill(checkout, name)
                 continue
             files = changed_files(checkout, name)
             if not files and new_entry == entry:
@@ -320,9 +325,13 @@ def open_pull_request(
     repo = target["repository"]
     branch = f"chore/update-locked-skills-{now:%Y-%m}"
     run(["git", "switch", "--quiet", "-c", branch], checkout)
-    run(
-        ["git", "add", "-A", "skills-lock.json", ".agents", *target.get("extraPaths", [])], checkout
-    )
+    # Stage only the skills that were assessed, so nothing unclassified reaches the pull request.
+    paths = ["skills-lock.json", *target.get("extraPaths", [])]
+    for change in changes:
+        paths.append(f".agents/skills/{change.name}")
+        if (checkout / ".claude/skills" / change.name).is_symlink():
+            paths.append(f".claude/skills/{change.name}")
+    run(["git", "add", "-A", "--", *paths], checkout)
     title = target.get("title", "chore(skills): update locked skills")
     run(["git", "commit", "--quiet", "-m", title], checkout)
     environment = {"GH_TOKEN": token}
@@ -447,7 +456,7 @@ def main() -> int:
             continue
         try:
             results.append(update_target(target, config, now, args.dry_run))
-        except UpdateError as error:
+        except Exception as error:  # One repository's failure must not stop the others.
             results.append(
                 {"repository": target["repository"], "status": "failed", "error": str(error)}
             )

@@ -1,9 +1,19 @@
 """Checks for the rules that decide whether a skill update can merge without review."""
 
+import subprocess
+import tempfile
 import unittest
 from datetime import UTC, datetime
+from pathlib import Path
 
-from update_skill_locks import newest_tag, old_enough, review_reasons, shell_lines, status_paths
+from update_skill_locks import (
+    changed_files,
+    newest_tag,
+    old_enough,
+    review_reasons,
+    shell_lines,
+    status_paths,
+)
 
 FENCE = "\x60\x60\x60"
 
@@ -89,6 +99,27 @@ class CooldownTests(unittest.TestCase):
 
     def test_unknown_date_waits(self):
         self.assertFalse(old_enough(None, self.now))
+
+
+class ChangedFilesTests(unittest.TestCase):
+    def test_binary_change_needs_review_without_decoding(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            skill = root / ".agents/skills/example"
+            skill.mkdir(parents=True)
+            (skill / "SKILL.md").write_text("Use short names.\n")
+            (skill / "image.png").write_bytes(bytes(range(256)))
+            for command in (
+                ["git", "init", "--quiet"],
+                ["git", "add", "-A"],
+                ["git", "-c", "user.email=a@example.com", "-c", "user.name=a"]
+                + ["commit", "-qm", "a"],
+            ):
+                subprocess.run(command, cwd=root, check=True)
+            (skill / "image.png").write_bytes(bytes(reversed(range(256))))
+            files = changed_files(root, "example")
+        self.assertEqual(files, [(".agents/skills/example/image.png", None, "")])
+        self.assertEqual(review_reasons(files), ["changes files that aren't Markdown (image.png)"])
 
 
 if __name__ == "__main__":
