@@ -168,6 +168,13 @@
       "skillPath": "skills/mobile-native/SKILL.md",
       "computedHash": "19a47e318bfcb2a1c2be346b79219758b296437800cc6226d2cb467233403d17"
     },
+    "mobilebuildmcp": {
+      "source": "getsentry/MobileBuildMCP",
+      "ref": "v2.7.1",
+      "sourceType": "github",
+      "skillPath": "skills/mobilebuildmcp/SKILL.md",
+      "computedHash": "11acfced2dc8c6f59af57f60a22608c24e33c1de7baab538dbe4498061599cf9"
+    },
     "pick-ui-library": {
       "source": "emilkowalski/skills",
       "sourceType": "github",
@@ -268,13 +275,6 @@
       "sourceType": "github",
       "skillPath": "skills/write-mintlify-changelog/SKILL.md",
       "computedHash": "565d7fdb61fbeb62ae22cec88e348de7ad250eb83d63bcb4ac40217883d62ac7"
-    },
-    "xcodebuildmcp": {
-      "source": "getsentry/XcodeBuildMCP",
-      "ref": "v2.7.0",
-      "sourceType": "github",
-      "skillPath": "skills/xcodebuildmcp/SKILL.md",
-      "computedHash": "cb153f421215de51d3b2fb0a1b6ebbd5c97f2268eba2e1eb70cfd623cc3a2ccb"
     }
   }
 }

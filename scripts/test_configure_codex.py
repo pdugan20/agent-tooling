@@ -15,13 +15,13 @@ SPEC.loader.exec_module(configure_codex)
 
 class ConfigureCodexTests(unittest.TestCase):
     MANAGED_MCP_SERVERS = {
-        "xcodebuildmcp": {
+        "mobilebuildmcp": {
             "command": "npx",
-            "args": ["--yes", "xcodebuildmcp@2.7.0", "mcp"],
+            "args": ["--yes", "mobilebuildmcp@2.7.1", "mcp"],
             "enabled": True,
             "env": {
-                "XCODEBUILDMCP_ENABLED_WORKFLOWS": "simulator,ui-automation,debugging",
-                "XCODEBUILDMCP_SENTRY_DISABLED": "true",
+                "MOBILEBUILDMCP_ENABLED_WORKFLOWS": "simulator,ui-automation,debugging",
+                "MOBILEBUILDMCP_SENTRY_DISABLED": "true",
             },
             "startup_timeout_sec": 120,
             "tool_timeout_sec": 300,
@@ -122,8 +122,8 @@ class ConfigureCodexTests(unittest.TestCase):
             parsed = tomllib.loads(updated)
 
             self.assertEqual(
-                parsed["mcp_servers"]["xcodebuildmcp"],
-                self.MANAGED_MCP_SERVERS["xcodebuildmcp"],
+                parsed["mcp_servers"]["mobilebuildmcp"],
+                self.MANAGED_MCP_SERVERS["mobilebuildmcp"],
             )
             self.assertEqual(
                 configure_codex.update_config(
@@ -138,9 +138,9 @@ class ConfigureCodexTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             home = Path(directory)
             original = (
-                "[mcp_servers.xcodebuildmcp]\n"
+                "[mcp_servers.mobilebuildmcp]\n"
                 'command = "npx"\n'
-                'args = ["--yes", "xcodebuildmcp@latest", "mcp"]\n\n'
+                'args = ["--yes", "mobilebuildmcp@latest", "mcp"]\n\n'
                 "[mcp_servers.other]\n"
                 'command = "other-server"\n'
             )
@@ -154,17 +154,17 @@ class ConfigureCodexTests(unittest.TestCase):
 
             self.assertEqual(parsed["mcp_servers"]["other"]["command"], "other-server")
             self.assertEqual(
-                parsed["mcp_servers"]["xcodebuildmcp"],
-                self.MANAGED_MCP_SERVERS["xcodebuildmcp"],
+                parsed["mcp_servers"]["mobilebuildmcp"],
+                self.MANAGED_MCP_SERVERS["mobilebuildmcp"],
             )
 
     def test_replaces_managed_mcp_server_without_consuming_array_tables(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             home = Path(directory)
             original = (
-                "[mcp_servers.xcodebuildmcp]\n"
+                "[mcp_servers.mobilebuildmcp]\n"
                 'command = "npx"\n'
-                'args = ["--yes", "xcodebuildmcp@latest", "mcp"]\n\n'
+                'args = ["--yes", "mobilebuildmcp@latest", "mcp"]\n\n'
                 "[[skills.config]]\n"
                 'path = "/tmp/example/SKILL.md"\n'
                 "enabled = false\n"

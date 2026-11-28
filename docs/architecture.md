@@ -109,7 +109,7 @@ No workflow plugin is selected. Strict planning, TDD, worktrees, orchestration, 
 named tables and preserves unrelated servers and authentication. Plugin-provided tools and other local servers
 have separate owners.
 
-The XcodeBuildMCP selection enables Simulator, semantic UI automation, and debugging with telemetry disabled.
+The MobileBuildMCP (formerly XcodeBuildMCP) selection enables Simulator, semantic UI automation, and debugging with telemetry disabled.
 Its exact package version and environment live in the manifest. Computer use supplies visual judgment; Instruments
 or `xctrace` and suitable device evidence support performance claims.
 

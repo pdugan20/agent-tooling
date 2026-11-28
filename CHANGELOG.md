@@ -22,6 +22,11 @@ version when compatibility requires it.
   `codex plugin marketplace remove patrick-plugins` and `claude plugin marketplace remove patrick-plugins`.
 - Recorded the remaining unmanaged skills as removed in `inventory/skill-ownership.json`. Their copies are retired
   from the user skill folders.
+- Moved from XcodeBuildMCP 2.7.0 to MobileBuildMCP 2.7.1, the same project under its new name. The `mobilebuildmcp`
+  skill replaces `xcodebuildmcp`, and the Codex MCP server is now `mobilebuildmcp` with `MOBILEBUILDMCP_*`
+  environment variables. Its `env` and `testRunnerEnv` tool inputs now take arrays of `{ "key", "value" }` entries.
+  Setup adds the new server but doesn't remove the old one, so delete the `[mcp_servers.xcodebuildmcp]` table from
+  `~/.codex/config.toml` once, then start a new task.
 
 ## [0.10.0] - 2026-11-26
 
