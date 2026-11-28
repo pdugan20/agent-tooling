@@ -15,7 +15,7 @@ class CatalogGenerationTests(unittest.TestCase):
         catalog = generate_catalog.build_catalog()
         items = catalog["items"]
 
-        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 40)
+        self.assertEqual(len([item for item in items if item["type"] == "skill"]), 42)
         self.assertEqual(len([item for item in items if item["type"] == "plugin"]), 23)
         self.assertEqual(len({item["id"] for item in items}), len(items))
         self.assertEqual({item["availability"] for item in items}, {"Global"})
@@ -209,6 +209,18 @@ class CatalogGenerationTests(unittest.TestCase):
                     "Emil Kowalski",
                     ".agents/skills/remove-animations/SKILL.md",
                     "https://github.com/emilkowalski/skills/blob/main/skills/remove-animations/SKILL.md",
+                ),
+                "ast-grep": (
+                    "ast-grep",
+                    ".agents/skills/ast-grep/SKILL.md",
+                    "https://github.com/ast-grep/agent-skill/blob/"
+                    "0613dc7f82bbfb3b557380b54726b92f73358460/ast-grep/skills/ast-grep/SKILL.md",
+                ),
+                "technical-writer": (
+                    "OneWave AI",
+                    ".agents/skills/technical-writer/SKILL.md",
+                    "https://github.com/onewave-ai/claude-skills/blob/"
+                    "b2267d9171af4f56848d82992381b20b89b44056/technical-writer/SKILL.md",
                 ),
                 "stageshow": (
                     "Benji Taylor",

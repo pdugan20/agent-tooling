@@ -21,7 +21,6 @@ ensure_marketplace firebase https://github.com/firebase/skills.git
 ensure_marketplace cloudflare https://github.com/cloudflare/skills.git
 ensure_marketplace claude-plugins-official https://github.com/anthropics/claude-plugins-official.git
 ensure_marketplace mintlify-marketplace https://github.com/mintlify/mintlify-claude-plugin.git
-ensure_marketplace patrick-plugins https://github.com/pdugan20/plugins.git
 
 installed_plugins=$(codex plugin list --json)
 while IFS= read -r plugin; do

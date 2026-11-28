@@ -6,6 +6,15 @@ version when compatibility requires it.
 
 ## [Unreleased]
 
+### Changed
+
+- Locked `ast-grep` and `technical-writer` as selected snapshots. Copies of them had been installed outside the lock.
+- Setup no longer adds the `patrick-plugins` marketplace to Codex or Claude. Setup links Patrick's skills directly,
+  so nothing was installed from it. Setup never removes marketplaces, so remove an existing registration once with
+  `codex plugin marketplace remove patrick-plugins` and `claude plugin marketplace remove patrick-plugins`.
+- Recorded the remaining unmanaged skills as removed in `inventory/skill-ownership.json`. Their copies are retired
+  from the user skill folders.
+
 ## [0.10.0] - 2026-11-26
 
 ### Added

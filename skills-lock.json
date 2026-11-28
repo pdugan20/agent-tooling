@@ -51,6 +51,13 @@
       "skillPath": "skills/apple-design/SKILL.md",
       "computedHash": "cb864bd97f86d9ca5578274fb77dfc70d9ab278a22e3788b23e0b2d951f4e5b5"
     },
+    "ast-grep": {
+      "source": "ast-grep/agent-skill",
+      "ref": "0613dc7f82bbfb3b557380b54726b92f73358460",
+      "sourceType": "github",
+      "skillPath": "ast-grep/skills/ast-grep/SKILL.md",
+      "computedHash": "55ab409e6afd238ebab8f29d9a5230d513b6d0102e0eb9f71c554a95d1344bd6"
+    },
     "audit-design-system-health": {
       "source": "pdugan20/skills",
       "ref": "v3.5.0",
@@ -226,6 +233,13 @@
       "sourceType": "github",
       "skillPath": "swiftui-pro/SKILL.md",
       "computedHash": "88fefb2239299c8815366b89737ba15e91358ab3e9a6fb69af2436ed4a704299"
+    },
+    "technical-writer": {
+      "source": "onewave-ai/claude-skills",
+      "ref": "b2267d9171af4f56848d82992381b20b89b44056",
+      "sourceType": "github",
+      "skillPath": "technical-writer/SKILL.md",
+      "computedHash": "d25627ab1698e307b5a558a601b63924a9e696ff36901268dea6ddca28ded434"
     },
     "tune-mobile-client-performance": {
       "source": "pdugan20/skills",
