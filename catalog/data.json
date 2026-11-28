@@ -941,6 +941,36 @@
     {
       "availability": "Global",
       "brand": null,
+      "contentHash": "55ab409e6afd238ebab8f29d9a5230d513b6d0102e0eb9f71c554a95d1344bd6",
+      "description": "Guide for writing ast-grep rules to perform structural code search and analysis. Use when users need to search codebases using Abstract Syntax Tree (AST) patterns, find specific code structures, or perform complex code queries that go beyond simple text search. This skill should be used when users ask to search for code patterns, find specific language constructs, or locate code with particular structural characteristics.",
+      "displayName": "AST Grep",
+      "featured": 50,
+      "id": "skill:ast-grep",
+      "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
+      "lockedRef": "0613dc7f82bbfb3b557380b54726b92f73358460",
+      "name": "ast-grep",
+      "ownerAvatarUrl": "https://github.com/ast-grep.png?size=96",
+      "path": ".agents/skills/ast-grep/SKILL.md",
+      "repositoryUrl": "https://github.com/ast-grep/agent-skill",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "skillsShUrl": "https://skills.sh/ast-grep/agent-skill/ast-grep",
+      "source": "third-party",
+      "sourceLabel": "ast-grep",
+      "sourceUrl": "https://github.com/ast-grep/agent-skill/blob/0613dc7f82bbfb3b557380b54726b92f73358460/ast-grep/skills/ast-grep/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "Git"
+    },
+    {
+      "availability": "Global",
+      "brand": null,
       "contentHash": "8b360e17ee4b1852518976e481e25a2cfd8a610abc564258e6bc35f2092c281e",
       "description": "Find design drift and consolidation opportunities",
       "displayName": "Audit Design-System Health",
@@ -1147,6 +1177,36 @@
       "state": "Configured",
       "type": "skill",
       "version": "1.1.1"
+    },
+    {
+      "availability": "Global",
+      "brand": null,
+      "contentHash": "d25627ab1698e307b5a558a601b63924a9e696ff36901268dea6ddca28ded434",
+      "description": "Writes and restructures technical documentation - READMEs, tutorials, how-to guides, user guides, architecture docs, onboarding guides, runbooks and SOPs, troubleshooting guides, release notes, and knowledge base articles - grounded in the actual code or product, with commands and examples verified where possible. Use when the user asks to document a project, feature, system, or process, write or fix a README, explain a codebase to new developers, turn notes into a guide, or make existing docs clearer. For endpoint-by-endpoint API reference or OpenAPI specs, use api-documentation-writer; for CLAUDE.md or AGENTS.md files, use claude-md-writer.",
+      "displayName": "Technical Writer",
+      "featured": 50,
+      "id": "skill:technical-writer",
+      "invocation": "Automatic",
+      "invocationByRuntime": {
+        "claude": "Automatic",
+        "codex": "Automatic"
+      },
+      "lockedRef": "b2267d9171af4f56848d82992381b20b89b44056",
+      "name": "technical-writer",
+      "ownerAvatarUrl": "https://github.com/onewave-ai.png?size=96",
+      "path": ".agents/skills/technical-writer/SKILL.md",
+      "repositoryUrl": "https://github.com/onewave-ai/claude-skills",
+      "runtimes": [
+        "codex",
+        "claude"
+      ],
+      "skillsShUrl": "https://skills.sh/onewave-ai/claude-skills/technical-writer",
+      "source": "third-party",
+      "sourceLabel": "OneWave AI",
+      "sourceUrl": "https://github.com/onewave-ai/claude-skills/blob/b2267d9171af4f56848d82992381b20b89b44056/technical-writer/SKILL.md",
+      "state": "Configured",
+      "type": "skill",
+      "version": "Git"
     },
     {
       "availability": "Global",

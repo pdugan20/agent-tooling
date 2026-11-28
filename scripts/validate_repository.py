@@ -237,6 +237,8 @@ UPSTREAM_SKILLS = {
         "getsentry/XcodeBuildMCP",
         "skills/xcodebuildmcp/SKILL.md",
     ),
+    "ast-grep": ("ast-grep/agent-skill", "ast-grep/skills/ast-grep/SKILL.md"),
+    "technical-writer": ("onewave-ai/claude-skills", "technical-writer/SKILL.md"),
 }
 PATRICK_SKILLS_REF = "v3.5.0"
 XCODEBUILDMCP_REF = "v2.7.0"
@@ -777,8 +779,11 @@ def validate_repository() -> None:
             )
             if destructive or "scripts/reconcile_claude_plugins.py" in script:
                 raise ValidationError(f"{script_name} must preserve unselected installed tooling")
-            if "ensure_marketplace patrick-plugins" not in script:
-                raise ValidationError(f"{script_name} must add Patrick's plugin marketplace")
+            if "patrick-plugins" in script:
+                raise ValidationError(
+                    f"{script_name} must not add Patrick's plugin marketplace; "
+                    "setup links his skills directly"
+                )
             if operation == "refresh" and not re.search(
                 rf'{runtime} plugin marketplace (?:upgrade|update) "\$marketplace"', script
             ):

@@ -28,6 +28,7 @@ PATRICK_SKILLS_SOURCE = "pdugan20/skills"
 UPSTREAM_SOURCE_LABELS = {
     "shadcn-ui/ui": "shadcn/ui",
     "addyosmani/web-quality-skills": "Addy Osmani",
+    "ast-grep/agent-skill": "ast-grep",
     "benjitaylor/skills": "Benji Taylor",
     "vercel-labs/agent-skills": "Vercel Labs",
     "currents-dev/playwright-best-practices-skill": "Currents",
@@ -35,6 +36,7 @@ UPSTREAM_SOURCE_LABELS = {
     "emilkowalski/skills": "Emil Kowalski",
     "getsentry/XcodeBuildMCP": "Sentry",
     "maplibre/maplibre-agent-skills": "MapLibre",
+    "onewave-ai/claude-skills": "OneWave AI",
     PATRICK_SKILLS_SOURCE: "Pat Dugan",
     "Prisma-Labs-Dev/apple-skills": "Prisma Labs",
     "railwayapp/railway-skills": "Railway",
