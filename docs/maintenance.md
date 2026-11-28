@@ -120,6 +120,28 @@ to do that work in the target project instead, because the installed folder link
 
 ## Monthly skill updates
 
+The Apple skills copied from Xcode aren't part of these updates. They change when Xcode updates. After installing a
+new Xcode, run `npm run bootstrap` and `npm run bootstrap:claude` to refresh the copies and pick up a newly
+numbered release, and review [`config/xcode-skills.json`](../config/xcode-skills.json) against the skills the new
+Xcode ships.
+
+When that list changes, check routing in fresh Codex sessions. For each request below, ask `codex exec` to name the
+skills it would load without using tools, and compare the answer with the expected skills. On November 28, 2026 every
+request matched on `gpt-5.6-luna` with Xcode 27.2.
+
+| Request | Expected skills |
+| --- | --- |
+| Get my UIKit app ready for the foldable iPhone Duo. | `app-resizability` |
+| After updating to the iOS 27 SDK my SwiftUI view fails with "@State used before being initialized". Why? | `swiftui-whats-new-27`, alongside `swiftui-pro` |
+| Add an App Intent so Siri can mark an episode as watched in my iOS app. | `integrate-app-intents` with `app-intents-specialist` |
+| The show list in my iOS app hitches while scrolling. Find out why. | `tune-mobile-client-performance` with `xctrace` |
+| Build a React landing page with a hero and pricing table. | None of the Xcode skills |
+| Review this SwiftUI view for best practices and maintainability. | `swiftui-pro`, without `swiftui-whats-new-27` |
+
+Also reread each linked skill for instructions that give agents new authority, such as pushing, deploying, sending
+messages or skipping a confirmation. The five linked in November 2026 had none. Their only commands are local
+`xctrace` reads.
+
 `scripts/update_skill_locks.py` updates the skills that each listed repository locks in its own
 `skills-lock.json`, including this one. The repository list is private machine configuration, by default
 `~/.codex/local/skill-update-targets.json`. A monthly Codex automation runs it and reports only what needs

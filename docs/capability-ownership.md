@@ -19,6 +19,8 @@ The ownership registry is a review ledger. Setup and the catalog do not read it 
 `retained-recovery-not-selected` records a recovered dependency without adding it to the selected consumer lock.
 `provider-selected-fallback-retained` records a provider-backed runtime with a separately tracked standalone fallback;
 retired copies stay recoverable outside skill discovery.
+`linked-from-xcode` records an Apple skill bundled with Xcode that setup links into the user skill folders, and
+`not-adopted` records one left inside Xcode with the reason.
 
 ## Evidence levels
 
