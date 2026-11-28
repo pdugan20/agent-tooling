@@ -6,6 +6,14 @@ version when compatibility requires it.
 
 ## [Unreleased]
 
+### Added
+
+- Added `scripts/update_skill_locks.py` (`npm run skills:update-all`). It updates every listed repository's locked
+  skills monthly with one pull request each, and sets a pull request to auto-merge only when each changed skill is
+  Markdown-only, adds no URLs or shell commands, and changed upstream at least seven days earlier.
+- `npm run skills:check` names a newer release for skills pinned to a version, and runs in repositories that have
+  no catalog directory.
+
 ### Changed
 
 - Locked `ast-grep` and `technical-writer` as selected snapshots. Copies of them had been installed outside the lock.

@@ -9,7 +9,7 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { folderHash } from "./check_skill_freshness.mjs";
+import { folderHash, newerRelease } from "./check_skill_freshness.mjs";
 
 test("compares materialized installation links with source links and catches content changes", () => {
   const temp = mkdtempSync(join(tmpdir(), "skill-hash-test-"));
@@ -51,4 +51,11 @@ test("rejects escaping and cyclic links without reading outside the skill", () =
   } finally {
     rmSync(temp, { recursive: true, force: true });
   }
+});
+
+test("reports the newest release above a pinned version", () => {
+  const tags = ["v27.6.1", "v27.8.1", "v27.7.3", "v28.0.0-beta.1", "27.9.0"];
+  assert.equal(newerRelease(tags, "v27.6.1"), "v27.8.1");
+  assert.equal(newerRelease(["v2.7.0", "v2.6.0"], "v2.7.0"), undefined);
+  assert.equal(newerRelease(["v1.0.0"], "a".repeat(40)), undefined);
 });
