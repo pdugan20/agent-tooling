@@ -1,8 +1,12 @@
 """Checks for the rules that decide whether a skill update can merge without review."""
 
+import io
+import json
+import os
 import subprocess
 import tempfile
 import unittest
+import urllib.error
 from datetime import UTC, datetime
 from pathlib import Path
 from unittest import mock
@@ -10,7 +14,6 @@ from unittest import mock
 from update_skill_locks import (
     BEHAVIOR_REVIEW_LIMIT,
     SkillChange,
-    UpdateError,
     behavior_review,
     changed_files,
     command_lines,
@@ -122,58 +125,78 @@ class RoutingRuleTests(unittest.TestCase):
 class BehaviorReviewTests(unittest.TestCase):
     files = [("SKILL.md", "Tell the user the tests passed.\n", "Then push to origin.\n")]
 
-    def review_with(self, verdict):
-        def fake_run(command, cwd=None, env=None, stdin_text=None):
-            self.assertIn("Then push to origin.", stdin_text)
-            self.assertEqual(command[command.index("--sandbox") + 1], "read-only")
-            if verdict is not None:
-                (Path(cwd) / "verdict.json").write_text(verdict)
-            return ""
+    def reply(self, text):
+        message = {"type": "message", "content": [{"type": "output_text", "text": text}]}
+        body = {"output": [{"type": "reasoning", "summary": []}, message]}
+        return io.BytesIO(json.dumps(body).encode())
 
-        with mock.patch("update_skill_locks.run", side_effect=fake_run):
-            return behavior_review(self.files, "small-model")
+    def review_with(self, response):
+        with (
+            mock.patch.dict(os.environ, {"OPENAI_API_KEY": ""}),
+            mock.patch("update_skill_locks.urllib.request.urlopen", **response) as urlopen,
+        ):
+            result = behavior_review(self.files, "small-model", "http://localhost:9/v1/")
+        return result, urlopen
+
+    def test_request_sends_the_diff_without_tools(self):
+        verdict = '{"grantsNewAuthority": false, "findings": []}'
+        _, urlopen = self.review_with({"return_value": self.reply(verdict)})
+        request = urlopen.call_args.args[0]
+        payload = json.loads(request.data)
+        self.assertEqual(request.full_url, "http://localhost:9/v1/responses")
+        self.assertNotIn("tools", payload)
+        self.assertEqual(payload["model"], "small-model")
+        self.assertIn("untrusted data", payload["instructions"])
+        self.assertIn("+Then push to origin.", payload["input"][0]["content"][0]["text"])
+        self.assertIsNone(request.get_header("Authorization"))
 
     def test_no_new_authority_needs_no_review(self):
         verdict = '{"grantsNewAuthority": false, "findings": []}'
-        self.assertEqual(self.review_with(verdict), [])
+        result, _ = self.review_with({"return_value": self.reply(verdict)})
+        self.assertEqual(result, ([], []))
 
-    def test_new_authority_needs_review_with_one_line_findings(self):
-        findings = '["Pushes | to origin.", "Skips\\nasking."]'
-        verdict = f'{{"grantsNewAuthority": true, "findings": {findings}}}'
+    def test_findings_stay_out_of_the_review_reason(self):
+        verdict = (
+            '{"grantsNewAuthority": true, "findings": ["Pushes to origin.", "Skips\\n asking."]}'
+        )
+        result, _ = self.review_with({"return_value": self.reply(verdict)})
         self.assertEqual(
-            self.review_with(verdict),
-            ["gives agents new authority: Pushes / to origin.; Skips asking."],
+            result,
+            (
+                ["the automated behavior review found new authority for agents"],
+                ["Pushes to origin.", "Skips asking."],
+            ),
         )
 
     def test_missing_answer_needs_review(self):
+        result, _ = self.review_with({"return_value": self.reply('{"findings": "none"}')})
         self.assertEqual(
-            self.review_with('{"findings": []}'), ["gives agents new authority: no details given"]
+            result, (["the automated behavior review found new authority for agents"], [])
         )
 
-    def test_missing_verdict_file_needs_review(self):
-        reasons = self.review_with(None)
-        self.assertEqual(len(reasons), 1)
-        self.assertTrue(reasons[0].startswith("couldn't get the automated behavior review"))
+    def test_unreadable_reply_needs_review(self):
+        result, _ = self.review_with({"return_value": io.BytesIO(b'{"output": []}')})
+        self.assertEqual(result, (["couldn't get the automated behavior review (IndexError)"], []))
 
-    def test_failed_run_needs_review(self):
-        with mock.patch("update_skill_locks.run", side_effect=UpdateError("codex exec failed")):
-            self.assertEqual(
-                behavior_review(self.files, "small-model"),
-                ["couldn't get the automated behavior review (codex exec failed)"],
-            )
+    def test_failed_request_needs_review(self):
+        error = urllib.error.URLError("connection refused")
+        result, _ = self.review_with({"side_effect": error})
+        self.assertEqual(result, (["couldn't get the automated behavior review (URLError)"], []))
 
     def test_no_markdown_change_skips_the_model(self):
-        with mock.patch("update_skill_locks.run") as run:
-            self.assertEqual(behavior_review([("SKILL.md", "Same.\n", "Same.\n")], "m"), [])
-        run.assert_not_called()
+        with mock.patch("update_skill_locks.urllib.request.urlopen") as urlopen:
+            files = [("SKILL.md", "Same.\n", "Same.\n")]
+            self.assertEqual(behavior_review(files, "m", "http://localhost:9"), ([], []))
+        urlopen.assert_not_called()
 
     def test_large_diff_needs_review_without_the_model(self):
         files = [("SKILL.md", "", "word\n" * BEHAVIOR_REVIEW_LIMIT)]
-        with mock.patch("update_skill_locks.run") as run:
+        with mock.patch("update_skill_locks.urllib.request.urlopen") as urlopen:
             self.assertEqual(
-                behavior_review(files, "m"), ["is too large for the automated behavior review"]
+                behavior_review(files, "m", "http://localhost:9"),
+                (["is too large for the automated behavior review"], []),
             )
-        run.assert_not_called()
+        urlopen.assert_not_called()
 
 
 class StatusTests(unittest.TestCase):

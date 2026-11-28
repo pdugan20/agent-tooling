@@ -14,7 +14,8 @@ version when compatibility requires it.
 - Locked skill updates now also wait for review when a `SKILL.md` changes its `name`, `description` or permission
   fields, when they add lines to Python, Ruby, PowerShell, AppleScript or unlabeled code blocks, or when a small
   model reading the diff finds something new the skill tells an agent to do. A failed or unclear model review
-  waits for review too.
+  waits for review too. The model gets the diff in a Responses API request with no tools, and its findings stay
+  in the local run receipt.
 - `npm run skills:check` names a newer release for skills pinned to a version, and runs in repositories that have
   no catalog directory.
 
