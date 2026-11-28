@@ -436,8 +436,8 @@ jobs:
                 validate_repository.PATRICK_SKILLS_REF,
             )
         self.assertEqual(
-            skills_lock["skills"]["xcodebuildmcp"]["ref"],
-            validate_repository.XCODEBUILDMCP_REF,
+            skills_lock["skills"]["mobilebuildmcp"]["ref"],
+            validate_repository.MOBILEBUILDMCP_REF,
         )
         self.assertEqual(
             skills_lock["skills"]["stageshow"]["ref"],

@@ -233,15 +233,15 @@ UPSTREAM_SKILLS = {
         "dadederk/ios-accessibility-agent-skill",
         "ios-accessibility/SKILL.md",
     ),
-    "xcodebuildmcp": (
-        "getsentry/XcodeBuildMCP",
-        "skills/xcodebuildmcp/SKILL.md",
+    "mobilebuildmcp": (
+        "getsentry/MobileBuildMCP",
+        "skills/mobilebuildmcp/SKILL.md",
     ),
     "ast-grep": ("ast-grep/agent-skill", "ast-grep/skills/ast-grep/SKILL.md"),
     "technical-writer": ("onewave-ai/claude-skills", "technical-writer/SKILL.md"),
 }
 PATRICK_SKILLS_REF = "v3.5.0"
-XCODEBUILDMCP_REF = "v2.7.0"
+MOBILEBUILDMCP_REF = "v2.7.1"
 STAGESHOW_REF = "299140fafd08df55a9c234e610c3f64af3f45531"
 
 
@@ -620,11 +620,11 @@ def validate_repository() -> None:
                 f"locked skill {skill_name} must pin Patrick Skills {PATRICK_SKILLS_REF}"
             )
         if (
-            expected_source == "getsentry/XcodeBuildMCP"
-            and lock_entry.get("ref") != XCODEBUILDMCP_REF
+            expected_source == "getsentry/MobileBuildMCP"
+            and lock_entry.get("ref") != MOBILEBUILDMCP_REF
         ):
             raise ValidationError(
-                f"locked skill {skill_name} must pin XcodeBuildMCP {XCODEBUILDMCP_REF}"
+                f"locked skill {skill_name} must pin MobileBuildMCP {MOBILEBUILDMCP_REF}"
             )
         if expected_source == "benjitaylor/skills" and lock_entry.get("ref") != STAGESHOW_REF:
             raise ValidationError(f"locked skill {skill_name} must pin Stageshow {STAGESHOW_REF}")

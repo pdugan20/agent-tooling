@@ -21,8 +21,8 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertEqual({item["availability"] for item in items}, {"Global"})
         self.assertEqual(catalog["schemaVersion"], 6)
         self.assertEqual(
-            next(item for item in items if item["name"] == "xcodebuildmcp")["displayName"],
-            "XcodeBuildMCP",
+            next(item for item in items if item["name"] == "mobilebuildmcp")["displayName"],
+            "MobileBuildMCP",
         )
 
     def test_custom_invocation_policy_is_visible(self) -> None:
@@ -244,10 +244,10 @@ class CatalogGenerationTests(unittest.TestCase):
                     ".agents/skills/ios-accessibility/SKILL.md",
                     "https://github.com/dadederk/ios-accessibility-agent-skill/blob/main/ios-accessibility/SKILL.md",
                 ),
-                "xcodebuildmcp": (
+                "mobilebuildmcp": (
                     "Sentry",
-                    ".agents/skills/xcodebuildmcp/SKILL.md",
-                    "https://github.com/getsentry/XcodeBuildMCP/blob/v2.7.0/skills/xcodebuildmcp/SKILL.md",
+                    ".agents/skills/mobilebuildmcp/SKILL.md",
+                    "https://github.com/getsentry/MobileBuildMCP/blob/v2.7.1/skills/mobilebuildmcp/SKILL.md",
                 ),
             },
         )

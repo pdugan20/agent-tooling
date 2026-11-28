@@ -34,7 +34,7 @@ UPSTREAM_SOURCE_LABELS = {
     "currents-dev/playwright-best-practices-skill": "Currents",
     "dadederk/ios-accessibility-agent-skill": "Daniel Devesa Derksen-Staats",
     "emilkowalski/skills": "Emil Kowalski",
-    "getsentry/XcodeBuildMCP": "Sentry",
+    "getsentry/MobileBuildMCP": "Sentry",
     "maplibre/maplibre-agent-skills": "MapLibre",
     "onewave-ai/claude-skills": "OneWave AI",
     PATRICK_SKILLS_SOURCE: "Pat Dugan",
@@ -52,7 +52,7 @@ SKILL_PRIORITY = {
     "review-mintlify-docs": 5,
     "generate-mintlify-reference": 6,
     "write-mintlify-changelog": 7,
-    "xcodebuildmcp": 8,
+    "mobilebuildmcp": 8,
     "tune-mobile-client-performance": 9,
     "integrate-app-intents": 10,
     "run-remote-dev-server": 11,
@@ -208,7 +208,7 @@ def humanize_name(name: str) -> str:
         "github": "GitHub",
         "swiftui": "SwiftUI",
         "use": "Use",
-        "xcodebuildmcp": "XcodeBuildMCP",
+        "mobilebuildmcp": "MobileBuildMCP",
     }
     return " ".join(
         special_names.get(part, part.upper() if len(part) <= 3 else part.title())
