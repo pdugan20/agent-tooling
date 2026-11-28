@@ -3,7 +3,7 @@
 import unittest
 from datetime import UTC, datetime
 
-from update_skill_locks import newest_tag, old_enough, review_reasons, shell_lines
+from update_skill_locks import newest_tag, old_enough, review_reasons, shell_lines, status_paths
 
 FENCE = "\x60\x60\x60"
 
@@ -46,6 +46,24 @@ class ReviewRuleTests(unittest.TestCase):
     def test_shell_lines_ignore_other_languages(self):
         text = f"{FENCE}swift\nprint(1)\n{FENCE}\n{FENCE}sh\nls\n{FENCE}\n"
         self.assertEqual(shell_lines(text), {"ls"})
+
+
+class StatusTests(unittest.TestCase):
+    def test_paths_keep_spaces_and_skip_rename_sources(self):
+        output = (
+            " M skills/a/reference guide.md\0?? skills/a/new.sh\0R  skills/a/b.md\0skills/a/a.md\0"
+        )
+        self.assertEqual(
+            status_paths(output),
+            ["skills/a/reference guide.md", "skills/a/new.sh", "skills/a/b.md"],
+        )
+
+    def test_link_counts_as_not_markdown(self):
+        files = [("skills/a/guide.md (link or special file)", None, "")]
+        self.assertEqual(
+            review_reasons(files),
+            ["changes files that aren't Markdown (guide.md (link or special file))"],
+        )
 
 
 class VersionTests(unittest.TestCase):

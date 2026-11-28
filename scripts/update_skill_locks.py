@@ -166,16 +166,38 @@ def upstream_path_date(source: str, path: str, ref: str | None, token: str) -> s
     return commits[0]["commit"]["committer"]["date"]
 
 
+def status_paths(output: str) -> list[str]:
+    """Paths from NUL-separated `git status --porcelain -z` output, without Git's quoting."""
+    entries = output.split("\0")
+    paths = []
+    index = 0
+    while index < len(entries):
+        entry = entries[index]
+        index += 1
+        if len(entry) < 4:
+            continue
+        paths.append(entry[3:])
+        if entry[0] in "RC":
+            # A rename or copy is followed by its original path, which no longer exists.
+            index += 1
+    return paths
+
+
 def changed_files(checkout: Path, skill: str) -> list[tuple[str, str | None, str | None]]:
     root = f".agents/skills/{skill}"
-    status = run(["git", "status", "--porcelain", "--untracked-files=all", "--", root], checkout)
+    status = run(
+        ["git", "status", "--porcelain", "-z", "--untracked-files=all", "--", root], checkout
+    )
     files = []
-    for line in status.splitlines():
-        path = line[3:].strip()
+    for path in status_paths(status):
         old = subprocess.run(
             ["git", "show", f"HEAD:{path}"], cwd=checkout, capture_output=True, text=True
         )
         new_path = checkout / path
+        if new_path.is_symlink() or (new_path.exists() and not new_path.is_file()):
+            # A link or special file is never treated as plain Markdown.
+            files.append((f"{path} (link or special file)", None, ""))
+            continue
         files.append(
             (
                 path,
@@ -303,7 +325,10 @@ def open_pull_request(
     )
     title = target.get("title", "chore(skills): update locked skills")
     run(["git", "commit", "--quiet", "-m", title], checkout)
-    run(["git", "push", "--quiet", "--force-with-lease", "origin", branch], checkout)
+    # A rerun in the same month replaces the branch, so lease against its current tip.
+    remote = run(["git", "ls-remote", "--heads", "origin", branch], checkout).split()
+    lease = f"--force-with-lease={branch}:{remote[0] if remote else ''}"
+    run(["git", "push", "--quiet", lease, "origin", branch], checkout)
 
     rows = []
     for change in changes:
