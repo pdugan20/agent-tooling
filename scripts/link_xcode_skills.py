@@ -150,6 +150,8 @@ def main() -> int:
     parser.add_argument("--cache", type=Path, default=Path.home() / ".agents/xcode-skills")
     parser.add_argument("--check", action="store_true", help="Report without changing anything.")
     args = parser.parse_args()
+    # Links store this path, so it must not depend on the working directory.
+    args.cache = args.cache.expanduser().absolute()
     config = json.loads(CONFIG.read_text())
 
     app = xcode_app()

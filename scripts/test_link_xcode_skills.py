@@ -84,6 +84,16 @@ class XcodeSkillTests(unittest.TestCase):
         self.assertTrue((self.target / "swiftui-whats-new-28/SKILL.md").is_file())
         self.assertEqual(self.link("--check").returncode, 0)
 
+    def test_relative_cache_makes_working_links(self):
+        env = {**os.environ, "AGENT_TOOLING_XCODE_APP": str(self.app)}
+        command = ["python3", str(SCRIPT), "--target", str(self.target), "--cache", "cache"]
+        result = subprocess.run(command, env=env, cwd=self.base, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        link = (self.target / "xctrace").readlink()
+        self.assertTrue(link.is_absolute())
+        self.assertEqual(link.resolve(), (self.cache / "xctrace").resolve())
+        self.assertTrue((self.target / "xctrace/SKILL.md").is_file())
+
     def test_existing_path_is_preserved(self):
         (self.target / "xctrace").mkdir(parents=True)
         result = self.link()
