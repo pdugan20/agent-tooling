@@ -325,6 +325,26 @@ def open_pull_request(
     )
     title = target.get("title", "chore(skills): update locked skills")
     run(["git", "commit", "--quiet", "-m", title], checkout)
+    environment = {"GH_TOKEN": token}
+    existing = json.loads(
+        run(
+            [
+                "gh",
+                "pr",
+                "list",
+                "--repo",
+                repo,
+                "--head",
+                branch,
+                "--json",
+                "url,autoMergeRequest",
+            ],
+            env=environment,
+        )
+    )
+    # A rerun can bring changes that need review, so turn off auto-merge before replacing the head.
+    if existing and existing[0].get("autoMergeRequest"):
+        run(["gh", "pr", "merge", existing[0]["url"], "--disable-auto"], env=environment)
     # A rerun in the same month replaces the branch, so lease against its current tip.
     remote = run(["git", "ls-remote", "--heads", "origin", branch], checkout).split()
     lease = f"--force-with-lease={branch}:{remote[0] if remote else ''}"
@@ -359,12 +379,6 @@ def open_pull_request(
             "",
             "Review instruction changes like dependency changes before merging by hand.",
         ]
-    )
-    environment = {"GH_TOKEN": token}
-    existing = json.loads(
-        run(
-            ["gh", "pr", "list", "--repo", repo, "--head", branch, "--json", "url"], env=environment
-        )
     )
     if existing:
         url = existing[0]["url"]
